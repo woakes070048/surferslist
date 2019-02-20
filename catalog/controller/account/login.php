@@ -366,11 +366,11 @@ class ControllerAccountLogin extends Controller {
 
 		$social_providers = array('facebook');
 
-		if (!isset($data['firstname']) || !$this->validateStringLength($this->request->post['firstname'], 1, 32) || !preg_match('/^[a-zA-Z- ]*$/', $data['firstname'])) {
+		if (!isset($data['firstname']) || !$this->validateStringLength($data['firstname'], 1, 32) || !preg_match('/^[a-zA-Z- ]*$/', $data['firstname'])) {
 			$this->setError('warning', $this->language->get('error_firstname'));
 		}
 
-		if (!isset($data['lastname']) || !$this->validateStringLength($this->request->post['lastname'], 3, 32) || !preg_match('/^[a-zA-Z- ]*$/', $data['lastname'])) {
+		if (!isset($data['lastname']) || !$this->validateStringLength($data['lastname'], 3, 32) || !preg_match('/^[a-zA-Z- ]*$/', $data['lastname'])) {
 			$this->setError('warning', $this->language->get('error_lastname'));
 		}
 
