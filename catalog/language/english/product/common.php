@@ -1,0 +1,112 @@
+<?php
+// Text
+$_['heading_filter_listings']   = 'Refine Listings';
+$_['heading_filter_categories'] = 'Refine Categories';
+$_['heading_filter_type']       = 'Type';
+$_['heading_more']              = 'More';
+$_['heading_other']             = 'Other';
+
+// Text
+$_['text_all_products']     	= 'Listings';
+$_['text_all_categories']       = 'Categories';
+$_['text_all_manufacturers']    = 'Brands';
+$_['text_all_members']          = 'Profiles';
+$_['text_products']             = 'Listings';
+$_['text_product_count']        = ' (%s)';
+$_['text_compare']              = 'Compare (%s)';
+$_['text_display']              = 'Display:';
+$_['text_list']                 = 'List';
+$_['text_grid']                 = 'Grid';
+$_['text_free']                 = 'FREE';
+$_['text_sort']                 = 'Sort By:';
+$_['text_limit']                = 'Show:';
+$_['text_default']              = 'Default';
+$_['text_random']               = 'Shuffle';
+$_['text_name_asc']             = 'Name (A-Z)';
+$_['text_name_desc']            = 'Name (Z-A)';
+$_['text_price_asc']            = 'Price/Value (Low)';
+$_['text_price_desc']           = 'Price/Value (High)';
+$_['text_model_asc']            = 'Model (A-Z)';
+$_['text_model_desc']           = 'Model (Z-A)';
+$_['text_date_asc']             = 'Date (Old)';
+$_['text_date_desc']            = 'Date (New)';
+$_['text_sort_order_asc']       = 'Order (Low)';
+$_['text_sort_order_desc']      = 'Order (High)';
+$_['text_filter_name']          = 'Refine by Name';
+$_['text_filter_category']      = 'Category:';
+$_['text_filter_manufacturer']  = 'Brand:';
+$_['text_filter_zone']          = 'State:';
+$_['text_filter_country']       = 'Country:';
+$_['text_filter_location']      = 'Location:';
+$_['text_category_all']         = '-- All Categories --';
+$_['text_sub_categories_all']   = '-- All Sub-Categories --';
+$_['text_manufacturer_all']     = '-- All Brands --';
+$_['text_country_all']          = '-- All Countries --';
+$_['text_zone_all']             = '-- All States --';
+$_['text_manufacturer']         = 'Brand:';
+$_['text_member']               = 'Profile:';
+$_['text_model']                = 'Model:';
+$_['text_quantity']             = 'Qty:';
+$_['text_points']               = 'Points:';
+$_['text_price']                = 'Price/Value:';
+$_['text_tax']                  = 'Tax:';
+$_['text_save']                 = 'Save:';
+$_['text_unknown']              = 'Unknown';
+$_['text_other']                = 'Other';
+$_['text_view']                 = 'View';
+$_['text_view_all']             = 'View All';
+$_['text_more']                 = 'Load More';
+$_['text_no_more']              = 'No more listings!';
+$_['text_loading']              = ' loading ...';
+$_['text_page']                 = 'Page';
+$_['text_page_not_found']       = 'Page Not Found';
+$_['text_more_options']         = 'More Options';
+$_['text_hide_options']         = 'Hide Options';
+$_['text_forsale']              = 'For sale only?';
+$_['text_classified']           = 'Classified';
+$_['text_buy_now']              = 'Buy Now';
+$_['text_shared']               = 'Not For Sale';
+$_['text_location']             = 'Set Location';
+$_['text_set_location']         = 'Set Your Location';
+$_['text_location_change']      = 'Change Location';
+$_['help_location_change']      = 'Change Location Setting';
+$_['text_location_remove']      = 'Remove Location';
+$_['help_location_remove']      = 'Remove Location Filter';
+$_['text_empty']                = 'No listings found.';
+$_['text_location_remove_url']  = '<a href="%s" class="button button_red smaller"><i class="fa fa-times-circle"></i> Remove location</a>';
+
+// Params
+$_['heading_params']            = 'Criteria';
+$_['heading_param_search']      = 'Search Criteria';
+$_['heading_param_filter']      = 'Filters Selected';
+$_['text_param_keyword']        = 'Keyword';
+$_['text_param_description']    = 'Description';
+$_['text_param_tag']            = 'Tag';
+$_['text_param_country']        = 'Country';
+$_['text_param_zone']           = 'State';
+$_['text_param_location']       = 'Location';
+$_['text_param_category']       = 'Category';
+$_['text_param_manufacturer']   = 'Brand';
+$_['text_param_price']          = 'Price/Value';
+$_['text_param_age']            = 'Age';
+$_['text_param_condition']      = 'Condition';
+$_['text_param_option']         = 'Options';
+$_['text_param_type']           = 'Type';
+$_['text_param_member']         = 'Profile';
+
+// Help
+$_['help_random']               = 'Shuffle Order';
+$_['help_name']                 = 'Refine by name';
+$_['help_category']             = 'Refine by category';
+$_['help_category_top']         = 'Refine by top category';
+$_['help_category_sub']         = 'Refine by sub category';
+$_['help_manufacturer']         = 'Refine by brand';
+$_['help_location']             = 'Refine by location';
+$_['help_country']              = 'Refine by country';
+$_['help_zone']                 = 'Refine by state/region';
+$_['help_location']             = 'Refine by city/location';
+$_['help_sort']                 = 'Sort listings by';
+$_['help_limit']                = 'Results per page';
+$_['help_type']                 = 'Refine by sale type';
+
+?>

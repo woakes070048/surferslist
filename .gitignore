@@ -1,0 +1,53 @@
+# Config
+/.htaccess
+/browserconfig.xml
+/crossdomain.xml
+/manifest.json
+/robots.txt
+/config*.*
+/google*
+/pinterest*
+
+# Icons
+/android-icon*
+/apple-icon*
+/apple-launch*
+/apple-touch*
+/ms-icon*
+/favicon*
+/splash-icon*
+
+# XML Sitemap
+/sitemap*.*
+/ror.xml
+
+# Error Logs
+/error_log
+
+# Image Cache Files
+/image/cache/*
+!/image/cache/index.html
+!/image/no_image.jpg
+
+# System Files
+/system/cache/*
+!/system/cache/index.html
+/system/logs/*
+!/system/logs/index.html
+/system/config/*
+!/system/config/index.html
+
+# Other
+/_home
+/admin*
+/download
+/generator
+/import
+/logo
+/tmp
+
+*.gz
+*.zip
+*.tar
+*.log
+*.sql
