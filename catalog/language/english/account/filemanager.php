@@ -37,18 +37,18 @@ $_['error_file_size']  = 'File too big please keep below %d kb!';
 $_['error_uploaded']   = 'File could not be uploaded for an unknown reason!';
 $_['error_permission'] = 'Permission Denied!';
 $_['error_file_dimensions_small']  = 'Image dimensions too small, must be at least %1$d px in width or %2$d px in height!';
-$_['error_filename_multi']   = 'Filename \'%s\' must be between %s and %s characters long';
-$_['error_file_size_multi']  = 'Image \'%s\' is too big, please keep &le; %s kB';
-$_['error_file_type_multi']  = 'Incorrect file type for image \'%s\'';
-$_['error_uploaded_multi']   = 'Image \'%s\' could not be uploaded for an unknown reason';
-$_['error_file_dimensions_small_multi']  = 'Image \'%s\' is too small! Min width %s px and min height %s px required';
+$_['error_filename_multiple']   = 'Filename \'%s\' must be between %s and %s characters long';
+$_['error_file_size_multiple']  = 'Image \'%s\' is too big, please keep &le; %s kB';
+$_['error_file_type_multiple']  = 'Incorrect file type for image \'%s\'';
+$_['error_uploaded_multiple']   = 'Image \'%s\' could not be uploaded for an unknown reason';
+$_['error_file_dimensions_small_multiple']  = 'Image \'%s\' is too small! Min width %s px and min height %s px required';
 
 // Success
 $_['success_image_uploaded'] = 'Success! Image uploaded.';
 $_['success_file_dimensions_large']  = 'Success! (Note: Image resized down to %1$d px height and %2$d px width)';
 $_['success_image_tab'] = 'Image added to additional images!';
-$_['success_text_uploaded_multi']    = 'Image \'%s\' has been uploaded';
-$_['success_file_dimensions_large_multi']  = 'Image \'%s\' resized to %s px width and %s px height';
+$_['success_text_uploaded_multiple']    = 'Image \'%s\' has been uploaded';
+$_['success_file_dimensions_large_multiple']  = 'Image \'%s\' resized to %s px width and %s px height';
 
 // Button
 $_['button_folder']    = 'New';

@@ -44,5 +44,13 @@ class Request {
 			return false;
 		}
 	}
+
+	public function checkReferer($referer) {
+		if (!$referer || !isset($this->server['HTTP_REFERER'])) {
+			return false;
+		}
+
+		return (strpos($this->server['HTTP_REFERER'], $referer) === 0);
+	}
 }
 ?>

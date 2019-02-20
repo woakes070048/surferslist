@@ -1,6 +1,6 @@
 <?php
 class ControllerAjaxUpload extends Controller {
-    use CSRFToken, ValidateTime; 
+    use CSRFToken, ValidateField, ValidateTime;
 
     public function image() {
 		if (!$this->config->get('member_status') || empty($this->request->files['file']['name'])) {
@@ -44,7 +44,7 @@ class ControllerAjaxUpload extends Controller {
 		$resize_type = 'fw';
 		$filename = basename(preg_replace('/[^a-zA-Z0-9\.\-\s+]/', '', html_entity_decode($this->request->files['file']['name'], ENT_QUOTES, 'UTF-8')));
 
-		if ((utf8_strlen($filename) < 5) || (utf8_strlen($filename) > 128)) {
+		if (!$this->validateStringLength($filename, 5, 128)) {
 			$json['error'] = sprintf($this->language->get('error_filename'), 5, 128);
 		}
 
@@ -179,7 +179,7 @@ class ControllerAjaxUpload extends Controller {
 
 		$filename = basename(html_entity_decode($this->request->files['file']['name'], ENT_QUOTES, 'UTF-8'));
 
-		if ((utf8_strlen($filename) < 5) || (utf8_strlen($filename) > 128)) {
+		if (!$this->validateStringLength($filename, 5, 128)) {
 			$json['error'] = sprintf($this->language->get('error_filename'), 5, 128);
 		}
 
@@ -217,7 +217,7 @@ class ControllerAjaxUpload extends Controller {
 
 		$filename = basename(preg_replace('/[^a-zA-Z0-9\.\-\s+]/', '', html_entity_decode($this->request->files['file']['name'], ENT_QUOTES, 'UTF-8')));
 
-		if ((utf8_strlen($filename) < 5) || (utf8_strlen($filename) > 128)) {
+		if (!$this->validateStringLength($filename, 5, 128)) {
 			$json['error'] = sprintf($this->language->get('error_filename'), 5, 128);
 		}
 

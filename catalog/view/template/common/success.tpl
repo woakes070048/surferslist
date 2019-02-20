@@ -14,6 +14,7 @@
         <?php echo $column_left; ?>
         <div class="container-center">
             <div class="content-page">
+                <?php echo isset($notification) ? $notification : ''; ?>
             	<?php echo $content_top; ?>
                 <div class="widget">
 					<h6><?php echo isset($heading_sub_title) ? $heading_sub_title : $heading_title; ?></h6>

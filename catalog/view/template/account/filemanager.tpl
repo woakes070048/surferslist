@@ -4,8 +4,8 @@
 <meta charset="UTF-8" />
 <title><?php echo $title; ?></title>
 <base href="<?php echo $base; ?>" />
-<link rel="stylesheet" type="text/css" href="catalog/view/root/ui/jquery-ui.min.css" />
-<link rel="stylesheet" type="text/css" href="catalog/view/root/font-awesome/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $server; ?>catalog/view/root/ui/jquery-ui.min.css<?php echo $fingerprint; ?>" />
+<!-- <link rel="stylesheet" type="text/css" href="<?php echo $server; ?>catalog/view/root/font-awesome/css/font-awesome.min.css" /> -->
 <style type="text/css">
 body {
 	padding: 0;
@@ -265,9 +265,9 @@ img {
 	<p class="red-text"><?php echo $text_image_expired; ?></p>
   </div>
 </div>
-<script type="text/javascript" src="catalog/view/root/javascript/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" src="catalog/view/root/ui/jquery-ui.min.js"></script>
-<script type="text/javascript" src="catalog/view/root/javascript/mf_ajaxupload.js"></script>
+<script type="text/javascript" src="<?php echo $server; ?>catalog/view/root/javascript/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="<?php echo $server; ?>catalog/view/root/ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="<?php echo $server; ?>catalog/view/root/javascript/mf_ajaxupload.js<?php echo $fingerprint; ?>"></script>
 <script type="text/javascript"><!--
 var imageDirectory = '<?php echo $dir_member_image; ?>';
 var urlImages = '<?php echo $url_member_image; ?>';
@@ -288,6 +288,7 @@ var buttonApply = '<?php echo $button_apply; ?>';
 var buttonUpload = '<?php echo $button_upload; ?>';
 var buttonSubmit = '<?php echo $button_submit; ?>';
 //--></script>
-<script type="text/javascript" src="catalog/view/root/javascript/filemanager.js"></script>
+<script type="text/javascript" src="<?php echo $server; ?>catalog/view/root/javascript/filemanager.js<?php echo $fingerprint; ?>"></script>
+<script type="text/javascript" src="https://use.fontawesome.com/08241cf910.js"></script>
 </body>
 </html>

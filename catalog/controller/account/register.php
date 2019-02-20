@@ -121,8 +121,9 @@ class ControllerAccountRegister extends Controller {
 
 			if ($this->data['text_agree'] === false) {
 				$this->load->model('catalog/information');
-				$privacy_policy_id = 3;
-				$terms_of_use_id = 5; // $this->config->get('config_account_id')
+				
+				$privacy_policy_id = $this->config->get('config_privacy_policy_id') ?: $this->config->get('config_account_id');
+				$terms_of_use_id = $this->config->get('config_terms_of_use_id') ?: $this->config->get('config_account_id');
 
 				$info_terms_of_use = $this->model_catalog_information->getInformation($terms_of_use_id);
 				$info_privacy_policy = $this->model_catalog_information->getInformation($privacy_policy_id);

@@ -560,8 +560,7 @@ class ControllerProductProduct extends Controller {
 
 			// Back/Previous Page
 			if (isset($this->request->server['HTTP_REFERER'])
-				&& (strpos($this->request->server['HTTP_REFERER'], $this->config->get('config_url')) === 0
-				|| strpos($this->request->server['HTTP_REFERER'], $this->config->get('config_ssl')) === 0)
+				&& ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl')))
 				&& (!$product_prev || strpos($this->request->server['HTTP_REFERER'], $prev_url) === false)
 				&& (!$product_next || strpos($this->request->server['HTTP_REFERER'], $next_url) === false)) {
 				$this->session->data['back_url'] = $this->request->server['HTTP_REFERER'];

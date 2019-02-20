@@ -498,10 +498,7 @@ class ModelCatalogProduct extends Model {
 			$search_log[] = 'SEARCH RESULTS: ' . count($product_data);
 			$search_log[] = 'SEARCH PARAMS: ' . json_encode(array_filter($data, function ($item) { return $item !== "" && $item !== []; }));
 
-			if ($search_log
-				&& isset($this->request->server['HTTP_REFERER'])
-				&& (strpos($this->request->server['HTTP_REFERER'], $this->config->get('config_url')) === 0
-					|| strpos($this->request->server['HTTP_REFERER'], $this->config->get('config_ssl')) === 0)) {
+			if ($search_log && ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl')))) {
 				$search_log_file = new Log('search.log');
 				$search_log_file->write(array_reduce($search_log, function ($carry, $item) { return $carry . $item . ' | '; }, ''));
 				// $search_log_file->write(preg_replace('/[^\S\n]/', ' ', $sql));
