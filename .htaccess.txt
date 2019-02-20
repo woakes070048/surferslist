@@ -1,0 +1,20 @@
+Options +FollowSymlinks
+Options -Indexes
+Options -Multiviews
+
+# Prevent Direct Access to files
+<FilesMatch "\.(tpl|ini|log|zip|gz)">
+ Order deny,allow
+ Deny from all
+</FilesMatch>
+
+# SEO URL Settings
+RewriteEngine On
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !.*\.(ico|gif|jpg|jpeg|png|js|css)
+RewriteRule ^([^?]*) index.php?_route_=$1 [L,QSA]
+
+# Git
+RedirectMatch 404 /\.git

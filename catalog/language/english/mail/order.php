@@ -1,0 +1,42 @@
+<?php
+// Text
+$_['text_subject']          = '[%s] NEW ORDER: %s';
+$_['text_greeting']         = 'A new order has been placed through %s. <a href="https://www.surferslist.com/login">Log in</a> to add comments and track the order status.';
+$_['text_received']         = 'An order has been received.';
+$_['text_link']             = 'Click on the following link to view the order details:';
+$_['text_order_detail']     = 'Order Details';
+$_['text_instruction']      = 'Instructions';
+$_['text_order_id']         = 'Order No:';
+$_['text_date_added']       = 'Date Added:';
+$_['text_order_status']     = 'Order Status:';
+$_['text_payment_method']   = 'Payment Method:';
+$_['text_shipping_method']  = 'Shipping Method:';
+$_['text_email']            = 'E-mail:';
+$_['text_telephone']        = 'Telephone:';
+$_['text_ip']               = 'IP Address:';
+$_['text_payment_address']  = 'Payment Address';
+$_['text_shipping_address'] = 'Shipping Address';
+$_['text_products']         = 'Listings';
+$_['text_product']          = 'Listing';
+$_['text_model']            = 'Model';
+$_['text_quantity']         = 'Quantity';
+$_['text_price']            = 'Price';
+$_['text_order_total']      = 'Order Totals';
+$_['text_total']            = 'Total';
+$_['text_download']         = 'After payment has been confirmed, digital files can be downloaded at the following link:';
+$_['text_comment']          = 'Comments for the order:';
+$_['text_footer']           = '*** DO NOT REPLY directly to this email ***';
+$_['text_powered']          = 'Thanks for supporting <a href="https://www.surferslist.com/">SurfersList.com</a>.';
+$_['text_update_subject']       = '[%s] ORDER UPDATE: %s';
+$_['text_update_greeting']      = 'An update has been made to Order No. %s placed on %s.';
+$_['text_update_order']         = 'Order No:';
+$_['text_update_date_added']    = 'Date:';
+$_['text_update_order_status']  = 'Order Status:';
+$_['text_update_comment']       = 'Comments:';
+$_['text_update_link']          = 'Click on the following link to view the order details:';
+$_['text_update_reply']         = 'Please reply from your account and login at https://www.surferslist.com/login.';
+$_['text_update_footer']        = '*** DO NOT REPLY directly to this email ***';
+$_['text_manufacturer']         = 'Brand';
+$_['text_member']               = 'Profile';
+$_['text_image']                = 'Image';
+?>
