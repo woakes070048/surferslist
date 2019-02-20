@@ -1,7 +1,5 @@
 <?php
 trait Contact {
-	use ValidateField;
-
 	protected $mail_enabled;
 
 	protected function getContactMailStatus() {
@@ -32,22 +30,8 @@ trait Contact {
 		$mail->port = $this->config->get('config_smtp_port');
 		$mail->timeout = $this->config->get('config_smtp_timeout');
 
-		if ($this->config->get('config_admin_mail') && isset($data['admin']) && $data['admin'] === true) {
-			if (!isset($data['bcc'])) {
-				$data['bcc'] = array();
-			}
-
-			$data['bcc'][] = $this->config->get('config_email');
-
-			if ($this->config->get('config_alert_emails')) {
-				$alert_emails = explode(',', $this->config->get('config_alert_emails'));
-
-				foreach ($alert_emails as $email) {
-					if ($this->validateEmail($email)) {
-						$data['bcc'][] = $email;
-					}
-				}
-			}
+		if (isset($data['admin']) && $data['admin'] === true) {
+			$this->setContactMailAdmin($data);
 		}
 
 		$mail->setTo($data['to']);
@@ -79,6 +63,28 @@ trait Contact {
 		}
 
 		return $mail_sent;
+	}
+
+	protected function setContactMailAdmin(&$data) {
+		if (!$this->config->get('config_admin_mail')) {
+			return;
+		}
+
+		if (!isset($data['bcc'])) {
+			$data['bcc'] = array();
+		}
+
+		$data['bcc'][] = $this->config->get('config_email');
+
+		if ($this->config->get('config_alert_emails')) {
+			$alert_emails = explode(',', $this->config->get('config_alert_emails'));
+
+			foreach ($alert_emails as $email) {
+				if (preg_match('/^[^\@]+@.*\.[a-z]{2,15}$/i', $email)) {
+					$data['bcc'][] = $email;
+				}
+			}
+		}
 	}
 
 	protected function debugLog($mail) {
