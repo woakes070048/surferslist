@@ -292,7 +292,8 @@ class ControllerAccountOrder extends Controller {
 			}
 			* */
 
-			$order_member_info = $this->model_account_order->getOrderMember($order_id);
+			$this->load->model('checkout/order');
+			$order_member_info = $this->model_checkout_order->getOrderMember($order_id);
 
 			if (!empty($order_member_info['customer_id'])) {
 				$this->data['contact'] = $this->url->link('information/contact', 'contact_id=' . $order_member_info['customer_id'], 'SSL');

@@ -7,6 +7,11 @@ class ControllerAjaxFileManager extends Controller {
 			return false;
 		}
 
+		if (!$this->request->checkReferer($this->config->get('config_url')) && !$this->request->checkReferer($this->config->get('config_ssl'))) {
+			$this->session->data['redirect'] = $this->url->link('account/product', '', 'SSL');
+			$this->redirect($this->url->link('account/login', '', 'SSL'));
+		}
+
 		$this->data = $this->load->language('account/filemanager');
 
 		$this->data['title'] = $this->language->get('heading_title');
@@ -23,76 +28,57 @@ class ControllerAjaxFileManager extends Controller {
 		$this->data['field'] = isset($this->request->get['field']) ? preg_replace('/[^a-zA-Z0-9_\-]/', '', $this->request->get['field']) : '';
 		$this->data['text_editor'] = isset($this->request->get['texteditorfuncnum']) ? (int)$this->request->get['texteditorfuncnum'] : false;
 
+		$minify = $this->cache->get('minify');
+		$js_min = isset($minify['js']) ? $minify['js'] : '';
+
+		$this->data['fingerprint'] = $js_min ? '?v=' . rtrim(substr($js_min, strpos($js_min, '-') + 1), '.min.js') : '';
+		$this->data['server'] = CDN_SERVER ?: ($this->request->isSecure() ? $this->config->get('config_ssl') : $this->config->get('config_url'));
+
 		$this->template = '/template/account/filemanager.tpl';
 
 		$this->response->setOutput($this->render());
 	}
 
 	public function image() {
-		if (!$this->validateUser()) {
+		if (!$this->validateUser() || empty($this->request->get['image'])) {
 			return false;
 		}
 
-		// e.g. "data/member/m/member-name/listing-001.jpg"
-		$image = $this->request->get['image'];
-
-		// skip if no image, or doesn't start with "data/", or if path does not belong to this member (e.g. "member/m/member-name/listing-001.jpg""), or if DNE
-		if (!$image || strpos($image, 'data/') !== 0 || strpos(ltrim($image, 'data/'), $this->customer->getMemberImagesDirectory()) !== 0 || !is_file(DIR_IMAGE . $image)) {
-			return false;
-		}
+		$image = 'data/' . $this->customer->getMemberImagesDirectory() . '/' . $this->request->get['image'];
 
 		$this->load->model('tool/image');
 
-		if (isset($this->request->get['field'])) {
-			$field = $this->request->get['field'];
-		} else {
-			$field = '';
-		}
+		$width = !empty($this->request->get['width']) ? (int)$this->request->get['width'] : $this->config->get('config_image_product_width');
+		$height = !empty($this->request->get['height']) ? (int)$this->request->get['height'] : $this->config->get('config_image_product_height');
 
-		if ($field == 'member_account_banner') {
-			$thumb_width = 1000;
-			$thumb_height = 300;
-		} else if ($field == 'member_account_image') {
-			$thumb_width = 250;
-			$thumb_height = 250;
-		} else if (strpos($field, 'image') !== false) {
-			$thumb_width = $this->config->get('config_image_product_width'); // 205
-			$thumb_height = $this->config->get('config_image_product_height'); // 295
-		} else {
-			$thumb_width = $this->config->get('config_image_product_width'); // 220;
-			$thumb_height = $this->config->get('config_image_product_height'); // 300;
-		}
+		$json = $this->model_tool_image->resize(html_entity_decode($image, ENT_QUOTES, 'UTF-8'), $width, $height, 'autocrop');
 
-		if (isset($this->request->get['image'])) {
-			$this->response->setOutput($this->model_tool_image->resize(html_entity_decode($image, ENT_QUOTES, 'UTF-8'), $thumb_width, $thumb_height, 'autocrop'));
-		}
+		$this->response->setOutput(json_encode($json));
 	}
 
 	public function directory() {
-		if (!$this->validateUser()) {
+		if (!$this->validateUser() || !isset($this->request->post['directory'])) {
 			return false;
 		}
 
 		$json = array();
 
-		if (isset($this->request->post['directory'])) {
-			$directories = glob(rtrim(DIR_IMAGE . 'data/' . $this->customer->getMemberImagesDirectory() . clean_path($this->request->post['directory']), '/') . '/*', GLOB_ONLYDIR);
+		$directories = glob(rtrim(DIR_IMAGE . 'data/' . $this->customer->getMemberImagesDirectory() . clean_path($this->request->post['directory']), '/') . '/*', GLOB_ONLYDIR);
 
-			if ($directories) {
-				$i = 0;
+		if ($directories) {
+			$i = 0;
 
-				foreach ($directories as $directory) {
-					$json[$i]['data'] = basename($directory);
-					$json[$i]['attributes']['directory'] = utf8_substr($directory, utf8_strlen(DIR_IMAGE . 'data/' . $this->customer->getMemberImagesDirectory()));
+			foreach ($directories as $directory) {
+				$json[$i]['data'] = basename($directory);
+				$json[$i]['attributes']['directory'] = utf8_substr($directory, utf8_strlen(DIR_IMAGE . 'data/' . $this->customer->getMemberImagesDirectory()));
 
-					$children = glob(rtrim($directory, '/') . '/*', GLOB_ONLYDIR);
+				$children = glob(rtrim($directory, '/') . '/*', GLOB_ONLYDIR);
 
-					if ($children)  {
-						$json[$i]['children'] = ' ';
-					}
-
-					$i++;
+				if ($children)  {
+					$json[$i]['children'] = ' ';
 				}
+
+				$i++;
 			}
 		}
 
@@ -100,13 +86,13 @@ class ControllerAjaxFileManager extends Controller {
 	}
 
 	public function files() {
-		if (!$this->validateUser()) {
+		if (!$this->validateUser() || !isset($this->request->post['directory'])) {
 			return false;
 		}
 
 		$json = array();
 
-		$directory = !empty($this->request->post['directory']) ? clean_path($this->request->post['directory']) : '';
+		$directory = clean_path($this->request->post['directory']);
 
 		$allowed = array(
 			'.jpg',
@@ -184,33 +170,39 @@ class ControllerAjaxFileManager extends Controller {
 	}
 
 	public function create() {
+		if (!$this->validateUser()) {
+			return false;
+		}
+
 		$this->load->language('account/filemanager');
 
 		$json = array();
 
-    	if (!$this->validateUser()) {
-      		$json['error'] = $this->language->get('error_permission');
-    	}
+    	// if (!$this->validateCreate()) {
+      	// 	$json['error'] = $this->language->get('error_permission');
+    	// }
 
 		// deny all requests (temp)
 		$json['error'] = $this->language->get('error_permission');
 
-		if (!isset($json['error']) && isset($this->request->post['directory'])) {
-			if (isset($this->request->post['name']) || $this->request->post['name']) {
-				$directory = rtrim(DIR_IMAGE . 'data/' . $this->customer->getMemberImagesDirectory() . clean_path($this->request->post['directory']), '/');
+		if (empty($this->request->post['name'])) {
+			$json['error'] = $this->language->get('error_name');
+		}
 
-				if (!is_dir($directory)) {
-					$json['error'] = $this->language->get('error_directory');
-				}
-
-				if (file_exists($directory . '/' . clean_path($this->request->post['name']))) {
-					$json['error'] = $this->language->get('error_exists');
-				}
-			} else {
-				$json['error'] = $this->language->get('error_name');
-			}
-		} else {
+		if (empty($this->request->post['directory'])) {
 			$json['error'] = $this->language->get('error_directory');
+		}
+
+		if (!isset($json['error'])) {
+			$directory = rtrim(DIR_IMAGE . 'data/' . $this->customer->getMemberImagesDirectory() . clean_path($this->request->post['directory']), '/');
+
+			if (!is_dir($directory)) {
+				$json['error'] = $this->language->get('error_directory');
+			}
+
+			if (file_exists($directory . '/' . clean_path($this->request->post['name']))) {
+				$json['error'] = $this->language->get('error_exists');
+			}
 		}
 
 		if (!isset($json['error'])) {
@@ -242,7 +234,7 @@ class ControllerAjaxFileManager extends Controller {
 			$json['error'] = $this->language->get('error_name');
 		}
 
-		if (!isset($json['error']) && (utf8_strlen($this->request->post['name']) < 5 || utf8_strlen($this->request->post['name']) > 255)) {
+		if (!isset($json['error']) && !$this->validateStringLength($this->request->post['name'], 5, 255)) {
 			$json['error'] = sprintf($this->language->get('error_filename'), 5, 255);
 		}
 
@@ -386,7 +378,7 @@ class ControllerAjaxFileManager extends Controller {
 		}
 
 		if (!isset($json['error']) && isset($this->request->post['path']) && isset($this->request->post['name'])) {
-			if ((utf8_strlen($this->request->post['name']) < 5) || (utf8_strlen($this->request->post['name']) > 255)) {
+			if (!$this->validateStringLength($this->request->post['name'], 5, 255)) {
 				$json['error'] = sprintf($this->language->get('error_filename'), 5, 255);
 			}
 
@@ -455,7 +447,11 @@ class ControllerAjaxFileManager extends Controller {
 
 		$output = '';
 
-		$output .= '<option value="' . utf8_substr($directory, utf8_strlen(DIR_IMAGE . 'data/' . $this->customer->getMemberImagesDirectory())) . '">' . utf8_substr($directory, utf8_strlen(DIR_IMAGE . 'data/' . $this->customer->getMemberImagesDirectory())) . '</option>';
+		$sub_directory = utf8_substr($directory, utf8_strlen(DIR_IMAGE . 'data/' . $this->customer->getMemberImagesDirectory()));
+
+		if ($sub_directory) {
+			$output .= '<option value="' . $sub_directory . '">' . $sub_directory . '</option>';
+		}
 
 		$directories = glob(rtrim(clean_path($directory), '/') . '/*', GLOB_ONLYDIR);
 
@@ -488,17 +484,13 @@ class ControllerAjaxFileManager extends Controller {
 					'image/jpeg',
 					'image/pjpeg',
 					'image/png',
-					'image/x-png'/*,
-					'image/gif',
-					'application/x-shockwave-flash'*/
+					'image/x-png'
 				);
 
 				$allowed_ext = array(
 					'.jpg',
 					'.jpeg',
-					/*'.gif',*/
-					'.png'/*,
-					'.flv'*/
+					'.png'
 				);
 
 				$filename = basename(preg_replace('/[^a-zA-Z0-9\.\-\s+]/', '', html_entity_decode($this->request->files['image']['name'], ENT_QUOTES, 'UTF-8')));
@@ -521,7 +513,7 @@ class ControllerAjaxFileManager extends Controller {
 					$json['error'][] = sprintf($this->language->get('error_file_size'), $this->config->get('member_image_upload_filesize_max'));
 				}
 
-				if ((utf8_strlen($filename) < 5) || (utf8_strlen($filename) > 255)) {
+				if (!$this->validateStringLength($filename, 5, 255)) {
 					$json['error'][] = sprintf($this->language->get('error_filename'), 5, 255);
 				}
 
@@ -579,31 +571,29 @@ class ControllerAjaxFileManager extends Controller {
 					'image/pjpeg',
 					'image/png',
 					'image/x-png',
-					'image/gif',
-					'application/x-shockwave-flash'
+					'image/gif'
 				);
 
 				$allowed_ext = array(
 					'.jpg',
 					'.jpeg',
 					'.gif',
-					'.png',
-					'.flv'
+					'.png'
 				);
 
 				for ($i = 0; $i < count($this->request->files['image']['name']); $i++) {
 					$json['error'][$i] = array();
-					$json['success'][$i] = '';
+					// $json['success'][$i] = '';
 
 					$filename = basename(preg_replace('/[^a-zA-Z0-9\.\-\s+]/', '', html_entity_decode($this->request->files['image']['name'][$i], ENT_QUOTES, 'UTF-8')));
 
 					if (!in_array($this->request->files['image']['type'][$i], $allowed) || !in_array(strtolower(strrchr($filename, '.')), $allowed_ext) || !getimagesize($this->request->files['image']['tmp_name'][$i])) {
-						$json['error'][$i][] = sprintf($this->language->get('error_file_type_multi'), $filename);
+						$json['error'][$i][] = sprintf($this->language->get('error_file_type_multiple'), $filename);
 					} else {
 						list($image_width, $image_height) = getimagesize($this->request->files['image']['tmp_name'][$i]);
 
 						if ($image_width < $this->config->get('member_image_dimensions_min_width') && $image_height < $this->config->get('member_image_dimensions_min_height')) {
-							$json['error'][$i][] = sprintf($this->language->get('error_file_dimensions_small_multi'), $filename, $this->config->get('member_image_dimensions_min_width'), $this->config->get('member_image_dimensions_min_height'));
+							$json['error'][$i][] = sprintf($this->language->get('error_file_dimensions_small_multiple'), $filename, $this->config->get('member_image_dimensions_min_width'), $this->config->get('member_image_dimensions_min_height'));
 						}
 
 						if ($image_height > $image_width * 2) {
@@ -612,11 +602,11 @@ class ControllerAjaxFileManager extends Controller {
 					}
 
 					if ($this->request->files['image']['size'][$i] > $this->config->get('member_image_upload_filesize_max') * 1024) {
-						$json['error'][$i][] = sprintf($this->language->get('error_file_size_multi'), $filename, $this->config->get('member_image_upload_filesize_max'));
+						$json['error'][$i][] = sprintf($this->language->get('error_file_size_multiple'), $filename, $this->config->get('member_image_upload_filesize_max'));
 					}
 
-					if ((utf8_strlen($filename) < 5) || (utf8_strlen($filename) > 255)) {
-						$json['error'][$i][] = sprintf($this->language->get('error_filename_multi'), $filename, 5, 255);
+					if (!$this->validateStringLength($filename, 5, 255)) {
+						$json['error'][$i][] = sprintf($this->language->get('error_filename_multiple'), $filename, 5, 255);
 					}
 
 					if ($this->request->files['image']['error'][$i] != UPLOAD_ERR_OK) {
@@ -634,19 +624,17 @@ class ControllerAjaxFileManager extends Controller {
 								$this->model_tool_image->edit($directory . '/' . $filename, $scaled_width, $scaled_height, 'autocrop');
 							}
 
-							$json['success'][$i] = sprintf($this->language->get('success_text_uploaded_multi'), $filename);
+							$json['success'][$i] = sprintf($this->language->get('success_text_uploaded_multiple'), $filename);
 							$json['image'][] = rtrim('data/' . $this->customer->getMemberImagesDirectory() . clean_path($this->request->post['directory']), '/') . '/' . $filename;
 						} else {
-							$json['error'][$i][] = sprintf($this->language->get('error_uploaded_multi'), $filename);
+							$json['error'][$i][] = sprintf($this->language->get('error_uploaded_multiple'), $filename);
 						}
 					}
 
 				}
-
 			} else {
 				$json['error'][] = $this->language->get('error_file');
 			}
-
 		} else {
 			$json['error'][] = $this->language->get('error_directory');
 		}

@@ -21,120 +21,89 @@ class ModelAccountOrder extends Model {
 			");
 		}
 
-		if ($order_query->num_rows) {
-			$country_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "country` WHERE country_id = '" . (int)$order_query->row['payment_country_id'] . "'");
+		$order_info = $order_query->num_rows ? $order_query->row : array();
 
-			if ($country_query->num_rows) {
-				$payment_iso_code_2 = $country_query->row['iso_code_2'];
-				$payment_iso_code_3 = $country_query->row['iso_code_3'];
-			} else {
-				$payment_iso_code_2 = '';
-				$payment_iso_code_3 = '';
-			}
-
-			$zone_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "zone` WHERE zone_id = '" . (int)$order_query->row['payment_zone_id'] . "'");
-
-			if ($zone_query->num_rows) {
-				$payment_zone_code = $zone_query->row['code'];
-			} else {
-				$payment_zone_code = '';
-			}
-
-			$country_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "country` WHERE country_id = '" . (int)$order_query->row['shipping_country_id'] . "'");
-
-			if ($country_query->num_rows) {
-				$shipping_iso_code_2 = $country_query->row['iso_code_2'];
-				$shipping_iso_code_3 = $country_query->row['iso_code_3'];
-			} else {
-				$shipping_iso_code_2 = '';
-				$shipping_iso_code_3 = '';
-			}
-
-			$zone_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "zone` WHERE zone_id = '" . (int)$order_query->row['shipping_zone_id'] . "'");
-
-			if ($zone_query->num_rows) {
-				$shipping_zone_code = $zone_query->row['code'];
-			} else {
-				$shipping_zone_code = '';
-			}
-
-			$this->load->model('localisation/language');
-
-			$language_info = $this->model_localisation_language->getLanguage($order_query->row['language_id'], null);
-
-			if ($language_info) {
-				$language_code = $language_info['code'];
-				$language_filename = $language_info['filename'];
-				$language_directory = $language_info['directory'];
-			} else {
-				$language_code = '';
-				$language_filename = '';
-				$language_directory = '';
-			}
-
-			return array(
-				'order_id'                => $order_query->row['order_id'],
-				'order_no'                => $order_query->row['order_no'],
-				'invoice_no'              => $order_query->row['invoice_no'],
-				'invoice_prefix'          => $order_query->row['invoice_prefix'],
-				'store_id'                => $order_query->row['store_id'],
-				'store_name'              => $order_query->row['store_name'],
-				'store_url'               => $order_query->row['store_url'],
-				'customer_id'             => $order_query->row['customer_id'],
-				'firstname'               => $order_query->row['firstname'],
-				'lastname'                => $order_query->row['lastname'],
-				'telephone'               => $order_query->row['telephone'],
-				'fax'                     => $order_query->row['fax'],
-				'email'                   => $order_query->row['email'],
-				'payment_firstname'       => $order_query->row['payment_firstname'],
-				'payment_lastname'        => $order_query->row['payment_lastname'],
-				'payment_company'         => $order_query->row['payment_company'],
-				'payment_address_1'       => $order_query->row['payment_address_1'],
-				'payment_address_2'       => $order_query->row['payment_address_2'],
-				'payment_postcode'        => $order_query->row['payment_postcode'],
-				'payment_city'            => $order_query->row['payment_city'],
-				'payment_zone_id'         => $order_query->row['payment_zone_id'],
-				'payment_zone'            => $order_query->row['payment_zone'],
-				'payment_zone_code'       => $payment_zone_code,
-				'payment_country_id'      => $order_query->row['payment_country_id'],
-				'payment_country'         => $order_query->row['payment_country'],
-				'payment_iso_code_2'      => $payment_iso_code_2,
-				'payment_iso_code_3'      => $payment_iso_code_3,
-				'payment_address_format'  => $order_query->row['payment_address_format'],
-				'payment_method'          => $order_query->row['payment_method'],
-				'shipping_firstname'      => $order_query->row['shipping_firstname'],
-				'shipping_lastname'       => $order_query->row['shipping_lastname'],
-				'shipping_company'        => $order_query->row['shipping_company'],
-				'shipping_address_1'      => $order_query->row['shipping_address_1'],
-				'shipping_address_2'      => $order_query->row['shipping_address_2'],
-				'shipping_postcode'       => $order_query->row['shipping_postcode'],
-				'shipping_city'           => $order_query->row['shipping_city'],
-				'shipping_zone_id'        => $order_query->row['shipping_zone_id'],
-				'shipping_zone'           => $order_query->row['shipping_zone'],
-				'shipping_zone_code'      => $shipping_zone_code,
-				'shipping_country_id'     => $order_query->row['shipping_country_id'],
-				'shipping_country'        => $order_query->row['shipping_country'],
-				'shipping_iso_code_2'     => $shipping_iso_code_2,
-				'shipping_iso_code_3'     => $shipping_iso_code_3,
-				'shipping_address_format' => $order_query->row['shipping_address_format'],
-				'shipping_method'         => $order_query->row['shipping_method'],
-				'comment'                 => $order_query->row['comment'],
-				'total'                   => $order_query->row['total'],
-				'order_status_id'         => $order_query->row['order_status_id'],
-				'language_id'             => $order_query->row['language_id'],
-				'language_code'           => $language_code,
-				'language_filename'       => $language_filename,
-				'language_directory'      => $language_directory,
-				'currency_id'             => $order_query->row['currency_id'],
-				'currency_code'           => $order_query->row['currency_code'],
-				'currency_value'          => $order_query->row['currency_value'],
-				'date_modified'           => $order_query->row['date_modified'],
-				'date_added'              => $order_query->row['date_added'],
-				'ip'                      => $order_query->row['ip']
-			);
-		} else {
+		if (!$order_info) {
 			return false;
 		}
+
+		$this->load->model('localisation/country');
+		$this->load->model('localisation/zone');
+		$this->load->model('localisation/language');
+
+		$payment_country_info = $this->model_localisation_country->getCountry($order_info['payment_country_id'], null);
+		$shipping_country_info = $this->model_localisation_country->getCountry($order_info['shipping_country_id'], null);
+		$payment_zone_info = $this->model_localisation_zone->getZone($order_info['payment_zone_id'], null);
+		$shipping_zone_info = $this->model_localisation_zone->getZone($order_info['shipping_zone_id'], null);
+		$language_info = $this->model_localisation_language->getLanguage($order_info['language_id'], null);
+
+		return array(
+			'order_id'                => $order_info['order_id'],
+			'order_no'                => $order_info['order_no'],
+			'invoice_no'              => $order_info['invoice_no'],
+			'invoice_prefix'          => $order_info['invoice_prefix'],
+			'store_id'                => $order_info['store_id'],
+			'store_name'              => $order_info['store_name'],
+			'store_url'               => $order_info['store_url'],
+			'customer_id'             => $order_info['customer_id'],
+			'firstname'               => $order_info['firstname'],
+			'lastname'                => $order_info['lastname'],
+			'telephone'               => $order_info['telephone'],
+			'fax'                     => $order_info['fax'],
+			'email'                   => $order_info['email'],
+			'payment_firstname'       => $order_info['payment_firstname'],
+			'payment_lastname'        => $order_info['payment_lastname'],
+			'payment_company'         => $order_info['payment_company'],
+			'payment_company_id'      => $order_info['payment_company_id'],
+			'payment_tax_id'          => $order_info['payment_tax_id'],
+			'payment_address_1'       => $order_info['payment_address_1'],
+			'payment_address_2'       => $order_info['payment_address_2'],
+			'payment_postcode'        => $order_info['payment_postcode'],
+			'payment_city'            => $order_info['payment_city'],
+			'payment_zone_id'         => $order_info['payment_zone_id'],
+			'payment_zone'            => $order_info['payment_zone'],
+			'payment_zone_code'       => $payment_zone_info ? $payment_zone_info['code'] : '',
+			'payment_country_id'      => $order_info['payment_country_id'],
+			'payment_country'         => $order_info['payment_country'],
+			'payment_iso_code_2'      => $payment_country_info ? $payment_country_info['iso_code_2'] : '',
+			'payment_iso_code_3'      => $payment_country_info ? $payment_country_info['iso_code_3'] : '',
+			'payment_address_format'  => $order_info['payment_address_format'],
+			'payment_method'          => $order_info['payment_method'],
+			'payment_code'            => $order_info['payment_code'],
+			'shipping_firstname'      => $order_info['shipping_firstname'],
+			'shipping_lastname'       => $order_info['shipping_lastname'],
+			'shipping_company'        => $order_info['shipping_company'],
+			'shipping_address_1'      => $order_info['shipping_address_1'],
+			'shipping_address_2'      => $order_info['shipping_address_2'],
+			'shipping_postcode'       => $order_info['shipping_postcode'],
+			'shipping_city'           => $order_info['shipping_city'],
+			'shipping_zone_id'        => $order_info['shipping_zone_id'],
+			'shipping_zone'           => $order_info['shipping_zone'],
+			'shipping_zone_code'      => $shipping_zone_info ? $shipping_zone_info['code'] : '',
+			'shipping_country_id'     => $order_info['shipping_country_id'],
+			'shipping_country'        => $order_info['shipping_country'],
+			'shipping_iso_code_2'     => $shipping_country_info ? $shipping_country_info['iso_code_2'] : '',
+			'shipping_iso_code_3'     => $shipping_country_info ? $shipping_country_info['iso_code_3'] : '',
+			'shipping_address_format' => $order_info['shipping_address_format'],
+			'shipping_method'         => $order_info['shipping_method'],
+			'shipping_code'           => $order_info['shipping_code'],
+			'comment'                 => $order_info['comment'],
+			'total'                   => $order_info['total'],
+			'order_status_id'         => $order_info['order_status_id'],
+			'language_id'             => $order_info['language_id'],
+			'language_code'           => $language_info ? $language_info['code'] : '',
+			'language_filename'       => $language_info ? $language_info['filename'] : '',
+			'language_directory'      => $language_info ? $language_info['directory'] : '',
+			'currency_id'             => $order_info['currency_id'],
+			'currency_code'           => $order_info['currency_code'],
+			'currency_value'          => $order_info['currency_value'],
+			'ip'                      => $order_info['ip'],
+			'forwarded_ip'            => $order_info['forwarded_ip'],
+			'user_agent'              => $order_info['user_agent'],
+			'accept_language'         => $order_info['accept_language'],
+			'date_modified'           => $order_info['date_modified'],
+			'date_added'              => $order_info['date_added']
+		);
 	}
 
 	public function getOrderStatusId($order_id) {
@@ -293,52 +262,12 @@ class ModelAccountOrder extends Model {
 		return $query->row['total'];
 	}
 
-	public function getOrderNoByOrderId($order_id) {
-		$query = $this->db->query("
-			SELECT order_no
-			FROM " . DB_PREFIX . "order
-			WHERE order_id = '" . (int)$order_id . "'
-			AND customer_id = '" . (int)$this->customer->getId() . "'
-		");
-
-		return $query->num_rows ? $query->row['order_no'] : 0;
-	}
-
-	public function getOrderIdByOrderNo($order_no) {
-		$query = $this->db->query("
-			SELECT order_id
-			FROM " . DB_PREFIX . "order
-			WHERE order_no = '" . $this->db->escape($order_no) . "'
-			AND customer_id = '" . (int)$this->customer->getId() . "'
-		");
-
-		return $query->num_rows ? $query->row['order_id'] : 0;
-	}
-
-	public function getOrderMember($order_id) {
-		$query = $this->db->query("
-			SELECT DISTINCT op.member_customer_id AS customer_id
-			, member.member_account_id AS member_id
-			, member.member_account_name AS member_name
-			, member.member_paypal_account AS member_paypal
-			, c.email AS email
-			FROM " . DB_PREFIX . "order_product op
-			LEFT JOIN " . DB_PREFIX . "product_member pm ON (op.product_id = pm.product_id)
-			LEFT JOIN " . DB_PREFIX . "customer_member_account member ON (pm.member_account_id = member.member_account_id)
-			LEFT JOIN " . DB_PREFIX . "customer c ON (pm.customer_id = c.customer_id)
-				AND pm.customer_id <> 0
-			WHERE op.order_id = '" . (int)$order_id . "'
-			LIMIT 1
-		");
-
-		return $query->row;
-	}
-
 	public function addOrderHistory($order_no, $data) {
-		$order_id = $this->getOrderIdByOrderNo($order_no);
+		$this->load->model('checkout/order');
+		$order_id = $this->model_checkout_order->getOrderIdByOrderNo($order_no);
 
 		if (!$order_id) {
-			return false;
+			return;
 		}
 
 		// Add order history
@@ -385,7 +314,8 @@ class ModelAccountOrder extends Model {
 			$bcc = array();
 
 			if ($this->config->get('member_email_customers')) {
-				$order_member_info = $this->getOrderMember($order_id);
+				$this->load->model('checkout/order');
+				$order_member_info = $this->model_checkout_order->getOrderMember($order_id);
 
 				if (!empty($order_member_info['email'])) {
 					$bcc[] = $order_member_info['email'];
@@ -410,7 +340,12 @@ class ModelAccountOrder extends Model {
 	}
 
 	public function getOrderHistories($order_no, $start = 0, $limit = 10) {
-		$order_id = $this->getOrderIdByOrderNo($order_no);
+		$this->load->model('checkout/order');
+		$order_id = $this->model_checkout_order->getOrderIdByOrderNo($order_no);
+
+		if (!$order_id) {
+			return array();
+		}
 
 		$sql = "
 			SELECT oh.date_added
@@ -445,7 +380,12 @@ class ModelAccountOrder extends Model {
 	}
 
 	public function getTotalOrderHistories($order_no) {
-		$order_id = $this->getOrderIdByOrderNo($order_no);
+		$this->load->model('checkout/order');
+		$order_id = $this->model_checkout_order->getOrderIdByOrderNo($order_no);
+
+		if (!$order_id) {
+			return 0;
+		}
 
 		$query = $this->db->query("
 			SELECT COUNT(order_history_id) AS total

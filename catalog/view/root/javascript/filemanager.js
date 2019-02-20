@@ -155,19 +155,23 @@ $(document).ready(function() {
 			var imgFile = $(image_anchor).next('.image-details').find('input[name=\'image\']').val(); // e.g. "/file-name-001.jpg"
 
 			$.ajax({
-				url: 'filemanager-image&image=' + encodeURIComponent('data/' + imageDirectory + imgFile),
-				dataType: 'html',
+				url: 'filemanager-image',
+                type: 'get',
+                data: 'image=' + encodeURIComponent(imgFile),
+				dataType: 'json',
 				beforeSend: function() {
 					$(image_anchor).parent('div').css({'opacity': '0', 'visibility': 'visible'}).animate({'opacity': '1'}, 600, 'swing');
 				},
-				success: function(html) {
-					fetchedImage = new Image();
+				success: function(json) {
+                    if (json) {
+                        newImage = new Image();
 
-					fetchedImage.onload = function() {
-						$(image_anchor).replaceWith('<img src="' + html + '" alt="" title="" class="filemanager-thumb" />');
-					}
+    					newImage.onload = function() {
+    						$(image_anchor).replaceWith('<img src="' + json + '" alt="" title="" class="filemanager-thumb" />');
+    					}
 
-					fetchedImage.src = html;
+    					newImage.src = json;
+                    }
 				}
 			});
 		}
@@ -302,16 +306,16 @@ $(document).ready(function() {
 			this.submit();
 		},
 		onSubmit: function(file, extension) {
-			$('#upload > i').attr('class', 'icon-spinner icon-spin');
+			$('#upload > i').attr('class', 'fa fa-spin fa-circle-o-notch icon-spin');
 			$('#upload').prop('disabled', true);
 		},
 		onComplete: function(file, json) {
             var alert_msg = "";
 
-			$('#upload > i').attr('class', 'icon-upload-alt');
+			$('#upload > i').attr('class', 'fa fa-upload');
 			$('#upload').prop('disabled', false);
 
-			if (json.success) {
+			if (typeof json.success !== 'undefined') {
                 loadImages('');
                 alert(textSuccessImageUploaded);
 			}

@@ -478,7 +478,7 @@ class ControllerProductCategory extends Controller {
 		$this->data['location_page'] = $this->url->link('information/location', 'redirect_path=' . urlencode(ltrim($request_path, "/")), 'SSL');
 		$this->data['random'] = $this->url->link('product/category', 'path=' . $category_info['path'] . '&sort=random' . $url, 'SSL');
 		$this->data['compare'] = $this->url->link('product/compare', '', 'SSL');
-		$this->data['back'] = (isset($this->request->server['HTTP_REFERER']) && (strpos($this->request->server['HTTP_REFERER'], $this->config->get('config_url')) === 0 || strpos($this->request->server['HTTP_REFERER'], $this->config->get('config_ssl')) === 0)) ? $this->request->server['HTTP_REFERER'] : $this->url->link('product/allproducts', '', 'SSL');
+		$this->data['back'] = ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->request->server['HTTP_REFERER'] : $this->url->link('product/allproducts', '', 'SSL');
 		$this->data['search'] = $this->url->link('product/search', '', 'SSL');
 		$this->data['reset'] = $this->url->link('product/category', 'path=' . $category_info['path'], 'SSL');
 		$this->data['continue'] = $this->url->link('common/home', '', 'SSL');

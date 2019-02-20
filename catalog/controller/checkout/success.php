@@ -19,7 +19,12 @@ class ControllerCheckoutSuccess extends Controller {
 			unset($this->session->data['vouchers']);
 		}
 
-		$this->load->language('checkout/success');
+		if (!$this->request->checkReferer($this->config->get('config_url')) && !$this->request->checkReferer($this->config->get('config_ssl'))) {
+			$this->session->data['redirect'] = $this->url->link('account/order', '', 'SSL');
+			$this->redirect($this->url->link('account/login', '', 'SSL'));
+		}
+
+		$this->data = $this->load->language('checkout/success');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
@@ -30,13 +35,14 @@ class ControllerCheckoutSuccess extends Controller {
 
 		$this->data['breadcrumbs'] = $this->getBreadcrumbs();
 
-		$this->data['heading_title'] = $this->language->get('heading_title');
-		$this->data['heading_sub_title'] = $this->language->get('heading_sub_title');
+		$this->session->data['success'] = $this->language->get('text_success_order');
 
-		$this->data['text_my_account'] = $this->language->get('text_my_account');
+		$message = $this->language->get('text_message_success');
 
-		$contact_id = 0;
-		$listing_owner = $this->config->get('config_store'); // config_owner
+		$customer_id = $this->config->get('config_customer_id');
+		$member_id = $this->config->get('config_member_id');
+		$profile_name = $this->config->get('config_owner');
+		// $contact_email = $this->config->get('config_email');
 
 		if (isset($this->request->get['order_no'])) {
 			$this->load->model('checkout/order');
@@ -44,26 +50,45 @@ class ControllerCheckoutSuccess extends Controller {
 			$order_id = $this->model_checkout_order->getOrderIdByOrderNo($this->request->get['order_no']);
 
 			if ($order_id) {
-				$order_member_info = $this->model_checkout_order->getOrderMember($order_id);
+				$this->load->model('account/order');
 
-				if (!empty($order_member_info['member_name'])) {
-					$contact_id = $order_member_info['customer_id'];
-					$listing_owner = $order_member_info['member_name'];
-				} else {
-					$listing_owner = $this->config->get('config_owner');
+				$order_info = $this->model_account_order->getOrder($this->request->get['order_no']);
+				$order_member = $this->model_checkout_order->getOrderMember($order_id);
+
+				if ($order_info && ($this->customer->isLogged() || $this->config->get('config_guest_checkout'))) {
+					$message .= sprintf($this->language->get('text_message_order_no'), $order_info['order_no']);
 				}
+
+				if ($order_member) {
+					$customer_id = $order_member['customer_id'];
+					$member_id = $order_member['member_id'];
+					$profile_name = $order_member['member_name'];
+					// $contact_email = $order_member['email'];
+				}
+
+				$contact_href = $member_id ? $this->url->link('product/member/info', 'member_id=' . $member_id, 'SSL') : $this->url->link('information/contact', 'contact_id=' . $customer_id, 'SSL');
 			}
 		}
 
-		$contact_href = $this->url->link('information/contact', 'contact_id=' . $contact_id, 'SSL');
+		$message .= $this->language->get('text_message_details');
 
 		if ($this->customer->isLogged()) {
-			$this->data['text_message'] = sprintf($this->language->get('text_customer'), $this->url->link('account/account', '', 'SSL'), $this->url->link('account/order', '', 'SSL'), $contact_href, $listing_owner, html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8'));
-		} else {
-			$this->data['text_message'] = sprintf($this->language->get('text_guest'), $contact_href, $listing_owner, html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8'));
+			$message_breadcrumb = sprintf($this->language->get('text_message_breadcrumb'), $this->url->link('account/account', '', 'SSL'), $this->url->link('account/order', '', 'SSL'));
+
+			if (!empty($order_info)) {
+				$message_breadcrumb .= sprintf($this->language->get('text_message_breadcrumb_last'), $this->url->link('account/order/info', 'order_no=' . $order_info['order_no'], 'SSL'), $order_info['order_no']);
+			}
+
+			$message .= sprintf($this->language->get('text_message_order_info'), $message_breadcrumb);
 		}
 
-		$this->data['button_continue'] = $this->language->get('button_continue');
+		if (isset($contact_href)) {
+			$message .= sprintf($this->language->get('text_message_contact'), $contact_href, $profile_name);
+		}
+
+		$message .= sprintf($this->language->get('text_message_thanks'), html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8'));
+
+		$this->data['text_message'] = $message;
 
 		$this->data['account'] = $this->url->link('account/account', '', 'SSL');
 		$this->data['continue'] = $this->url->link('common/home', '', 'SSL');
@@ -71,6 +96,7 @@ class ControllerCheckoutSuccess extends Controller {
 		$this->template = '/template/common/success.tpl';
 
 		$this->children = array(
+			'common/notification',
 			'common/column_left',
 			'common/column_right',
 			'common/content_top',

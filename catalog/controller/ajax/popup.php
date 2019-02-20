@@ -93,9 +93,7 @@ class ControllerAjaxPopup extends Controller {
 
 			$this->data = $this->load->language('common/popups');
 
-			$referer = isset($this->request->server['HTTP_REFERER'])
-				&& (strpos($this->request->server['HTTP_REFERER'], $this->config->get('config_url')) === 0
-				|| strpos($this->request->server['HTTP_REFERER'], $this->config->get('config_ssl')) === 0) ? $this->request->server['HTTP_REFERER'] : '';
+			$referer = ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->request->server['HTTP_REFERER'] : '';
 
 			$this->data['captcha_enabled'] = $this->getCaptchaStatus();
 			$this->data['csrf_token'] = $this->getCSRFToken();
@@ -146,8 +144,9 @@ class ControllerAjaxPopup extends Controller {
 
 				if ($this->data['text_register_agree'] === false) {
 					$this->load->model('catalog/information');
-					$privacy_policy_id = 3;
-					$terms_of_use_id = 5; // $this->config->get('config_account_id')
+					
+					$privacy_policy_id = $this->config->get('config_privacy_policy_id') ?: $this->config->get('config_account_id');
+					$terms_of_use_id = $this->config->get('config_terms_of_use_id') ?: $this->config->get('config_account_id');
 
 					$info_terms_of_use = $this->model_catalog_information->getInformation($terms_of_use_id);
 					$info_privacy_policy = $this->model_catalog_information->getInformation($privacy_policy_id);
@@ -166,7 +165,7 @@ class ControllerAjaxPopup extends Controller {
 				$this->data['text_register_agree'] = '';
 			}
 
-			$this->data['redirect'] = isset($this->request->server['HTTP_REFERER']) && ($this->request->server['HTTP_REFERER'] == $this->config->get('config_url') || $this->request->server['HTTP_REFERER'] == $this->config->get('config_ssl')) ? $this->url->link('account/account', '', 'SSL') : '';
+			$this->data['redirect'] = ''; // ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->url->link('account/account', '', 'SSL') : '';
 
 			$this->template = '/template/common/popup_register.tpl';
 

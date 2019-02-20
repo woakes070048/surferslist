@@ -280,9 +280,7 @@ class ControllerAjaxProduct extends Controller {
     public function more() {
 		if (!$this->config->get('apac_status')
 			|| !$this->config->get('apac_products_status')
-			|| !isset($this->request->server['HTTP_REFERER'])
-			|| (strpos($this->request->server['HTTP_REFERER'], $this->config->get('config_url')) !== 0
-				&& strpos($this->request->server['HTTP_REFERER'], $this->config->get('config_ssl')) !== 0)) {
+			|| (!$this->request->checkReferer($this->config->get('config_url')) && !$this->request->checkReferer($this->config->get('config_ssl')))) {
 	  		$this->redirect($this->url->link('product/allproducts', '', 'SSL'));
 		}
 

@@ -279,8 +279,8 @@ class ModelCheckoutOrder extends Model {
 			, member.member_paypal_account AS member_paypal
 			, c.email AS email
 			FROM " . DB_PREFIX . "order_product op
-			LEFT JOIN " . DB_PREFIX . "product_member pm ON (op.product_id = pm.product_id)
-			LEFT JOIN " . DB_PREFIX . "customer_member_account member ON (pm.member_account_id = member.member_account_id)
+			INNER JOIN " . DB_PREFIX . "product_member pm ON (op.product_id = pm.product_id)
+			INNER JOIN " . DB_PREFIX . "customer_member_account member ON (pm.member_account_id = member.member_account_id)
 			LEFT JOIN " . DB_PREFIX . "customer c ON (pm.customer_id = c.customer_id)
 				AND pm.customer_id <> 0
 			WHERE op.order_id = '" . (int)$order_id . "'

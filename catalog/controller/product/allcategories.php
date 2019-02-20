@@ -144,7 +144,7 @@ class ControllerProductAllCategories extends Controller {
 		$this->data['order'] = $order;
 
 		$this->data['compare'] = $this->url->link('product/compare', '');
-		$this->data['back'] = (isset($this->request->server['HTTP_REFERER']) && (strpos($this->request->server['HTTP_REFERER'], $this->config->get('config_url')) === 0 || strpos($this->request->server['HTTP_REFERER'], $this->config->get('config_ssl')) === 0)) ? $this->request->server['HTTP_REFERER'] : $this->url->link('product/allproducts', '');
+		$this->data['back'] = ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->request->server['HTTP_REFERER'] : $this->url->link('product/allproducts', '');
 		$this->data['search'] = $this->url->link('product/search', '');
 		$this->data['reset'] = $this->url->link('product/allcategories', '');
 		$this->data['continue'] = $this->url->link('common/home', '');

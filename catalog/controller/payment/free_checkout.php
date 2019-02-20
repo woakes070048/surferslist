@@ -1,9 +1,13 @@
 <?php
 class ControllerPaymentFreeCheckout extends Controller {
 	protected function index() {
+		$this->load->model('checkout/order');
+
+		$order_no = $this->model_checkout_order->getOrderNoByOrderId($this->session->data['order_id']);
+
 		$this->data['button_confirm'] = $this->language->get('button_confirm');
 
-		$this->data['continue'] = $this->url->link('checkout/success');
+		$this->data['continue'] = $this->url->link('checkout/success', 'order_no=' . $order_no, 'SSL');
 
 		$this->template = '/template/payment/free_checkout.tpl';
 

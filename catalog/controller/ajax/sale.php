@@ -1,5 +1,6 @@
 <?php
 class ControllerAjaxSale extends Controller {
+	use ValidateField;
 
     public function history_order() {
 		if (!isset($this->request->get['order_no'])) {
@@ -11,15 +12,16 @@ class ControllerAjaxSale extends Controller {
 		$this->data['error'] = '';
 		$this->data['success'] = '';
 
+        $this->load->model('checkout/order');
 		$this->load->model('account/order');
 		$this->load->model('account/customer');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->config->get('member_report_sales_history') && (!$this->data['error'])) {
 			$data = strip_tags_decode($this->request->post);
 
-			if ((utf8_strlen($this->request->post['comment']) < 10) || (utf8_strlen($this->request->post['comment']) > 255)) {
-				$order_id = $this->model_account_order->getOrderIdByOrderNo($this->request->get['order_no']);
-				$order_member_info = $this->model_account_order->getOrderMember($order_id);
+			if (!$this->validateStringLength($this->request->post['comment'], 10, 255)) {
+				$order_id = $this->model_checkout_order->getOrderIdByOrderNo($this->request->get['order_no']);
+				$order_member_info = $this->model_checkout_order->getOrderMember($order_id);
 
 				if (!empty($order_member_info['customer_id'])) {
 					$contact_member = $this->url->link('information/contact', 'contact_id=' . $order_member_info['customer_id'], 'SSL');
@@ -84,7 +86,7 @@ class ControllerAjaxSale extends Controller {
 		$this->load->model('account/customer');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->config->get('member_report_sales_history') && (!$this->data['error'])) {
-			if ((utf8_strlen($this->request->post['comment']) < 10) || (utf8_strlen($this->request->post['comment']) > 255)) {
+			if (!$this->validateStringLength($this->request->post['comment'], 10, 255)) {
 				$sale_info = $this->model_account_sales->getSale($this->request->get['sale_id']);
 				$this->data['error'] = sprintf($this->language->get('error_comment'), 10, 255, $this->url->link('information/contact', 'contact_id=' . $sale_info['customer_id'], 'SSL'));
 			} else {

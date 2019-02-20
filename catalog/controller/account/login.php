@@ -60,11 +60,7 @@ class ControllerAccountLogin extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$referer = isset($this->request->server['HTTP_REFERER'])
-			&& (strpos($this->request->server['HTTP_REFERER'], $this->config->get('config_url')) === 0
-			|| strpos($this->request->server['HTTP_REFERER'], $this->config->get('config_ssl')) === 0)
-				? $this->request->server['HTTP_REFERER']
-				: '';
+		$referer = ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->request->server['HTTP_REFERER'] : '';
 
 		$redirect_to = (isset($this->request->post['redirect'])
 			&& (strpos($this->request->post['redirect'], $this->config->get('config_url')) === 0
@@ -183,10 +179,7 @@ class ControllerAccountLogin extends Controller {
 	public function login_social() {
 		$this->load->language('account/login');
 
-		if ($this->request->server['REQUEST_METHOD'] != 'POST'
-			|| !isset($this->request->server['HTTP_REFERER'])
-			|| (strpos($this->request->server['HTTP_REFERER'], $this->config->get('config_url')) !== 0
-				&& strpos($this->request->server['HTTP_REFERER'], $this->config->get('config_ssl')) !== 0)) {
+		if ($this->request->server['REQUEST_METHOD'] != 'POST' || (!$this->request->checkReferer($this->config->get('config_url')) && !$this->request->checkReferer($this->config->get('config_ssl')))) {
 			$this->response->setOutput(json_encode(array('error' => $this->language->get('error_social_request_invalid'))));
 			return;
 		}
