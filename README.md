@@ -4,7 +4,7 @@ SurferList is a website application written in PHP and JavaScript that lets user
 
 ## Features
 
-[Features](https://www.surferslist.com/features) from popular sites like [Craigslist](https://www.craigslist.org/) (e.g. classified ads, multiple locations, anonymity), [eBay](https://www.craigslist.org/) (e.g. e-commerce, peer-to-peer, business registration), and [Facebook](https://www.facebook.com/) (e.g. user profiles, topic discussion, social sharing) were combined into a central platform.  Learn more starting at [https://www.surferslist.com/about](https://www.surferslist.com/about).
+[Features](https://www.surferslist.com/features) from popular sites like [Craigslist](https://www.craigslist.org/) (e.g. classified ads, multiple locations, anonymity), [eBay](https://www.craigslist.org/) (e.g. e-commerce, peer-to-peer, business registration), and [Facebook](https://www.facebook.com/) (e.g. user profiles, topic discussion, social sharing) were combined into a single platform. It is similar to [ShareTribe](https://github.com/sharetribe/sharetribe), but with PHP on the back-end in place of Ruby and is more self-contained (less dependencies).  Learn more and start taking it for a spin starting at [https://www.surferslist.com/about](https://www.surferslist.com/about).
 
 ## Usage
 
@@ -18,11 +18,11 @@ Listings can be posted anonymously or linked to a user profile.  Anonymous listi
 
 ## History
 
-This project began as a multi-seller/multi-vendor extension for [OpenCart](https://github.com/opencart/opencart) (an e-commerce CMS) back in 2013.  As it grew in complexity, rather than continuing to update it to work with newer versions of the CMS, in 2015 work was started to integrate it more deeply into a forked copy of version 1.5 of the software ([OpenCart-CE](https://github.com/opencart-ce/opencart-ce), to be precise).  Since then, much of the code has been *substantially* updated, extended, improved, and refactored.
+This project began as a [multi-seller/multi-vendor extension](https://github.com/garudacrafts/opencart-customer-product-manager) for [OpenCart](https://github.com/opencart/opencart) (an e-commerce CMS) back in 2013.  As it grew in complexity, rather than continuing to update it to work with newer versions of the CMS, in 2015 work was started to integrate it more deeply into a forked copy of version 1.5 of the software ([OpenCart-CE](https://github.com/opencart-ce/opencart-ce), to be precise).  Since then, much of the code has been **substantially** updated, extended, improved, and refactored.
 
 ## Under the Hood
 
-[SurfersList.com](https://www.surferslist.com/) is running on Ubuntu with Apache and MySQL (LAMP stack) on a VM hosted by [DigitalOcean](https://www.digitalocean.com/).  It requires a minimum PHP version of 5.4.
+[SurfersList.com](https://www.surferslist.com/) is running on Ubuntu with Apache and MySQL 5.7 (LAMP stack) on a VM hosted by [DigitalOcean](https://www.digitalocean.com/).  It requires a minimum PHP version of 5.4.
 
 ## Credits
 
