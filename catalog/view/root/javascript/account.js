@@ -44,7 +44,7 @@ $(window).on('load', function() {
 if ($('#form.address-form').length) {
     $('#form.address-form').on('change', 'select[name=\'country_id\']', function() {
     	$.ajax({
-    		url: 'country&country_id=' + this.value,
+    		url: 'country?country_id=' + this.value,
     		dataType: 'json',
     		beforeSend: function() {
     			$('select[name=\'country_id\']').after('<span class="wait icon"><i class="fa fa-spin fa-circle-o-notch icon-spin"></i></span>');
@@ -115,7 +115,7 @@ if ($('#form.member-profile-form').length) {
 
     $('#form.member-profile-form').on('change', 'select[name=\'member_country_id\']', function() {
     	$.ajax({
-    		url: 'country&country_id=' + this.value,
+    		url: 'country?country_id=' + this.value,
     		dataType: 'json',
     		beforeSend: function() {
     			$('select[name=\'member_country_id\']').after('<span class="wait icon"><i class="fa fa-spin fa-circle-o-notch icon-spin"></i></span>');
@@ -151,10 +151,8 @@ if ($('#form.member-profile-form').length) {
         var $thumb = $('#' + thumbId);
         var $image = $('input[name=\'' + imgInput + '\']');
 
-        //console.log(targetId, thumbId, imgInput, type)
-
         new AjaxUpload($target, {
-            action: 'upload-image&type=' + type,
+            action: 'upload-image?type=' + type,
         	name: 'file',
         	autoSubmit: true,
         	responseType: 'json',
@@ -167,7 +165,7 @@ if ($('#form.member-profile-form').length) {
         	onComplete: function(file, json) {
         		$target.prop('disabled', false);
                 $thumb.animate({'opacity': '1'}, 300, 'swing');
-
+                
         		if (json['success']) {
         			$image.val(json['filename']);
         			$thumb.attr('src', json['thumb']); // .after('<p><span class="success"><i class="fa fa-check-circle-o"></i> ' + json['success'] + '</span></p>');
@@ -188,8 +186,8 @@ if ($('#form.member-profile-form').length) {
     if ($('#member_account_image_browse').length || $('#member_account_banner_browse').length) {
         function image_upload(field, thumb) {
         	$('#dialog').remove();
-        	// #content
-        	$('.container-center').prepend('<div id="dialog"><iframe src="filemanager&field=' + encodeURIComponent(field) + '" style="padding:0; margin: 0; display: block; width: 100%; height: 100%;" frameborder="no" scrolling="auto"></iframe></div>');
+
+        	$('.container-center').prepend('<div id="dialog"><iframe src="filemanager?field=' + encodeURIComponent(field) + '" style="padding:0; margin: 0; display: block; width: 100%; height: 100%;" frameborder="no" scrolling="auto"></iframe></div>');
 
         	$('#dialog').dialog({
         		title: textImageManager,
@@ -203,10 +201,12 @@ if ($('#form.member-profile-form').length) {
         		close: function (event, ui) {
         			if ($('#' + field).val()) {
         				$.ajax({
-        					url: 'filemanager-image&field=' + encodeURIComponent(field) + '&image=' + encodeURIComponent($('#' + field).val()),
-        					dataType: 'text',
-        					success: function(text) {
-        						$('#' + thumb).replaceWith('<img src="' + text + '" alt="" id="' + thumb + '" class="thumb" />');
+        					url: 'filemanager-image',
+                            type: 'get',
+                            data: 'field=' + encodeURIComponent(field) + '&image=' + encodeURIComponent($('#' + field).val()),
+        					dataType: 'json',
+        					success: function(json) {
+        						$('#' + thumb).replaceWith('<img src="' + json + '" alt="" id="' + thumb + '" class="thumb" />');
         					}
         				});
         			}
@@ -316,12 +316,12 @@ if (typeof orderNo !== 'undefined' && orderNo.length) {
     	return false;
     });
 
-    $('.order-info-page .my-order #history').load('account-order-history&order_no=' + orderNo);
+    $('.order-info-page .my-order #history').load('account-order-history?order_no=' + orderNo);
 
     if (salesHistoryEnabled !== 'undefined' && salesHistoryEnabled) {
         $('.order-info-page .my-order').clickOrTouch('#button-history', function() {
         	$.ajax({
-        		url: 'account-order-history&order_no=' + orderNo,
+        		url: 'account-order-history?order_no=' + orderNo,
         		type: 'post',
         		dataType: 'html',
         		data: 'emailed=' + encodeURIComponent($('input[name=\'emailed\']:checked').length ? 1 : 0) + '&comment=' + encodeURIComponent($('textarea[name=\'comment\']').val()),
@@ -422,7 +422,7 @@ if ($('#form.product-viewed-form').length) {
     	delay: 0,
     	source: function(request, response) {
     		$.ajax({
-    			url: 'autocomplete-listing&filter_name=' +  encodeURIComponent(request.term),
+    			url: 'autocomplete-listing?filter_name=' +  encodeURIComponent(request.term),
     			dataType: 'json',
     			success: function(json) {
     				response($.map(json, function(item) {
@@ -448,7 +448,7 @@ if ($('#form.product-viewed-form').length) {
     	delay: 0,
     	source: function(request, response) {
     		$.ajax({
-    			url: 'autocomplete-listing&filter_model=' +  encodeURIComponent(request.term),
+    			url: 'autocomplete-listing?filter_model=' +  encodeURIComponent(request.term),
     			dataType: 'json',
     			success: function(json) {
     				response($.map(json, function(item) {
@@ -596,7 +596,7 @@ if ($('#form.account-product-list-form').length) {
     	delay: 0,
     	source: function(request, response) {
     		$.ajax({
-    			url: 'autocomplete-listing&filter_name=' +  encodeURIComponent(request.term),
+    			url: 'autocomplete-listing?filter_name=' +  encodeURIComponent(request.term),
     			dataType: 'json',
     			success: function(json) {
     				response($.map(json, function(item) {
@@ -622,7 +622,7 @@ if ($('#form.account-product-list-form').length) {
     	delay: 0,
     	source: function(request, response) {
     		$.ajax({
-    			url: 'autocomplete-listing&filter_model=' +  encodeURIComponent(request.term),
+    			url: 'autocomplete-listing?filter_model=' +  encodeURIComponent(request.term),
     			dataType: 'json',
     			success: function(json) {
     				response($.map(json, function(item) {
@@ -835,7 +835,7 @@ $('.account-sales-info-page #history').clickOrTouch('.pagination a', function(e)
 });
 
 if (typeof sale_id !== 'undefined' && sale_id) {
-    $('.account-sales-info-page #history').load('account-sale-history&sale_id=' + sale_id);
+    $('.account-sales-info-page #history').load('account-sale-history?sale_id=' + sale_id);
 
     $('.account-sales-info-page').clickOrTouch('#button-history', function() {
         var buttonText = $(this).html();
@@ -844,7 +844,7 @@ if (typeof sale_id !== 'undefined' && sale_id) {
         var history_comment = $('textarea[name=\'comment\']').val();
 
     	$.ajax({
-    		url: 'account-sale-history&sale_id=' + sale_id,
+    		url: 'account-sale-history?sale_id=' + sale_id,
     		type: 'post',
     		dataType: 'html',
     		data: 'order_status_id=' + encodeURIComponent(order_status_id) + '&emailed=' + encodeURIComponent(history_emailed) + '&comment=' + encodeURIComponent(history_comment),

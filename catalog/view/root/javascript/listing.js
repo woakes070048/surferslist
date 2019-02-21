@@ -99,13 +99,13 @@ if (listing_id) {
     	scrollToSection('#tabs', listingOffsetTop);
     });
 
-    $('#question').load('discussion-listing&listing_id=' + listing_id);
+    $('#question').load('discussion-listing?listing_id=' + listing_id);
 
     $('#tab-question').clickOrTouch('#button-question', function() {
         var data = $('input, textarea').serialize();
 
     	$.ajax({
-    		url: 'discuss-listing&listing_id=' + listing_id,
+    		url: 'discuss-listing?listing_id=' + listing_id,
     		type: 'post',
     		dataType: 'json',
     		data: data,
@@ -133,7 +133,7 @@ if (listing_id) {
                     scrollToId = '#tabs';
     			}
 
-    			$('#question').load('discussion-listing&listing_id=' + listing_id);
+    			$('#question').load('discussion-listing?listing_id=' + listing_id);
 
                 setTimeout(function() {
                     scrollToSection(scrollToId, listingOffsetTop);

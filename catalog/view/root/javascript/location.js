@@ -22,7 +22,7 @@ if ($locationForm.length) {
     	}
 
     	$.ajax({
-    		url: 'country&country_id=' + this.value,
+    		url: 'country?country_id=' + this.value,
     		dataType: 'json',
     		beforeSend: function() {
     			$('select[name=\'country\']').before('<span class="wait"><i class="fa fa-spin fa-circle-o-notch icon-spin"></i></span>');

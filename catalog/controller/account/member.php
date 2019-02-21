@@ -523,7 +523,7 @@ class ControllerAccountMember extends Controller {
     	*/
 
     	if (isset($this->request->post['member_url_alias'])) {
-			if ($this->validateStringLength($this->request->post['member_url_alias'], 3, 128) || !preg_match('/^[a-zA-Z0-9- ]*$/', $this->request->post['member_url_alias'])) {
+			if (!$this->validateStringLength($this->request->post['member_url_alias'], 3, 128) || !preg_match('/^[a-zA-Z0-9- ]*$/', $this->request->post['member_url_alias'])) {
 				$this->setError('member_url_alias', sprintf($this->language->get('error_member_url_alias'), 3, 128));
 			} else {
 				$url_alias_query = false;

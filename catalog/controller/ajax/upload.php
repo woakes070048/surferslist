@@ -73,7 +73,7 @@ class ControllerAjaxUpload extends Controller {
 
 		//$json['no_image'] = $this->model_tool_image->resize('no_image.jpg', $thumb_resize_width, $thumb_resize_height, $resize_type);
 
-		if ($this->customer->hasProfile()) { // !empty($this->request->get['activated'])
+		if ($this->customer->hasProfile() && $this->customer->getMemberImagesDirectory()) { // !empty($this->request->get['activated'])
 			$image_directory = 'data/' . $this->customer->getMemberImagesDirectory();
 		// } else if (!empty($this->request->get['directory_images'])) {
 		// 	$image_directory = 'data/' . clean_path(urldecode($this->request->get['directory_images']));
@@ -120,8 +120,8 @@ class ControllerAjaxUpload extends Controller {
 			$json['error'] = 'Image height cannot be more than twice the width!';
 		}
 
-		if ($image_type == 'banner' && $image_width < 1200) {
-			$json['error'] = 'Width of banner image must be at least 1200px!';
+		if ($image_type == 'banner' && $image_width < 1000) {
+			$json['error'] = 'Width of banner image must be at least 1000px!';
 		}
 
 		if ($image_type == 'banner' && $image_height > $image_width / 2) {

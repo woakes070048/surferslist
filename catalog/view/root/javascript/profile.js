@@ -23,7 +23,7 @@ if (member_id) {
 
     // reviews
     if ($('#review').length) {
-        $('#review').load('reviews-member&member_id=' + member_id);
+        $('#review').load('reviews-member?member_id=' + member_id);
     }
 
     $('#review').clickOrTouch('.pagination a', function(e) {
@@ -39,7 +39,7 @@ if (member_id) {
         var reviewRating = $('#tab-review input[name=\'rating\']:checked').val() || '';
 
     	$.ajax({
-    		url: 'review-member&member_id=' + member_id,
+    		url: 'review-member?member_id=' + member_id,
     		type: 'post',
     		dataType: 'json',
     		data: 'name=' + encodeURIComponent(reviewName) + '&text=' + encodeURIComponent(reviewText) + '&rating=' + encodeURIComponent(reviewRating),
@@ -63,7 +63,7 @@ if (member_id) {
     				$('#tab-review input[name=\'rating\']').prop('checked', false);
     			}
 
-                //$('#review').load('reviews-member&member_id=' + member_id);
+                //$('#review').load('reviews-member?member_id=' + member_id);
                 scrollToSection('#review-title', profileOffsetTop);
     		},
             error: handleError
@@ -72,7 +72,7 @@ if (member_id) {
 
     // discussion
     if ($('#discussion').length) {
-        $('#discussion').load('discussion-member&member_id=' + member_id);
+        $('#discussion').load('discussion-member?member_id=' + member_id);
     }
 
     $('#discussion').clickOrTouch('.pagination a', function(e) {
@@ -85,7 +85,7 @@ if (member_id) {
         var data = $('#tab-discussion input, #tab-discussion textarea').serialize();
 
     	$.ajax({
-    		url: 'discuss-member&member_id=' + member_id,
+    		url: 'discuss-member?member_id=' + member_id,
     		type: 'post',
     		dataType: 'json',
     		data: data,
@@ -113,7 +113,7 @@ if (member_id) {
                     scrollToId = '#tabs';
     			}
 
-    			$('#discussion').load('discussion-member&member_id=' + member_id);
+    			$('#discussion').load('discussion-member?member_id=' + member_id);
 
                 setTimeout(function() {
                     scrollToSection(scrollToId, profileOffsetTop);

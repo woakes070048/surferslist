@@ -138,7 +138,7 @@ $('#shipping').clickOrTouch('#button-quote', function() {
 
 $('#shipping').on('change', 'select[name=\'country_id\']', function() {
 	$.ajax({
-		url: 'country&country_id=' + this.value,
+		url: 'country?country_id=' + this.value,
 		dataType: 'json',
 		beforeSend: function() {
 			$('select[name=\'country_id\']').after('<span class="wait icon"><i class="fa fa-spin fa-circle-o-notch icon-spin"></i></span>');

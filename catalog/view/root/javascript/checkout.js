@@ -421,7 +421,7 @@ $('#payment-address').on('change', 'input[name=\'payment_address\']', function()
 $('#payment-address').on('change', 'select[name=\'country_id\']', function() {
 	if (this.value == '') return;
 	$.ajax({
-		url: 'country&country_id=' + this.value,
+		url: 'country?country_id=' + this.value,
 		dataType: 'json',
 		beforeSend: function() {
 			$('select[name=\'country_id\']').after('<span class="wait icon"><i class="fa fa-spin fa-circle-o-notch icon-spin"></i></span>');
@@ -576,7 +576,7 @@ $('#shipping-address').on('change', 'input[name=\'shipping_address\']', function
 $('#shipping-address').on('change', 'select[name=\'country_id\']', function() {
 	if (this.value == '') return;
 	$.ajax({
-		url: 'country&country_id=' + this.value,
+		url: 'country?country_id=' + this.value,
 		dataType: 'json',
 		beforeSend: function() {
 			$('select[name=\'country_id\']').after('<span class="wait icon"><i class="fa fa-spin fa-circle-o-notch icon-spin"></i></span>');
