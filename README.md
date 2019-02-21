@@ -4,7 +4,7 @@ SurferList is a website application written in PHP and JavaScript that lets user
 
 ## Features
 
-A single platform that combines [features](https://www.surferslist.com/features) from popular sites like [Craigslist](https://www.craigslist.org/) (e.g. classified ads, multiple locations, anonymity), [eBay](https://www.craigslist.org/) (e.g. e-commerce marketplace, peer-to-peer, business accounts), and [Facebook](https://www.facebook.com/) (e.g. user profiles, topic discussion, social sharing). It is similar to [ShareTribe](https://github.com/sharetribe/sharetribe), except with PHP on the back-end rather than Ruby and more compact.  Learn more at [https://www.surferslist.com/about](https://www.surferslist.com/about).
+The platform combines [features](https://www.surferslist.com/features) from popular sites like [Craigslist](https://www.craigslist.org/) (e.g. classified ads, multiple locations, anonymity), [eBay](https://www.craigslist.org/) (e.g. e-commerce marketplace, peer-to-peer, business accounts), and [Facebook](https://www.facebook.com/) (e.g. user profiles, topic discussion, social sharing).  Learn more at [https://www.surferslist.com/about](https://www.surferslist.com/about).  It is similar to [ShareTribe](https://github.com/sharetribe/sharetribe), except with PHP on the back-end rather than Ruby.  It is very compact and lightweight.
 
 ## Usage
 
@@ -33,10 +33,11 @@ This project began as a [multi-seller/multi-vendor extension](https://github.com
 ### Security
 
 * Bcrypt is used to hash and store account passwords
-* ReCaptcha and CSRF tokens are used to secure all web forms
+* ReCaptcha and CSRF tokens are used to secure web forms
 * Login attempts are tracked and rate limited
 * Form data is validated server-side
-* Parameters in SQL statements are sanitized
+* Parameters are sanitized in SQL statements
+* New account emails are verified by email link
 * AJAX endpoints secured and data validated
 * Intrusion detection to deter attacks and blacklist IPs
 * SSL certificate (Let's Encrypt) is installed and enforced site-wide
@@ -44,11 +45,12 @@ This project began as a [multi-seller/multi-vendor extension](https://github.com
 
 ### Performance
 
-* Database queries are raw SQL and performant
 * Database calls are minimized and heavily cached
-* Routes are cached in flat-files and in memory for quick lookup
-* Images are resized, compressed, and cached
-* JavaScript and CSS are combined and minimized
+* Database queries are raw SQL and performant
+* Database tables are sufficiently indexed
+* Routes are cached in files and in memory
+* Images are resized, compressed, and multiple dimensions cached
+* JavaScript and CSS are combined, minimized, and fingerprinted
 * Static resources are split between multiple domains
 * Pagination and infinity loading of listings
 * JavaScript loaded at the bottom of page
@@ -57,8 +59,8 @@ This project began as a [multi-seller/multi-vendor extension](https://github.com
 ### Images
 
 * Images are stored locally on the same server (CDN possible)
-* Multiple sizes generated and optimally served
-* Separate directories are used for each account
+* Multiple dimensions are generated and optimally served
+* Separate filesystem directories are used for each user account
 * Images are validated by MIME-type, extension, filesize, dimensions, and filename
 * Images are compressed via nightly cron job
 
