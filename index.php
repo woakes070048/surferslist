@@ -21,7 +21,6 @@ require_once(DIR_SYSTEM . 'library/recaptcha/src/autoload.php');
 // Trait
 require_once(DIR_SYSTEM . 'trait/admin.php');
 require_once(DIR_SYSTEM . 'trait/captcha.php');
-require_once(DIR_SYSTEM . 'trait/csrf_token.php');
 require_once(DIR_SYSTEM . 'trait/validate_error.php');
 require_once(DIR_SYSTEM . 'trait/validate_field.php');
 require_once(DIR_SYSTEM . 'trait/validate_time.php');
