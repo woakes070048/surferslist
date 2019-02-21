@@ -1349,7 +1349,9 @@ class ControllerAccountProduct extends Controller {
 
 		if ($this->config->get('member_data_field_quantity')) {
 			$data_optional[] = 'quantity';
+			$data_optional[] = 'subtract';
 			$data_optional[] = 'minimum';
+			$data_optional[] = 'stock_status_id';
 		}
 
 		// if ($this->config->get('member_data_field_filter')) {

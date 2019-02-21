@@ -83,7 +83,7 @@ if ($searchWidget.length || $postListingForm.length) {
         // ajax fallback
         if (!manufacturers_json.length && !manufacturers.length) {
             $.ajax({
-                url: 'manufactuer_category&category_id=' + selectedCategoryId,
+                url: 'manufactuer_category?category_id=' + selectedCategoryId,
                 dataType: 'json',
                 beforeSend: function() {
                     $('select[name*=\'category\']').before('<span class="wait icon"><i class="fa fa-spin fa-circle-o-notch icon-spin"></i></span>');
@@ -566,7 +566,7 @@ if ($searchWidget.length || $postListingForm.length) {
         	// ajax fallback
         	if (!categories_json.length) {
         		$.ajax({
-        			url: 'sub_category&category_id=' + this.value,
+        			url: 'sub_category?category_id=' + this.value,
         			dataType: 'json',
         			beforeSend: function() {
         				$('select[name=\'category_id\']').after('<span class="wait icon"><i class="fa fa-spin fa-circle-o-notch icon-spin"></i></span>');
@@ -645,7 +645,7 @@ if ($searchWidget.length || $postListingForm.length) {
         	// ajax fallback
         	if (!categories_json.length) {
         		$.ajax({
-        			url: 'sub_category&category_id=' + this.value,
+        			url: 'sub_category?category_id=' + this.value,
         			dataType: 'json',
         			beforeSend: function() {
         				$('select[name=\'sub_category_id\']').after('<span class="wait icon"><i class="fa fa-spin fa-circle-o-notch icon-spin"></i></span>');
@@ -691,7 +691,7 @@ if ($searchWidget.length || $postListingForm.length) {
             }
 
         	$.ajax({
-        		url: 'country&country_id=' + this.value,
+        		url: 'country?country_id=' + this.value,
         		dataType: 'json',
         		beforeSend: function() {
         			$('select[name=\'country_id\']').after('<span class="wait icon"><i class="fa fa-spin fa-circle-o-notch icon-spin"></i></span>');

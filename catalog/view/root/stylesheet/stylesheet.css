@@ -568,6 +568,11 @@ div[class^="grid-"]:last-child, .grid-2+.grid-2, .grid-3+.grid-6, .grid-6+.grid-
     margin: 0 5px 10px 0;
 }
 
+.image-border .button:last-child {
+    margin-right: 0;
+}
+
+
 .video-container {
     position: relative;
     padding-bottom: 56.25%;
@@ -7624,7 +7629,7 @@ a.highlight, b.highlight, i.highlight, span.highlight {
 }
 
 .account-product-form .image {
-    height: 356px;
+    min-height: 356px;
 }
 
 .account-product-form p[class$='-notification'] {

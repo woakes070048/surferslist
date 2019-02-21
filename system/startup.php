@@ -31,6 +31,7 @@ require_once(DIR_SYSTEM . 'helper/utf8.php');
 require_once(DIR_SYSTEM . 'helper/helper.php');
 
 // Trait
+require_once(DIR_SYSTEM . 'trait/csrf_token.php');
 require_once(DIR_SYSTEM . 'trait/breadcrumb.php');
 require_once(DIR_SYSTEM . 'trait/param.php');
 require_once(DIR_SYSTEM . 'trait/sort.php');

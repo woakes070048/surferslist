@@ -3,7 +3,7 @@ $('input[name=\'member[member_name]\']').autocomplete({
 	minLength: 2,
 	source: function(request, response) {
 		$.ajax({
-			url: 'autocomplete-member&member_name=' +  encodeURIComponent(request.term),
+			url: 'autocomplete-member?member_name=' +  encodeURIComponent(request.term),
 			dataType: 'json',
 			success: function(json) {
 				response($.map(json, function(item) {

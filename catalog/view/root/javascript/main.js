@@ -922,9 +922,9 @@ $('#cart').clickOrTouch('.cart-remove', function(e) {
     var path_name = String(document.location.pathname);
 
     if (path_name.indexOf('cart') !== -1 || path_name.indexOf('checkout') !== -1) {
-        location = 'cart&remove=' + cart_key;
+        location = 'cart?remove=' + cart_key;
     } else {
-        $('#cart').load('cart-module&remove=' + cart_key + ' #cart > *');
+        $('#cart').load('cart-module?remove=' + cart_key + ' #cart > *');
     }
 });
 

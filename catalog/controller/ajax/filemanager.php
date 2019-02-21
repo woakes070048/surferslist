@@ -44,12 +44,33 @@ class ControllerAjaxFileManager extends Controller {
 			return false;
 		}
 
-		$image = 'data/' . $this->customer->getMemberImagesDirectory() . '/' . $this->request->get['image'];
+		$image = (string)$this->request->get['image'];
+
+		if (strpos($image, 'data/') === 0 && strpos(ltrim($image, 'data/'), $this->customer->getMemberImagesDirectory()) === 0) {
+			// e.g. "data/member/m/member-name/listing-001.jpg"
+			$image = $this->request->get['image'];
+		} else {
+			// e.g. "/listing-001.jpg"
+			$image = 'data/' . $this->customer->getMemberImagesDirectory() . $this->request->get['image'];
+		}
+
+		if (!is_file(DIR_IMAGE . $image)) {
+			return false;
+		}
 
 		$this->load->model('tool/image');
 
+		$field = isset($this->request->get['field']) ? $this->request->get['field'] : '';
 		$width = !empty($this->request->get['width']) ? (int)$this->request->get['width'] : $this->config->get('config_image_product_width');
 		$height = !empty($this->request->get['height']) ? (int)$this->request->get['height'] : $this->config->get('config_image_product_height');
+
+		if ($field === 'member_account_banner') {
+			$width = 1000;
+			$height = 300;
+		} else if ($field === 'member_account_image') {
+			$width = 250;
+			$height = 250;
+		}
 
 		$json = $this->model_tool_image->resize(html_entity_decode($image, ENT_QUOTES, 'UTF-8'), $width, $height, 'autocrop');
 

@@ -149,7 +149,7 @@ $postListingForm.on('change', 'select[name=\'manufacturer_id\']', function() {
 });
 
 // START Image
-var urlImageUpload = 'upload-image&width=' + imageWidth + '&height=' + imageHeight + '&type=listing&csrf_token=' + csrfToken;  // encodeURIComponent
+var urlImageUpload = 'upload-image?width=' + imageWidth + '&height=' + imageHeight + '&type=listing&csrf_token=' + csrfToken;  // encodeURIComponent
 
 function uploadImage(image_id, url, no_image) {
 	new AjaxUpload('#button-upload' + image_id, {
@@ -351,8 +351,10 @@ $(document).clickOrTouch('.upload-images', function(e) {
 
 function uploadImages(imageId, thumbId) {
 	$('#dialog').remove();
-	$('.container-left').prepend('<div id="dialog"><iframe src="filemanager&field=' + encodeURIComponent(imageId) + '" style="padding:0; margin: 0; display: block; width: 100%; height: 100%;" frameborder="no" scrolling="auto"></iframe></div>');
-	$('#dialog').dialog({
+
+	$('.container-left').prepend('<div id="dialog"><iframe src="filemanager?field=' + encodeURIComponent(imageId) + '" style="padding:0; margin: 0; display: block; width: 100%; height: 100%;" frameborder="no" scrolling="auto"></iframe></div>');
+
+    $('#dialog').dialog({
 		title: textImageManager,
 		open: function (e, ui) {
 			setTimeout(function() {
@@ -366,10 +368,12 @@ function uploadImages(imageId, thumbId) {
 
 			if ($('#' + imageId).val()) {
 				$.ajax({
-					url: 'filemanager-image&field=' + encodeURIComponent(imageId) + '&image=' + encodeURIComponent($('#' + imageId).val()),
-					dataType: 'text',
-					success: function(text) {
-						$('#' + thumbId).replaceWith('<img src="' + text + '" alt="" id="' + thumbId + '" class="thumb" />');
+					url: 'filemanager-image',
+                    type: 'get',
+                    data: 'field=' + encodeURIComponent(imageId) + '&image=' + encodeURIComponent($('#' + imageId).val()),
+					dataType: 'json',
+					success: function(json) {
+						$('#' + thumbId).replaceWith('<img src="' + json + '" alt="" id="' + thumbId + '" class="thumb" />');
 					}
 				});
 			}
@@ -564,7 +568,7 @@ if ($('#tab-attribute').length) {
     		delay: 0,
     		source: function(request, response) {
     			$.ajax({
-    				url: 'autocomplete-attribute&filter_name=' +  encodeURIComponent(request.term),
+    				url: 'autocomplete-attribute?filter_name=' +  encodeURIComponent(request.term),
     				dataType: 'json',
     				success: function(json) {
     					response($.map(json, function(item) {
@@ -625,7 +629,7 @@ if ($('#tab-option').length) {
     	delay: 100,
     	source: function(request, response) {
     		$.ajax({
-    			url: 'autocomplete-option&filter_name=' +  encodeURIComponent(request.term),
+    			url: 'autocomplete-option?filter_name=' +  encodeURIComponent(request.term),
     			dataType: 'json',
     			success: function(json) {
     				response($.map(json, function(item) {

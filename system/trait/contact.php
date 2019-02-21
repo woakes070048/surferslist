@@ -1,6 +1,8 @@
 <?php
 trait Contact {
 	protected $mail_enabled;
+	protected $admin_mail_enabled;
+	protected $mail_log;
 
 	protected function getContactMailStatus() {
 		return $this->mail_enabled;
@@ -8,6 +10,22 @@ trait Contact {
 
 	protected function setContactMailStatus($status) {
 		$this->mail_enabled = $status;
+	}
+
+	protected function getContactAdminMailStatus() {
+		return $this->admin_mail_enabled;
+	}
+
+	protected function setContactAdminMailStatus($status) {
+		$this->admin_mail_enabled = $status;
+	}
+
+	protected function getContactMailLog() {
+		return $this->mail_log;
+	}
+
+	protected function setContactMailLog($filename) {
+		$this->mail_log = $filename;
 	}
 
 	protected function sendEmail($data) {
@@ -56,9 +74,9 @@ trait Contact {
 			$mail->setHtml($data['html']);
 		}
 
-		$this->debugLog($mail);
+		$this->logContactMail($mail);
 
-		if ($this->mail_enabled) {
+		if ($this->getContactMailStatus()) {
 			$mail_sent = $mail->send();
 		}
 
@@ -66,29 +84,48 @@ trait Contact {
 	}
 
 	protected function setContactMailAdmin(&$data) {
-		if (!$this->config->get('config_admin_mail')) {
+		if (!isset($this->admin_mail_enabled)) {
+			$this->setContactAdminMailStatus($this->config->get('config_admin_mail'));
+		}
+
+		if (!$this->getContactAdminMailStatus()) {
 			return;
+		}
+
+		$admin_emails = array();
+		$data_emails = array();
+
+		$data_emails[] = $data['to'];
+
+		if (!isset($data['cc'])) {
+			$data['cc'] = array();
 		}
 
 		if (!isset($data['bcc'])) {
 			$data['bcc'] = array();
 		}
 
-		$data['bcc'][] = $this->config->get('config_email');
+		$data_emails = array_merge($data_emails, $data['cc'], $data['bcc']);
+
+		$admin_emails[] = $this->config->get('config_email');
 
 		if ($this->config->get('config_alert_emails')) {
-			$alert_emails = explode(',', $this->config->get('config_alert_emails'));
+			$admin_emails = array_merge($admin_emails, explode(',', $this->config->get('config_alert_emails')));
+		}
 
-			foreach ($alert_emails as $email) {
-				if (preg_match('/^[^\@]+@.*\.[a-z]{2,15}$/i', $email)) {
-					$data['bcc'][] = $email;
-				}
+		foreach ($admin_emails as $admin_email) {
+			if ($admin_email && !in_array($admin_email, $data_emails) && preg_match('/^[^\@]+@.*\.[a-z]{2,15}$/i', $admin_email)) {
+				$data['bcc'][] = $admin_email;
 			}
 		}
 	}
 
-	protected function debugLog($mail) {
-		$email_log = new Log($this->config->get('config_mail_log'));
+	protected function logContactMail($mail) {
+		if (!isset($this->mail_log)) {
+			$this->setContactMailLog($this->config->get('config_mail_log'));
+		}
+
+		$email_log = new Log($this->getContactMailLog());
 
 		$ip = isset($this->request->server['REMOTE_ADDR']) ? $this->request->server['REMOTE_ADDR'] : '';
 
