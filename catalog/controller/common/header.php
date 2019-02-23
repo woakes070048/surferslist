@@ -57,7 +57,7 @@ class ControllerCommonHeader extends Controller {
 		$this->data['styles'] = $this->document->getStyles();
 		$this->data['lang'] = $this->language->get('code');
 		$this->data['direction'] = $this->language->get('direction');
-		$this->data['dns_prefetch'] = $this->config->get('config_dns_prefetch');
+		$this->data['dns_prefetch'] = is_array($this->config->get('config_dns_prefetch')) ? $this->config->get('config_dns_prefetch') : array();
 		$this->data['app'] = $this->config->get('config_app');
 		$this->data['ascii_art'] = $this->config->get('config_ascii_art');
 		$this->data['logo_img'] = $this->config->get('config_logo_img');

@@ -236,11 +236,11 @@ class ControllerAccountMember extends Controller {
 			}
 		}
 
-		$this->data['member_activities'] = $this->config->get('config_category_tags');
+		$this->data['member_activities'] = is_array($this->config->get('config_category_tags')) ? $this->config->get('config_category_tags') : array();
 
 		if (isset($this->request->post['member_activity'])) {
 			$this->data['member_activity'] = $this->request->post['member_activity'];
-		} elseif (isset($member_info)) {
+		} elseif (isset($member_info) && is_array($this->config->get('config_category_tags'))) {
 			$this->data['member_activity'] = array_intersect(array_flip($this->config->get('config_category_tags')), array_map('trim', explode(',', $member_info['member_tag'])));
 		} else {
 			$this->data['member_activity'] = array();
@@ -397,8 +397,6 @@ class ControllerAccountMember extends Controller {
   	}
 
   	private function validateForm() {
-		$invalid_words = $this->config->get('config_invalid_keywords');
-
 		if (!isset($this->request->post['member_account_name']) || !$this->validateStringLength($this->request->post['member_account_name'], 2, 128) || !preg_match('/^[a-zA-Z][a-zA-Z0-9- ]*$/', $this->request->post['member_account_name'])) {
 			$this->setError('member_account_name', sprintf($this->language->get('error_member_account_name'), 2, 128));
 	    } else {
@@ -408,16 +406,16 @@ class ControllerAccountMember extends Controller {
 				$this->setError('member_account_name', $this->language->get('error_exists_name'));
 			}
 
-			foreach ($invalid_words as $invalid_word) {
-				if (stripos($this->request->post['member_account_name'], $invalid_word) !== false) {
-					$this->setError('member_account_name', sprintf($this->language->get('error_member_account_name_reserved'), $invalid_word));
+			if (is_array($this->config->get('config_invalid_keywords'))) {
+				foreach ($this->config->get('config_invalid_keywords') as $invalid_word) {
+					if (stripos($this->request->post['member_account_name'], $invalid_word) !== false) {
+						$this->setError('member_account_name', sprintf($this->language->get('error_member_account_name_reserved'), $invalid_word));
+					}
 				}
 			}
 
-			$invalid_name_start = $this->config->get('config_member_name_start_invalid');
-
-			if (is_array($invalid_name_start)) {
-				foreach ($invalid_name_start as $invalid_start) {
+			if (is_array($this->config->get('config_invalid_keywords_start'))) {
+				foreach ($this->config->get('config_invalid_keywords_start') as $invalid_start) {
 					if (substr(strtolower($this->request->post['member_account_name']), 0, utf8_strlen($invalid_start)) == $invalid_start) {
 						$this->setError('member_account_name', sprintf($this->language->get('error_member_account_name_start'), $invalid_start));
 					}
@@ -528,7 +526,7 @@ class ControllerAccountMember extends Controller {
 			} else {
 				$url_alias_query = false;
 
-				if (in_array($this->request->post['member_url_alias'], $this->config->get('config_route_keywords'), true)) {
+				if (is_array($this->config->get('config_route_keywords')) && in_array($this->request->post['member_url_alias'], $this->config->get('config_route_keywords'), true)) {
 					$url_alias_query = array_search($this->request->post['member_url_alias'], $this->config->get('config_route_keywords'));
 				}
 
@@ -550,16 +548,16 @@ class ControllerAccountMember extends Controller {
 					}
 				}
 
-				foreach ($invalid_words as $invalid_word) {
-					if (stripos($this->request->post['member_url_alias'], $invalid_word) !== false) {
-						$this->setError('member_url_alias', sprintf($this->language->get('error_member_url_alias_reserved'), $invalid_word));
+				if (is_array($this->config->get('config_invalid_keywords'))) {
+					foreach ($this->config->get('config_invalid_keywords') as $invalid_word) {
+						if (stripos($this->request->post['member_url_alias'], $invalid_word) !== false) {
+							$this->setError('member_url_alias', sprintf($this->language->get('error_member_url_alias_reserved'), $invalid_word));
+						}
 					}
 				}
 
-				$invalid_url_start = $this->config->get('config_invalid_keywords_start');
-
-				if (is_array($invalid_url_start)) {
-					foreach ($invalid_url_start as $invalid_start) {
+				if (is_array($this->config->get('config_invalid_keywords_start'))) {
+					foreach ($this->config->get('config_invalid_keywords_start') as $invalid_start) {
 						if (substr($this->request->post['member_url_alias'], 0, utf8_strlen($invalid_start)) == $invalid_start) {
 							$this->setError('member_url_alias', sprintf($this->language->get('error_member_url_alias_start'), $invalid_start));
 						}
@@ -723,7 +721,7 @@ class ControllerAccountMember extends Controller {
 		if (!$this->customer->getMemberPermission('sort_enabled')) {
 			$data['sort_order'] = '10';
 
-			if (isset($this->request->post['member_activity'])) {
+			if (isset($this->request->post['member_activity']) && is_array($this->config->get('config_category_tags'))) {
 				$data['member_tag'] = implode(',', array_intersect(array_flip($this->config->get('config_category_tags')), $data['member_activity']));
 			} else {
 				$data['member_tag'] = '';

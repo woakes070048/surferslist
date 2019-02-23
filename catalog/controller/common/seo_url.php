@@ -16,8 +16,13 @@ class ControllerCommonSeoUrl extends Controller {
 		);
 
 		if ($this->config->get('config_route_cache')) {
-			$this->cache = array_merge($this->config->get('config_route_keywords'), $this->cache);
-			$this->category_path = $this->config->get('config_route_category_path');
+			if (is_array($this->config->get('config_route_keywords'))) {
+				$this->cache = array_merge($this->config->get('config_route_keywords'), $this->cache);
+			}
+
+			if (is_array($this->config->get('config_route_category_path'))) {
+				$this->category_path = $this->config->get('config_route_category_path');
+			}
 		}
 	}
 

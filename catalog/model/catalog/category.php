@@ -260,25 +260,25 @@ class ModelCatalogCategory extends Model {
 			}
 
 			// add synonyms
-			foreach ($this->config->get('config_category_synonyms') as $key => $value) {
-				// remove common keywords
-				if (empty($value)) {
-					unset($category_names[$key]);
-					continue;
-				}
+			if (is_array($this->config->get('config_category_synonyms'))) {
+				foreach ($this->config->get('config_category_synonyms') as $key => $value) {
+					// remove common keywords
+					if (empty($value)) {
+						unset($category_names[$key]);
+						continue;
+					}
 
-				if (!is_array($value)) {
-					$value = array($value);
-				}
+					$synonyms = explode(',', $value);
 
-				foreach ($value as $synonym) {
-					if (isset($category_names[$synonym])) {
-						$category_names[$synonym] = array_merge($category_names[$synonym], $category_names[$key]);
-					} else {
-						$category_names[$synonym] = $category_names[$key];
+					foreach ($synonyms as $synonym) {
+						if (isset($category_names[$synonym])) {
+							$category_names[$synonym] = array_merge($category_names[$synonym], $category_names[$key]);
+						} else {
+							$category_names[$synonym] = $category_names[$key];
+						}
 					}
 				}
-			}
+			}			
 
 			$this->cache->set('category.names.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'), $category_names);
 		}

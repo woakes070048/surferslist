@@ -165,7 +165,7 @@ $response = new Response();
 $response->addHeader('Content-Type: text/html; charset=utf-8');
 $response->addHeader('X-Frame-Options: SAMEORIGIN');
 
-if ($config->get('config_content_security_policy')) {
+if (is_array($config->get('config_content_security_policy')) && $config->get('config_content_security_policy')) {
 	$csp_header = $config->get('config_content_security_policy_report_only') === false
 		? 'Content-Security-Policy'
 		: 'Content-Security-Policy-Report-Only';
