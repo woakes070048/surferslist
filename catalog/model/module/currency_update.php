@@ -8,7 +8,7 @@ class ModelModuleCurrencyUpdate extends Model {
 	}
 
 	public function update($currency_codes = array()) {
-		if ($this->config->get('module_currency_update_status') == 0 || !$currency_codes) {
+		if ($this->config->get('module_currency_update_status') == 0 || !$this->config->get('config_fixer_access_key') || !$currency_codes) {
 			return false;
 		}
 

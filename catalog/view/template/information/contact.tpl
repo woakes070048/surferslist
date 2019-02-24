@@ -26,6 +26,14 @@
                     <div class="content clearafter">
 						<p class="text-larger"><?php echo $text_intro; ?></p>
 
+                        <?php if ($success) { ?>
+                        <div class="success">
+                            <p><?php echo $success; ?></p>
+                            <span class="close"><i class="fa fa-times"></i></span>
+                            <span class="icon"><i class="fa fa-check-circle"></i></span>
+                        </div>
+                        <?php } ?>
+
                         <?php if ($warning) { ?>
                         <div class="warning">
                             <p><?php echo $warning; ?></p>

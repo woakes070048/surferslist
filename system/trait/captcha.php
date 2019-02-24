@@ -2,6 +2,7 @@
 trait Captcha {
 	protected $captcha_enabled; // bool
 	protected $captcha_error; // string
+	protected $captcha_secret; // string
 
 	protected function getCaptchaStatus() {
 		if (!isset($this->captcha_enabled)) {
@@ -12,12 +13,13 @@ trait Captcha {
 	}
 
 	protected function setCaptchaStatus($bool) {
-		$this->captcha_enabled = $bool !== false;
+		$this->captcha_secret = $this->config->get('config_captcha_secret');
+		$this->captcha_enabled = $bool !== false && $this->captcha_secret;
 	}
 
 	protected function getCaptchaError() {
 		if (!isset($this->captcha_enabled)) {
-			$this->setCaptchaError("");
+			$this->setCaptchaError('');
 		}
 
 		return $this->captcha_error;
@@ -27,7 +29,7 @@ trait Captcha {
 		$this->captcha_error = $msg;
 	}
 
-	protected function validateCaptcha() {		
+	protected function validateCaptcha() {
 		if (isset($this->captcha_enabled) && !$this->captcha_enabled) {
 			return true;
 		}
@@ -64,7 +66,7 @@ trait Captcha {
 	protected function verifyCaptcha($response, $remoteip) {
 		$this->load->library('nocaptcha');
 
-		$recaptcha = new NoCaptcha($this->config->get('config_captcha_secret'));
+		$recaptcha = new NoCaptcha($this->captcha_secret);
 
 		$recaptcha->setResponse($response);
 		$recaptcha->setRemoteIp($remoteip);

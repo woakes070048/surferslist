@@ -16,8 +16,6 @@ class ModelDesignLayout extends Model {
 			return $this->route_layout[substr($route, 0, strrpos($route, '/') + 1)];
 		}
 
-		// $this->log->write('route: ' . $route);
-
 		$query = $this->db->query("
 			SELECT layout_id
 			FROM " . DB_PREFIX . "layout_route

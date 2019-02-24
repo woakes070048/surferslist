@@ -67,9 +67,16 @@ This project began as a [multi-seller/multi-vendor extension](https://github.com
 ## Installation & Configuration
 
 * No install script (yet); manual setup required
-* Database schema coming soon...
-* A complete list of possible configuration variables coming soon...
-* Administration website yet to be published open-source (will be a separate repo)
+* Database schema `database.sql` and starter data is `data.sql`
+* A list of configuration (config) variables will be added to the Wiki
+* Administration (admin) website yet to be made open-source (to be a separate repo)
+
+## Road Map
+* Add user management page for private messages
+* Add public pages to browse and search Discussions of Listings and Profiles
+* Add Forum (public read and write)
+* Add Blog (public read, premium user write)
+* Refactor and upload admin website
 
 ## Credits
 

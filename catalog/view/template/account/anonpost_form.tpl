@@ -267,7 +267,7 @@
                                             <strong><?php echo $entry_name; ?></strong>
                                             <i class="fa fa-question-circle float-right grey-text" title="<?php echo $entry_name . $help_optional; ?>" data-content="<?php echo $help_name; ?>" data-placement="left" data-container="body" rel="popover" data-trigger="hover"></i>
                                         </p>
-        								<input type="text" name="product_description[<?php echo $language['language_id']; ?>][name]" value="<?php echo isset($product_description[$language['language_id']]) ? $product_description[$language['language_id']]['name'] : ''; ?>" placeholder="<?php echo $entry_name; ?>" />
+        								<input type="text" name="product_description[<?php echo $language['language_id']; ?>][name]" value="<?php echo isset($product_description[$language['language_id']]['name']) ? $product_description[$language['language_id']]['name'] : ''; ?>" placeholder="<?php echo $entry_name; ?>" />
                                         <?php if (isset($error_name[$language['language_id']])) { ?><span class="error"><i class="fa fa-exclamation-triangle"></i><?php echo $error_name[$language['language_id']]; ?></span><?php } ?>
         							</div>
 
@@ -276,7 +276,7 @@
                                             <strong><?php echo $entry_description; ?></strong>
                                             <i class="fa fa-question-circle float-right grey-text" title="<?php echo $entry_description . $help_optional; ?>" data-content="<?php echo $help_description; ?>" data-placement="left" data-container="body" rel="popover" data-trigger="hover"></i>
                                         </p>
-                                        <textarea name="product_description[<?php echo $language['language_id']; ?>][description]" cols="68" rows="6" id="description<?php echo $language['language_id']; ?>"><?php echo isset($product_description[$language['language_id']]) ? $product_description[$language['language_id']]['description'] : ''; ?></textarea>
+                                        <textarea name="product_description[<?php echo $language['language_id']; ?>][description]" cols="68" rows="6" id="description<?php echo $language['language_id']; ?>"><?php echo isset($product_description[$language['language_id']]['description']) ? $product_description[$language['language_id']]['description'] : ''; ?></textarea>
                                         <?php if (isset($error_description[$language['language_id']])) { ?><span class="error"><i class="fa fa-exclamation-triangle"></i><?php echo $error_description[$language['language_id']]; ?></span><?php } ?>
         							</div>
                                     <?php } ?>
@@ -285,7 +285,7 @@
                                             <strong><?php echo $entry_tag; ?></strong>
                                             <i class="fa fa-question-circle float-right grey-text" title="<?php echo $entry_tag . $help_optional; ?>" data-content="<?php echo $help_tag; ?>" data-placement="left" data-container="body" rel="popover" data-trigger="hover"></i>
                                         </p>
-        								<input type="text" name="product_description[<?php echo $language['language_id']; ?>][tag]" value="<?php echo isset($product_description[$language['language_id']]) ? $product_description[$language['language_id']]['tag'] : ''; ?>" placeholder="<?php echo $entry_tag; ?>" />
+        								<input type="text" name="product_description[<?php echo $language['language_id']; ?>][tag]" value="<?php echo isset($product_description[$language['language_id']]['tag']) ? $product_description[$language['language_id']]['tag'] : ''; ?>" placeholder="<?php echo $entry_tag; ?>" />
                                         <?php if (isset($error_tag[$language['language_id']])) { ?><span class="error"><i class="fa fa-exclamation-triangle"></i><?php echo $error_tag[$language['language_id']]; ?></span><?php } ?>
         							</div>
         						</div>

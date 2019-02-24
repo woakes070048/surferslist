@@ -74,7 +74,7 @@ $core_css_min_new = '';
 $core_js_min_new = '';
 
 // minify css
-if (!$core_css_min) {
+if (!$core_css_min && is_array($config->get('config_minify_css_files'))) {
 	$css_filepaths = $config->get('config_minify_css_files');
 	$first_css_filepath = array_shift($css_filepaths);
 
@@ -91,7 +91,7 @@ if (!$core_css_min) {
 }
 
 // minify js
-if (!$core_js_min) {
+if (!$core_js_min && is_array($config->get('config_minify_js_files'))) {
 	$js_filepaths = $config->get('config_minify_js_files');
 	$first_js_filepath = array_shift($js_filepaths);
 

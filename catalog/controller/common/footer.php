@@ -97,7 +97,7 @@ class ControllerCommonFooter extends Controller {
 
 		// Socials
 		$this->data['fb_app_id'] = $this->config->get('config_fb_app_id');
-		$this->data['social_links'] = $this->config->get('config_social_links');
+		$this->data['social_links'] = is_array($this->config->get('config_social_links')) ? $this->config->get('config_social_links') : array();
 
 		// Who's Online
 		if ($this->config->get('config_customer_online')) {
