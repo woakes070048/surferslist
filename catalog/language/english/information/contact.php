@@ -20,7 +20,7 @@ $_['text_message_body'] = 'Message:';
 $_['text_telephone'] = 'Telephone:';
 $_['text_fax']       = 'Fax:';
 $_['text_message']   = 'Your message has been sent! Thank you.';
-$_['text_message_recipient']   = 'Your message has been sent to %s! Thank you.';
+$_['text_message_recipient']   = 'Your message has been sent to <a href="%s">%s</a>!<br />Thank you.';
 $_['text_message_listing']   = <<<EOT
 I have a question about the listing "%s".
 

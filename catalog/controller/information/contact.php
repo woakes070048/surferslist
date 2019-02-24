@@ -22,10 +22,20 @@ class ControllerInformationContact extends Controller {
 		$this->document->setKeywords($this->language->get('meta_keyword'));
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$mail_sent = $this->sendContact();
+			if (!empty($this->member)) {
+				$contact_data['email'] = $this->member['email'];
+				$contact_data['recipient'] = $this->member['member_account_name'];
+				$contact_data['recipient_url'] = $this->url->link('product/member/info', 'member_id=' . $this->member['member_account_id'], 'SSL');
+			} else {
+				$contact_data['email'] = $this->config->get('config_email');
+				$contact_data['recipient'] = $this->config->get('config_name');
+				$contact_data['recipient_url'] = $this->url->link('common/home', '', 'SSL');
+			}
+
+			$mail_sent = $this->sendContact($contact_data);
 
 			if ($mail_sent) {
-				$success = sprintf($this->language->get('text_message_recipient'), $member_contact_recipient);
+			 	$success = sprintf($this->language->get('text_message_recipient'), $contact_data['recipient_url'], strip_tags(html_entity_decode($contact_data['recipient'], ENT_QUOTES, 'UTF-8')));
 			} else if (!$this->getContactMailStatus()) {
 				$this->setError('warning', $this->language->get('error_disabled_mail'));
 			} else {
@@ -42,7 +52,10 @@ class ControllerInformationContact extends Controller {
 				$this->response->setOutput(json_encode($json));
 				return;
 			} else {
-				$this->session->data['success'] = isset($success) ? $success : '';
+				if (!$this->hasError()) {
+					$this->session->data['success'] = isset($success) ? $success : '';
+					$this->redirect($this->url->link('information/contact', '', 'SSL'));
+				}				
 			}
     	}
 
@@ -71,6 +84,8 @@ class ControllerInformationContact extends Controller {
         foreach ($data_field_errors as $data_field => $error_name) {
             $this->data[$error_name] = $this->getError($data_field);
         }
+
+		$this->data['success'] = isset($this->session->data['success']) ? $this->session->data['success'] : '';
 
     	if (isset($this->request->get['listing_id'])) {
 			$this->load->model('catalog/product');
@@ -202,23 +217,12 @@ class ControllerInformationContact extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	protected function sendContact() {
-		if (!empty($this->member)) {
-			$member_contact_email = $this->member['email'];
-			$member_contact_recipient = strip_tags_decode(html_entity_decode($this->member['member_account_name'], ENT_QUOTES, 'UTF-8'));
-			$member_contact_recipient_url = $this->url->link('product/member/info', 'member_id=' . $this->member['member_account_id'], 'SSL');
-		} else {
-			$member_contact_email = $this->config->get('config_email');
-			$member_contact_recipient = $this->config->get('config_name');
-			$member_contact_recipient_url = $this->url->link('common/home', '', 'SSL');
-		}
-
+	protected function sendContact($data) {
 		$to = '';
-		$cc = array();
 		$bcc = array();
 
 		// profile email is bcc'd for privacy
-		$bcc[] = $member_contact_email;
+		$bcc[] = $data['email'];
 
 		// send to the email submitted via form, if submitter is not logged in
 		if (!$this->customer->isLogged()) {
@@ -254,8 +258,7 @@ class ControllerInformationContact extends Controller {
 			'from' 		=> $this->config->get('config_email_noreply'),
 			'sender' 	=> $this->config->get('config_name'),
 			'subject' 	=> sprintf($this->language->get('email_subject'), $this->config->get('config_name'), $poster_name),
-			'message' 	=> sprintf($this->language->get('email_message'), $member_contact_recipient, $member_contact_recipient_url, $poster_name, $poster_email, strip_tags_decode($this->request->post['message'])),
-			'cc' 		=> $cc,
+			'message' 	=> sprintf($this->language->get('email_message'), $data['recipient'], $data['recipient_url'], $poster_name, $poster_email, $this->request->post['message']),
 			'bcc' 		=> $bcc,
 			'reply' 	=> $this->request->post['email']
 		));
