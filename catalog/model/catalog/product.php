@@ -1299,7 +1299,7 @@ class ModelCatalogProduct extends Model {
 					if (in_array($data['sort'], $sort_data)) {
 						if ($data['sort'] == 'name' || $data['sort'] == 'model') {
 							foreach ($product_data as $key => $value) {
-								$sort_order[$key] = strtolower($value[$data['sort']]);
+								$sort_order[$key] = utf8_strtolower($value[$data['sort']]);
 							}
 						} elseif ($data['sort'] == 'price') {
 							foreach ($product_data as $key => $value) {

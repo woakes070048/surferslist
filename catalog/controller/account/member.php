@@ -206,7 +206,7 @@ class ControllerAccountMember extends Controller {
 			$this->data['embed_settings_hex'][] = array(
 				'label' => $this->language->get("entry_embed_settings_{$embed_option}"),
 				'key' => $embed_option,
-				'value' => isset($embed_settings[$embed_option]) && is_hex_color($embed_settings[$embed_option]) ? strtolower($embed_settings[$embed_option]) : ''
+				'value' => isset($embed_settings[$embed_option]) && is_hex_color($embed_settings[$embed_option]) ? utf8_strtolower($embed_settings[$embed_option]) : ''
 			);
 		}
 
@@ -408,7 +408,7 @@ class ControllerAccountMember extends Controller {
 
 			if (is_array($this->config->get('config_invalid_keywords'))) {
 				foreach ($this->config->get('config_invalid_keywords') as $invalid_word) {
-					if (stripos($this->request->post['member_account_name'], $invalid_word) !== false) {
+					if (stripos(utf8_strtolower($this->request->post['member_account_name']), $invalid_word) !== false) {
 						$this->setError('member_account_name', sprintf($this->language->get('error_member_account_name_reserved'), $invalid_word));
 					}
 				}
@@ -416,7 +416,7 @@ class ControllerAccountMember extends Controller {
 
 			if (is_array($this->config->get('config_invalid_keywords_start'))) {
 				foreach ($this->config->get('config_invalid_keywords_start') as $invalid_start) {
-					if (substr(strtolower($this->request->post['member_account_name']), 0, utf8_strlen($invalid_start)) == $invalid_start) {
+					if (substr(utf8_strtolower($this->request->post['member_account_name']), 0, utf8_strlen($invalid_start)) == $invalid_start) {
 						$this->setError('member_account_name', sprintf($this->language->get('error_member_account_name_start'), $invalid_start));
 					}
 				}
@@ -521,13 +521,13 @@ class ControllerAccountMember extends Controller {
     	*/
 
     	if (isset($this->request->post['member_url_alias'])) {
-			if (!$this->validateStringLength($this->request->post['member_url_alias'], 3, 128) || !preg_match('/^[a-zA-Z0-9- ]*$/', $this->request->post['member_url_alias'])) {
+			if (!$this->validateStringLength($this->request->post['member_url_alias'], 3, 128) || !preg_match('/^[a-zA-Z0-9-]+$/', $this->request->post['member_url_alias'])) {
 				$this->setError('member_url_alias', sprintf($this->language->get('error_member_url_alias'), 3, 128));
 			} else {
 				$url_alias_query = false;
 
-				if (is_array($this->config->get('config_route_keywords')) && in_array($this->request->post['member_url_alias'], $this->config->get('config_route_keywords'), true)) {
-					$url_alias_query = array_search($this->request->post['member_url_alias'], $this->config->get('config_route_keywords'));
+				if (is_array($this->config->get('config_route_keywords')) && in_array(utf8_strtolower($this->request->post['member_url_alias']), $this->config->get('config_route_keywords'), true)) {
+					$url_alias_query = array_search(utf8_strtolower($this->request->post['member_url_alias']), $this->config->get('config_route_keywords'));
 				}
 
 				if (!$url_alias_query) {
@@ -550,7 +550,7 @@ class ControllerAccountMember extends Controller {
 
 				if (is_array($this->config->get('config_invalid_keywords'))) {
 					foreach ($this->config->get('config_invalid_keywords') as $invalid_word) {
-						if (stripos($this->request->post['member_url_alias'], $invalid_word) !== false) {
+						if (stripos(utf8_strtolower($this->request->post['member_url_alias']), $invalid_word) !== false) {
 							$this->setError('member_url_alias', sprintf($this->language->get('error_member_url_alias_reserved'), $invalid_word));
 						}
 					}
@@ -558,7 +558,7 @@ class ControllerAccountMember extends Controller {
 
 				if (is_array($this->config->get('config_invalid_keywords_start'))) {
 					foreach ($this->config->get('config_invalid_keywords_start') as $invalid_start) {
-						if (substr($this->request->post['member_url_alias'], 0, utf8_strlen($invalid_start)) == $invalid_start) {
+						if (substr(utf8_strtolower($this->request->post['member_url_alias']), 0, utf8_strlen($invalid_start)) == $invalid_start) {
 							$this->setError('member_url_alias', sprintf($this->language->get('error_member_url_alias_start'), $invalid_start));
 						}
 					}
@@ -621,7 +621,7 @@ class ControllerAccountMember extends Controller {
 
 						// member account image
 						if (!empty($this->request->post['member_account_image'])) {
-							$ext = substr(strrchr(strtolower($data['member_account_image']), '.'), 1);  // jpg (file extension)
+							$ext = substr(strrchr(utf8_strtolower($data['member_account_image']), '.'), 1);  // jpg (file extension)
 							$old_filepath = DIR_IMAGE . $data['member_account_image'];  // web-root-home-dir/image/data/member/uploaded-image.jpg
 							$new_filename = $data['keyword'] . '-image.' . $ext;  // member-name-image.jpg
 							$new_filepath = $directory . '/' . $new_filename;  // web-root-home-dir/image/data/member/a/name-123456/member-name-image.jpg
@@ -637,7 +637,7 @@ class ControllerAccountMember extends Controller {
 
 						// member account banner
 						if (!empty($this->request->post['member_account_banner']) && $this->customer->getMemberPermission('banner_enabled')) {
-							$ext = substr(strrchr(strtolower($data['member_account_banner']), '.'), 1);  // jpg (file extension)
+							$ext = substr(strrchr(utf8_strtolower($data['member_account_banner']), '.'), 1);  // jpg (file extension)
 							$old_filepath = DIR_IMAGE . $data['member_account_banner'];  // web-root-home-dir/image/data/member/uploaded-banner.jpg
 							$new_filename = $data['keyword'] . '-banner.' . $ext;  // member-name-banner.jpg
 							$new_filepath = $directory . '/' . $new_filename;  // web-root-home-dir/image/data/member/a/name-123456/member-name-banner.jpg
@@ -728,7 +728,7 @@ class ControllerAccountMember extends Controller {
 			}
 		} else {
 			$data['sort_order'] = '1';
-			$data['member_tag'] = preg_replace('/[\s,#]+/', ', $1', trim(strtolower($data['member_tag']), " \t\n\r\0\x0B,#"));
+			$data['member_tag'] = preg_replace('/[\s,#]+/', ', $1', trim(utf8_strtolower($data['member_tag']), " \t\n\r\0\x0B,#"));
 		}
 
 		$data['meta_keyword'] = $data['member_tag'];
