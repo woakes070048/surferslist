@@ -1725,7 +1725,7 @@ class ModelAccountProduct extends Model {
 		$query = $this->db->query("
 			SELECT COUNT(product_id) AS total
 			FROM " . DB_PREFIX . "product_description
-			WHERE LOWER(`name`) = '" . $this->db->escape(strtolower($name)) . "'
+			WHERE LOWER(`name`) = '" . $this->db->escape(utf8_strtolower($name)) . "'
 			AND language_id = '" . (int)$language_id . "'
 		");
 
