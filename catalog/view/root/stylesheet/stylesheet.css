@@ -9072,6 +9072,26 @@ a.highlight, b.highlight, i.highlight, span.highlight {
         max-width: 340px;
     }
 
+    .product-page .layout, .product-page .layout .container-bottom .container-center > .content-page {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .product-page .layout .right-item, .product-page .layout .container-bottom {
+        padding: 10px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    .product-page .layout .right-item > .widget, .product-page .left-item {
+        margin-bottom: 0;
+    }
+
+    .product-page .left-item .thumb {
+        padding: 0;
+    }
+
     .grid-1, .grid-2, .grid-3, .grid-4, .grid-6, .grid-8 {
         margin-left: 0 !important;
         margin-right: 0 !important;
