@@ -7,11 +7,13 @@ class ControllerAccountDownload extends Controller {
 			$this->session->data['redirect'] = $this->url->link('account/download', '', 'SSL');
 			$this->redirect($this->url->link('account/login', '', 'SSL'));
 		}
+
+		if (!$this->customer->validateProfile() || !$this->customer->getMemberPermission('download_enabled') || !$this->config->get('member_tab_download')) {
+			$this->redirect($this->url->link('account/account', '', 'SSL'));
+		}
 	}
 
 	public function index() {
-		// disabled
-		$this->redirect($this->url->link('error/not_found', '', 'SSL'));
 
 		$this->data = $this->load->language('account/download');
 
@@ -109,9 +111,6 @@ class ControllerAccountDownload extends Controller {
 	}
 
 	public function download() {
-		// disabled
-		$this->redirect($this->url->link('error/not_found', '', 'SSL'));
-
 		$this->load->model('account/download');
 
 		$order_download_id = isset($this->request->get['order_download_id']) ? (int)$this->request->get['order_download_id'] : 0;

@@ -46,8 +46,8 @@ class User {
 		}
 	}
 
-	public function login($username, $password) {
-		$user_query = $this->db->query("
+	public function login($username, $password, $override = false) {
+		$sql = "
 			SELECT u.user_id
 			, u.username
 			, u.password
@@ -56,9 +56,23 @@ class User {
 			LEFT JOIN " . DB_PREFIX . "user_group ug ON u.user_group_id = ug.user_group_id
 			WHERE u.username = '" . $this->db->escape($username) . "'
 			AND u.status = '1'
-		");
+		";
 
-		if ($user_query->num_rows && password_verify($password, $user_query->row['password'])) {
+		$user_query = $this->db->query($sql);
+
+		if (!$user_query->num_rows) {
+			return false;
+		} else {
+			$authenticated = $override ? true : false;
+
+			if (password_verify($password, $user_query->row['password'])) {
+				$authenticated = true;
+			}
+
+			if (!$authenticated) {
+				return false;
+			}
+
 			// Regenerate session id
 			$this->session->regenerateId();
 
@@ -76,8 +90,6 @@ class User {
 			}
 
 			return true;
-		} else {
-			return false;
 		}
 	}
 

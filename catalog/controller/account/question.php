@@ -186,7 +186,7 @@ class ControllerAccountQuestion extends Controller {
 				'href' => $this->url->link('account/question/update', '&question_id=' . $result['question_id'] . $url, 'SSL')
 			);
 
-			$message = strip_tags_decode(html_entity_decode($result['text'], ENT_QUOTES, 'UTF-8'));
+			$message = strip_tags(html_entity_decode($result['text'], ENT_QUOTES, 'UTF-8'));
 			$message_short = utf8_substr($message, 0, 45);
 			$message_short .= utf8_strlen($message) > 45 ? $this->language->get('text_ellipses') : '';
 

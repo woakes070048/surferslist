@@ -192,7 +192,7 @@ class ControllerAccountReview extends Controller {
 				'href' => $this->url->link('account/review/update', '&review_id=' . $result['review_id'] . $url, 'SSL')
 			);
 
-			$review = strip_tags_decode(html_entity_decode($result['text'], ENT_QUOTES, 'UTF-8'));
+			$review = strip_tags(html_entity_decode($result['text'], ENT_QUOTES, 'UTF-8'));
 			$review_short = utf8_substr($review, 0, 30);
 			$review_short .= utf8_strlen($review) > 30 ? $this->language->get('text_ellipses') : '';
 

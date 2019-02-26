@@ -100,7 +100,7 @@ $_['error_login_expired']   = 'Session expired! Please log in again.';
 $_['error_logged']          = 'Login is required! <a href="features">Learn more</a>';
 $_['error_member_activate'] = '<a href="%s">Profile</a> is required! <a href="user-profile">Learn more</a>';
 $_['error_member_disabled'] = 'Profile has been disabled for this account! Please <a href="contact">contact us</a>.';
-$_['error_membership']      = 'Profile actions are temporarily disabled!';
+$_['error_membership']      = 'Profiles are temporarily disabled!';
 $_['error_disabled']        = 'This action is disabled!';
 $_['error_disabled_mail']   = 'Sorry, email is temporarily disabled!';
 $_['error_send_mail']       = 'Error: mail was not sent!';

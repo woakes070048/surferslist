@@ -39,7 +39,7 @@ class ControllerAccountVerification extends Controller {
 
 		$this->data['warning'] = $this->getError('warning') ?: $this->language->get('text_account_not_verified');
 
-		$this->template = $this->config->get('config_template') . '/template/account/verification.tpl';
+		$this->template = '/template/account/verification.tpl';
 
 		$this->children = array(
 			'common/column_left',

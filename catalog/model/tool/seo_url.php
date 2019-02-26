@@ -82,6 +82,8 @@ class ModelToolSeoUrl extends Model {
 		$data = $this->cache->get($type . '.route');
 
 		if ($data === false) {
+			$data = array();
+			
 			$expires = 60 * 60; // default 1 hour cache expiration
 
 			switch ($type) {

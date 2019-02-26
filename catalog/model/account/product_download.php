@@ -7,7 +7,7 @@ class ModelAccountProductDownload extends Model {
 			SET filename = '" . $this->db->escape($data['filename']) . "'
 			, mask = '" . $this->db->escape($data['mask']) . "'
 			, remaining = '" . (int)$data['remaining'] . "'
-			, member_customer_id = '" . (int)$data['customer_id'] . "'
+			, member_customer_id = '" . (int)$this->customer->getId() . "'
 			, date_added = NOW()
 		");
 
@@ -34,13 +34,21 @@ class ModelAccountProductDownload extends Model {
 			, mask = '" . $this->db->escape($data['mask']) . "'
 			, remaining = '" . (int)$data['remaining'] . "'
 			WHERE download_id = '" . (int)$download_id . "'
-			AND member_customer_id = '" . (int)$data['customer_id'] . "'
+			AND member_customer_id = '" . (int)$this->customer->getId() . "'
 		");
+
+		if (!$this->db->countAffected()) {
+			return;
+		}
 
       	$this->db->query("
 			DELETE FROM " . DB_PREFIX . "download_description
 			WHERE download_id = '" . (int)$download_id . "'
 		");
+
+		if (!$this->db->countAffected()) {
+			return;
+		}
 
       	foreach ($data['download_description'] as $language_id => $value) {
         	$this->db->query("
@@ -52,25 +60,27 @@ class ModelAccountProductDownload extends Model {
       	}
 	}
 
-	public function deleteDownload($download_id, $customer_id) {
+	public function deleteDownload($download_id) {
       	$this->db->query("
 			DELETE FROM " . DB_PREFIX . "download
 			WHERE download_id = '" . (int)$download_id . "'
-			AND member_customer_id = '" . $customer_id . "'
+			AND member_customer_id = '" . (int)$this->customer->getId() . "'
 		");
 
-	  	$this->db->query("
-			DELETE FROM " . DB_PREFIX . "download_description
-			WHERE download_id = '" . (int)$download_id . "'
-		");
+		if ($this->db->countAffected()) {
+			$this->db->query("
+				DELETE FROM " . DB_PREFIX . "download_description
+				WHERE download_id = '" . (int)$download_id . "'
+			");
+		}
 	}
 
-	public function getDownload($download_id, $customer_id) {
+	public function getDownload($download_id) {
 		$query = $this->db->query("
 			SELECT DISTINCT *
 			FROM " . DB_PREFIX . "download
 			WHERE download_id = '" . (int)$download_id . "'
-			AND member_customer_id = '" . $customer_id . "'
+			AND member_customer_id = '" . (int)$this->customer->getId() . "'
 		");
 
 		return $query->row;
@@ -82,7 +92,7 @@ class ModelAccountProductDownload extends Model {
 			FROM " . DB_PREFIX . "download d
 			LEFT JOIN " . DB_PREFIX . "download_description dd ON (d.download_id = dd.download_id)
 			WHERE dd.language_id = '" . (int)$this->config->get('config_language_id') . "'
-			AND d.member_customer_id = '" . (int)$data['customer_id'] . "'
+			AND d.member_customer_id = '" . (int)$this->customer->getId() . "'
 		";
 
 		$sort_data = array(
@@ -123,9 +133,10 @@ class ModelAccountProductDownload extends Model {
 		$download_description_data = array();
 
 		$query = $this->db->query("
-			SELECT *
-			FROM " . DB_PREFIX . "download_description
-			WHERE download_id = '" . (int)$download_id . "'
+			SELECT dd.*
+			FROM " . DB_PREFIX . "download_description dd
+			RIGHT JOIN " . DB_PREFIX . "download d ON (dd.download_id = d.download_id)
+			WHERE d.member_customer_id = '" . (int)$this->customer->getId() . "'
 		");
 
 		foreach ($query->rows as $result) {
@@ -135,11 +146,11 @@ class ModelAccountProductDownload extends Model {
 		return $download_description_data;
 	}
 
-	public function getTotalDownloads($customer_id) {
+	public function getTotalDownloads() {
       	$query = $this->db->query("
 			SELECT COUNT(download_id) AS total
 			FROM " . DB_PREFIX . "download
-			WHERE member_customer_id = '" . (int)$customer_id ."'
+			WHERE member_customer_id = '" . (int)$this->customer->getId() ."'
 		");
 
 		return $query->row['total'];
