@@ -71,9 +71,7 @@ class ControllerAjaxUpload extends Controller {
 			$filename = friendly_url($profile_name) . '-image-' . mt_rand() . '.' . $file_extension;
 		}
 
-		//$json['no_image'] = $this->model_tool_image->resize('no_image.jpg', $thumb_resize_width, $thumb_resize_height, $resize_type);
-
-		if ($this->customer->hasProfile() && $this->customer->getMemberImagesDirectory()) { // !empty($this->request->get['activated'])
+		if ($this->customer->hasProfile() && $this->customer->getMemberImagesDirectory()) {
 			$image_directory = 'data/' . $this->customer->getMemberImagesDirectory();
 		// } else if (!empty($this->request->get['directory_images'])) {
 		// 	$image_directory = 'data/' . clean_path(urldecode($this->request->get['directory_images']));
@@ -162,13 +160,11 @@ class ControllerAjaxUpload extends Controller {
 	}
 
     public function file_member() {
-        // disabled
-		if (true
-            || !$this->customer->validateLogin()
+		if (!$this->customer->validateLogin()
             || !$this->customer->validateProfile()
+            || !$this->customer->getMemberPermission('download_enabled')
             || !$this->config->get('member_status')
             || !$this->config->get('member_tab_download')
-            || !$this->customer->getMemberPermission('download_enabled')
             || empty($this->request->files['file']['name'])) {
 			return false;
 		}

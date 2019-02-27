@@ -588,7 +588,7 @@ class ControllerAccountMember extends Controller {
 
 		$meta_description = $this->language->get('text_account_member') . ': ' . ucwords($data['member_account_name']) . '; ';
 		$meta_description .= $this->language->get('text_location') . ': ' . $data['member_city'] . ', ' . $member_zone['name'] . ', ' . $member_country['name'] . '; ';
-		$meta_description .= $this->language->get('entry_member_account_description') . ': ' . utf8_substr(trim(strip_tags_decode(html_entity_decode($data['member_account_description'], ENT_QUOTES, 'UTF-8'))), 0, 100) . ';';
+		$meta_description .= $this->language->get('entry_member_account_description') . ': ' . utf8_substr(trim(strip_tags(html_entity_decode($data['member_account_description'], ENT_QUOTES, 'UTF-8'))), 0, 100) . ';';
 
 		$data['meta_description'] = $meta_description;
 		*/

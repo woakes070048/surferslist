@@ -1094,7 +1094,7 @@ class ControllerAccountProduct extends Controller {
 			if ($this->customer->getMemberPermission('download_enabled') && $this->config->get('member_tab_download')) {
 				$this->load->model('account/product_download');
 
-				$this->data['downloads'] = $this->model_account_product_download->getDownloads($data);
+				$this->data['downloads'] = $this->model_account_product_download->getDownloads();
 
 				if (isset($this->request->post['product_download'])) {
 					$this->data['product_download'] = $this->request->post['product_download'];
@@ -1481,12 +1481,26 @@ class ControllerAccountProduct extends Controller {
       		}
     	}
 
-		if ($this->config->get('member_data_field_image') && empty($data['image'])) {
-			$this->setError('image', $this->language->get('error_image'));
+		if ($this->config->get('member_data_field_image')) {
+			if (empty($data['image'])) {
+				$this->setError('image', $this->language->get('error_image'));
+			}
+
+			if (!is_file(DIR_IMAGE . $data['image'])) {
+				$this->setError('image', sprintf($this->language->get('error_exists'), $data['image']));
+			}
 		}
 
-		if ($this->config->get('member_data_field_image') && !empty($data['product_image']) && count($data['product_image']) > $this->config->get('member_image_max_number')) {
-			$this->setError('images', sprintf($this->language->get('error_max_images'), $this->config->get('member_image_max_number')));
+		if ($this->config->get('member_data_field_image') && !empty($data['product_image'])) {
+			if (count($data['product_image']) > $this->config->get('member_image_max_number')) {
+				$this->setError('images', sprintf($this->language->get('error_max_images'), $this->config->get('member_image_max_number')));
+			}
+
+			foreach ($data['product_image'] as $product_image) {
+				if (!is_file(DIR_IMAGE . $product_image)) {
+					$this->setError('image', sprintf($this->language->get('error_exists'), $product_image));
+				}
+			}
 		}
 
 		if ($data['for_sale'] == 0) {
@@ -1714,7 +1728,7 @@ class ControllerAccountProduct extends Controller {
 				$listing_name_changed = true;
 			}
 
-			if ($this->config->get('member_tab_image') && isset($data['product_image']) && $data['product_image'] != $product_images) {
+			if (isset($data['product_image']) && $data['product_image'] != $product_images) {
 				$listing_images_changed = true;
 			}
 		}
@@ -1776,7 +1790,7 @@ class ControllerAccountProduct extends Controller {
 			$meta_description .= $this->language->get('entry_category') . ': ' . $product_category_main['name'] . ', ' . $product_category_sub['name'];
 			$meta_description .= !empty($product_category_third['name']) ? ', ' . $product_category_third['name'] . '; ' : ';';
 			$meta_description .= $this->language->get('entry_location') . ': ' . $data['location'] . ', ' . $product_zone['name'] . ', ' . $product_country['name'] . '; ';
-			// $meta_description .= $this->language->get('entry_description') . ': ' . utf8_substr(trim(strip_tags_decode(html_entity_decode($value['description'], ENT_QUOTES, 'UTF-8'))), 0, 100) . ';';
+			// $meta_description .= $this->language->get('entry_description') . ': ' . utf8_substr(trim(strip_tags(html_entity_decode($value['description'], ENT_QUOTES, 'UTF-8'))), 0, 100) . ';';
 
 			$data['product_description'][$language_id]['meta_description'] = $meta_description;
 		}
@@ -2052,7 +2066,7 @@ class ControllerAccountProduct extends Controller {
 			$output .= '   <tbody>' . "\n";
 			foreach ($results as $result) {
 			$output .= '      <tr>' . "\n";
-			$output .= '        <td class="left">' . strip_tags_decode(html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8')) . '</td>' . "\n";
+			$output .= '        <td class="left">' . strip_tags(html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8')) . '</td>' . "\n";
 			$output .= '        <td class="left">' . $result['attribute_group'] . '</td>' . "\n";
 			$output .= '      <tr>' . "\n";
 			}
@@ -2119,7 +2133,7 @@ class ControllerAccountProduct extends Controller {
 				}
 
 			$output .= '      <tr>' . "\n";
-			$output .= '        <td class="left">' . strip_tags_decode(html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8')) . '</td>' . "\n";
+			$output .= '        <td class="left">' . strip_tags(html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8')) . '</td>' . "\n";
 			$output .= '        <td class="left">' . $type . ' (' . $result['type'] . ')</td>' . "\n";
 			$output .= '      <tr>' . "\n";
 			}
@@ -2177,7 +2191,7 @@ class ControllerAccountProduct extends Controller {
 
 				foreach ($geo_zone_info['geo_zone_zones'] as $geo_zone_zone_info) {
 					$output .= '      <tr>' . "\n";
-					$output .= '        <td class="left">' . strip_tags_decode(html_entity_decode($geo_zone_zone_info['name'], ENT_QUOTES, 'UTF-8')) . ' (' . $geo_zone_zone_info['code'] . ')' . '</td>' . "\n";
+					$output .= '        <td class="left">' . strip_tags(html_entity_decode($geo_zone_zone_info['name'], ENT_QUOTES, 'UTF-8')) . ' (' . $geo_zone_zone_info['code'] . ')' . '</td>' . "\n";
 					$output .= '      <tr>' . "\n";
 				}
 

@@ -195,8 +195,9 @@ class ControllerAccountAnonPost extends Controller {
 		$this->data['help_unauthorized'] = !$this->isAdmin() && !$this->customer->isLogged() ? sprintf($this->language->get('help_unauthorized'), $this->url->link('account/login', '', 'SSL'), $this->url->link('account/register', '', 'SSL')) : '';
 
 		// Categories
+		$categories_complete = array();
+
 		if ($this->config->get('member_data_field_category')) {
-			$this->data['categories_complete'] = $this->model_catalog_category->getAllCategoriesComplete();
 			$this->data['categories'] = $this->model_catalog_category->getCategories(0);
 			$this->data['category_id'] = isset($this->request->post['category_id']) ? $this->request->post['category_id'] : 0;
 			$this->data['sub_categories'] = $this->data['category_id'] ? $this->model_catalog_category->getCategories($this->data['category_id']) : array();
@@ -204,9 +205,15 @@ class ControllerAccountAnonPost extends Controller {
 			$this->data['third_categories'] = $this->data['sub_category_id'] ? $this->model_catalog_category->getCategories($this->data['sub_category_id']) : array();
 			$this->data['third_category_id'] = isset($this->request->post['third_category_id']) ? $this->request->post['third_category_id'] : 0;
 			$this->data['category_name'] = isset($this->request->post['category_name']) ? $this->request->post['category_name'] : '';
+
+			$categories_complete = $this->model_catalog_category->getAllCategoriesComplete();
 		}
 
+		$this->data['categories_complete'] = htmlspecialchars(json_encode($categories_complete), ENT_COMPAT);
+
 		// Manufacturers (Brands)
+		$manufacturers = array();
+
 		if ($this->config->get('member_data_field_manufacturer')) {
 			$this->data['manufacturer_id'] = isset($this->request->post['manufacturer_id']) ? $this->request->post['manufacturer_id'] : 0;
 
@@ -219,8 +226,10 @@ class ControllerAccountAnonPost extends Controller {
 				$this->data['manufacturer_name'] = '';
 			}
 
-			$this->data['manufacturers'] = $this->model_catalog_manufacturer->getManufacturers();
+			$manufacturers = $this->model_catalog_manufacturer->getManufacturers();
 		}
+
+		$this->data['manufacturers'] = htmlspecialchars(json_encode($manufacturers), ENT_COMPAT);
 
 		$this->data['currency'] = $this->model_localisation_currency->getCurrencyByCode($this->currency->getCode());
 		$this->data['price'] = isset($this->request->post['price']) ? $this->request->post['price'] : '';

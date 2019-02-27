@@ -17,7 +17,7 @@ class ControllerInformationInformation extends Controller {
 			if (!empty($information_info['meta_description'])) {
 				$information_info_meta_description = $information_info['meta_description'];
 			} else {
-				$information_info_meta_description = utf8_substr(strip_tags_decode(html_entity_decode($information_info['description'], ENT_QUOTES, 'UTF-8')), 0, 160);
+				$information_info_meta_description = utf8_substr(strip_tags(html_entity_decode($information_info['description'], ENT_QUOTES, 'UTF-8')), 0, 160);
 			}
 
 			$this->document->setDescription($information_info_meta_description);

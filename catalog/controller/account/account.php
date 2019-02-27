@@ -137,7 +137,7 @@ class ControllerAccountAccount extends Controller {
 			// removed member description
 			/*
 			if(!empty($member_info['member_account_description'])){
-				$this->data['member_description'] = utf8_substr(strip_tags_decode(html_entity_decode($member_info['member_account_description'], ENT_QUOTES, 'UTF-8')), 0, 300) . $this->language->get('text_ellipses');
+				$this->data['member_description'] = utf8_substr(strip_tags(html_entity_decode($member_info['member_account_description'], ENT_QUOTES, 'UTF-8')), 0, 300) . $this->language->get('text_ellipses');
 			} else {
 				$this->data['member_description'] = '';
 			} */

@@ -98,7 +98,7 @@ class ControllerFeedGoogleSitemap extends Controller {
 				$output .= '<priority>0.9</priority>';
 				$output .= '<image:image>';
 				$output .= '<image:loc>' . str_replace(' ', '%20', $this->model_tool_image->resize($product['image'], $this->config->get('config_image_popup_width'), $this->config->get('config_image_popup_height'))) . '</image:loc>';
-				$output .= '<image:caption>' . utf8_substr(str_replace('&nbsp', ' ', strip_tags_decode(html_entity_decode($product['description'], ENT_QUOTES, 'UTF-8'))), 0, 100) . '...' . '</image:caption>';
+				$output .= '<image:caption>' . utf8_substr(str_replace('&nbsp', ' ', strip_tags(html_entity_decode($product['description'], ENT_QUOTES, 'UTF-8'))), 0, 100) . '...' . '</image:caption>';
 				$output .= '<image:title>' . $product_title . '</image:title>';
 				$output .= '</image:image>';
 				$output .= '</url>';

@@ -209,7 +209,7 @@ class ControllerAjaxProduct extends Controller {
 					$output .= '        <td class="left">';
 
 					foreach ($geo_zone_info['geo_zone_zones'] as $geo_zone_zone_info) {
-						$output .= strip_tags_decode(html_entity_decode($geo_zone_zone_info['name'], ENT_QUOTES, 'UTF-8')) . ' (' . $geo_zone_zone_info['code'] . '), ';
+						$output .= strip_tags(html_entity_decode($geo_zone_zone_info['name'], ENT_QUOTES, 'UTF-8')) . ' (' . $geo_zone_zone_info['code'] . '), ';
 					}
 
 					$output .= '        </td>' . "\n";

@@ -478,6 +478,7 @@ $_['error_download_filename'] = 'Download filename must be between 3 and 128 cha
 $_['error_download_exists']   = 'Download file does not exist!';
 $_['error_download_mask']     = 'Download mask must be between 3 and 128 characters!';
 $_['error_download_filetype'] = 'Invalid file type!';
+$_['error_exists']            = 'File %s does not exist!';
 $_['error_upload_1']          = 'The uploaded file exceeds the upload_max_filesize directive in php.ini!';
 $_['error_upload_2']          = 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form!';
 $_['error_upload_3']          = 'The uploaded file was only partially uploaded!';

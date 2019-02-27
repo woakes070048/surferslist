@@ -10,7 +10,7 @@ class ControllerAccountProductDownload extends Controller {
 			$this->redirect($this->url->link('account/login', '', 'SSL'));
 		}
 
-		if (!$this->customer->validateMembership() || !$this->config->get('member_tab_download')) {
+		if (!$this->customer->validateProfile() || !$this->customer->getMemberPermission('download_enabled') || !$this->config->get('member_tab_download')) {
 			$this->redirect($this->url->link('account/account', '', 'SSL'));
 		}
 	}
@@ -26,17 +26,11 @@ class ControllerAccountProductDownload extends Controller {
 	}
 
 	public function index() {
-		// disable
-		$this->redirect($this->url->link('error/not_found', '', 'SSL'));
-
 		$this->init();
 		$this->getList();
 	}
 
   	public function insert() {
-		// disable
-		$this->redirect($this->url->link('error/not_found', '', 'SSL'));
-
 		$this->init();
 
 		if (!$this->validateNew()) {
@@ -54,7 +48,7 @@ class ControllerAccountProductDownload extends Controller {
 			if ($this->validateForm()) {
 				$data = $this->request->post;
 				// $data['filename'] = $this->customer->getMemberDownloadsDirectory() . '/' . $data['filename'];
-				$data['customer_id'] = $this->customer->getId();
+
 				$this->model_account_product_download->addDownload($data);
 
 				$this->session->data['success'] = $this->language->get('text_success');
@@ -67,10 +61,11 @@ class ControllerAccountProductDownload extends Controller {
  	}
 
   	public function update() {
-		// disable
-		$this->redirect($this->url->link('error/not_found', '', 'SSL'));
-
 		$this->init();
+
+		if (!$this->validateAction()) {
+			$this->getList();
+		}
 
     	if ($this->request->server['REQUEST_METHOD'] == 'POST') {
 			if (!$this->customer->validateToken()) {
@@ -81,10 +76,7 @@ class ControllerAccountProductDownload extends Controller {
 			$this->customer->setToken();
 
 			if ($this->validateForm()) {
-				$data = $this->request->post;
-				$data['customer_id'] = $this->customer->getId();
-
-				$this->model_account_product_download->editDownload($this->request->get['download_id'], $data);
+				$this->model_account_product_download->editDownload($this->request->get['download_id'], $this->request->post);
 
 				$this->session->data['success'] = $this->language->get('text_success');
 
@@ -96,10 +88,11 @@ class ControllerAccountProductDownload extends Controller {
   	}
 
   	public function delete() {
-		// disable
-		$this->redirect($this->url->link('error/not_found', '', 'SSL'));
-
 		$this->init();
+
+		if (!$this->validateAction()) {
+			$this->getList();
+		}
 
     	if (isset($this->request->post['selected'])) {
 			if (!$this->customer->validateToken()) {
@@ -111,7 +104,7 @@ class ControllerAccountProductDownload extends Controller {
 
 			if ($this->validateDelete()) {
 				foreach ($this->request->post['selected'] as $download_id) {
-					$this->model_account_product_download->deleteDownload($download_id, $this->customer->getId());
+					$this->model_account_product_download->deleteDownload($download_id);
 				}
 
 				$this->session->data['success'] = $this->language->get('text_success');
@@ -123,7 +116,7 @@ class ControllerAccountProductDownload extends Controller {
     	$this->getList();
   	}
 
-  	private function getList() {
+  	protected function getList() {
 		$sort = isset($this->request->get['sort']) ? (string)$this->request->get['sort'] : 'dd.name';
 		$order = isset($this->request->get['order']) ? (string)$this->request->get['order'] : 'ASC';
 		$page = isset($this->request->get['page']) ? (int)$this->request->get['page'] : 1;
@@ -142,14 +135,13 @@ class ControllerAccountProductDownload extends Controller {
 		$this->data['downloads'] = array();
 
 		$data = array(
-			'customer_id' => $this->customer->getId(),
 			'sort'  => $sort,
 			'order' => $order,
 			'start' => ($page - 1) * $this->config->get('config_admin_limit'),
 			'limit' => $this->config->get('config_admin_limit')
 		);
 
-		$download_total = $this->model_account_product_download->getTotalDownloads($this->customer->getId());
+		$download_total = $this->model_account_product_download->getTotalDownloads();
 
 		$results = $this->model_account_product_download->getDownloads($data);
 
@@ -158,7 +150,7 @@ class ControllerAccountProductDownload extends Controller {
 
 			$action[] = array(
 				'text' => $this->language->get('text_edit'),
-				'href' => $this->url->link('account/product_download/update', '' . '&download_id=' . $result['download_id'] . $url, 'SSL')
+				'href' => $this->url->link('account/product_download/update', 'download_id=' . $result['download_id'] . $url, 'SSL')
 			);
 
 			$this->data['downloads'][] = array(
@@ -212,7 +204,7 @@ class ControllerAccountProductDownload extends Controller {
 		$this->response->setOutput($this->render());
   	}
 
-  	private function getForm() {
+  	protected function getForm() {
 		$data_field_errors = array(
 			'warning'		=>	'error_warning',
 			'name'			=>	'error_name',
@@ -233,7 +225,7 @@ class ControllerAccountProductDownload extends Controller {
 		if (!isset($this->request->get['download_id'])) {
 			$this->data['action'] = $this->url->link('account/product_download/insert', '', 'SSL');
 		} else {
-			$this->data['action'] = $this->url->link('account/product_download/update', '' . '&download_id=' . $this->request->get['download_id'], 'SSL');
+			$this->data['action'] = $this->url->link('account/product_download/update', 'download_id=' . $this->request->get['download_id'], 'SSL');
 		}
 
 		$this->data['cancel'] = $this->url->link('account/product_download', $this->getQueryParams(), 'SSL');
@@ -243,7 +235,7 @@ class ControllerAccountProductDownload extends Controller {
 		$this->data['languages'] = $this->model_localisation_language->getLanguages();
 
     	if (isset($this->request->get['download_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$download_info = $this->model_account_product_download->getDownload($this->request->get['download_id'], $this->customer->getId());
+			$download_info = $this->model_account_product_download->getDownload($this->request->get['download_id']);
     	}
 
 		$this->data['download_id'] = isset($this->request->get['download_id']) ? (int)$this->request->get['download_id'] : 0;
@@ -305,20 +297,20 @@ class ControllerAccountProductDownload extends Controller {
 
   	private function validateForm() {
     	foreach ($this->request->post['download_description'] as $language_id => $value) {
-      		if ((utf8_strlen($value['name']) < 3) || (utf8_strlen($value['name']) > 64)) {
+      		if (!$this->validateStringLength($value['name'], 3, 64)) {
         		$this->appendError('name', sprintf($this->language->get('error_name'), 3, 64), $language_id);
       		}
     	}
 
-		if ((utf8_strlen($this->request->post['filename']) < 5) || (utf8_strlen($this->request->post['filename']) > 128)) {
+		if (!$this->validateStringLength($this->request->post['filename'], 5, 128)) {
 			$this->setError('filename', sprintf($this->language->get('error_filename'), 5, 128));
 		}
 
-		if (!file_exists(DIR_DOWNLOAD . $this->request->post['filename']) && !is_file(DIR_DOWNLOAD . $this->request->post['filename'])) {
-			$this->setError('filename', $this->language->get('error_exists'));
+		if (!is_file(DIR_DOWNLOAD . $this->request->post['filename'])) {
+			$this->setError('filename', sprintf($this->language->get('error_exists'), $this->request->post['filename']));
 		}
 
-		if ((utf8_strlen($this->request->post['mask']) < 3) || (utf8_strlen($this->request->post['mask']) > 128)) {
+		if (!$this->validateStringLength($this->request->post['mask'], 3, 128)) {
 			$this->setError('mask', $this->language->get('error_mask'));
 		}
 
@@ -340,15 +332,15 @@ class ControllerAccountProductDownload extends Controller {
   	}
 
   	private function validateNew() {
-    	if (!$this->validateCustomer()) {
+    	if (!$this->validateAction()) {
       		$this->setError('warning', $this->language->get('error_permission'));
     	}
 
-		/* Placeholder for potential futuer feature, additional field Member Max Downloads allowed per Customer account
+		/* Placeholder for potential future feature, additional field Member Max Downloads allowed per Customer account
 		$this->customer->getMemberMaxDownloads();
 		if($customer_max_downloads  == '-1') return true;
 
-		$download_total = $this->model_account_product_download->getTotalDownloads($this->customer->getId());
+		$download_total = $this->model_account_product_download->getTotalDownloads();
 		if ($download_total >= $customer_max_downloads) {
 			$this->setError('max_downloads', $this->language->get('error_max_downloads'));
 		}
@@ -358,7 +350,7 @@ class ControllerAccountProductDownload extends Controller {
   	}
 
 	private function validateAction() {
-    	if (!$this->customer->getMemberPermission('download_enabled')) {
+		if (!$this->customer->getMemberPermission('download_enabled') || !$this->config->get('member_tab_download')) {
       		$this->setError('warning', $this->language->get('error_permission'));
     	}
 

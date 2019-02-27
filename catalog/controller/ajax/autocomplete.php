@@ -71,7 +71,7 @@ class ControllerAjaxAutocomplete extends Controller {
 
 			$json[] = array(
 				'product_id' => $result['product_id'],
-				'name'       => strip_tags_decode(html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8')),
+				'name'       => strip_tags(html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8')),
 				'model'      => $result['model'],
 				// 'option'     => $option_data,
 				'price'      => $result['price']
@@ -116,7 +116,7 @@ class ControllerAjaxAutocomplete extends Controller {
 			$json[] = array(
 				'member_id'				=> $result['member_account_id'],
 				'member_image'			=> $this->model_tool_image->resize($member_image, $this->config->get('config_image_category_width'), $this->config->get('config_image_category_height')),
-				'member_name' 			=> strip_tags_decode(html_entity_decode($result['member_account_name'], ENT_QUOTES, 'UTF-8')),
+				'member_name' 			=> strip_tags(html_entity_decode($result['member_account_name'], ENT_QUOTES, 'UTF-8')),
 				'fullname'				=> $result['fullname']
 			);
 		}
@@ -148,7 +148,7 @@ class ControllerAjaxAutocomplete extends Controller {
 		foreach ($results as $result) {
 			$json[] = array(
 				'attribute_id'    => $result['attribute_id'],
-				'name'            => strip_tags_decode(html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8')),
+				'name'            => strip_tags(html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8')),
 				'attribute_group' => $result['attribute_group']
 			);
 		}
@@ -235,7 +235,7 @@ class ControllerAjaxAutocomplete extends Controller {
 
 			$json[] = array(
 				'option_id'    => $option['option_id'],
-				'name'         => strip_tags_decode(html_entity_decode($option['name'], ENT_QUOTES, 'UTF-8')),
+				'name'         => strip_tags(html_entity_decode($option['name'], ENT_QUOTES, 'UTF-8')),
 				'category'     => $type,
 				'type'         => $option['type'],
 				'option_value' => $option_value_data

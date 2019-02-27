@@ -52,12 +52,12 @@ class ControllerAjaxPopup extends Controller {
 
 			if ($member_info) {
 				$member_data = array(
-					'member_name' => strip_tags_decode(html_entity_decode($member_info['member_account_name'], ENT_QUOTES, 'UTF-8')),
+					'member_name' => strip_tags(html_entity_decode($member_info['member_account_name'], ENT_QUOTES, 'UTF-8')),
 					'member_id' => $member_info['member_account_id']
 				);
 			} else {
 				$member_data = array(
-					'member_name' => strip_tags_decode(html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8')),
+					'member_name' => strip_tags(html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8')),
 					'member_id' => 0
 				);
 			}
@@ -144,7 +144,7 @@ class ControllerAjaxPopup extends Controller {
 
 				if ($this->data['text_register_agree'] === false) {
 					$this->load->model('catalog/information');
-					
+
 					$privacy_policy_id = $this->config->get('config_privacy_policy_id') ?: $this->config->get('config_account_id');
 					$terms_of_use_id = $this->config->get('config_terms_of_use_id') ?: $this->config->get('config_account_id');
 

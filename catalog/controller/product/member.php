@@ -4,6 +4,7 @@ class ControllerProductMember extends Controller {
 
 	public function index() {
 		if (!$this->config->get('member_status') || !$this->config->get('member_member_pages')) {
+			$this->session->data['warning'] = $this->language->get('error_membership');
 			$this->redirect($this->url->link('common/home', '', 'SSL'));
 		}
 
@@ -363,6 +364,7 @@ class ControllerProductMember extends Controller {
 
 	public function info() {
 		if (!$this->config->get('member_status') || !$this->config->get('member_member_pages')) {
+			$this->session->data['warning'] = $this->language->get('error_membership');
 			$this->redirect($this->url->link('common/home', '', 'SSL'));
 		}
 
@@ -500,7 +502,7 @@ class ControllerProductMember extends Controller {
 
 			$meta_description = sprintf($this->language->get('meta_description_profile'), $member_info['member_account_name'], $member_info['member_city'] . ', ' . $member_zone['name'] . ', ' . $member_country['name']);
 			// $meta_description .= '; ' . $this->language->get('text_member_type') . ' ' . $member_info['member_group'];
-			// $meta_description .= '; ' . $this->language->get('text_member_description') . ' ' . utf8_substr(trim(strip_tags_decode(html_entity_decode($member_info['member_account_description'], ENT_QUOTES, 'UTF-8'))), 0, 120) . '...;';
+			// $meta_description .= '; ' . $this->language->get('text_member_description') . ' ' . utf8_substr(trim(strip_tags(html_entity_decode($member_info['member_account_description'], ENT_QUOTES, 'UTF-8'))), 0, 120) . '...;';
 		}
 
 		if (!empty($member_info['member_tag'])) {
@@ -563,7 +565,7 @@ class ControllerProductMember extends Controller {
 		}
 
 		if(!empty($member_info['member_account_banner'])) {
-			$this->data['member_banner'] = $this->model_tool_image->resize($member_info['member_account_banner'], 1200, 360, 'fw');
+			$this->data['member_banner'] = $this->model_tool_image->resize($member_info['member_account_banner'], 1200, 360, 'autocrop');
 		} else {
 			$this->data['member_banner'] = '';
 		}

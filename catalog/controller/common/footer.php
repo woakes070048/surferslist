@@ -35,6 +35,8 @@ class ControllerCommonFooter extends Controller {
 		}
 
 		if (!$this->data['informations']) {
+			$this->data['informations'] = array();
+
 			foreach ($this->model_catalog_information->getInformations() as $result) {
 				if ($result['bottom'] && $result['sort_order'] < 50) {
 					$this->data['informations'][] = array(

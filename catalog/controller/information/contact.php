@@ -55,7 +55,7 @@ class ControllerInformationContact extends Controller {
 				if (!$this->hasError()) {
 					$this->session->data['success'] = isset($success) ? $success : '';
 					$this->redirect($this->url->link('information/contact', '', 'SSL'));
-				}				
+				}
 			}
     	}
 
@@ -116,12 +116,12 @@ class ControllerInformationContact extends Controller {
 
 			if ($member_info) {
 				$this->data['member'] = array(
-					'member_name' => strip_tags_decode(html_entity_decode($member_info['member_account_name'], ENT_QUOTES, 'UTF-8')),
+					'member_name' => strip_tags(html_entity_decode($member_info['member_account_name'], ENT_QUOTES, 'UTF-8')),
 					'member_id' => $member_info['member_account_id']
 				);
 			} else {
 				$this->data['member'] = array(
-					'member_name' => strip_tags_decode(html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8')),
+					'member_name' => strip_tags(html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8')),
 					'member_id' => 0
 				);
 			}
