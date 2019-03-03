@@ -50,6 +50,10 @@ abstract class Controller {
 		}
 	}
 
+	protected function setOutput($output) {
+		$this->output = $output;
+	}
+
 	protected function render() {
 		foreach ($this->children as $child) {
 			$this->data[basename($child)] = $this->getChild($child);

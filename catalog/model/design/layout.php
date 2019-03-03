@@ -75,5 +75,40 @@ class ModelDesignLayout extends Model {
 		return $layouts_data;
 	}
 
+	public function getCategoryLayoutId($category_id) {
+		$query = $this->db->query("
+			SELECT *
+			FROM " . DB_PREFIX . "category_to_layout
+			WHERE category_id = '" . (int)$category_id . "'
+			AND store_id = '" . (int)$this->config->get('config_store_id') . "'
+		");
+
+		return $query->num_rows ? $query->row['layout_id'] : 0;
+	}
+
+	public function getProductLayoutId($product_id) {
+		if (empty($product_id)) return 0;
+
+		$query = $this->db->query("
+			SELECT *
+			FROM " . DB_PREFIX . "product_to_layout
+			WHERE product_id = '" . (int)$product_id . "'
+			AND store_id = '" . (int)$this->config->get('config_store_id') . "'
+		");
+
+		return $query->num_rows ? $query->row['layout_id'] : 0;
+	}
+
+	public function getInformationLayoutId($information_id) {
+		$query = $this->db->query("
+			SELECT *
+			FROM " . DB_PREFIX . "information_to_layout
+			WHERE information_id = '" . (int)$information_id . "'
+			AND store_id = '" . (int)$this->config->get('config_store_id') . "'
+		");
+
+		return $query->num_rows ? $query->row['layout_id'] : 0;
+	}
+
 }
 ?>
