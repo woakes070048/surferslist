@@ -1,6 +1,6 @@
 <?php
 // Listing Discussion
-$_['text_question_mail_subject']    = '[%s] NEW DISCUSSION: %s';
+$_['text_question_mail_subject']    = '[%s] New Discussion: %s';
 $_['text_question_mail'] = <<<EOT
 A message has been submitted to listing %s.
 
@@ -18,7 +18,7 @@ Please reply using the Discussion tab on the listing page.
 EOT;
 
 // Profile Discussion
-$_['text_disucssion_mail_subject']    = '[%s] NEW DISCUSSION: %s';
+$_['text_disucssion_mail_subject']    = '[%s] New Discussion: %s';
 $_['text_disucssion_mail'] = <<<EOT
 A message has been submitted to profile %s.
 

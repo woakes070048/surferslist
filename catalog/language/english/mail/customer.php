@@ -16,7 +16,7 @@ EOT;
 $_['text_forgotten']      = 'If you forget your password, you can always reset it at: %s.';
 $_['text_instruction']    = 'Next Steps';
 $_['text_thanks']         = 'Thanks,';
-$_['text_new_customer']   = '[%s] NEW USER';
+$_['text_new_customer']   = '[%s] New User';
 $_['text_footer']         = 'Please reply to this email if you have any questions.';
 $_['text_signup']         = 'A new user has joined:';
 $_['text_website']        = 'Website:';

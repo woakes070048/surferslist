@@ -1,6 +1,6 @@
 <?php
 // Text
-$_['text_subject']          = '[%s] NEW ORDER: %s';
+$_['text_subject']          = '[%s] New Order: %s';
 $_['text_greeting']         = 'A new order has been placed through %s. <a href="https://www.surferslist.com/login">Log in</a> to add comments and track the order status.';
 $_['text_received']         = 'An order has been received.';
 $_['text_link']             = 'Click on the following link to view the order details:';
@@ -27,7 +27,7 @@ $_['text_download']         = 'After payment has been confirmed, digital files c
 $_['text_comment']          = 'Comments for the order:';
 $_['text_footer']           = '*** DO NOT REPLY directly to this email ***';
 $_['text_powered']          = 'Thanks for supporting <a href="https://www.surferslist.com/">SurfersList.com</a>.';
-$_['text_update_subject']       = '[%s] ORDER UPDATE: %s';
+$_['text_update_subject']       = '[%s] Order Updated: %s';
 $_['text_update_greeting']      = 'An update has been made to Order No. %s placed on %s.';
 $_['text_update_order']         = 'Order No:';
 $_['text_update_date_added']    = 'Date:';
