@@ -31,7 +31,7 @@ class ControllerErrorProductRetired extends Controller {
 		if ($this->config->get('apac_status') && $this->config->get('apac_products_status') && $this->config->get('apac_products_breadcrumb')) {
 			$this->addBreadcrumb($this->language->get('text_all_products'), $this->url->link('product/allproducts'));
 		}
-		
+
 		// product retired info
 		$product_info = $this->model_catalog_product->getProductRetired($product_id);
 
@@ -116,7 +116,7 @@ class ControllerErrorProductRetired extends Controller {
 
 			$product_manufacturer = array(
 				'name'		  => $manufacturer_info['name'] . ($config_product_count ? sprintf($this->language->get('text_product_count'), $manufacturer_info['product_count']) : ''),
-				'thumb'       => $manufacturer_thumb = $this->model_tool_image->resize($manufacturer_info['image'], $this->config->get('config_image_product_width'), 120);,
+				'thumb'       => $this->model_tool_image->resize($manufacturer_info['image'], $this->config->get('config_image_product_width'), 120),
 				'href'        => $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $manufacturer_info['manufacturer_id'])
 			);
 		}
