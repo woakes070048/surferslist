@@ -46,6 +46,3 @@
 		<?php } ?>
 	</div>
 </div>
-<?php if (isset($pagination)) { ?>
-<div class="pagination"><?php echo $pagination; ?></div>
-<?php } ?>

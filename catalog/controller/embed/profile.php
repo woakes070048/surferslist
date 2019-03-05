@@ -29,8 +29,6 @@ class ControllerEmbedProfile extends Controller {
 		$this->load->model('catalog/category');
 		$this->load->model('tool/image');
 
-		$config_product_count = true; // $this->config->get('config_product_count');
-
 		$this->data['config_email'] = $this->config->get('config_email');
 		$this->data['config_icon'] = $this->config->get('config_icon') ? $server . 'image/' . $this->config->get('config_icon') : '';
 		$this->data['text_powered'] = sprintf($this->language->get('text_powered'), $this->config->get('config_name'), date('Y', time()));
@@ -177,189 +175,18 @@ class ControllerEmbedProfile extends Controller {
 			return $this->profileNotFound();
 		}
 
-		$results = $this->model_catalog_product->getProducts($data, false); // don't cache in model
+		$this->data['products'] = $this->getChild('product/product/embed', $this->model_catalog_product->getProducts($data, false));
 
-		foreach ($results as $result) {
-			// adds to $this->data['products']
-			require(DIR_APPLICATION . 'controller/embed/listing_result.inc.php');
-		}
-
-		// Category Filters
-		$this->data['categories'] = array();
-
-		if ($member_info['product_categories']) {
-			$url = $this->getQueryParams(array('filter_category_id'));
-
-			$this->data['categories'][] = array(
-				'id'	=> 0,
-				'name'	=> $this->language->get('text_category_all'),
-				'href'	=> $this->url->link('embed/profile', 'profile_id=' . $this->request->get['profile_id'] . '&filter_category_id=0' . $url)
-			);
-
-			foreach ($member_info['product_categories'] as $category) {
-				if (utf8_strpos($category['name'], $this->language->get('heading_more')) !== false) {
-					$category_name = $this->language->get('heading_more');
-				} else if (utf8_strpos($category['name'], $this->language->get('heading_other')) !== false) {
-					$category_name = $this->language->get('heading_other');
-				} else {
-					$category_name = $category['name'];
-				}
-
-				switch (substr_count($category['path'], '_')) {
-					case 1:
-						$category_name = '&emsp;' . ucwords($category_name);
-						break;
-					case 2:
-						$category_name = '&emsp;' . '&emsp;' . ucwords($category_name);
-						break;
-					case 0:
-					default:
-						$category_name = utf8_strtoupper($category_name);
-						break;
-				}
-
-				if ($category['product_count']) {
-					$this->data['categories'][] = array(
-						'id'	=> $category['category_id'],
-						'name'  => $category_name . ($config_product_count ? sprintf($this->language->get('text_product_count'), $category['product_count']) : ''),
-						'product_count' => $config_product_count ? $category['product_count'] : null,
-						'href'  => $this->url->link('embed/profile', 'profile_id=' . $this->request->get['profile_id'] . '&filter_category_id=' . $category['category_id'] . $url)
-					);
-				}
-			}
-		}
-
-		// Manufacturer Filters
-		$this->data['manufacturers'] = array();
-
-		if ($member_info['product_manufacturers']) {
-			$url = $this->getQueryParams(array('filter_manufacturer_id'));
-
-			$this->data['manufacturers'][] = array(
-				'id'	=> 0,
-				'name'	=> $this->language->get('text_manufacturer_all'),
-				'href'	=> $this->url->link('embed/profile', 'profile_id=' . $this->request->get['profile_id'] . '&filter_manufacturer_id=0' . $url)
-			);
-
-			foreach ($member_info['product_manufacturers'] as $manufacturer) {
-				if ($this->config->get('config_product_count')) {
-					$data = array(
-						'filter_member_account_id' 	=> $member_account_id,
-						'filter_manufacturer_id'  	=> $manufacturer['manufacturer_id'],
-						'filter_filter'           	=> $filter,
-						'filter_sub_category'     	=> true,
-						'filter_category_id'      	=> $filter_category_id
-					);
-
-					$product_total_manufacturer = $this->model_catalog_product->getTotalProducts($data);
-				}
-
-				if ($manufacturer['product_count']) {
-					$this->data['manufacturers'][] = array(
-						'id'	=> $manufacturer['manufacturer_id'],
-						'name'  => $manufacturer['name'] . ($config_product_count ? sprintf($this->language->get('text_product_count'), $manufacturer['product_count']) : ''),
-						'href'  => $this->url->link('embed/profile', 'profile_id=' . $this->request->get['profile_id'] . '&filter_manufacturer_id=' . $manufacturer['manufacturer_id'] . $url)
-					);
-				}
-			}
-		}
-
-		// Types
-		$this->data['listing_types'] = array();
-
-		$listing_types = array(
-			array(
-				'id' 	=> '0',
-				'name'	=> $this->language->get('text_classified'),
-				'sort_order' => '1'
-			),
-			array(
-				'id'	=> '1',
-				'name'	=> $this->language->get('text_buy_now'),
-				'sort_order' => '2'
-			),
-			array(
-				'id'	=> '-1',
-				'name'	=> $this->language->get('text_shared'),
-				'sort_order' => '3'
-			)
-		);
-
-		foreach ($listing_types as $listing_type) {
-			if ($config_product_count) {
-				$product_total_type = count(array_filter($products, function ($item) use ($listing_type) {
-					return $item['type_id'] == $listing_type['id'];
-				}));
-			}
-
-			$this->data['listing_types'][] = array(
-				'type_id' => $listing_type['id'],
-				'name'    => $listing_type['name'] . ($config_product_count ? sprintf($this->language->get('text_product_count'), $product_total_type) : '')
-			);
-		}
-
-		$this->data['type_selected'] = $type_selected;
-
-		// Filter Groups
-		$url = $this->getQueryParams(array('filter', 'type'));
-
-		$this->data['heading_filter'] = $this->language->get('heading_filter');
-
-		$this->data['action'] = str_replace('&amp;', '&', $this->url->link('embed/profile', 'profile_id=' . $this->request->get['profile_id'] . $url));
-
-		if (isset($this->request->get['filter'])) {
-			$this->data['filter_category'] = explode(',', $this->request->get['filter']);
-			$display_more_options = true;
-		} else {
-			$this->data['filter_category'] = array();
-		}
-
-		$this->data['display_more_options'] = $display_more_options;
-
-		$this->data['filter_groups'] = array();
-
-		$filter_groups = $this->model_catalog_category->getCategoryFiltersAll(); /* display all filters all the time */
-
-		foreach ($filter_groups as $filter_group) {
-			$filter_data = array();
-
-			foreach ($filter_group['filter'] as $filter_group_filter) {
-				if ($config_product_count) {
-					$product_total_filter = count(array_filter($products, function ($item) use ($filter_group_filter) {
-						return in_array($filter_group_filter['filter_id'], $item['filter_ids']);
-					}));
-				}
-
-				$filter_data[] = array(
-					'filter_id' => $filter_group_filter['filter_id'],
-					'name'      => $filter_group_filter['name'] . ($config_product_count ? sprintf($this->language->get('text_product_count'), $product_total_filter) : '')
-				);
-			}
-
-			$this->data['filter_groups'][] = array(
-				'filter_group_id' => $filter_group['filter_group_id'],
-				'name'            => $filter_group['name'],
-				'filter'          => $filter_data
-			);
-		}
-
-		// Sort, Limit
-		$url = $this->getQueryParams(array('sort', 'order'));
-
-		$this->addSort($this->language->get('text_default'), 'p.sort_order-ASC', $this->url->link('embed/profile', 'profile_id=' . $this->request->get['profile_id'] . '&sort=p.sort_order&order=ASC' . $url));
-		$this->addSort($this->language->get('text_name_asc'), 'pd.name-ASC', $this->url->link('embed/profile', 'profile_id=' . $this->request->get['profile_id'] . '&sort=pd.name&order=ASC' . $url));
-		$this->addSort($this->language->get('text_name_desc'), 'pd.name-DESC', $this->url->link('embed/profile', 'profile_id=' . $this->request->get['profile_id'] . '&sort=pd.name&order=DESC' . $url));
-		$this->addSort($this->language->get('text_date_asc'), 'p.date_added-ASC', $this->url->link('embed/profile', 'profile_id=' . $this->request->get['profile_id'] . '&sort=p.date_added&order=ASC' . $url));
-		$this->addSort($this->language->get('text_date_desc'), 'p.date_added-DESC', $this->url->link('embed/profile', 'profile_id=' . $this->request->get['profile_id'] . '&sort=p.date_added&order=DESC' . $url));
-		$this->addSort($this->language->get('text_price_asc'), 'p.price-ASC', $this->url->link('embed/profile', 'profile_id=' . $this->request->get['profile_id'] . '&sort=p.price&order=ASC' . $url));
-		$this->addSort($this->language->get('text_price_desc'), 'p.price-DESC', $this->url->link('embed/profile', 'profile_id=' . $this->request->get['profile_id'] . '&sort=p.price&order=DESC' . $url));
-		$this->addSort($this->language->get('text_model_asc'), 'p.model-ASC', $this->url->link('embed/profile', 'profile_id=' . $this->request->get['profile_id'] . '&sort=p.model&order=ASC' . $url));
-		$this->addSort($this->language->get('text_model_desc'), 'p.model-DESC', $this->url->link('embed/profile', 'profile_id=' . $this->request->get['profile_id'] . '&sort=p.model&order=DESC' . $url));
-		$this->addSort($this->language->get('text_random'), 'random-' . $order, $this->url->link('embed/profile', 'profile_id=' . $this->request->get['profile_id'] . '&sort=random' . $url));
-
-		$this->data['sorts'] = $this->getSorts();
-		$this->data['limits'] = $this->getLimits('embed/profile', 'profile_id=' . $this->request->get['profile_id'] . $this->getQueryParams(array('limit')));
-		$this->data['random'] = $this->url->link('embed/profile', 'profile_id=' . $this->request->get['profile_id'] . '&sort=random' . $url);
+		$this->data['refine'] = $this->getChild('module/refine', array(
+			'query_params' => $query_params,
+			'route' => 'embed/profile',
+			'path' => 'profile_id=' . $this->request->get['profile_id'],
+			'filter' => $data,
+			'products' => $products,
+			'product_categories' => $member_info['product_categories'],
+			'product_manufacturers' => $member_info['product_manufacturers'],
+			'display_more_options' => $display_more_options,
+		));
 
 		$url = $this->getQueryParams(array('page'));
 
@@ -381,15 +208,8 @@ class ControllerEmbedProfile extends Controller {
 		$this->data['nobackground'] = $nobackground;
 		$this->data['customcolor'] = $customcolor;
 
-		$this->data['tag'] = $tag;
-		$this->data['search_term'] = $search;
-		$this->data['filter'] = $filter;
-		$this->data['filter_category_id'] = $filter_category_id;
-		$this->data['filter_manufacturer_id'] = $filter_manufacturer_id;
-		$this->data['filter_location'] = $filter_location;
-		$this->data['sort'] = $sort;
-		$this->data['order'] = $order;
-		$this->data['limit'] = $limit;
+		$this->data['action'] = str_replace('&amp;', '&', $this->url->link('embed/profile', 'profile_id=' . $this->request->get['profile_id'] . $url));
+
 		$this->data['profile_id'] = (int)$this->request->get['profile_id'];
 
 		$this->model_catalog_member->updateViewed($member_account_id);

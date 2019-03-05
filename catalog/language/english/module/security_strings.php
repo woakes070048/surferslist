@@ -1,6 +1,6 @@
 <?php
 $_['text_security_404_lockout']             = 'Your ability to access website has been suspended due to too many attempts to open a page or file that does not exist. Please try again later.';
-$_['text_security_404_notify_subject']      = '[%s] Security 404 Detection Notification';
+$_['text_security_404_notify_subject']      = '[%s] New Security 404';
 $_['text_security_404_notify_text']         = 'A %s has been locked out of the site %s due to too many attempts to open a page or file that does not exist. You may login to the site to manually release the lock if necessary.';
 
 $_['text_security_notify_user']             = 'user %s at host %s';

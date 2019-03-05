@@ -1,6 +1,6 @@
 <?php
 // Text
-$_['text_subject']  = '[%s] PASSWORD RESET';
+$_['text_subject']  = '[%s] Password Reset';
 $_['text_password'] = 'Your new temporary password is:';
 $_['text_message'] = <<<EOT
 A password reset was requested from %s.

@@ -9,7 +9,6 @@ class ControllerProductSpecial extends Controller {
 		$this->load->model('catalog/product');
 		$this->load->model('tool/image');
 
-		$config_product_count = false; // $this->config->get('config_product_count');
 		$display_more_options = false;
 
 		if (isset($this->request->get['type']) && !is_array($this->request->get['type'])) {
@@ -84,7 +83,7 @@ class ControllerProductSpecial extends Controller {
 		$page = isset($this->request->get['page']) ? (int)$this->request->get['page'] : 1;
 		$limit = (isset($this->request->get['limit']) && $this->request->get['limit'] <= $this->config->get('config_catalog_limit') * 4) ? (int)$this->request->get['limit'] : $this->config->get('config_catalog_limit');
 
-		$this->setQueryParams(array(
+		$query_params = array(
 			'search',
 			'filter_location',
 			// 'filter',
@@ -97,7 +96,9 @@ class ControllerProductSpecial extends Controller {
 			'sort',
 			'order',
 			'limit'
-		));
+		);
+
+		$this->setQueryParams($query_params);
 
 		$heading_title = $this->language->get('heading_title');
 		$meta_description = $this->language->get('meta_description');
@@ -143,11 +144,7 @@ class ControllerProductSpecial extends Controller {
 			$this->redirect($this->url->link('error/not_found', '', 'SSL'));
 		}
 
-		$results = $product_total ? $this->model_catalog_product->getProductSpecials($data) : array();
-
-		foreach ($results as $result) {
-			require(DIR_APPLICATION . 'controller/product/listing_result.inc.php');
-		}
+		$this->data['products'] = $this->getChild('product/product/list', $this->model_catalog_product->getProductSpecials($data));
 
 		// Sorts
 		$url = $this->getQueryParams(array('sort', 'order'));
@@ -209,7 +206,7 @@ class ControllerProductSpecial extends Controller {
 		$this->data['continue'] = $this->url->link('common/home', '', 'SSL');
 
 		// $this->data['more'] = $page < $max_pages ? $this->url->link('product/special', $url . '&page=' . ($page + 1), 'SSL') : '';
-		$this->data['more'] = $page < $max_pages ? $this->url->link('product/allproducts/more', $url . '&special=true' . '&page=' . ($page + 1), 'SSL') : '';
+		$this->data['more'] = $page < $max_pages ? $this->url->link('ajax/product/more', $url . '&special=true' . '&page=' . ($page + 1), 'SSL') : '';
 
 		if (!$this->data['products'] && (isset($this->session->data['shipping_country_id']) || isset($this->session->data['shipping_zone_id']) || isset($this->session->data['shipping_location']))) {
 			// Remove Location

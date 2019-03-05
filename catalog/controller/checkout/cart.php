@@ -84,7 +84,8 @@ class ControllerCheckoutCart extends Controller {
 		}
 
 		if (!$this->cart->hasProducts() && empty($this->session->data['vouchers'])) {
-			return $this->forward('checkout/cart/empty');
+			//return $this->forward('checkout/cart/empty');
+			$this->redirect($this->url->link('error/cart_empty'));
 		}
 
 		if ($this->cart->hasProducts()) {
@@ -406,6 +407,7 @@ class ControllerCheckoutCart extends Controller {
 		$this->addBreadcrumb($this->language->get('heading_title'), $this->url->link('checkout/cart'));
 
 		$this->data['breadcrumbs'] = $this->getBreadcrumbs();
+		
 		$this->data['action'] = $this->url->link('checkout/cart', '', 'SSL');
 		$this->data['search'] = $this->url->link('product/search', '', 'SSL');
 	}

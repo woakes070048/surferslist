@@ -1244,10 +1244,11 @@ class ModelCatalogProduct extends Model {
 				$result = $this->getProductShort($product_id);
 
 				if ($result) {
-					if ((!empty($data['filter_location']) && utf8_strpos($result['location'], utf8_strtolower($data['filter_location'])) === false)
+					if ((!empty($data['filter_location']) && utf8_strpos(utf8_strtolower($result['location']), utf8_strtolower($data['filter_location'])) === false)
 						|| (!empty($data['filter_country_id']) && $result['country_id'] != $data['filter_country_id'])
 						|| (!empty($data['filter_zone_id']) && $result['zone_id'] != $data['filter_zone_id'])
 						|| (!empty($data['filter_manufacturer_id']) && $result['manufacturer_id'] != $data['filter_manufacturer_id'])
+						|| (!empty($data['filter_name']) && utf8_strpos(utf8_strtolower($result['name']), utf8_strtolower($data['filter_name'])) === false)
 						|| (!empty($data['filter_filter']) && !in_array($product_id, $product_ids))
 						|| (!empty($data['filter_listings']) && in_array($product_id, $filter_listing_ids))) {
 						continue;
@@ -1893,19 +1894,6 @@ class ModelCatalogProduct extends Model {
 		}
 
 		return $product_shipping_rate_data;
-	}
-
-	public function getProductLayoutId($product_id) {
-		if (empty($product_id)) return 0;
-
-		$query = $this->db->query("
-			SELECT *
-			FROM " . DB_PREFIX . "product_to_layout
-			WHERE product_id = '" . (int)$product_id . "'
-			AND store_id = '" . (int)$this->config->get('config_store_id') . "'
-		");
-
-		return $query->num_rows ? $query->row['layout_id'] : 0;
 	}
 
 	public function getCategories($product_id) {

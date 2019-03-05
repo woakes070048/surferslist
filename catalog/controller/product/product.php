@@ -141,11 +141,6 @@ class ControllerProductProduct extends Controller {
 			// Compare
 			$this->data['compare'] = false; // in_array($product_info['product_id'], $this->session->data['compare']) ? true : false;
 
-			// Check Premium
-			$customer_group_id = $this->customer->getCustomerGroupId();
-
-			$this->data['premium_membership'] = $customer_group_id != 1 ? true : false;
-
 			// Quantity, Minimum
 			$this->data['quantity'] = $product_info['quantity'];
 			$this->data['minimum'] = $product_info['minimum'] ? $product_info['minimum'] : 1;
@@ -423,13 +418,7 @@ class ControllerProductProduct extends Controller {
 			}
 
 			// Related Product Listings
-			$this->data['products'] = array();
-
-			$this->data['more'] = false;
-
-			foreach ($product_info['related'] as $result) {
-				require(DIR_APPLICATION . 'controller/product/listing_result.inc.php');
-			}
+			$this->data['products'] = $this->getChild('product/product/list', $product_info['related']);
 
 			// Keyword Tags
 			$this->data['tags'] = array();
@@ -644,5 +633,215 @@ class ControllerProductProduct extends Controller {
 		// END Product Info
 	}
 
+	protected function getProductData($data) {
+        if (empty($data)) {
+            return array();
+        }
+
+		$customer_group_id = $this->customer->isLogged() ? $this->customer->getCustomerGroupId() : $this->config->get('config_customer_group_id');
+
+        $product_data = $this->cache->get('product_' . (int)$data['product_id'] . '.min.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id);
+
+        if ($product_data === false) {
+            $thumb = $this->model_tool_image->resize($data['image'], $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height'), 'fw');
+            $image = $this->model_tool_image->resize($data['image'], $this->config->get('config_image_thumb_width'), $this->config->get('config_image_thumb_height'), 'fw');
+
+            $data_description = remove_links(preg_replace('/\s+/', ' ', strip_tags_decode($data['description'])));
+
+            if (!$data_description) {
+                if ($data['year'] != '0000') {
+                    $data_description .= $data['year'] . ' ';
+                }
+
+                if ($data['manufacturer_id'] > 1) {
+                    $data_description .= $data['manufacturer'] . ' ';
+                }
+
+                $data_description .= $data['model'];
+
+                if (utf8_strpos(trim($data['size']), ' ') === false && utf8_strlen($data['size']) < 10) {
+                    $data_description .= ' ' . $data['size'];
+                }
+            } else if (utf8_strlen($data_description) > 80) {
+                $data_description = utf8_substr($data_description, 0, 80) . $this->language->get('text_ellipses');
+            }
+
+            $product_data = array(
+                'href'              => $this->url->link('product/product', 'product_id=' . $data['product_id'], 'SSL'),
+                'product_id'        => $data['product_id'],
+                'customer_id'       => $data['customer_id'],
+                'member_id'         => $data['member_id'],
+                'manufacturer_id'   => $data['manufacturer_id'],
+                'manufacturer'      => $data['manufacturer'],
+                'path'              => $data['path'],
+                'type_id'           => $data['type_id'],
+            	'type'              => $data['type_id'] == 1 ? $this->language->get('text_buy_now') : ($data['type_id'] == 0 ? $this->language->get('text_classified') : $this->language->get('text_shared')),
+                'name'              => $data['name'],
+                'model'             => $data['model'],
+                'size'              => $data['size'],
+                'year'              => $data['year'],
+                'thumb'             => $thumb,
+                'image'             => $image,
+                'description'       => $data_description,
+                'quantity'          => $data['quantity'],
+                'quickview'         => $this->url->link('product/quickview', 'listing_id=' . $data['product_id'], 'SSL'),
+            	'location'          => isset($data['location']) ? $data['location'] : '',
+                'zone_id'           => isset($data['zone_id']) ? $data['zone_id'] : '',
+            	'location_zone'     => !empty($location_zone) ? $location_zone['name'] : '',
+                'country_id'        => isset($data['country_id']) ? $data['country_id'] : '',
+            	'location_country'  => !empty($location_country) ? $location_country['iso_code_3'] : '',
+                'featured'          => $data['featured'],
+				'sort_order'        => $data['sort_order']
+            );
+            // 'manufacturer_image' => !empty($data['manufacturer_image']) && $data['manufacturer_id'] != 1 ? $this->model_tool_image->resize($data['manufacturer_image'], 100, 40, "fh") : false,
+            // 'manufacturer_href' => $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $data['manufacturer_id'], 'SSL'),
+            // 'member'            => isset($data['member']) ? $data['member'] : '',
+            // 'member_href'       => $this->url->link('product/member/info', 'member_id=' . $data['member_id'], 'SSL'),
+            // 'member_contact'    => $this->url->link('information/contact', 'contact_id=' . $data['customer_id'], 'SSL'),
+            // 'date_added'        => $data['date_added'],
+            // 'date_modified'     => $data['date_modified'],
+            // 'viewed'            => $data['viewed'],
+            // 'attribute'         => isset($attribute_data) ? $attribute_data : array(),
+            // 'weight'            => isset($data['weight']) && isset($data['weight_class_id']) ? $this->weight->format($data['weight'], $data['weight_class_id']) : '',
+            // 'length'            => isset($data['length']) && isset($data['length_class_id']) ? $this->length->format($data['length'], $data['length_class_id']) : '',
+            // 'width'             => isset($data['width']) && isset($data['length_class_id']) ? $this->length->format($data['width'], $data['length_class_id']) : '',
+            // 'height'            => isset($data['height']) && isset($data['length_class_id']) ? $this->length->format($data['height'], $data['length_class_id']) : '',
+            // 'location_href'     => isset($data['country_id']) && isset($data['zone_id']) ? $this->url->link('product/search', 'country=' . $data['country_id'] . '&state=' . $data['zone_id'], 'SSL') : ''
+
+            $this->cache->set('product_' . (int)$data['product_id'] . '.min.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id, $product_data);
+        }
+
+        // add-in non-cached listing data
+        $price = false;
+        $special = false;
+        $salebadges = false;
+        $savebadges = false;
+        $tax = false;
+
+        if (!$this->config->get('config_customer_price') || $this->customer->isLogged()) {
+            $price = $data['price'] != 0
+                ? $this->currency->format($this->tax->calculate($data['price'], $data['tax_class_id'], $this->config->get('config_tax')))
+                : $this->language->get('text_free');
+        }
+
+        if ((float)$data['special']) {
+            $special = $this->currency->format($this->tax->calculate($data['special'], $data['tax_class_id'], $this->config->get('config_tax')));
+            $salebadges = round((($data['price'] - $data['special']) / $data['price']) * 100, 0);
+            $savebadges = $this->currency->format(($this->tax->calculate($data['price'], $data['tax_class_id'], $this->config->get('config_tax'))) - ($this->tax->calculate($data['special'], $data['tax_class_id'], $this->config->get('config_tax'))));
+        }
+
+        if ($this->config->get('config_tax')) {
+            $tax = $this->currency->format((float)$data['special'] ? $data['special'] : $data['price']);
+        }
+
+        $product_data = array_merge($product_data, array(
+            'price'             => $price,
+            'price_value'       => $data['price'],
+            'special'           => $special,
+            'special_value'     => $data['special'],
+            'salebadges'        => $salebadges,
+            'savebadges'        => $savebadges,
+            'tax'               => $tax,
+            'compare'           => isset($this->session->data['compare']) && in_array($data['product_id'], $this->session->data['compare']) ? true : false
+        ));
+
+		return $product_data;
+    }
+
+	protected function info($data) {
+		$this->setOutput($this->getProductData($data));
+	}
+
+	protected function list($products) {
+        if (empty($products)) {
+            return array();
+        }
+
+		$this->load->language('product/common');
+
+		$this->data['text_loading'] = $this->language->get('text_loading');
+		$this->data['text_save'] = $this->language->get('text_save');
+		$this->data['text_tax'] = $this->language->get('text_tax');
+		// $this->data['text_more'] = $this->language->get('text_more');
+		// $this->data['text_empty'] = $this->language->get('text_empty');
+
+		$this->data['button_quickview'] = $this->language->get('button_quickview');
+		$this->data['button_wishlist'] = $this->language->get('button_wishlist');
+		$this->data['button_learn_more'] = $this->language->get('button_learn_more');
+		$this->data['button_cart'] = $this->language->get('button_cart');
+		$this->data['button_contact'] = $this->language->get('button_contact');
+		$this->data['button_compare'] = $this->language->get('button_compare');
+
+		$product_data = array();
+
+		foreach ($products as $product) {
+			$product_data[$product['product_id']] = $this->getProductData($product);
+		}
+
+		$this->data['products'] = $product_data;
+
+		$this->template = '/template/product/products.tpl';
+
+		$this->render();
+	}
+
+	protected function list_module($data) {
+        if (empty($data) || empty($data['products']) || empty($data['position'])) {
+            return array();
+        }
+
+		$this->load->language('product/common');
+
+		$this->data['text_save'] = $this->language->get('text_save');
+		$this->data['text_tax'] = $this->language->get('text_tax');
+		$this->data['text_view'] = $this->language->get('text_view');
+
+		$this->data['button_quickview'] = $this->language->get('button_quickview');
+		$this->data['button_wishlist'] = $this->language->get('button_wishlist');
+		$this->data['button_cart'] = $this->language->get('button_cart');
+		$this->data['button_contact'] = $this->language->get('button_contact');
+		$this->data['button_compare'] = $this->language->get('button_compare');
+
+		$product_data = array();
+
+		foreach ($data['products'] as $product) {
+			$product_data[$product['product_id']] = $this->getProductData($product);
+		}
+
+		$this->data['products'] = $product_data;
+
+		$this->data['position'] = $data['position'];
+
+		$this->template = '/template/module/products.tpl';
+
+		$this->render();
+	}
+
+	protected function embed($products) {
+        if (empty($products)) {
+            return array();
+        }
+
+		$this->load->language('product/common');
+
+		// $this->data['text_loading'] = $this->language->get('text_loading');
+		$this->data['text_save'] = $this->language->get('text_save');
+		$this->data['text_tax'] = $this->language->get('text_tax');
+
+		$this->data['button_quickview'] = $this->language->get('button_quickview');
+
+		$product_data = array();
+
+		foreach ($products as $product) {
+			$product_data[$product['product_id']] = $this->getProductData($product);
+			$product_data[$product['product_id']]['quickview'] = $this->url->link('embed/quickview', 'listing_id=' . $product['product_id'], 'SSL');
+		}
+
+		$this->data['products'] = $product_data;
+
+		$this->template = '/template/embed/products.tpl';
+
+		$this->render();
+	}
 }
 ?>

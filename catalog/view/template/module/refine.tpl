@@ -19,6 +19,7 @@
                 </div>
                 <?php } ?>
                 <?php } ?>
+
                 <?php if ($categories) { ?>
                 <div class="filter category-filter" title="<?php echo $help_category_sub; ?>" rel="tooltip" data-container="body">
                   <label for="category-filter" class="hidden"><?php echo $text_filter_category; ?></label>
@@ -33,12 +34,13 @@
                   </select>
                 </div>
                 <?php } ?>
+
                 <?php if ($manufacturers) { ?>
                 <div class="filter manufacturer-filter" title="<?php echo $help_manufacturer; ?>" rel="tooltip" data-container="body">
                   <label for="manufacturer-filter" class="hidden"><?php echo $text_filter_manufacturer; ?></label>
                   <select name="manufacturer-filter" id="manufacturer-filter" onchange="location = this.value;">
                     <?php foreach ($manufacturers as $manufacturer_data) { ?>
-                    <?php if (!empty($all_listings_page) || !empty($manufacturer_data['product_count']) || $manufacturer_data['id'] == $filter_manufacturer_id || $manufacturer_data['id'] == 0) { ?>
+                    <?php if (!empty($show_all_manufacturers) || !empty($manufacturer_data['product_count']) || $manufacturer_data['id'] == $filter_manufacturer_id || $manufacturer_data['id'] == 0) { ?>
                     <?php if ($manufacturer_data['id'] == $filter_manufacturer_id) { ?>
                     <option value="<?php echo $manufacturer_data['href']; ?>" data-filter="<?php echo $manufacturer_data['id']; ?>" selected="selected"><?php echo $manufacturer_data['name']; ?></option>
                     <?php } else { ?>
@@ -49,10 +51,12 @@
                   </select>
                 </div>
                 <?php } ?>
+
                 <div class="filter name-filter" title="<?php echo $help_name; ?>" rel="tooltip" data-container="body">
                     <label for="filter_search" class="hidden"><?php echo $text_filter_name; ?></label>
                     <input type="text" name="filter_search" value="<?php echo $filter_search; ?>" placeholder="<?php echo $text_filter_name; ?>" />
                 </div>
+
                 <div class="sort" title="<?php echo $help_sort; ?>" rel="tooltip" data-container="body">
                     <label for="sort" class="hidden"><?php echo $text_sort; ?></label>
                     <select name="sort" onchange="location = this.value;">
@@ -65,6 +69,7 @@
                         <?php } ?>
                     </select>
                 </div>
+
                 <div class="limit" title="<?php echo $help_limit; ?>" rel="tooltip" data-container="body">
                     <label for="limit" class="hidden"><?php echo $text_limit; ?></label>
                     <select name="limit" onchange="location = this.value;">
@@ -77,6 +82,7 @@
                         <?php } ?>
                     </select>
                 </div>
+
                 <?php if ($filter_groups && $products) { ?>
                 <div class="formbox">
                     <span class="label">
@@ -144,6 +150,8 @@
                     <?php } ?>
                 </div>
                 <?php } ?>
+
+                <?php if ($location_page) { ?>
                 <div class="formbox">
                     <span class="label">
                         <a href="<?php echo $location_page; ?>" id="button-location" title="<?php echo $text_set_location; ?>">
@@ -151,6 +159,8 @@
                         </a>
                     </span>
                 </div>
+                <?php } ?>
+
             </div>
             <div class="buttons">
                 <div class="left hidden">
@@ -165,10 +175,12 @@
                     <a id="button-filter" href="<?php echo $action; ?>" class="button">
                         <i class="fa fa-filter"></i> <?php echo $button_filter; ?>
                     </a>
+                    <?php if ($compare) { ?>
                     <div class="product-filter">
                         <a href="<?php echo $random; ?>" id="random"><i class="fa fa-random"></i><?php echo $text_random; ?></a>
                         <a class="product-compare<?php if (!empty($this->session->data['compare'])) { ?> active<?php } ?>" href="<?php echo $compare; ?>"><i class="fa fa-copy"></i><span id="compare-total"><?php echo $text_compare; ?></span></a>
                     </div>
+                    <?php } ?>
                 </div>
             </div>
         	<input type="hidden" name="text_hide_options" value="<?php echo $text_hide_options; ?>" />

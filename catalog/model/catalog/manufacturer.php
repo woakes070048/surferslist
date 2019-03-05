@@ -50,6 +50,8 @@ class ModelCatalogManufacturer extends Model {
 		$manufacturer_data = $this->cache->get('manufacturer.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $cache);
 
 		if ($manufacturer_data === false || $random) {
+			$manufacturer_data = array();
+
 			$sql = "
 				SELECT m.manufacturer_id
 				, m.name
@@ -155,8 +157,6 @@ class ModelCatalogManufacturer extends Model {
 				$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
 			}
 
-			$manufacturer_data = array();
-
 			$query = $this->db->query($sql);
 
 			if (!empty($data['images_included'])) {
@@ -165,7 +165,7 @@ class ModelCatalogManufacturer extends Model {
 				foreach ($query->rows as $result) {
 					$image_resized = !empty($result['image']) ? $this->model_tool_image->resize($result['image'], 188, 188, 'fw') : ''; // $this->config->get('config_image_category_width'), $this->config->get('config_image_category_height')
 
-					$manufacturer_data[] = array (
+					$manufacturer_data[] = array(
 						'manufacturer_id'	=> $result['manufacturer_id'],
 						'image_resized'		=> $image_resized,
 						'name'				=> $result['name'],

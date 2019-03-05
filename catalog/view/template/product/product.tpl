@@ -434,11 +434,14 @@
                 <section class="container-center">
                     <div class="content-page">
                         <div id="related-listings" class="widget-module">
-                            <?php include('products.inc.php'); ?>
+                            <div id="filterscat">
+                        		<?php echo $products; ?>
+                            </div>
                         </div>
                     </div>
                 </section>
                 <?php } ?>
+
                 <?php echo $content_bottom; ?>
             </div>
         </section>

@@ -1,6 +1,6 @@
 <?php
 // New Listing
-$_['text_subject']        = '[%s] NEW LISTING: %s (%s)';
+$_['text_subject']        = '[%s] New Listing: %s (%s)';
 $_['text_new_product']    = 'A new listing has been created:';
 $_['text_approval']       = 'This listing is pending approval by SurfersList.';
 $_['text_auto_approval']  = 'This listing will appear on the website shortly.';
@@ -43,7 +43,7 @@ This listing is pending approval by SurfersList.
 EOT;
 
 // Listing Q & A
-$_['text_question_mail_subject']    = '[%s] New Discussion on Listing: %s';
+$_['text_question_mail_subject']    = '[%s] New Discussion: %s';
 $_['text_question_mail'] = <<<EOT
 A message has been submitted to listing %s.
 
@@ -61,7 +61,7 @@ Please reply using the Discussion tab on the listing page.
 EOT;
 
 // Flag/Report Listing
-$_['text_flag_mail_subject']    = '[%s] Listing REPORTED for removal: %s';
+$_['text_flag_mail_subject']    = '[%s] Listing Reported: %s';
 $_['text_flag_anon']            = 'Anonymous';
 $_['text_flag_none']            = 'None';
 $_['text_flag_mail'] = <<<EOT

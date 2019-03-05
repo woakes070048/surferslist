@@ -1,6 +1,6 @@
 <?php
 // Text
-$_['text_subject']  = '[%s] You have been sent a gift certificate!';
+$_['text_subject']  = '[%s] New Gift Certificate!';
 $_['text_greeting'] = 'Congratulations, you have received a gift certificate worth %s';
 $_['text_from']     = 'This gift certificate has been sent to you by %s';
 $_['text_message']  = 'With a message saying';

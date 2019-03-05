@@ -103,30 +103,32 @@ class ControllerModuleFeatured extends Controller {
 
 		$customer_group_id = $this->customer->isLogged() ? $this->customer->getCustomerGroupId() : $this->config->get('config_customer_group_id');
 
-		$this->data['products'] = $this->cache->get('product.module.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . (int)$currency_id . '.' . $cache);
+		$listings = $this->cache->get('product.module.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . (int)$currency_id . '.' . $cache);
 
-		if ($this->data['products'] === false) {
-			$this->data['products'] = array();
+		if ($listings === false) {
+			$listings = $this->getChild('product/product/list', $this->model_catalog_product->getProductFeatured($data, false));
+
+			$listings = array();
 
 			$results = $this->model_catalog_product->getProductFeatured($data, false); // don't cache in model
 
 			foreach ($results as $result) {
-				// adds to $this->data['products']
-				require(DIR_APPLICATION . 'controller/module/listing_result.inc.php');
+				$listings[$result['product_id']] = $this->getChild('product/product/info', $result);
+				$listings[$result['product_id']]['thumb'] = $this->model_tool_image->resize($result['image'], $image_width, $image_height, $image_crop);
 			}
 
-			$this->cache->set('product.module.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . (int)$currency_id . '.' . $cache, $this->data['products'], 60 * 30); // 30 min cache expiration
+			$this->cache->set('product.module.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . (int)$currency_id . '.' . $cache, $listings, 60 * 30); // 30 min cache expiration
 		}
 
 		if ($setting['position'] == 'content_top' || $setting['position'] == 'content_bottom') {
 			// filter_ids
 			$url = '';
 
-			foreach ($this->data['products'] as $listing) {
+			foreach ($listings as $listing) {
 				$url .= $listing['product_id'] . ',';
 			}
 
-			$this->data['more'] = $this->url->link('product/allproducts/more', 'module=true&featured=true&filter_listings=' . rtrim($url, ','), 'SSL');
+			$this->data['more'] = $this->url->link('ajax/product/more', 'module=true&featured=true&filter_listings=' . rtrim($url, ','), 'SSL');
 		} else {
 			$this->data['more'] = $this->url->link('product/featured', '', 'SSL');
 		}
@@ -134,6 +136,8 @@ class ControllerModuleFeatured extends Controller {
 		if ($setting['position'] == 'column_right' || $setting['position'] == 'column_left') {
 			$this->document->addScript('catalog/view/root/slick/slick.min.js');
 		}
+
+		$this->data['products'] = $this->getChild('product/product/list_module', array('products' => $listings, 'position' => $setting['position']));
 
 		$this->template = '/template/module/featured.tpl';
 

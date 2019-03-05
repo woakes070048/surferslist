@@ -59,16 +59,5 @@ class ModelCatalogInformation extends Model {
 		return $information_data;
 	}
 
-	// public function getInformationLayoutId($information_id) {
-	// 	$query = $this->db->query("
-	// 		SELECT *
-	// 		FROM " . DB_PREFIX . "information_to_layout
-	// 		WHERE information_id = '" . (int)$information_id . "'
-	// 		AND store_id = '" . (int)$this->config->get('config_store_id') . "'
-	// 	");
-    //
-	// 	return $query->num_rows ? $query->row['layout_id'] : 0;
-	// }
-
 }
 ?>

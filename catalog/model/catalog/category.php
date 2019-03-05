@@ -278,7 +278,7 @@ class ModelCatalogCategory extends Model {
 						}
 					}
 				}
-			}			
+			}
 
 			$this->cache->set('category.names.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'), $category_names);
 		}
@@ -471,17 +471,6 @@ class ModelCatalogCategory extends Model {
 		}
 
 		return $filter_group_data;
-	}
-
-	public function getCategoryLayoutId($category_id) {
-		$query = $this->db->query("
-			SELECT *
-			FROM " . DB_PREFIX . "category_to_layout
-			WHERE category_id = '" . (int)$category_id . "'
-			AND store_id = '" . (int)$this->config->get('config_store_id') . "'
-		");
-
-		return $query->num_rows ? $query->row['layout_id'] : 0;
 	}
 
 	public function getCategoryIdsByParentId($category_id) {
