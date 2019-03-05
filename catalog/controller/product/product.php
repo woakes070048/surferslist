@@ -182,7 +182,7 @@ class ControllerProductProduct extends Controller {
 			if ($this->config->get('member_data_field_shipping') && $product_info['shipping'] && $this->config->get('product_shipping_status')) {
 				$product_shipping = $this->model_catalog_product->getProductShipping($product_id);
 				$this->data['shipping'] = $product_shipping
-					? sprintf($this->language->get('text_shipping_yes'), $this->url->link('product/product/shipping_rates', 'shipping_rate_id=' . $product_id, 'SSL'))
+					? sprintf($this->language->get('text_shipping_yes'), $this->url->link('ajax/product/shipping_rates', 'shipping_rate_id=' . $product_id, 'SSL'))
 					: $this->language->get('text_yes');
 				$this->data['shipping_display'] = true;
 				$this->data['shipping_display_dimensions'] = $product_shipping ? false : true;
