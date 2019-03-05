@@ -87,24 +87,18 @@ class ControllerCommonModule extends Controller {
 		$this->setOutput($module_info);
 	}
 
-    protected function hideSidebar() {
-        $hide_sidebar = false;
+    protected function hasSidebar() {
+        $sidebar_exists = false;
 
-		if (!isset($this->session->data['warning'])
-			&& ($this->route == 'product/member'
-			|| ($this->route == 'product/member/info' && isset($this->request->get['member_id']))
-			|| $this->route == 'product/manufacturer'
-			|| ($this->route == 'product/manufacturer/info' && isset($this->request->get['manufacturer_id']))
-			|| $this->route == 'product/allproducts'
-			|| $this->route == 'product/allcategories'
-			|| $this->route == 'product/featured'
-			|| $this->route == 'product/special'
-			|| $this->route == 'product/category')) {
+		if (strpos($this->route, 'product') === 0
+			&& $this->route != 'product/product'
+			&& $this->route != 'product/search'
+			&& $this->route != 'product/compare') {
 
-			$hide_sidebar = true;
+			$sidebar_exists = true;
 		}
 
-        $this->setOutput($hide_sidebar);
+        $this->setOutput($sidebar_exists);
     }
 }
 ?>

@@ -1244,10 +1244,11 @@ class ModelCatalogProduct extends Model {
 				$result = $this->getProductShort($product_id);
 
 				if ($result) {
-					if ((!empty($data['filter_location']) && utf8_strpos($result['location'], utf8_strtolower($data['filter_location'])) === false)
+					if ((!empty($data['filter_location']) && utf8_strpos(utf8_strtolower($result['location']), utf8_strtolower($data['filter_location'])) === false)
 						|| (!empty($data['filter_country_id']) && $result['country_id'] != $data['filter_country_id'])
 						|| (!empty($data['filter_zone_id']) && $result['zone_id'] != $data['filter_zone_id'])
 						|| (!empty($data['filter_manufacturer_id']) && $result['manufacturer_id'] != $data['filter_manufacturer_id'])
+						|| (!empty($data['filter_name']) && utf8_strpos(utf8_strtolower($result['name']), utf8_strtolower($data['filter_name'])) === false)
 						|| (!empty($data['filter_filter']) && !in_array($product_id, $product_ids))
 						|| (!empty($data['filter_listings']) && in_array($product_id, $filter_listing_ids))) {
 						continue;

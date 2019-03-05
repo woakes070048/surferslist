@@ -9,15 +9,13 @@ class ControllerModuleSpecial extends Controller {
 		$this->load->model('catalog/product');
 		$this->load->model('tool/image');
 
-		$image_width = ($setting['position'] == 'content_top' || $setting['position'] == 'content_bottom') ? $this->config->get('config_image_product_width') : $this->config->get('config_image_additional_width');
-		$image_height = ($setting['position'] == 'content_top' || $setting['position'] == 'content_bottom') ? $this->config->get('config_image_product_height') : $this->config->get('config_image_additional_height');
-
 		$this->data['position'] = $setting['position'];
 
-		$this->data['products'] = array();
+		$listings = array();
 
 		$sort = 'random'; // $this->config->get('apac_products_sort_default') ? $this->config->get('apac_products_sort_default') : 'p.date_added'; // 'pd.name', 'random', 'p.date_added'
 		$order = (($sort == 'p.date_added') ? 'DESC' : 'ASC'); // if sorted by date, then show newest first, otherwise sort ascending
+		$url = '';
 
 		$data = array(
 			'filter_country_id' => (isset($this->session->data['shipping_country_id']) ? $this->session->data['shipping_country_id'] : ''),
@@ -30,21 +28,14 @@ class ControllerModuleSpecial extends Controller {
 		$results = $this->model_catalog_product->getProductSpecials($data);
 
 		foreach ($results as $result) {
-			// adds to $this->data['products'] array
-			require(DIR_APPLICATION . 'controller/module/listing_result.inc.php');
+			$listings[] = $this->getChild('product/product/info', $result);
+
+			$url .= $result['product_id'] . ',';
 		}
 
-		// $product_total = $this->model_catalog_product->getTotalProductSpecials($data);
+		$this->data['more'] = $this->url->link('ajax/product/more', 'module=true&special=true&filter_listings=' . rtrim($url, ','), 'SSL');
 
-		// filter_ids
-		$url = '';
-
-		foreach ($this->data['products'] as $listing) {
-			$url .= $listing['product_id'] . ',';
-		}
-
-		$this->data['more'] = $this->url->link('product/allproducts/more', 'module=true&special=true&filter_listings=' . rtrim($url, ','), 'SSL');
-
+		$this->data['products'] = $this->getChild('product/product/list_module', array('products' => $listings, 'position' => $setting['position']));
 
 		$this->template = '/template/module/special.tpl';
 

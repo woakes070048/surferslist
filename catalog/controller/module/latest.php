@@ -9,10 +9,6 @@ class ControllerModuleLatest extends Controller {
 		$this->load->model('catalog/product');
 		$this->load->model('tool/image');
 
-		$image_width = ($setting['position'] == 'content_top' || $setting['position'] == 'content_bottom') ? $this->config->get('config_image_product_width') : $this->config->get('config_image_additional_width');
-		$image_height = ($setting['position'] == 'content_top' || $setting['position'] == 'content_bottom') ? $this->config->get('config_image_product_height') : $this->config->get('config_image_additional_height');
-		$image_crop = 'fw';
-
 		$this->data['position'] = $setting['position'];
 
 		$filter_country_id = isset($this->session->data['shipping_country_id']) ? $this->session->data['shipping_country_id'] : '';
@@ -23,10 +19,10 @@ class ControllerModuleLatest extends Controller {
 
 		$customer_group_id = $this->customer->isLogged() ? $this->customer->getCustomerGroupId() : $this->config->get('config_customer_group_id');
 
-		$this->data['products'] = $this->cache->get('product.latest.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$filter_country_id . '.' . (int)$customer_group_id . '.' . $cache);
+		$listings = $this->cache->get('product.latest.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$filter_country_id . '.' . (int)$customer_group_id . '.' . $cache);
 
-		if ($this->data['products'] === false) {
-			$this->data['products'] = array();
+		if ($listings === false) {
+			$listings = array();
 
 			// latest
 			$sort_latest = 'p.date_added'; // $this->config->get('apac_products_sort_default') ? $this->config->get('apac_products_sort_default') : 'p.date_added'; // 'pd.name', 'random', 'p.date_added'
@@ -44,9 +40,8 @@ class ControllerModuleLatest extends Controller {
 
 			$results_latest = $this->model_catalog_product->getProducts($data);
 
-			// add each new latest listing to $this->data['products']
 			foreach ($results_latest as $result) {
-				require(DIR_APPLICATION . 'controller/module/listing_result.inc.php');
+				$listings[$result['product_id']] = $this->getChild('product/product/info', $result);
 			}
 
 			// featured
@@ -58,7 +53,7 @@ class ControllerModuleLatest extends Controller {
 			foreach ($featured_product_ids as $product_id) {
 				$result = $this->model_catalog_product->getProduct($product_id);
 
-				if ($result && !array_key_exists($result['product_id'], $this->data['products'])) {
+				if ($result && !array_key_exists($result['product_id'], $listings)) {
 					$featured_products[$result['product_id']] = $result;
 				}
 			}
@@ -72,11 +67,11 @@ class ControllerModuleLatest extends Controller {
 
 			array_multisort($sort_order_featured, SORT_DESC, $featured_products);
 
-			// add each new featured listing to $this->data['products']
+			// add each new featured listing
 			foreach ($featured_products as $result) {
 				if ($count_featured >= $limit_featured) break;
 
-				require(DIR_APPLICATION . 'controller/module/listing_result.inc.php');
+				$listings[$result['product_id']] = $this->getChild('product/product/info', $result);
 
 				$count_featured++;
 			}
@@ -96,36 +91,38 @@ class ControllerModuleLatest extends Controller {
 
 			$results_special = $this->model_catalog_product->getProductSpecials($data_special);
 
-			// add each new special listing to $this->data['products']
+			// add each new special listing to $listings
 			foreach ($results_special as $result) {
-				if ($result && !array_key_exists($result['product_id'], $this->data['products'])) {
-					require(DIR_APPLICATION . 'controller/module/listing_result.inc.php');
+				if ($result && !array_key_exists($result['product_id'], $listings)) {
+					$listings[$result['product_id']] = $this->getChild('product/product/info', $result);
 				}
 			}
 
 			// order by date_added DESC
 			$sort_order = array();
 
-			foreach ($this->data['products'] as $key => $value) {
+			foreach ($listings as $key => $value) {
 				$sort_order[$key] = $value['date_added'];
 			}
 
-			array_multisort($sort_order, SORT_DESC, $this->data['products']);
+			array_multisort($sort_order, SORT_DESC, $listings);
 
 			// limit
-			$this->data['products'] = array_slice($this->data['products'], 0, $limit_featured + $limit_latest + $limit_special);
+			$listings = array_slice($listings, 0, $limit_featured + $limit_latest + $limit_special);
 
-			$this->cache->set('product.latest.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$filter_country_id . '.' . (int)$customer_group_id . '.' . $cache, $this->data['products'], 60 * 60); // 1 hr cache expiration
+			$this->cache->set('product.latest.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$filter_country_id . '.' . (int)$customer_group_id . '.' . $cache, $listings, 60 * 60); // 1 hr cache expiration
 		}
 
 		// filter_ids
 		$url = '';
 
-		foreach ($this->data['products'] as $listing) {
+		foreach ($listings as $listing) {
 			$url .= $listing['product_id'] . ',';
 		}
 
-		$this->data['more'] = $this->url->link('product/allproducts/more', 'module=true&filter_listings=' . rtrim($url, ','), 'SSL');
+		$this->data['more'] = $this->url->link('ajax/product/more', 'module=true&filter_listings=' . rtrim($url, ','), 'SSL');
+
+		$this->data['products'] = $this->getChild('product/product/list_module', array('products' => $listings, 'position' => $setting['position']));
 
 		$this->template = '/template/module/latest.tpl';
 

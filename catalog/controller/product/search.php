@@ -100,7 +100,7 @@ class ControllerProductSearch extends Controller {
 		$page = isset($this->request->get['page']) ? (int)$this->request->get['page'] : 1;
 		$limit = (isset($this->request->get['limit']) && $this->request->get['limit'] <= $this->config->get('config_catalog_limit') * 4) ? (int)$this->request->get['limit'] : $this->config->get('config_catalog_limit');
 
-		$this->setQueryParams(array(
+		$query_params = array(
 			's',
 			'search',
 			'tag',
@@ -116,7 +116,9 @@ class ControllerProductSearch extends Controller {
 			'sort',
 			'order',
 			'limit'
-		));
+		);
+
+		$this->setQueryParams($query_params);
 
 		$no_search = true;
 
@@ -219,9 +221,7 @@ class ControllerProductSearch extends Controller {
 		if ($results) {
 			$this->load->model('tool/image');
 
-			foreach ($results as $result) {
-				require(DIR_APPLICATION . 'controller/product/listing_result.inc.php');
-			}
+			$this->data['products'] = $this->getChild('product/product/list', $results);
 		}
 
 		// Sorts
@@ -281,7 +281,7 @@ class ControllerProductSearch extends Controller {
 		$this->data['reset'] = $this->url->link('product/search', '', 'SSL');
 		$this->data['continue'] = $this->url->link('common/home', '', 'SSL');
 
-		$this->data['more'] = $page < $max_pages ? $this->url->link('product/allproducts/more', $url . '&page=' . ($page + 1), 'SSL') : '';
+		$this->data['more'] = $page < $max_pages ? $this->url->link('ajax/product/more', $url . '&page=' . ($page + 1), 'SSL') : '';
 
 		if (!$this->data['products'] && (isset($this->session->data['shipping_country_id']) || isset($this->session->data['shipping_zone_id']) || isset($this->session->data['shipping_location']))) {
 			// Remove Location

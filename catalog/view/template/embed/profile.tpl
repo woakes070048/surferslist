@@ -20,12 +20,18 @@
         <section id="embed-profile">
             <?php if (!$nosidebar) { ?>
             <aside id="sidebar" class="sidebar container-right">
-                <?php require_once('filter.inc.php'); ?>
+                <?php echo $refine; ?>
             </aside>
             <?php } ?>
             <div class="container-center">
                 <div class="content-page">
-                    <?php require_once('listings.inc.php'); ?>
+
+                    <?php echo $products; ?>
+
+                    <?php if (isset($pagination)) { ?>
+                    <div class="pagination"><?php echo $pagination; ?></div>
+                    <?php } ?>
+
                     <?php if (!$hidefooter) { ?>
                     <p class="powered text-center">
                         <?php if ($logo) { ?>
@@ -46,7 +52,7 @@
         <?php } else { ?>
         <?php if (!$nosidebar) { ?>
         <aside id="sidebar" class="sidebar container-right">
-            <?php require_once('filter.inc.php'); ?>
+            <?php echo $refine; ?>
         </aside>
         <?php } ?>
         <div class="container-center">

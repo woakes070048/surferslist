@@ -11,7 +11,6 @@ class ControllerProductAllProducts extends Controller {
 		$this->load->model('catalog/manufacturer');
 		$this->load->model('tool/image');
 
-		$config_product_count = true; // $this->config->get('config_product_count');
 		$display_more_options = false;
 
 		if (isset($this->request->get['type']) && !is_array($this->request->get['type'])) {
@@ -86,7 +85,7 @@ class ControllerProductAllProducts extends Controller {
 		$page = isset($this->request->get['page']) ? (int)$this->request->get['page'] : 1;
 		$limit = (isset($this->request->get['limit']) && $this->request->get['limit'] <= $this->config->get('config_catalog_limit') * 4) ? (int)$this->request->get['limit'] : $this->config->get('config_catalog_limit');
 
-		$this->setQueryParams(array(
+		$query_params = array(
 			'search',
 			'filter_location',
 			'filter',
@@ -99,7 +98,9 @@ class ControllerProductAllProducts extends Controller {
 			'sort',
 			'order',
 			'limit'
-		));
+		);
+
+		$this->setQueryParams($query_params);
 
 		// get All Products info from APAC Module config settings
 		$language_id = (int)$this->config->get('config_language_id');
@@ -155,7 +156,6 @@ class ControllerProductAllProducts extends Controller {
 		$this->data['breadcrumbs'] = $this->getBreadcrumbs();
 
 		$this->data['heading_title'] = $heading_title;
-		$this->data['text_compare'] = sprintf($this->language->get('text_compare'), (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));
 		$this->data['text_all_products'] = $heading_title;
 
 		$this->data['thumb'] = (!empty($all_products_info['image']))
@@ -192,193 +192,17 @@ class ControllerProductAllProducts extends Controller {
 			$this->redirect($this->url->link('error/not_found', '', 'SSL'));
 		}
 
-		$customer_group_id = $this->customer->isLogged() ? $this->customer->getCustomerGroupId() : $this->config->get('config_customer_group_id');
+		$this->data['products'] = $this->getChild('product/product/list', $this->model_catalog_product->getProducts($data));
 
-		$this->data['products'] = array();
-
-		$results = $this->model_catalog_product->getProducts($data);
-
-		foreach ($results as $result) {
-			// adds to $this->data['products']
-			require(DIR_APPLICATION . 'controller/product/listing_result.inc.php');
-		}
-
-		// Categories Filter
-		$this->data['categories'] = array();
-
-		$url = $this->getQueryParams(array('filter_category_id'));
-
-		if ($this->config->get('apac_products_refine_category')) {
-			$this->data['categories'][] = array(
-				'id'	=> 0,
-				'name'	=> $this->language->get('text_category_all'),
-				'href'	=> $this->url->link('product/allproducts', $url, 'SSL')
-			);
-
-			$categories = $this->model_catalog_category->getCategories(0);
-
-			foreach ($categories as $category) {
-				if (utf8_strpos($category['name'], $this->language->get('heading_more')) !== false) {
-					$category_name = $this->language->get('heading_more');
-				} else if (utf8_strpos($category['name'], $this->language->get('heading_other')) !== false) {
-					$category_name = $this->language->get('heading_other');
-				} else {
-					$category_name = $category['name'];
-				}
-
-				if (false && $config_product_count) {
-					// $product_total_category = $category['product_count'];
-					$product_total_category = count(array_filter($products, function ($item) use ($category) {
-						return in_array($category['category_id'], $item['category_ids']);
-					}));
-				}
-
-				$this->data['categories'][] = array(
-					'id'	=> $category['category_id'],
-					'name'  => utf8_strtoupper($category_name) . (false && $config_product_count ? sprintf($this->language->get('text_product_count'), $product_total_category) : ''),
-					'href'  => $this->url->link('product/category', 'path=' . $category['path'] . $url, 'SSL')
-				);
-			}
-		}
-
-		// Manufacturer Filter
-		$this->data['manufacturers'] = array();
-
-		$url = $this->getQueryParams(array('filter_manufacturer_id'));
-
-		if ($this->config->get('apac_products_refine_brand')) {
-			$this->data['manufacturers'][0] = array(
-				'id'	=> 0,
-				'name'	=> $this->language->get('text_manufacturer_all'),
-				'href'	=> $this->url->link('product/allproducts', $url, 'SSL')
-			);
-
-			$manufacturers_data = array(
-				'filter_category_id'    => $filter_category_id
-			);
-
-			$manufacturers = $this->model_catalog_manufacturer->getManufacturers($manufacturers_data);
-
-			foreach ($manufacturers as $manufacturer) {
-				if ($config_product_count) {
-					$product_total_manufacturer = count(array_filter($products, function ($item) use ($manufacturer) {
-						return $manufacturer['manufacturer_id'] == $item['manufacturer_id'];
-					}));
-				}
-
-				$this->data['manufacturers'][$manufacturer['manufacturer_id']] = array(
-					'id'	=> $manufacturer['manufacturer_id'],
-					'name'  => $manufacturer['name'] . ($config_product_count ? sprintf($this->language->get('text_product_count'), $product_total_manufacturer) : ''),
-					'product_count' => $config_product_count ? $product_total_manufacturer : null,
-					'href'  => $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $manufacturer['manufacturer_id'] . $url, 'SSL')
-				);
-			}
-		}
-
-		// Types
-		$this->data['listing_types'] = array();
-
-		$listing_types = array(
-			array(
-				'id' 	=> '0',
-				'name'	=> $this->language->get('text_classified'),
-				'sort_order' => '1'
-			),
-			array(
-				'id'	=> '1',
-				'name'	=> $this->language->get('text_buy_now'),
-				'sort_order' => '2'
-			),
-			array(
-				'id'	=> '-1',
-				'name'	=> $this->language->get('text_shared'),
-				'sort_order' => '3'
-			)
-		);
-
-		foreach ($listing_types as $listing_type) {
-			if ($config_product_count) {
-				$product_total_type = count(array_filter($products, function ($item) use ($listing_type) {
-					return $item['type_id'] == $listing_type['id'];
-				}));
-			}
-
-			$this->data['listing_types'][] = array(
-				'type_id' => $listing_type['id'],
-				'name'    => $listing_type['name'] . ($config_product_count ? sprintf($this->language->get('text_product_count'), $product_total_type) : '')
-			);
-		}
-
-		// Filter Groups
-		$url = $this->getQueryParams(array('filter', 'type', 'search'));
-
-		$this->data['action'] = str_replace('&amp;', '&', $this->url->link('product/allproducts', $url, 'SSL'));
-
-		if (isset($this->request->get['filter']) && !is_array($this->request->get['filter'])) {
-			$this->data['filter_category'] = explode(',', $this->request->get['filter']);
-			$display_more_options = true;
-		} else {
-			$this->data['filter_category'] = array();
-		}
-
-		$this->data['filter_groups'] = array();
-
-		$filter_groups = $this->model_catalog_category->getCategoryFiltersAll(); /* display all filters all the time */
-
-		foreach ($filter_groups as $filter_group) {
-			$filter_data = array();
-
-			foreach ($filter_group['filter'] as $filter_group_filter) {
-				if ($config_product_count) {
-					$product_total_filter = count(array_filter($products, function ($item) use ($filter_group_filter) {
-						return in_array($filter_group_filter['filter_id'], $item['filter_ids']);
-					}));
-				}
-
-				$filter_data[] = array(
-					'filter_id' => $filter_group_filter['filter_id'],
-					'name'      => $filter_group_filter['name'] . ($config_product_count ? sprintf($this->language->get('text_product_count'), $product_total_filter) : '')
-				);
-			}
-
-			$this->data['filter_groups'][] = array(
-				'filter_group_id' => $filter_group['filter_group_id'],
-				'name'            => $filter_group['name'],
-				'filter'          => $filter_data
-			);
-		}
-
-		// Sort, Limit
-		$url = $this->getQueryParams(array('sort', 'order'));
-
-		if ($this->config->get('apac_products_sort_sort_order')) {
-			$this->addSort($this->language->get('text_default'), 'p.sort_order-ASC', $this->url->link('product/allproducts','&sort=p.sort_order&order=ASC' . $url));
-		}
-
-		if ($this->config->get('apac_products_sort_name')) {
-			$this->addSort($this->language->get('text_name_asc'), 'pd.name-ASC', $this->url->link('product/allproducts','&sort=pd.name&order=ASC' . $url));
-			$this->addSort($this->language->get('text_name_desc'), 'pd.name-DESC', $this->url->link('product/allproducts','&sort=pd.name&order=DESC' . $url));
-		}
-
-		if ($this->config->get('apac_products_sort_price')) {
-			$this->addSort($this->language->get('text_price_asc'), 'p.price-ASC', $this->url->link('product/allproducts','&sort=p.price&order=ASC' . $url));
-			$this->addSort($this->language->get('text_price_desc'), 'p.price-DESC', $this->url->link('product/allproducts','&sort=p.price&order=DESC' . $url));
-		}
-
-		if ($this->config->get('apac_products_sort_model')) {
-			$this->addSort($this->language->get('text_model_asc'), 'p.model-ASC', $this->url->link('product/allproducts','&sort=p.model&order=ASC' . $url));
-			$this->addSort($this->language->get('text_model_desc'), 'p.model-DESC', $this->url->link('product/allproducts','&sort=p.model&order=DESC' . $url));
-		}
-
-		if ($this->config->get('apac_products_sort_date')) {
-			$this->addSort($this->language->get('text_date_asc'), 'p.date_added-ASC', $this->url->link('product/allproducts','&sort=p.date_added&order=ASC' . $url));
-			$this->addSort($this->language->get('text_date_desc'), 'p.date_added-DESC', $this->url->link('product/allproducts','&sort=p.date_added&order=DESC' . $url));
-		}
-
-		$this->addSort($this->language->get('text_random'), 'random-' . $order,  $this->url->link('product/allproducts', '&sort=random' . $url));
-
-		$this->data['sorts'] = $this->getSorts();
-		$this->data['limits'] = $this->getLimits('product/allproducts', $this->getQueryParams(array('limit')));
+		$this->data['refine'] = $this->getChild('module/refine', array(
+			'query_params' => $query_params,
+			'route' => 'product/allproducts',
+			'path' => '',
+			'filter' => $data,
+			'products' => $products,
+			'display_more_options' => $display_more_options,
+			'forsale' => $forsale
+		));
 
 		// Pagination
 		$url = $this->getQueryParams(array('page'));
@@ -395,36 +219,18 @@ class ControllerProductAllProducts extends Controller {
 		$this->document->setDescription($meta_description);
 		$this->document->setKeywords($meta_keyword);
 
-		$this->data['display_more_options'] = $display_more_options;
-		$this->data['filter'] = $filter;
-		$this->data['filter_search'] = $search;
-		$this->data['filter_category_id'] = $filter_category_id;
-		$this->data['filter_manufacturer_id'] = $filter_manufacturer_id;
-		$this->data['filter_country_id'] = $filter_country_id;
-		$this->data['filter_zone_id'] = $filter_zone_id;
-		$this->data['filter_location'] = $filter_location;
-		$this->data['type_selected'] = $filter_listing_type;
-		$this->data['forsale'] = $forsale;
-		$this->data['sort'] = $sort;
-		$this->data['order'] = $order;
-		$this->data['limit'] = $limit;
-		$this->data['url'] = $url;
-		// $this->data['all_listings_page'] = true;
-
-		$request_path = isset($this->request->server['REQUEST_URI']) ? parse_url(strtolower(urldecode($this->request->server['REQUEST_URI'])), PHP_URL_PATH) : '';
-
-		$this->data['location_page'] = $this->url->link('information/location', 'redirect_path=' . urlencode(ltrim($request_path, "/")), 'SSL');
-		$this->data['random'] = $this->url->link('product/allproducts', '&sort=random' . $url, 'SSL');
-		$this->data['back'] = ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->request->server['HTTP_REFERER'] : $this->url->link('common/home', '', 'SSL');
-		$this->data['compare'] = $this->url->link('product/compare', '', 'SSL');
+		$this->data['action'] = str_replace('&amp;', '&', $this->url->link('product/allproducts', $url, 'SSL'));
 		$this->data['search'] = $this->url->link('product/search', '', 'SSL');
-		$this->data['reset'] = $this->url->link('product/allproducts', '', 'SSL');
+		$this->data['back'] = ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->request->server['HTTP_REFERER'] : $this->url->link('common/home', '', 'SSL');
 		$this->data['continue'] = $this->url->link('common/home', '', 'SSL');
-		$this->data['more'] = $page < $max_pages ? $this->url->link('product/allproducts/more', $url . '&page=' . ($page + 1), 'SSL') : '';
+		$this->data['reset'] = $this->url->link('product/allproducts', '', 'SSL');
+		$this->data['more'] = $page < $max_pages ? $this->url->link('ajax/product/more', $url . '&page=' . ($page + 1), 'SSL') : '';
+		$this->data['url'] = $url;
 
 		if (!$this->data['products'] && (isset($this->session->data['shipping_country_id']) || isset($this->session->data['shipping_zone_id']) || isset($this->session->data['shipping_location']))) {
 			// Remove Location
 			$url = $this->getQueryParams(array('filter_location', 'filter_country_id', 'filter_zone_id'));
+			$request_path = isset($this->request->server['REQUEST_URI']) ? parse_url(strtolower(urldecode($this->request->server['REQUEST_URI'])), PHP_URL_PATH) : '';
 			$location_remove_url = $this->url->link('information/location', 'location=none&redirect_path=' . urlencode(ltrim($request_path . '?' . ltrim($url, "&"), "/")), 'SSL');
 			$this->data['text_empty'] .= '&nbsp; &nbsp;' . sprintf($this->language->get('text_location_remove_url'), $location_remove_url);
 		}
