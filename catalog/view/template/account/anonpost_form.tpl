@@ -370,7 +370,7 @@
                     <input type="hidden" name="text_select_zone" value="<?php echo $text_select_zone; ?>" />
             		<input type="hidden" name="text_hide_options" value="<?php echo $text_hide_options; ?>" />
             		<input type="hidden" name="text_more_options" value="<?php echo $text_more_options; ?>" />
-                    <input type="hidden" name="manufacturers_all" value="<?php echo $manufacturers; ?>" />
+                    <input type="hidden" name="manufacturers_all" value="<?php echo $manufacturers_all; ?>" />
                     <input type="hidden" name="categories_complete" value="<?php echo $categories_complete; ?>" />
 
                 </div>
