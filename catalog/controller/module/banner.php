@@ -11,7 +11,7 @@ class ControllerModuleBanner extends Controller {
 
 		$cache = md5(http_build_query($setting));
 
-		$banners = $this->cache->get('banner.module.banner.' . (int)$this->config->get('config_language_id') . $cache);
+		$banners = $this->cache->get('banner.module.banner.' . (int)$this->config->get('config_language_id') . '.' . $cache);
 
 		if ($banners === false) {
 			$banners = array();

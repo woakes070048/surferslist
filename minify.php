@@ -1,6 +1,7 @@
 <?php
 // load and check cache first
 require_once('config.php');
+require_once(DIR_SYSTEM . 'helper/helper.php');
 require_once(DIR_SYSTEM . 'library/cache.php');
 
 $cache = new Cache();

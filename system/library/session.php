@@ -9,7 +9,7 @@ class Session {
 			ini_set('session.use_trans_sid', 'Off');
 			ini_set('session.cookie_httponly', 'On');
 			*/
-			
+
 			// session_save_path(dirname($_SERVER['DOCUMENT_ROOT']).'/public_html/tmp');
 			session_set_cookie_params(0, '/');
 			session_start();
@@ -18,7 +18,7 @@ class Session {
 		$this->data =& $_SESSION;
 	}
 
-	function getId() {
+	public function getId() {
 		return session_id();
 	}
 

@@ -1,8 +1,8 @@
 <?php
 class ControllerModuleRefine extends Controller {
-	private $category_id;
-	private $config_product_count;
-	private $display_more_options;
+	private $category_id = 0;
+	private $config_product_count = true;
+	private $anchor;
 
 	protected function index($data) {
 		$this->data = $this->load->language('product/common');
@@ -11,10 +11,28 @@ class ControllerModuleRefine extends Controller {
 		$this->load->model('catalog/category');
 		$this->load->model('catalog/manufacturer');
 
-        $this->category_id = $data['route'] === 'product/category' ? $data['filter']['filter_category_id'] : 0;
+        // $this->config_product_count = $this->config->get('config_product_count');
 
-        $this->display_more_options = $data['display_more_options'];
-        $this->config_product_count = $data['route'] !== 'product/featured' ? true : false; // $this->config->get('config_product_count');
+		switch ($data['route']) {
+			case 'product/category':
+				$this->category_id = $data['filter']['filter_category_id'];
+				$this->anchor = '';
+				break;
+
+			case 'product/manufacturer/info':
+				$this->anchor = '#brand-listings';
+				break;
+
+			case 'product/member/info':
+				$this->anchor = '#member-listings';
+				break;
+
+			default:
+				$this->anchor = '';
+				break;
+		}
+
+		$display_more_options = $data['display_more_options'];
 
         $this->setQueryParams($data['query_params']);
 
@@ -34,7 +52,7 @@ class ControllerModuleRefine extends Controller {
 
         if (isset($this->request->get['filter']) && !is_array($this->request->get['filter'])) {
             $this->data['filter_category'] = explode(',', $this->request->get['filter']);
-            $this->display_more_options = true;
+            $display_more_options = true;
         } else {
             $this->data['filter_category'] = array();
         }
@@ -43,7 +61,7 @@ class ControllerModuleRefine extends Controller {
         $this->data['sorts'] = $this->getSortOptions($data);
         $this->data['limits'] = $this->getLimits($data['route'], $data['path'] . $this->getQueryParams(array('limit')));
 
-        $this->data['display_more_options'] = $this->display_more_options;
+        $this->data['display_more_options'] = $display_more_options;
 		$this->data['forsale'] = isset($data['forsale']) ? $data['forsale'] : '';
 
 		$this->data['filter'] = $data['filter']['filter_filter'];
@@ -65,6 +83,7 @@ class ControllerModuleRefine extends Controller {
         $this->data['location_page'] = $data['route'] !== 'embed/profile' ? $this->url->link('information/location', 'redirect_path=' . urlencode(ltrim($request_path, "/"))) : '';
 		$this->data['random'] = $this->url->link($data['route'], $data['path'] . '&sort=random' . $this->getQueryParams(array('sort', 'order')));
 		$this->data['compare'] = $data['route'] !== 'embed/profile' ? $this->url->link('product/compare', '') : '';
+		$this->data['reset'] = $this->getQueryParams(array('page')) ? $this->url->link($data['route'], $data['path']) . $this->anchor : '';
 
         $this->data['show_all_manufacturers'] = $data['route'] === 'product/allproducts' ? true : false;
         $this->data['text_compare'] = sprintf($this->language->get('text_compare'), (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));
@@ -200,19 +219,13 @@ class ControllerModuleRefine extends Controller {
 
 		$manufacturers_filter = array();
 
-		if ($data['route'] === 'product/member/info') {
-			$jumpTo = '#member-listings';
-		} else {
-			$jumpTo = '';
-		}
-
 		if ($data['product_manufacturers']) {
 			$url = $this->getQueryParams(array('filter_manufacturer_id'));
 
 			$manufacturers_filter[] = array(
 				'id'	=> 0,
 				'name'	=> $this->language->get('text_manufacturer_all'),
-				'href'	=> $this->url->link($data['route'], 'member_id=' . $data['path'] . '&filter_manufacturer_id=0' . $url, 'SSL') . $jumpTo
+				'href'	=> $this->url->link($data['route'], $data['path'] . '&filter_manufacturer_id=0' . $url, 'SSL') . $this->anchor
 			);
 
 			foreach ($data['product_manufacturers'] as $manufacturer) {
@@ -229,7 +242,7 @@ class ControllerModuleRefine extends Controller {
 						'id'	=> $manufacturer['manufacturer_id'],
 						'name'  => $manufacturer['name'] . ($this->config_product_count ? sprintf($this->language->get('text_product_count'), $product_total_manufacturer) : ''),
 						'product_count' => $this->config_product_count ? $product_total_manufacturer : null,
-						'href'  => $this->url->link($data['route'], 'member_id=' . $data['path'] . '&filter_manufacturer_id=' . $manufacturer['manufacturer_id'] . $url, 'SSL') . $jumpTo
+						'href'  => $this->url->link($data['route'], $data['path'] . '&filter_manufacturer_id=' . $manufacturer['manufacturer_id'] . $url, 'SSL') . $this->anchor
 					);
 				}
 			}
@@ -382,18 +395,10 @@ class ControllerModuleRefine extends Controller {
 
 		$url = $this->getQueryParams(array('filter_manufacturer_id', 'filter_category_id'));
 
-		if ($data['route'] === 'product/manufacturer/info') {
-			$jumpTo = '#brand-listings';
-		} else if ($data['route'] === 'product/member/info') {
-			$jumpTo = '#member-listings';
-		} else {
-			$jumpTo = '';
-		}
-
 		$categories_filter[] = array(
 			'id' 		=> 0,
 			'name'      => $this->language->get('text_category_all'),
-			'href'      => $this->url->link($data['route'], $data['path'] . '&filter_category_id=0' . $url, 'SSL') . $jumpTo
+			'href'      => $this->url->link($data['route'], $data['path'] . '&filter_category_id=0' . $url, 'SSL') . $this->anchor
 		);
 
 		foreach ($data['product_categories'] as $category_info) {
@@ -432,7 +437,7 @@ class ControllerModuleRefine extends Controller {
 					'name'        => $category_name . ($this->config_product_count ? sprintf($this->language->get('text_product_count'), $product_total_category) : ''),
 					'product_count' => $this->config_product_count ? $product_total_category : null,
 					'link'        => $this->url->link('product/category', 'path=' . $category_info['path'], 'SSL'),
-					'href'        => $this->url->link($data['route'], $data['path'] . '&filter_category_id=' . $category_info['category_id'] . $url, 'SSL') . $jumpTo
+					'href'        => $this->url->link($data['route'], $data['path'] . '&filter_category_id=' . $category_info['category_id'] . $url, 'SSL') . $this->anchor
 				);
 			}
 		}

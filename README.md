@@ -1,6 +1,6 @@
-# SurferList
+# SurfersList
 
-SurferList is a website application written in PHP and JavaScript that lets users post listings of items to an online catalog to share information, start discussions, and offer items for sale.
+SurfersList is a website application written in PHP and JavaScript that lets users post listings of items to an online catalog to share information, start discussions, and offer items for sale.
 
 ## Features
 

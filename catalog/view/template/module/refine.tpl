@@ -20,7 +20,7 @@
                 <?php } ?>
                 <?php } ?>
 
-                <?php if ($categories) { ?>
+                <?php if (count($categories) > 1) { ?>
                 <div class="filter category-filter" title="<?php echo $help_category_sub; ?>" rel="tooltip" data-container="body">
                   <label for="category-filter" class="hidden"><?php echo $text_filter_category; ?></label>
                   <select name="category-filter" id="category-filter" onchange="location = this.value;">
@@ -35,7 +35,7 @@
                 </div>
                 <?php } ?>
 
-                <?php if ($manufacturers) { ?>
+                <?php if (count($manufacturers) > 1) { ?>
                 <div class="filter manufacturer-filter" title="<?php echo $help_manufacturer; ?>" rel="tooltip" data-container="body">
                   <label for="manufacturer-filter" class="hidden"><?php echo $text_filter_manufacturer; ?></label>
                   <select name="manufacturer-filter" id="manufacturer-filter" onchange="location = this.value;">
@@ -175,6 +175,11 @@
                     <a id="button-filter" href="<?php echo $action; ?>" class="button">
                         <i class="fa fa-filter"></i> <?php echo $button_filter; ?>
                     </a>
+                    <?php if ($reset) { ?>
+                    <a id="button-reset" href="<?php echo $reset; ?>" class="button button_alt">
+                        <i class="fa fa-refresh"></i><?php echo $button_reset; ?>
+                    </a>
+                    <?php } ?>
                     <?php if ($compare) { ?>
                     <div class="product-filter">
                         <a href="<?php echo $random; ?>" id="random"><i class="fa fa-random"></i><?php echo $text_random; ?></a>
