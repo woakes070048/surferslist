@@ -229,7 +229,8 @@ class ControllerAccountAnonPost extends Controller {
 			$manufacturers = $this->model_catalog_manufacturer->getManufacturers();
 		}
 
-		$this->data['manufacturers'] = htmlspecialchars(json_encode($manufacturers), ENT_COMPAT);
+		$this->data['manufacturers'] = $manufacturers;
+		$this->data['manufacturers_all'] = htmlspecialchars(json_encode($manufacturers), ENT_COMPAT);
 
 		$this->data['currency'] = $this->model_localisation_currency->getCurrencyByCode($this->currency->getCode());
 		$this->data['price'] = isset($this->request->post['price']) ? $this->request->post['price'] : '';
