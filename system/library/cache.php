@@ -2,16 +2,13 @@
 final class Cache {
 	private $expire = 3600;
 	private $prefix = 'cache.';
-	private $memory_cache_enabled;
+	private $memory_cache_enabled = false;
 	private $memory_cache_files = array(); // key is cache name/title, value is expiration time
-	// private $log;
 
 	public function __construct($memcache = true) {
 		$this->memory_cache_enabled = $memcache;
 
 		$files = glob_recursive(DIR_CACHE . '*');
-
-		// $this->log = new Log('cache.log', false);
 
 		if ($files) {
 			foreach ($files as $file) {
@@ -22,8 +19,8 @@ final class Cache {
 
 					if ($this->memory_cache_enabled && !$file_expired) {
 						// files are `dir_cache/dir/prefix.name.expiration` and keys `name`
-						$key = substr($file, strlen(strtok($file, '.')) + 1, -(strlen($expiration) + 1));
-			        	$this->setMemCache($key, $expiration);
+						$name = substr($file, strrpos($file, '/') + strlen($this->prefix) + 1, -(strlen($expiration) + 1));
+			        	$this->setMemCache($name, $expiration);
 					}
 
 					if ($file_expired) {
@@ -32,11 +29,6 @@ final class Cache {
 				}
 			}
 		}
-
-		// debug
-		// if ($this->memory_cache_enabled) {
-		// 	$this->log->write('memory_cache: ' . json_encode($this->memory_cache_files));
-		// }
 
 		clearstatcache();
 	}
@@ -71,11 +63,6 @@ final class Cache {
 				$cache = json_decode($data, true);
 			}
 		}
-
-		// debug
-		// if ($cache === false) {
-		// 	$this->log->write('get: ' . $filepath . ' | ' . json_encode($cache));
-		// }
 
 		return $cache;
 	}

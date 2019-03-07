@@ -1,8 +1,10 @@
 <?php
 class ControllerModuleRefine extends Controller {
 	private $category_id = 0;
-	private $config_product_count = true;
-	private $anchor;
+	private $config_product_count = false;
+	private $display_more_options = false;
+	private $show_all_manufacturers = false;
+	private $anchor = '';
 
 	protected function index($data) {
 		$this->data = $this->load->language('product/common');
@@ -11,12 +13,18 @@ class ControllerModuleRefine extends Controller {
 		$this->load->model('catalog/category');
 		$this->load->model('catalog/manufacturer');
 
-        // $this->config_product_count = $this->config->get('config_product_count');
+        $this->config_product_count = true; // $this->config->get('config_product_count');
+
+		$this->display_more_options = $data['display_more_options'];
+		$this->show_all_manufacturers = false;
 
 		switch ($data['route']) {
+			case 'product/allproducts':
+				$this->show_all_manufacturers = true;
+				break;
+
 			case 'product/category':
 				$this->category_id = $data['filter']['filter_category_id'];
-				$this->anchor = '';
 				break;
 
 			case 'product/manufacturer/info':
@@ -32,12 +40,12 @@ class ControllerModuleRefine extends Controller {
 				break;
 		}
 
-		$display_more_options = $data['display_more_options'];
-
         $this->setQueryParams($data['query_params']);
 
+		// Brands/Manufacturers
         $this->data['manufacturers'] = $this->getFilterManufacturers($data);
 
+		// Categories
         $this->data['category_hierarchy_ids'] = array();
 
         if ($this->category_id) {
@@ -47,12 +55,13 @@ class ControllerModuleRefine extends Controller {
         $this->data['categories'] = $this->getFilterCategories($data);
         $this->data['parent_categories'] = $this->getFilterParentCategories($data);
 
+		// Type, Filters
 		$this->data['listing_types'] = $this->getFilterListingTypes($data);
 		$this->data['filter_groups'] = $this->getFilterFilterGroups($data);
 
         if (isset($this->request->get['filter']) && !is_array($this->request->get['filter'])) {
             $this->data['filter_category'] = explode(',', $this->request->get['filter']);
-            $display_more_options = true;
+            $this->display_more_options = true;
         } else {
             $this->data['filter_category'] = array();
         }
@@ -61,9 +70,7 @@ class ControllerModuleRefine extends Controller {
         $this->data['sorts'] = $this->getSortOptions($data);
         $this->data['limits'] = $this->getLimits($data['route'], $data['path'] . $this->getQueryParams(array('limit')));
 
-        $this->data['display_more_options'] = $display_more_options;
-		$this->data['forsale'] = isset($data['forsale']) ? $data['forsale'] : '';
-
+		// Selected Values
 		$this->data['filter'] = $data['filter']['filter_filter'];
 		$this->data['filter_search'] = $data['filter']['filter_name'];
 		$this->data['filter_tag'] = isset($data['filter']['filter_tag']) ? $data['filter']['filter_tag'] : '';
@@ -76,16 +83,20 @@ class ControllerModuleRefine extends Controller {
 		$this->data['sort'] = $data['filter']['sort'];
 		$this->data['order'] = $data['filter']['order'];
 		$this->data['limit'] = $data['filter']['limit'];
+		$this->data['forsale'] = isset($data['forsale']) ? $data['forsale'] : '';
 
 		$request_path = isset($this->request->server['REQUEST_URI']) ? parse_url(strtolower(urldecode($this->request->server['REQUEST_URI'])), PHP_URL_PATH) : '';
 
+		// Links
         $this->data['action'] = str_replace('&amp;', '&', $this->url->link($data['route'], $data['path'] . $this->getQueryParams(array('filter', 'type', 'search'))));;
         $this->data['location_page'] = $data['route'] !== 'embed/profile' ? $this->url->link('information/location', 'redirect_path=' . urlencode(ltrim($request_path, "/"))) : '';
 		$this->data['random'] = $this->url->link($data['route'], $data['path'] . '&sort=random' . $this->getQueryParams(array('sort', 'order')));
 		$this->data['compare'] = $data['route'] !== 'embed/profile' ? $this->url->link('product/compare', '') : '';
 		$this->data['reset'] = $this->getQueryParams(array('page')) ? $this->url->link($data['route'], $data['path']) . $this->anchor : '';
 
-        $this->data['show_all_manufacturers'] = $data['route'] === 'product/allproducts' ? true : false;
+		$this->data['display_more_options'] = $this->display_more_options;
+        $this->data['show_all_manufacturers'] = $this->show_all_manufacturers;
+		
         $this->data['text_compare'] = sprintf($this->language->get('text_compare'), (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));
 
         $this->data['products'] = $data['products'] ? true : false;
