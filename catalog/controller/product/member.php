@@ -638,6 +638,7 @@ class ControllerProductMember extends Controller {
 		// Listings
 		$this->data['products'] = array();
 
+		// location filter disabled for profile listings
 		$data = array(
 			'filter_member_account_id' 	=> $member_account_id,
 			'filter_name'         		=> $search,

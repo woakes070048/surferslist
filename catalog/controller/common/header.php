@@ -65,32 +65,8 @@ class ControllerCommonHeader extends Controller {
 		$this->data['text_wishlist'] = sprintf($this->language->get('text_wishlist'), (isset($this->session->data['wishlist']) ? count($this->session->data['wishlist']) : 0));
 		$this->data['google_analytics'] = html_entity_decode($this->config->get('config_google_analytics'), ENT_QUOTES, 'UTF-8');
 
-		// Location Set
-		$location_code = isset($this->session->data['shipping_country_iso_code_3']) ? $this->session->data['shipping_country_iso_code_3'] : '';;
-		$session_country_id = isset($this->session->data['shipping_country_id']) ? $this->session->data['shipping_country_id'] : '';
-		$session_zone_id = isset($this->session->data['shipping_zone_id']) ? $this->session->data['shipping_zone_id'] : '';
-		$session_location = isset($this->session->data['shipping_location']) ? $this->session->data['shipping_location'] : '';
-
-		if ($session_country_id || $session_zone_id) {
-			$this->load->model('localisation/country');
-			$this->load->model('localisation/zone');
-		}
-
-		$location_country = $session_country_id ? $this->model_localisation_country->getCountry($session_country_id) : '';
-		$location_zone = $session_zone_id ? $this->model_localisation_zone->getZone($session_zone_id) : '';
-		$location_name = $session_location ? $session_location : '';
-
-		$this->data['location_code'] = $location_code;
-
-		if ($location_zone && $location_name) {
-			$this->data['location_geo'] = ucwords($location_name) . ', ' . $location_zone['code']; //  . ', ' . $location_code
-		} else if ($location_zone) {
-			$this->data['location_geo'] = $location_zone['name']; // $location_zone['code'] . ', ' . $location_code;
-		} else if ($location_country) {
-			$this->data['location_geo'] = $location_country['name']; // name, iso_code_3
-		} else {
-			$this->data['location_geo'] = $this->language->get('text_location_change');
-		}
+		$this->data['location_code'] = $this->getLocationCode();
+		$this->data['location_geo'] = $this->getLocationName('short') ?: $this->language->get('text_location_change');
 
 		$this->data['home'] = $this->url->link('common/home');
 		$this->data['product'] = $this->url->link('product/allproducts', '', 'SSL');

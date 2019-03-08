@@ -94,9 +94,9 @@ class ControllerModuleSearch extends Controller {
 				$age = '';
 			}
 
-			$country = isset($this->request->get['country']) ? $this->request->get['country'] : $session_country_id;
-			$zone = isset($this->request->get['state']) ? $this->request->get['state'] : $session_zone_id;
-			$location = isset($this->request->get['location']) ? $this->request->get['location'] : $session_location;
+			$country = isset($this->request->get['country']) ? $this->request->get['country'] : '';
+			$zone = isset($this->request->get['state']) ? $this->request->get['state'] : '';
+			$location = isset($this->request->get['location']) ? $this->request->get['location'] : '';
 			$type = isset($this->request->get['type']) && !is_array($this->request->get['type'])
 				? explode(',', $this->request->get['type'])
 				: (isset($this->request->get['forsale']) && $this->request->get['forsale']

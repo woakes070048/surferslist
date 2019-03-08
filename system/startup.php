@@ -36,6 +36,7 @@ require_once(DIR_SYSTEM . 'trait/breadcrumb.php');
 require_once(DIR_SYSTEM . 'trait/param.php');
 require_once(DIR_SYSTEM . 'trait/sort.php');
 require_once(DIR_SYSTEM . 'trait/limit.php');
+require_once(DIR_SYSTEM . 'trait/location.php');
 require_once(DIR_SYSTEM . 'trait/paginate.php');
 
 // Engine

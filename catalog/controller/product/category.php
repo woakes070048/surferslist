@@ -158,12 +158,20 @@ class ControllerProductCategory extends Controller {
 		$meta_description = !empty($category_info['meta_description']) ? $category_info['meta_description'] : sprintf($this->language->get('text_category_meta_description'), $category_info['name'], $this->config->get('config_name'));
 		$meta_keyword = !empty($category_info['meta_keyword']) ? $category_info['meta_keyword'] : sprintf($this->language->get('text_category_meta_keyword'), strtolower($category_info['name']));
 
-		// last breadcrumbs
+		// more breadcrumbs
 		$this->addBreadcrumb($category_info['name'], $this->url->link('product/category', 'path=' . $category_info['path']));
 
 		if ($filter_manufacturer_id) {
 			$manufacturer_info = $this->model_catalog_manufacturer->getManufacturer($filter_manufacturer_id);
 			$this->addBreadcrumb($manufacturer_info['name'], $this->url->link('product/category', 'path=' . $category_info['path'] . '&manufacturer_id=' . $filter_manufacturer_id));
+		}
+
+		$location_name = $this->getLocationName('long');
+
+		if ($location_name) {
+			$heading_title .= ' - ' . $location_name;
+
+			$this->addBreadcrumb($location_name, $this->url->link('information/location'));
 		}
 
 		$this->data['breadcrumbs'] = $this->getBreadcrumbs();

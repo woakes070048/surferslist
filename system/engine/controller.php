@@ -1,6 +1,6 @@
 <?php
 abstract class Controller {
-	use Breadcrumb, Param, Sort, Limit, Paginate;
+	use Breadcrumb, Param, Sort, Limit, Location, Paginate;
 
 	protected $registry;
 	protected $id;

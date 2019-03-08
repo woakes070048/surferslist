@@ -153,6 +153,14 @@ class ControllerProductAllProducts extends Controller {
 			$this->addBreadcrumb($this->language->get('text_all_products'), $this->url->link('product/allproducts'));
 		}
 
+		$location_name = $this->getLocationName('long');
+
+		if ($location_name) {
+			$heading_title .= ' - ' . $location_name;
+
+			$this->addBreadcrumb($location_name, $this->url->link('information/location'));
+		}
+
 		$this->data['breadcrumbs'] = $this->getBreadcrumbs();
 
 		$this->data['heading_title'] = $heading_title;

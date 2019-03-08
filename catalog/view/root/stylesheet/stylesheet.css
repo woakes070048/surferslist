@@ -672,6 +672,10 @@ div[class^="grid-"]:last-child, .grid-2+.grid-2, .grid-3+.grid-6, .grid-6+.grid-
     margin-top: -30px;
 }
 
+.search-page .widget-search+.global-page:empty {
+    display: none;
+}
+
 .global-page ul, .global-page ol, .global-page .list-icon, .content-page .widget .list-icon {
     margin: 0;
     vertical-align: top;

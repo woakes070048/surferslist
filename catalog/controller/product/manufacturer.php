@@ -330,6 +330,7 @@ class ControllerProductManufacturer extends Controller {
 		// Listings
 		$this->data['products'] = array();
 
+		// location filter disabled for brand listings
 		$data = array(
 			'filter_manufacturer_id' 	=> $manufacturer_id,
 			'filter_name'         		=> $search,

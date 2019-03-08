@@ -64,24 +64,24 @@ class ControllerProductSearch extends Controller {
 
 		if (isset($this->request->get['country'])) {
 			$country = $this->request->get['country'];
-		} elseif (isset($this->session->data['shipping_country_id'])) {
-			$country = $this->session->data['shipping_country_id'];
+		// } elseif (isset($this->session->data['shipping_country_id'])) {
+		// 	$country = $this->session->data['shipping_country_id'];
 		} else {
 			$country = ''; // $this->config->get('config_country_id');
 		}
 
 		if (isset($this->request->get['state'])) {
 			$zone = $this->request->get['state'];
-		} elseif (isset($this->session->data['shipping_zone_id'])) {
-			$zone = $this->session->data['shipping_zone_id'];
+		// } elseif (isset($this->session->data['shipping_zone_id'])) {
+		// 	$zone = $this->session->data['shipping_zone_id'];
 		} else {
 			$zone = '';
 		}
 
 		if (isset($this->request->get['location'])) {
 			$location = $this->request->get['location'];
-		} elseif (isset($this->session->data['shipping_location'])) {
-			$location = $this->session->data['shipping_location'];
+		// } elseif (isset($this->session->data['shipping_location'])) {
+		// 	$location = $this->session->data['shipping_location'];
 		} else {
 			$location = '';
 		}
@@ -166,7 +166,21 @@ class ControllerProductSearch extends Controller {
 
 		$this->addBreadcrumb($this->language->get('heading_title'), $this->url->link('product/search'));
 
+		if (isset($this->session->data['shipping_country_id']) && $country == $this->session->data['shipping_country_id']
+			&& isset($this->session->data['shipping_zone_id']) && $zone == $this->session->data['shipping_zone_id']
+			&& isset($this->session->data['shipping_location']) && $location == $this->session->data['shipping_location']) {
+			$location_name = $this->getLocationName('long');
+
+			if ($location_name) {
+				$heading_title .= ' - ' . $location_name;
+
+				$this->addBreadcrumb($location_name, $this->url->link('information/location'));
+			}
+		}
+
 		$this->data['breadcrumbs'] = $this->getBreadcrumbs();
+
+		$this->data['heading_title'] = $heading_title;
 
 		$this->data['heading_params'] = $this->language->get('heading_param_search');
 

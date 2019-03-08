@@ -202,7 +202,7 @@ if ($filterWidget.length) {
 // Search
 if ($searchWidget.length) {
     $('.search-page .product-filter').appendTo('#searchwidget .content');
-    $('.search-page .content-page .global-page').remove();
+    $('.search-page .widget-search + .global-page').empty();
 
     var $params = $('.parameters');
 
@@ -722,7 +722,7 @@ if ($searchWidget.length || $postListingForm.length) {
                         }
                     }
 
-                    if (!results) {
+                    if (!zones) {
                         $('.location-wrapper').slideUp(300);
                     }
 
