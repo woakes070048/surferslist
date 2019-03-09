@@ -2,6 +2,8 @@
 class ModelAccountSales extends Model {
 	use Contact;
 
+	private $cache_expires = 60 * 60; // 1 hour cache expiration
+
 	public function getSale($order_id) {
 		$order_query = $this->db->query("
 			SELECT DISTINCT o.*
@@ -478,7 +480,7 @@ class ModelAccountSales extends Model {
 
 				$order_status_data = $query->rows;
 
-				$this->cache->set('order_status.' . (int)$this->config->get('config_language_id'), $order_status_data);
+				$this->cache->set('order_status.' . (int)$this->config->get('config_language_id'), $order_status_data, $this->cache_expires);
 			}
 
 			return $order_status_data;

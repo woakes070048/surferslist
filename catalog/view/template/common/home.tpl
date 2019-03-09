@@ -79,6 +79,10 @@
                     </div>
 
                 </div>
+                
+                <input type="hidden" name="country_id" value="<?php echo $country_id; ?>" />
+                <input type="hidden" name="zone_id" value="<?php echo $zone_id; ?>" />
+                <input type="hidden" name="location" value="<?php echo $location; ?>" />
         	</form>
         </div>
 

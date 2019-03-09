@@ -39,17 +39,14 @@ class ControllerProductSearch extends Controller {
 			$third_category_id = 0;
 		}
 
-		$filter_group_id_price = 1;
-		$filter_group_id_condition = 2;
-		$filter_group_id_age = 3;
-
 		// filters for price, condition, and age
-		//$this->load->model('catalog/category');
-		$price_filter_ids = array('1', '2', '3', '4', '5'); // $this->model_catalog_category->getFilterIdsByFilterGroupId($filter_group_id_price);
-		$condition_filter_ids = array('6', '7', '8', '9', '10'); // $this->model_catalog_category->getFilterIdsByFilterGroupId($filter_group_id_condition);
-		$age_filter_ids = array('11', '12', '13', '14'); // $this->model_catalog_category->getFilterIdsByFilterGroupId($filter_group_id_age);
-
 		if (isset($this->request->get['filter']) && !is_array($this->request->get['filter'])) {
+			$this->load->model('catalog/filter');
+
+			$price_filter_ids = $this->model_catalog_filter->getFilterIdsByFilterGroupId($this->config->get('config_filter_group_price_id'));  // array('1', '2', '3', '4', '5');
+			$condition_filter_ids = $this->model_catalog_filter->getFilterIdsByFilterGroupId($this->config->get('config_filter_group_condition_id'));  // array('6', '7', '8', '9', '10');
+			$age_filter_ids = $this->model_catalog_filter->getFilterIdsByFilterGroupId($this->config->get('config_filter_group_age_id'));  // array('11', '12', '13', '14');
+
 			$filter = $this->request->get['filter'];
 			$filters = explode(',', $this->request->get['filter']);
 			$price = current(array_intersect($filters, $price_filter_ids));
@@ -58,42 +55,24 @@ class ControllerProductSearch extends Controller {
 		} else {
 			$filter = '';
 			$price = '';
-			$condition = array(); // array('6', '7', '8', '9', '10');
+			$condition = array();
 			$age = '';
 		}
 
-		if (isset($this->request->get['country'])) {
-			$country = $this->request->get['country'];
-		// } elseif (isset($this->session->data['shipping_country_id'])) {
-		// 	$country = $this->session->data['shipping_country_id'];
-		} else {
-			$country = ''; // $this->config->get('config_country_id');
-		}
-
-		if (isset($this->request->get['state'])) {
-			$zone = $this->request->get['state'];
-		// } elseif (isset($this->session->data['shipping_zone_id'])) {
-		// 	$zone = $this->session->data['shipping_zone_id'];
-		} else {
-			$zone = '';
-		}
-
-		if (isset($this->request->get['location'])) {
-			$location = $this->request->get['location'];
-		// } elseif (isset($this->session->data['shipping_location'])) {
-		// 	$location = $this->session->data['shipping_location'];
-		} else {
-			$location = '';
-		}
+		$country = isset($this->request->get['country']) ? $this->request->get['country'] : '';
+		$zone = isset($this->request->get['state']) ? $this->request->get['state'] : '';
+		$location = isset($this->request->get['location']) ? $this->request->get['location'] : '';
 
 		$type = isset($this->request->get['type']) && !is_array($this->request->get['type'])
 			? explode(',', $this->request->get['type'])
 			: (isset($this->request->get['forsale']) && $this->request->get['forsale']
 				? array('0', '1') // classified and buy-now
 				: array()); // array('-1', '0', '1');
+
 		$forsale = isset($this->request->get['forsale'])
 			? $this->request->get['forsale']
 			: ($type == array('0', '1') ? true : false);
+
 		$member = isset($this->request->get['member']) && !is_array($this->request->get['member']) ? explode(',', $this->request->get['member']) : array(); // array('1', '2', '3');
 		$sort = isset($this->request->get['sort']) ? $this->request->get['sort'] : $this->config->get('apac_products_sort_default'); // 'p.date_added'; // 'random'
 		$order = isset($this->request->get['order']) ? $this->request->get['order'] : (($sort == 'p.date_added') ? 'DESC' : 'ASC'); // if sorted by date, then show newest first, otherwise sort ascending
@@ -169,6 +148,7 @@ class ControllerProductSearch extends Controller {
 		if (isset($this->session->data['shipping_country_id']) && $country == $this->session->data['shipping_country_id']
 			&& isset($this->session->data['shipping_zone_id']) && $zone == $this->session->data['shipping_zone_id']
 			&& isset($this->session->data['shipping_location']) && $location == $this->session->data['shipping_location']) {
+
 			$location_name = $this->getLocationName('long');
 
 			if ($location_name) {

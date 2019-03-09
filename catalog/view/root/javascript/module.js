@@ -233,8 +233,8 @@ if ($searchWidget.length) {
         var $fieldBrand = $('#searchwidget select[name=\'manufacturer_id\']');
         var $fieldPrice = $('#searchwidget select[name=\'price\']');
         var $fieldAge = $('#searchwidget select[name=\'age\']');
-        var $fieldCountry = $('#searchwidget select[name=\'country_id\']');
-        var $fieldZone = $('#searchwidget select[name=\'zone_id\']');
+        var $fieldCountry = $('#searchwidget select[name=\'country_id\']').length ? $('#searchwidget select[name=\'country_id\']') : $('#searchwidget input[name=\'country_id\']');
+        var $fieldZone = $('#searchwidget select[name=\'zone_id\']').length ? $('#searchwidget select[name=\'zone_id\']') : $('#searchwidget input[name=\'zone_id\']');
         var $fieldLocation = $('#searchwidget input[name=\'location\']');
         var $fieldCondition = $('#searchwidget input[name=\'condition[]\']:checked');
         var $fieldType = $('#searchwidget input[name=\'type[]\']:checked');

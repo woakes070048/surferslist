@@ -633,7 +633,7 @@ class ControllerProductProduct extends Controller {
 		// END Product Info
 	}
 
-	protected function getProductData($data) {
+	protected function min($data) {
         if (empty($data)) {
             return array();
         }
@@ -708,7 +708,7 @@ class ControllerProductProduct extends Controller {
             // 'height'            => isset($data['height']) && isset($data['length_class_id']) ? $this->length->format($data['height'], $data['length_class_id']) : '',
             // 'location_href'     => isset($data['country_id']) && isset($data['zone_id']) ? $this->url->link('product/search', 'country=' . $data['country_id'] . '&state=' . $data['zone_id'], 'SSL') : ''
 
-            $this->cache->set('product_' . (int)$data['product_id'] . '.min.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id, $product_data);
+            $this->cache->set('product_' . (int)$data['product_id'] . '.min.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id, $product_data, 60 * 60 * 3); // 3 hours cache expiration
         }
 
         // add-in non-cached listing data
@@ -749,7 +749,7 @@ class ControllerProductProduct extends Controller {
     }
 
 	protected function info($data) {
-		$this->setOutput($this->getProductData($data));
+		$this->setOutput($this->min($data));
 	}
 
 	protected function list($products) {
@@ -775,7 +775,7 @@ class ControllerProductProduct extends Controller {
 		$product_data = array();
 
 		foreach ($products as $product) {
-			$product_data[$product['product_id']] = $this->getProductData($product);
+			$product_data[$product['product_id']] = $this->min($product);
 		}
 
 		$this->data['products'] = $product_data;
@@ -805,7 +805,7 @@ class ControllerProductProduct extends Controller {
 		$product_data = array();
 
 		foreach ($data['products'] as $product) {
-			$product_data[$product['product_id']] = $this->getProductData($product);
+			$product_data[$product['product_id']] = $this->min($product);
 		}
 
 		$this->data['products'] = $product_data;
@@ -833,7 +833,7 @@ class ControllerProductProduct extends Controller {
 		$product_data = array();
 
 		foreach ($products as $product) {
-			$product_data[$product['product_id']] = $this->getProductData($product);
+			$product_data[$product['product_id']] = $this->min($product);
 			$product_data[$product['product_id']]['quickview'] = $this->url->link('embed/quickview', 'listing_id=' . $product['product_id'], 'SSL');
 		}
 

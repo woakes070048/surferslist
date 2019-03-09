@@ -22,6 +22,7 @@ class ControllerAccountAnonPost extends Controller {
 		$this->load->model('account/product');
 		$this->load->model('catalog/category');
 		$this->load->model('catalog/manufacturer');
+		$this->load->model('catalog/filter');
 		$this->load->model('localisation/language');
 		$this->load->model('localisation/currency');
 		$this->load->model('localisation/country');
@@ -234,7 +235,7 @@ class ControllerAccountAnonPost extends Controller {
 
 		$this->data['currency'] = $this->model_localisation_currency->getCurrencyByCode($this->currency->getCode());
 		$this->data['price'] = isset($this->request->post['price']) ? $this->request->post['price'] : '';
-		$this->data['conditions'] = $this->model_account_product->getFilters(2);  // filter_group_id 2 - Condition
+		$this->data['conditions'] = $this->model_catalog_filter->getFiltersByFilterGroupId($this->config->get('config_filter_group_condition_id'));
 		$this->data['condition_id'] = isset($this->request->post['condition_id']) ? $this->request->post['condition_id'] : 0;
 
 		// Admin Fields

@@ -1,5 +1,7 @@
 <?php
 class ModelCatalogMember extends Model {
+	private $cache_expires = 60 * 60 * 24; // 1 day cache expiration
+
 	public function getMember($member_account_id) {
 		if ((int)$member_account_id <= 0) return array();
 
@@ -50,7 +52,7 @@ class ModelCatalogMember extends Model {
 				$member_data['product_manufacturers'] = $this->getMemberProductManufacturers($member_account_id);
 			}
 
-			$this->cache->set('member.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$member_account_id, $member_data);
+			$this->cache->set('member.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$member_account_id, $member_data, $this->cache_expires);
 		}
 
 		return $member_data;
@@ -260,7 +262,7 @@ class ModelCatalogMember extends Model {
 			$member_data = $query->rows;
 
 			if (!$random) {
-				$this->cache->set('member.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $cache, $member_data);
+				$this->cache->set('member.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $cache, $member_data, $this->cache_expires);
 			}
 		}
 
@@ -632,7 +634,7 @@ class ModelCatalogMember extends Model {
 			unset($member_names['sport']);
 			unset($member_names['other']);
 
-			$this->cache->set('member.names.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'), $member_names);
+			$this->cache->set('member.names.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'), $member_names, $this->cache_expires);
 		}
 
 		return $member_names;

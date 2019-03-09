@@ -114,7 +114,9 @@ class ModelLocalisationZone extends Model {
 
 		if ($geo_zone_zones_data === false) {
 			$sql = "
-				SELECT zgz.zone_id, z.name, z.code
+				SELECT zgz.zone_id
+				, z.name
+				, z.code
 				FROM " . DB_PREFIX . "zone_to_geo_zone zgz
 				INNER JOIN " . DB_PREFIX . "zone z ON (zgz.zone_id = z.zone_id)
 				INNER JOIN " . DB_PREFIX . "country c ON (zgz.country_id = c.country_id)
@@ -129,7 +131,7 @@ class ModelLocalisationZone extends Model {
 
 			$geo_zone_zones_data = $query->rows;
 
-			$this->cache->set('zone.geo_zone.' . (int)$geo_zone_id, $geo_zone_zones_data, $this->cache_expires);
+			$this->cache->set('zone.geo_zone.' . (int)$geo_zone_id, $geo_zone_zones_data);
 		}
 
 		return $geo_zone_zones_data;

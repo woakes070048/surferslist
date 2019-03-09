@@ -333,7 +333,15 @@ class ControllerAccountProduct extends Controller {
 		$this->data['heading_title'] = $this->language->get('heading_listings');
 		$this->data['heading_sub_title'] = $this->language->get('heading_listings_sub');
 
-		$data_filters = array('filter_name', 'filter_model', 'filter_price', 'filter_type', 'filter_quantity', 'filter_approved', 'filter_status' );
+		$data_filters = array(
+			'filter_name',
+			'filter_model',
+			'filter_price',
+			'filter_type',
+			'filter_quantity',
+			'filter_approved',
+			'filter_status'
+		);
 
 		foreach ($data_filters as $data_filter){
 			${$data_filter} = isset($this->request->get[$data_filter]) ? $this->request->get[$data_filter] : null;
@@ -530,8 +538,10 @@ class ControllerAccountProduct extends Controller {
   	}
 
   	private function getForm() {
+		$this->load->model('account/customer_group');
 		$this->load->model('catalog/category');
 		$this->load->model('catalog/manufacturer');
+		$this->load->model('catalog/filter');
 		$this->load->model('localisation/language');
 		$this->load->model('localisation/currency');
 		$this->load->model('localisation/country');
@@ -906,14 +916,12 @@ class ControllerAccountProduct extends Controller {
 
 		// Product Filters (Condition)
 		// if ($this->config->get('member_data_field_filter')) {
-			$filter_group_id = 2; // Condition
-
-			$this->data['conditions'] = $this->model_account_product->getFilters($filter_group_id);
+			$this->data['conditions'] = $this->model_catalog_filter->getFiltersByFilterGroupId($this->config->get('config_filter_group_condition_id'));
 
 			if (isset($this->request->post['condition_id'])) {
 				$this->data['condition_id'] = $this->request->post['condition_id'];
 			} elseif (isset($this->request->get['listing_id'])) {
-				$product_filter_conditions = $this->model_account_product->getProductFilters($this->request->get['listing_id'], $filter_group_id);
+				$product_filter_conditions = $this->model_account_product->getProductFilters($this->request->get['listing_id'], $this->config->get('config_filter_group_condition_id'));
 				$this->data['condition_id'] = reset($product_filter_conditions);
 			} else {
 				$this->data['condition_id'] = 0;
@@ -936,7 +944,7 @@ class ControllerAccountProduct extends Controller {
 				? true
 				: false;
 
-			$this->data['geo_zones'] = $this->model_account_product->getGeoZones();
+			$this->data['geo_zones'] = $this->model_localisation_zone->getGeoZones();
 
 			if (isset($this->request->post['product_shipping'])) {
 				$this->data['product_shipping'] = $this->request->post['product_shipping'];
@@ -1192,7 +1200,7 @@ class ControllerAccountProduct extends Controller {
 
 			// Discount, Specials, Reward Points
 			if ($this->config->get('member_tab_discount') || $this->config->get('member_tab_special') || $this->config->get('member_tab_reward_points')) {
-				$this->data['customer_groups'] = $this->model_account_product->getCustomerGroups();
+				$this->data['customer_groups'] = $this->model_account_customer_group->getCustomerGroups();
 
 				if ($this->customer->getMemberPermission('discount_enabled') && $this->config->get('member_tab_discount')) {
 					if (isset($this->request->post['price_discount'])) {
@@ -1696,6 +1704,7 @@ class ControllerAccountProduct extends Controller {
   	private function prepareData(&$data) {
 		if (empty($data)) return;
 
+		$this->load->model('account/customer_group');
 		$this->load->model('catalog/category');
 		$this->load->model('catalog/manufacturer');
 		$this->load->model('localisation/country');
@@ -1874,7 +1883,7 @@ class ControllerAccountProduct extends Controller {
 
 		$price_rounded = (int)$price;
 
-		$customer_groups = $this->model_account_product->getCustomerGroups();
+		$customer_groups = $this->model_account_customer_group->getCustomerGroups();
 
 		// Filters
 		$data['product_filters'] = array();
@@ -2149,12 +2158,14 @@ class ControllerAccountProduct extends Controller {
 	public function display_geo_zones() {
 		$this->init();
 
+		$this->load->model('localisation/zone');
+
 		if (!$this->customer->getMemberPermission('inventory_enabled')) {
 			return false;
 		}
 
 		$geo_zones_info = array();
-		$geo_zones = $this->model_account_product->getGeoZones();
+		$geo_zones = $this->model_localisation_zone->getGeoZones();
 
 		if ($geo_zones) {
 			foreach ($geo_zones as $geo_zone) {
@@ -2162,7 +2173,7 @@ class ControllerAccountProduct extends Controller {
 					'geo_zone_id'           => $geo_zone['geo_zone_id'],
 					'geo_zone_name'         => $geo_zone['name'],
 					'geo_zone_description'  => $geo_zone['description'],
-					'geo_zone_zones'        => $this->model_account_product->getZonesByGeoZoneId($geo_zone['geo_zone_id'])
+					'geo_zone_zones'        => $this->model_localisation_zone->getZonesByGeoZoneId($geo_zone['geo_zone_id'])
 				);
 			}
 		}

@@ -53,6 +53,10 @@ class ControllerCommonHome extends Controller {
 			$this->cache->set('category.module.search.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'), $this->data['categories'], 60 * 60 * 24 * 30); // 1 month cache expiration
 		}
 
+		$this->data['country_id'] = isset($this->session->data['shipping_country_id']) ? $this->session->data['shipping_country_id'] : '';
+		$this->data['zone_id'] = isset($this->session->data['shipping_zone_id']) ? $this->session->data['shipping_zone_id'] : '';
+		$this->data['location'] = isset($this->session->data['shipping_location']) ? $this->session->data['shipping_location'] : '';
+
 		$this->data['search'] = $this->url->link('product/search', '', 'SSL');
 		$this->data['product_random'] = $this->url->link('product/allproducts', 'sort=random', 'SSL');
 		$this->data['post'] = $this->url->link('account/anonpost', '', 'SSL');

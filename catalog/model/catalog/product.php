@@ -104,12 +104,13 @@ class ModelCatalogProduct extends Model {
 				// Filters and Condition
 				$product_filters = $this->getProductFilters($query->row['product_id']);
 				// $condition_filter_group_id = 2;
-				// $condition_filter_ids = $this->model_catalog_category->getFilterIdsByFilterGroupId($condition_filter_group_id);
+				// $this->load->model('catalog/filter');
+				// $condition_filter_ids = $this->model_catalog_filter->getFilterIdsByFilterGroupId($condition_filter_group_id);
 				$condition_filter_id = current(array_intersect($product_filters, array('6', '7', '8', '9', '10')));
 
 				if ($condition_filter_id) {
-					$this->load->model('catalog/category');
-					$product_condition = $this->model_catalog_category->getFilterByFilterId($condition_filter_id);
+					$this->load->model('catalog/filter');
+					$product_condition = $this->model_catalog_filter->getFilterByFilterId($condition_filter_id);
 				}
 
 				$type_id = $query->row['quantity'] > 0 ? 1 : ($query->row['quantity'] == 0 ? 0 : -1);

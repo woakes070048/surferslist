@@ -40,6 +40,12 @@ class ControllerModuleFilter extends Controller {
 		if ($category_info || $manufacturer_id || $member_id || (isset($this->request->get['route']) && $this->request->get['route'] == 'product/allproducts')) {
 			$this->load->language('module/filter');
 
+			$this->load->model('catalog/filter');
+
+			if ($this->config->get('config_product_count')) {
+				$this->load->model('catalog/product');
+			}
+
 			$this->data['heading_title'] = $this->language->get('heading_title');
 
 			$this->data['button_filter'] = $this->language->get('button_filter');
@@ -82,20 +88,18 @@ class ControllerModuleFilter extends Controller {
 				$this->data['filter_category'] = array();
 			}
 
-			$this->load->model('catalog/product');
-
 			$this->data['filter_groups'] = array();
 
 			/* if ($category_info) {
-				$filter_groups = $this->model_catalog_category->getCategoryFilters($category_id);
+				$filter_groups = $this->model_catalog_filter->getCategoryFilters($category_id);
 			} else
 			if (!$this->config->get('apac_products_filters_all')) {
 				$data = array(
 					'filter_category_filter' => 1
 				);
-				$filter_groups = $this->model_catalog_category->getCategoryFiltersAll($data);
+				$filter_groups = $this->model_catalog_filter->getCategoryFiltersAll($data);
 			} else {*/
-				$filter_groups = $this->model_catalog_category->getCategoryFiltersAll(); /* display all filters all the time */
+				$filter_groups = $this->model_catalog_filter->getCategoryFiltersAll(); /* display all filters all the time */
 			/* } */
 
 			if ($filter_groups) {

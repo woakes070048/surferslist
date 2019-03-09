@@ -3,6 +3,14 @@ class ControllerModuleSearch extends Controller {
 	protected function index($setting) {
         $this->data = $this->load->language('module/search');
 
+		$this->load->model('catalog/category');
+		$this->load->model('catalog/manufacturer');
+		$this->load->model('catalog/filter');
+		$this->load->model('localisation/country');
+		$this->load->model('localisation/zone');
+		$this->load->model('account/customer_group');
+		$this->load->model('catalog/filter');
+
 		$request_path = isset($this->request->server['REQUEST_URI']) ? parse_url(strtolower(urldecode($this->request->server['REQUEST_URI'])), PHP_URL_PATH) : '';
 		$this_page = !isset($this->request->get['route']) || $this->request->get['route'] == 'common/home' || ($request_path == '/')	? 'home' : friendly_url($request_path);
 		$is_home = $this_page === 'home'	? true : false;
@@ -27,12 +35,6 @@ class ControllerModuleSearch extends Controller {
 		$sub_category_id = 0;
 		$third_category_id = 0;
 
-		// filter groups
-		$filter_group_id_price = 1;
-		$filter_group_id_condition = 2;
-		$filter_group_id_age = 3;
-
-		$location_code = !empty($this->session->data['shipping_country_iso_code_3']) ? $this->session->data['shipping_country_iso_code_3'] : '';;
 		$session_country_id = isset($this->session->data['shipping_country_id']) ? $this->session->data['shipping_country_id'] : '';
 		$session_zone_id = isset($this->session->data['shipping_zone_id']) ? $this->session->data['shipping_zone_id'] : '';
 		$session_location = isset($this->session->data['shipping_location']) ? $this->session->data['shipping_location'] : '';
@@ -46,16 +48,14 @@ class ControllerModuleSearch extends Controller {
 			$brand = '';
 			$filter = '';
 			$price = '';
-			$condition = array(); // array('6', '7', '8', '9', '10');
+			$condition = array();
 			$age = '';
 			$country = $session_country_id;
 			$zone = $session_zone_id;
 			$location = $session_location;
-			$type = array(); //array('-1', '0', '1');
-			$member = array(); //array('1', '3');
+			$type = array();
+			$member = array();
 		} else {
-			// $this->load->model('catalog/category');
-
 			if (isset($this->request->get['s'])) {
 				$search = $this->request->get['s'];
 			} else if (isset($this->request->get['search'])) {
@@ -77,11 +77,11 @@ class ControllerModuleSearch extends Controller {
 			}
 
 			// filters for price, condition, and age
-			$price_filter_ids = array('1', '2', '3', '4', '5'); // $this->model_catalog_category->getFilterIdsByFilterGroupId($filter_group_id_price);
-			$condition_filter_ids = array('6', '7', '8', '9', '10'); // $this->model_catalog_category->getFilterIdsByFilterGroupId($filter_group_id_condition);
-			$age_filter_ids = array('11', '12', '13', '14'); // $this->model_catalog_category->getFilterIdsByFilterGroupId($filter_group_id_age);
-
 			if (isset($this->request->get['filter'])) {
+				$price_filter_ids = $this->model_catalog_filter->getFilterIdsByFilterGroupId($this->config->get('config_filter_group_price_id'));  // array('1', '2', '3', '4', '5');
+				$condition_filter_ids = $this->model_catalog_filter->getFilterIdsByFilterGroupId($this->config->get('config_filter_group_condition_id'));  // array('6', '7', '8', '9', '10');
+				$age_filter_ids = $this->model_catalog_filter->getFilterIdsByFilterGroupId($this->config->get('config_filter_group_age_id'));  // array('11', '12', '13', '14');
+
 				$filter = $this->request->get['filter'];
 				$filters = explode(',', $this->request->get['filter']);
 				$price = current(array_intersect($filters, $price_filter_ids));
@@ -90,7 +90,7 @@ class ControllerModuleSearch extends Controller {
 			} else {
 				$filter = '';
 				$price = '';
-				$condition = array(); // array('6', '7', '8', '9', '10');
+				$condition = array();
 				$age = '';
 			}
 
@@ -105,7 +105,9 @@ class ControllerModuleSearch extends Controller {
 			$forsale = isset($this->request->get['forsale'])
 				? $this->request->get['forsale']
 				: ($type == array('0', '1') ? true : false);
-			$member = isset($this->request->get['member']) && !is_array($this->request->get['member']) ? explode(',', $this->request->get['member']) : array(); // array('1', '2', '3');
+			$member = isset($this->request->get['member']) && !is_array($this->request->get['member'])
+				? explode(',', $this->request->get['member'])
+				: array(); // array('1', '2', '3');
 		}
 
 		$sort = isset($this->request->get['sort']) ? $this->request->get['sort'] : 'p.date_added';
@@ -114,9 +116,6 @@ class ControllerModuleSearch extends Controller {
 		$limit = isset($this->request->get['limit']) ? (int)$this->request->get['limit'] : $this->config->get('config_catalog_limit');
 
 		// Categories & Manufacturers
-		$this->load->model('catalog/category');
-		$this->load->model('catalog/manufacturer');
-
 		$this->data['categories_complete'] = $this->model_catalog_category->getAllCategoriesComplete();
 		$this->data['sub_categories'] = $category_id ? $this->model_catalog_category->getCategories($category_id) : array();
 		$this->data['third_categories'] = $sub_category_id ? $this->model_catalog_category->getCategories($sub_category_id) : array();
@@ -151,17 +150,12 @@ class ControllerModuleSearch extends Controller {
 		}
 
 		// Location
-		$this->load->model('localisation/country');
-		$this->load->model('localisation/zone');
-
 		$this->data['countries'] = $this->model_localisation_country->getCountries();
 		$this->data['zones'] = $this->model_localisation_zone->getZonesByCountryId($country);
 		$this->data['location_geo'] = $this->language->get('heading_geozone');
 
 		// Member Groups
 		$this->data['member_groups'] = array();
-
-		$this->load->model('account/customer_group');
 
 		$customer_groups = $this->model_account_customer_group->getCustomerGroups();
 
@@ -173,9 +167,9 @@ class ControllerModuleSearch extends Controller {
 		}
 
 		// Filters (Condition, Age, Price)
-		$this->data['prices'] = $this->model_catalog_category->getFiltersByFilterGroupId($filter_group_id_price);
-		$this->data['conditions'] = $this->model_catalog_category->getFiltersByFilterGroupId($filter_group_id_condition);
-		$this->data['ages'] = $this->model_catalog_category->getFiltersByFilterGroupId($filter_group_id_age);
+		$this->data['prices'] = $this->model_catalog_filter->getFiltersByFilterGroupId($this->config->get('config_filter_group_price_id'));
+		$this->data['conditions'] = $this->model_catalog_filter->getFiltersByFilterGroupId($this->config->get('config_filter_group_condition_id'));
+		$this->data['ages'] = $this->model_catalog_filter->getFiltersByFilterGroupId($this->config->get('config_filter_group_age_id'));
 
 		// Types
 		$this->data['listing_types'] = array();

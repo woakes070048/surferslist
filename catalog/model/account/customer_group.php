@@ -6,6 +6,8 @@ class ModelAccountCustomerGroup extends Model {
 		$customer_group_data = $this->cache->get('customer.group.' . (int)$customer_group_id . '.' . (int)$this->config->get('config_language_id'));
 
 		if ($customer_group_data === false) {
+			$customer_group_data = array();
+
 			$query = $this->db->query("
 				SELECT DISTINCT *
 				FROM " . DB_PREFIX . "customer_group cg
@@ -22,22 +24,56 @@ class ModelAccountCustomerGroup extends Model {
 		return $customer_group_data;
 	}
 
-	public function getCustomerGroups() {
-		$customer_groups_data = $this->cache->get('customer.groups.' . (int)$this->config->get('config_language_id'));
+	public function getCustomerGroups($data = array()) {
+		$cache = md5(http_build_query($data));
+
+		$customer_groups_data = $this->cache->get('customer.groups.' . (int)$this->config->get('config_language_id') . '.' . $cache);
 
 		if ($customer_groups_data === false) {
-			$query = $this->db->query("
+			$customer_groups_data = array();
+
+			$sql = "
 				SELECT *
 				, cg.customer_group_id
 				FROM " . DB_PREFIX . "customer_group cg
 				LEFT JOIN " . DB_PREFIX . "customer_group_description cgd ON (cg.customer_group_id = cgd.customer_group_id)
 				WHERE cgd.language_id = '" . (int)$this->config->get('config_language_id') . "'
-				ORDER BY cg.sort_order ASC, cgd.name ASC
-			");
+			";
+
+			$sort_data = array(
+				'cgd.name',
+				'cg.sort_order'
+			);
+
+			if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
+				$sql .= " ORDER BY " . $data['sort'];
+			} else {
+				$sql .= " ORDER BY cgd.name";
+			}
+
+			if (isset($data['order']) && ($data['order'] == 'DESC')) {
+				$sql .= " DESC";
+			} else {
+				$sql .= " ASC";
+			}
+
+			if (isset($data['start']) || isset($data['limit'])) {
+				if ($data['start'] < 0) {
+					$data['start'] = 0;
+				}
+
+				if ($data['limit'] < 1) {
+					$data['limit'] = 20;
+				}
+
+				$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
+			}
+
+			$query = $this->db->query($sql);
 
 			$customer_groups_data = $query->rows;
 
-			$this->cache->set('customer.groups.' . (int)$this->config->get('config_language_id'), $customer_groups_data, $this->cache_expires);
+			$this->cache->set('customer.groups.' . (int)$this->config->get('config_language_id') . '.' . $cache, $customer_groups_data, $this->cache_expires);
 		}
 
 		return $customer_groups_data;
@@ -47,6 +83,8 @@ class ModelAccountCustomerGroup extends Model {
 		$customer_member_group_data = $this->cache->get('customer.member.group.' . (int)$member_group_id);
 
 		if ($customer_member_group_data === false) {
+			$customer_member_group_data = array();
+
 			$query = $this->db->query("
 				SELECT *
 				FROM " . DB_PREFIX . "customer_member_group cmg
@@ -67,6 +105,8 @@ class ModelAccountCustomerGroup extends Model {
 		$customer_member_groups_data = $this->cache->get('customer.member.group.' . (int)$customer_group_id . '.' . $cache);
 
 		if ($customer_member_groups_data === false) {
+			$customer_member_groups_data = array();
+
 			$sql = "
 				SELECT *
 				FROM " . DB_PREFIX . "customer_member_group cmg
@@ -99,23 +139,43 @@ class ModelAccountCustomerGroup extends Model {
 	}
 
 	public function getDefaultMemberGroupId($customer_group_id) {
-		$query = $this->db->query("
-			SELECT DISTINCT member_group_default_id
-			FROM " . DB_PREFIX . "customer_group cg
-			WHERE cg.customer_group_id = '" . (int)$customer_group_id . "'
-		");
+		$member_group_id = $this->cache->get('customer.member.group.default.' . (int)$customer_group_id);
 
-		return $query->row['member_group_default_id'];
+		if ($member_group_id === false) {
+			$member_group_id = 0;
+
+			$query = $this->db->query("
+				SELECT DISTINCT member_group_default_id
+				FROM " . DB_PREFIX . "customer_group cg
+				WHERE cg.customer_group_id = '" . (int)$customer_group_id . "'
+			");
+
+			$member_group_id = $query->row['member_group_default_id'];
+
+			$this->cache->set('customer.member.group.default.' . (int)$customer_group_id, $member_group_id, $this->cache_expires);
+		}
+
+		return $member_group_id;
 	}
 
 	public function getCustomerGroupIdByMemberGroupId($member_group_id) {
-		$query = $this->db->query("
-			SELECT DISTINCT customer_group_id
-			FROM " . DB_PREFIX . "customer_member_group cmg
-			WHERE cmg.member_group_id = '" . (int)$member_group_id . "'
-		");
+		$customer_group_id = $this->cache->get('customer.group.member.' . (int)$member_group_id);
 
-		return $query->row['customer_group_id'];
+		if ($customer_group_id === false) {
+			$customer_group_id = 0;
+
+			$query = $this->db->query("
+				SELECT DISTINCT customer_group_id
+				FROM " . DB_PREFIX . "customer_member_group cmg
+				WHERE cmg.member_group_id = '" . (int)$member_group_id . "'
+			");
+
+			$customer_group_id = $query->row['customer_group_id'];
+
+			$this->cache->set('customer.group.member.' . (int)$member_group_id, $customer_group_id, $this->cache_expires);
+		}
+
+		return $customer_group_id;
 	}
 }
 ?>

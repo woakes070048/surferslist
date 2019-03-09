@@ -117,7 +117,7 @@ class ControllerModuleFeatured extends Controller {
 				$listings[$result['product_id']]['thumb'] = $this->model_tool_image->resize($result['image'], $image_width, $image_height, $image_crop);
 			}
 
-			$this->cache->set('product.module.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . (int)$currency_id . '.' . $cache, $listings, 60 * 30); // 30 min cache expiration
+			$this->cache->set('product.module.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . (int)$currency_id . '.' . $cache, $listings, 60 * 60 * 24 * 7); // 1 week cache expiration
 		}
 
 		if ($setting['position'] == 'content_top' || $setting['position'] == 'content_bottom') {

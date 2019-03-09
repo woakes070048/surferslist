@@ -2,6 +2,8 @@
 class ModelAccountProduct extends Model {
 	use Contact;
 
+	private $cache_expires = 60 * 60; // 1 hour cache expiration
+
 	public function addAnonListing($data) {
 		if (empty($data)) {
 			return false;
@@ -964,7 +966,7 @@ class ModelAccountProduct extends Model {
 
 				$product_data = $query->rows;
 
-				$this->cache->set('product.member.' . (int)$this->customer->getId() . '.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'), $product_data);
+				$this->cache->set('product.member.' . (int)$this->customer->getId() . '.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'), $product_data, $this->cache_expires);
 			}
 
 			return $product_data;
@@ -1625,7 +1627,7 @@ class ModelAccountProduct extends Model {
 				);
 			}
 
-			$this->cache->set('category.member.all.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $cache, $all_member_category_data);
+			$this->cache->set('category.member.all.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $cache, $all_member_category_data, $this->cache_expires);
 		}
 
 		return $all_member_category_data;
@@ -1750,30 +1752,6 @@ class ModelAccountProduct extends Model {
 		");
 
 		return $query->num_rows ? $query->row['member_account_id'] : 0;
-	}
-
-	public function getFilters($filter_group_id = 0) {
-		$sql = "
-			SELECT *
-			FROM " . DB_PREFIX . "filter f
-			LEFT JOIN " . DB_PREFIX . "filter_description fd ON (f.filter_id = fd.filter_id)
-			WHERE fd.language_id = '" . (int)$this->config->get('config_language_id') . "'
-		";
-
-		if ($filter_group_id) {
-			$sql .= "
-				AND f.filter_group_id = '" . (int)$filter_group_id . "'
-			";
-		}
-
-		$sql .= "
-			ORDER BY f.filter_group_id
-			, f.sort_order ASC
-		";
-
-		$query = $this->db->query($sql);
-
-		return $query->rows;
 	}
 
 	public function getOptions($data = array()) {
@@ -1987,7 +1965,8 @@ class ModelAccountProduct extends Model {
 			if ($stock_status_data === false) {
 				$query = $this->db->query("
 					SELECT stock_status_id
-					, name FROM " . DB_PREFIX . "stock_status
+					, name
+					FROM " . DB_PREFIX . "stock_status
 					WHERE language_id = '" . (int)$this->config->get('config_language_id') . "'
 					ORDER BY name
 				");
@@ -2137,52 +2116,6 @@ class ModelAccountProduct extends Model {
 		}
 	}
 
-	public function getGeoZones() {
-		$geo_zone_data = $this->cache->get('geo_zone');
-
-		if ($geo_zone_data === false) {
-			$query = $this->db->query("
-				SELECT *
-				FROM " . DB_PREFIX . "geo_zone
-				ORDER BY geo_zone_id ASC
-			");
-
-			$geo_zone_data = $query->rows;
-
-			$this->cache->set('geo_zone', $geo_zone_data);
-		}
-
-		return $geo_zone_data;
-	}
-
-	public function getZonesByGeoZoneId($geo_zone_id) {
-		$geo_zone_zones_data = $this->cache->get('zone.geo_zone.' . (int)$geo_zone_id);
-
-		if ($geo_zone_zones_data === false) {
-			$sql = "
-				SELECT zgz.zone_id
-				, z.name
-				, z.code
-				FROM " . DB_PREFIX . "zone_to_geo_zone zgz
-				INNER JOIN " . DB_PREFIX . "zone z ON (zgz.zone_id = z.zone_id)
-				INNER JOIN " . DB_PREFIX . "country c ON (zgz.country_id = c.country_id)
-				INNER JOIN " . DB_PREFIX . "geo_zone gz ON (zgz.geo_zone_id = gz.geo_zone_id)
-				WHERE zgz.geo_zone_id = '" . (int)$geo_zone_id . "'
-				AND z.status = '1'
-				AND c.status = '1'
-				ORDER BY z.name ASC
-			";
-
-			$query = $this->db->query($sql);
-
-			$geo_zone_zones_data = $query->rows;
-
-			$this->cache->set('zone.geo_zone.' . (int)$geo_zone_id, $geo_zone_zones_data);
-		}
-
-		return $geo_zone_zones_data;
-	}
-
 	public function getProductShipping($product_id) {
 		$query = $this->db->query("
 			SELECT DISTINCT ps.`geo_zone_id`
@@ -2206,48 +2139,6 @@ class ModelAccountProduct extends Model {
 		}
 
 		return $data;
-	}
-
-	public function getCustomerGroups($data = array()) {
-		$sql = "
-			SELECT *
-			FROM " . DB_PREFIX . "customer_group cg
-			LEFT JOIN " . DB_PREFIX . "customer_group_description cgd ON (cg.customer_group_id = cgd.customer_group_id)
-			WHERE cgd.language_id = '" . (int)$this->config->get('config_language_id') . "'
-		";
-
-		$sort_data = array(
-			'cgd.name',
-			'cg.sort_order'
-		);
-
-		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
-			$sql .= " ORDER BY " . $data['sort'];
-		} else {
-			$sql .= " ORDER BY cgd.name";
-		}
-
-		if (isset($data['order']) && ($data['order'] == 'DESC')) {
-			$sql .= " DESC";
-		} else {
-			$sql .= " ASC";
-		}
-
-		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
-			}
-
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
-			}
-
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
-		}
-
-		$query = $this->db->query($sql);
-
-		return $query->rows;
 	}
 
 	private function editProductShipping($product_id, $product_shipping) {

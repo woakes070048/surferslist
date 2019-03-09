@@ -1,5 +1,7 @@
 <?php
 class ModelCatalogManufacturer extends Model {
+	private $cache_expires = 60 * 60 * 24 * 30; // 1 month cache expiration
+
 	public function getManufacturer($manufacturer_id) {
 		if (!$manufacturer_id) return array();
 
@@ -36,7 +38,7 @@ class ModelCatalogManufacturer extends Model {
 				$manufacturer_data['product_categories'] = $this->getManufacturerProductCategories($manufacturer_id);
 			}
 
-			$this->cache->set('manufacturer.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$manufacturer_id, $manufacturer_data);
+			$this->cache->set('manufacturer.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$manufacturer_id, $manufacturer_data, $this->cache_expires);
 		}
 
 		return $manufacturer_data;
@@ -178,7 +180,7 @@ class ModelCatalogManufacturer extends Model {
 			}
 
 			if ($cache_results && !$random) {
-				$this->cache->set('manufacturer.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $cache, $manufacturer_data);
+				$this->cache->set('manufacturer.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $cache, $manufacturer_data, $this->cache_expires);
 			}
 		}
 
@@ -320,7 +322,7 @@ class ModelCatalogManufacturer extends Model {
 			unset($manufacturer_names['sport']);
 			unset($manufacturer_names['other']);
 
-			$this->cache->set('manufacturer.names.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'), $manufacturer_names);
+			$this->cache->set('manufacturer.names.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'), $manufacturer_names, $this->cache_expires);
 		}
 
 		return $manufacturer_names;

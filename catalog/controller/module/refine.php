@@ -12,6 +12,7 @@ class ControllerModuleRefine extends Controller {
 		$this->load->model('catalog/product');
 		$this->load->model('catalog/category');
 		$this->load->model('catalog/manufacturer');
+		$this->load->model('catalog/filter');
 
         $this->config_product_count = true; // $this->config->get('config_product_count');
 
@@ -96,7 +97,7 @@ class ControllerModuleRefine extends Controller {
 
 		$this->data['display_more_options'] = $this->display_more_options;
         $this->data['show_all_manufacturers'] = $this->show_all_manufacturers;
-		
+
         $this->data['text_compare'] = sprintf($this->language->get('text_compare'), (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));
 
         $this->data['products'] = $data['products'] ? true : false;
@@ -147,7 +148,7 @@ class ControllerModuleRefine extends Controller {
         $filter_groups_filter = array();
 
 		// display all filters all the time
-        $filter_groups = $this->model_catalog_category->getCategoryFiltersAll();
+        $filter_groups = $this->model_catalog_filter->getCategoryFiltersAll();
 
         foreach ($filter_groups as $filter_group) {
             $filter_data = array();
