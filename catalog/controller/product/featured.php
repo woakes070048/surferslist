@@ -121,7 +121,7 @@ class ControllerProductFeatured extends Controller {
 		$this->data['breadcrumbs'] = $this->getBreadcrumbs();
 
 		// Products Featured
-		$url = $this->getQueryParams();
+		$url = $this->getQueryString();
 
 		$this->data['products'] = array();
 
@@ -158,7 +158,7 @@ class ControllerProductFeatured extends Controller {
 			$this->redirect($this->url->link('error/not_found', '', 'SSL'));
 		}
 
-		$this->data['products'] = $this->getChild('product/product/list', $this->model_catalog_product->getProductFeatured($data, ($sort != 'random')));
+		$this->data['products'] = $this->getChild('product/data/list', $this->model_catalog_product->getProductFeatured($data, ($sort != 'random')));
 
 		$this->data['refine'] = $this->getChild('module/refine', array(
 			'query_params' => $query_params,
@@ -170,7 +170,7 @@ class ControllerProductFeatured extends Controller {
 			'forsale' => $forsale
 		));
 
-		$url = $this->getQueryParams(array('page'));
+		$url = $this->getQueryString(array('page'));
 
 		$this->data['pagination'] = $this->getPagination($product_total, $page, $limit, 'product/featured', '', $url);
 
@@ -196,7 +196,7 @@ class ControllerProductFeatured extends Controller {
 
 		if (!$this->data['products'] && (isset($this->session->data['shipping_country_id']) || isset($this->session->data['shipping_zone_id']) || isset($this->session->data['shipping_location']))) {
 			// Remove Location
-			$url = $this->getQueryParams(array('filter_location', 'filter_country_id', 'filter_zone_id'));
+			$url = $this->getQueryString(array('filter_location', 'filter_country_id', 'filter_zone_id'));
 			$request_path = isset($this->request->server['REQUEST_URI']) ? parse_url(strtolower(urldecode($this->request->server['REQUEST_URI'])), PHP_URL_PATH) : '';
 			$location_remove_url = $this->url->link('information/location', 'location=none&redirect_path=' . urlencode(ltrim($request_path . '?' . ltrim($url, "&"), "/")), 'SSL');
 			$this->data['text_empty'] .= '&nbsp; &nbsp;' . sprintf($this->language->get('text_location_remove_url'), $location_remove_url);

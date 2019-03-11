@@ -125,7 +125,7 @@ class ControllerProductMember extends Controller {
 
 		$this->data['members'] = array();
 
-		$url = $this->getQueryParams();
+		$url = $this->getQueryString();
 
 		$alphabet = array('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z');
 
@@ -200,7 +200,7 @@ class ControllerProductMember extends Controller {
 		/*
 		$this->data['locations'] = array();
 
-		$url = $this->getQueryParams(array('filter_location'));
+		$url = $this->getQueryString(array('filter_location'));
 
 		$this->data['locations'][] = array(
 			'text'  => $this->language->get('text_default'),
@@ -222,7 +222,7 @@ class ControllerProductMember extends Controller {
 		* */
 
 		// Country
-		$url = $this->getQueryParams(array('filter_country_id'));
+		$url = $this->getQueryString(array('filter_country_id'));
 
 		$this->data['countries'][] = array(
 			'id'	=> 0,
@@ -251,7 +251,7 @@ class ControllerProductMember extends Controller {
 		// Zone
 		$this->data['zones'] = array();
 
-		$url = $this->getQueryParams(array('filter_zone_id'));
+		$url = $this->getQueryString(array('filter_zone_id'));
 
 		$this->data['zones'][] = array(
 			'id'	=> 0,
@@ -293,7 +293,7 @@ class ControllerProductMember extends Controller {
 		}
 
 		// Sort, Limit
-		$url = $this->getQueryParams(array('sort', 'order'));
+		$url = $this->getQueryString(array('sort', 'order'));
 
 		if ($this->config->get('member_members_list_sort')) {
 			$this->addSort($this->language->get('text_default'), 'default-' . $order, $this->url->link('product/member', '&sort=default' . $url, 'SSL'));
@@ -305,9 +305,9 @@ class ControllerProductMember extends Controller {
 		$this->addSort($this->language->get('text_random'), 'random-' . $order, $this->url->link('product/member', '&sort=random' . $url, 'SSL'));
 
 		$this->data['sorts'] = $this->getSorts();
-		$this->data['limits'] = $this->getLimits('product/member', $this->getQueryParams(array('limit')));
+		$this->data['limits'] = $this->getLimits('product/member', $this->getQueryString(array('limit')));
 
-		$url = $this->getQueryParams(array('page'));
+		$url = $this->getQueryString(array('page'));
 
 		$this->data['pagination'] = $this->getPagination($members_total, $page, $limit, 'product/member', '', $url);
 
@@ -342,7 +342,7 @@ class ControllerProductMember extends Controller {
 
 		if (!$this->data['members'] && (isset($this->session->data['shipping_country_id']) || isset($this->session->data['shipping_zone_id']) || isset($this->session->data['shipping_location']))) {
 			// Remove Location
-			$url = $this->getQueryParams(array('filter_location', 'filter_country_id', 'filter_zone_id'));
+			$url = $this->getQueryString(array('filter_location', 'filter_country_id', 'filter_zone_id'));
 			$location_remove_url = $this->url->link('information/location', 'location=none&redirect_path=' . urlencode(ltrim($request_path . '?' . ltrim($url, "&"), "/")), 'SSL');
 			$this->data['text_empty_members'] .= '&emsp;' . sprintf($this->language->get('text_location_remove_url'), $location_remove_url);
 		}
@@ -510,7 +510,7 @@ class ControllerProductMember extends Controller {
 			$this->document->setKeywords($member_info['member_tag']);
 		}
 
-		$url = $this->getQueryParams();
+		$url = $this->getQueryString();
 
 		$this->addBreadcrumb($member_info['member_account_name'], $this->url->link('product/member/info', 'member_id=' . $this->request->get['member_id']));
 
@@ -665,7 +665,7 @@ class ControllerProductMember extends Controller {
 			$this->redirect($this->url->link('error/not_found', '', 'SSL'));
 		}
 
-		$this->data['products'] = $this->getChild('product/product/list', $this->model_catalog_product->getProducts($data));
+		$this->data['products'] = $this->getChild('product/data/list', $this->model_catalog_product->getProducts($data));
 
 		$this->data['refine'] = $this->getChild('module/refine', array(
 			'query_params' => $query_params,
@@ -679,7 +679,7 @@ class ControllerProductMember extends Controller {
 			'forsale' => $forsale
 		));
 
-		$url = $this->getQueryParams(array('page'));
+		$url = $this->getQueryString(array('page'));
 
 		$this->data['pagination'] = $this->getPagination($product_total, $page, $limit, 'product/member/info', 'member_id=' . $this->request->get['member_id'], $url, $jumpTo);
 

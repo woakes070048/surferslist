@@ -28,14 +28,14 @@ class ControllerModuleSpecial extends Controller {
 		$results = $this->model_catalog_product->getProductSpecials($data);
 
 		foreach ($results as $result) {
-			$listings[] = $this->getChild('product/product/info', $result);
+			$listings[] = $this->getChild('product/data/info', $result);
 
 			$url .= $result['product_id'] . ',';
 		}
 
 		$this->data['more'] = $this->url->link('ajax/product/more', 'module=true&special=true&filter_listings=' . rtrim($url, ','), 'SSL');
 
-		$this->data['products'] = $this->getChild('product/product/list_module', array('products' => $listings, 'position' => $setting['position']));
+		$this->data['products'] = $this->getChild('product/data/list_module', array('products' => $listings, 'position' => $setting['position']));
 
 		$this->template = '/template/module/special.tpl';
 

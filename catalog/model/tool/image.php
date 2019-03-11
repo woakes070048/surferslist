@@ -49,10 +49,10 @@ class ModelToolImage extends Model {
 
 		$type_ext = $type ? '-' . $type : '';
 
-		$old_image = $filename;
+		$original_image = $filename;
 		$new_image = utf8_substr($filename, 0, utf8_strrpos($filename, '.')) . '-' . $width . 'x' . $height . $type_ext .'.' . $filename_extension;
 
-		if (!is_file(DIR_IMAGE_CACHE . $new_image) || (filectime(DIR_IMAGE . $old_image) > filectime(DIR_IMAGE_CACHE . $new_image))) {
+		if (!is_file(DIR_IMAGE_CACHE . $new_image) || (filectime(DIR_IMAGE . $original_image) > filectime(DIR_IMAGE_CACHE . $new_image))) {
 			$path = '';
 
 			$directories = explode('/', dirname(str_replace('../', '', $new_image)));
@@ -65,10 +65,10 @@ class ModelToolImage extends Model {
 				}
 			}
 
-			list($width_orig, $height_orig) = getimagesize(DIR_IMAGE . $old_image);
+			list($width_orig, $height_orig) = getimagesize(DIR_IMAGE . $original_image);
 
 			if ($width_orig != $width || $height_orig != $height) {
-				$image = new Image(DIR_IMAGE . $old_image);
+				$image = new Image(DIR_IMAGE . $original_image);
 
 				$ratio = $width / $height;
 				$ratio_orig = $width_orig / $height_orig;
@@ -133,7 +133,7 @@ class ModelToolImage extends Model {
 
 				$image->save(DIR_IMAGE_CACHE . $new_image);
 			} else {
-				copy(DIR_IMAGE . $old_image, DIR_IMAGE_CACHE . $new_image);
+				copy(DIR_IMAGE . $original_image, DIR_IMAGE_CACHE . $new_image);
 			}
 		}
 

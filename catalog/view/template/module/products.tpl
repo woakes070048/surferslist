@@ -9,7 +9,7 @@
 	        <img src="<?php echo $product['thumb']; ?>" alt="<?php echo $product['name']; ?>" />
 	        <?php } ?>
 	        <span class="description">
-	            <a href="<?php echo $product['href']; ?>" title="<?php echo $product['description']; ?>">
+	            <a href="<?php echo $product['href']; ?>" title="<?php echo $product['description_short']; ?>">
 	            <?php if ($product['year'] != '0000') { ?>
 	                <?php echo $product['year']; ?>&nbsp;
 	            <?php } ?>

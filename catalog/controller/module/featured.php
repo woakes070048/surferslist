@@ -9,22 +9,12 @@ class ControllerModuleFeatured extends Controller {
 		$this->load->model('catalog/product');
 		$this->load->model('tool/image');
 
+		$filter_category_id = isset($this->request->get['filter_category_id']) ? $this->request->get['filter_category_id'] : '';
+
 		if (!empty($this->request->get['path']) && !is_array($this->request->get['path'])) {
 			$path = explode('_', (string)$this->request->get['path']);
 			$filter_category_id = (int)array_pop($path);
-		} else if (isset($this->request->get['filter_category_id'])) {
-			$filter_category_id = $this->request->get['filter_category_id'];
-		} else {
-			$filter_category_id = '';
 		}
-
-		// if (!empty($this->request->get['manufacturer_id'])) {
-		// 	$filter_manufacturer_id = $this->request->get['manufacturer_id'];
-		// } else if (isset($this->request->get['filter_manufacturer_id'])) {
-		// 	$filter_manufacturer_id = $this->request->get['filter_manufacturer_id'];
-		// } else {
-		// 	$filter_manufacturer_id = '';
-		// }
 
 		// if (isset($this->request->get['filter_location'])) {
 		// 	$filter_location = $this->request->get['filter_location'];
@@ -85,7 +75,6 @@ class ControllerModuleFeatured extends Controller {
 		// Listings
 		$data = array(
 			'filter_category_id' 		=> $filter_category_id,
-			// 'filter_manufacturer_id' 	=> $filter_manufacturer_id,
 			// 'filter_country_id'  		=> $filter_country_id,
 			// 'filter_zone_id'            => $filter_zone_id,
 			// 'filter_location'           => $filter_location,
@@ -106,14 +95,12 @@ class ControllerModuleFeatured extends Controller {
 		$listings = $this->cache->get('product.module.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . (int)$currency_id . '.' . $cache);
 
 		if ($listings === false) {
-			$listings = $this->getChild('product/product/list', $this->model_catalog_product->getProductFeatured($data, false));
-
 			$listings = array();
 
 			$results = $this->model_catalog_product->getProductFeatured($data, false); // don't cache in model
 
 			foreach ($results as $result) {
-				$listings[$result['product_id']] = $this->getChild('product/product/info', $result);
+				$listings[$result['product_id']] = $this->getChild('product/data/info', $result);
 				$listings[$result['product_id']]['thumb'] = $this->model_tool_image->resize($result['image'], $image_width, $image_height, $image_crop);
 			}
 
@@ -137,7 +124,7 @@ class ControllerModuleFeatured extends Controller {
 			$this->document->addScript('catalog/view/root/slick/slick.min.js');
 		}
 
-		$this->data['products'] = $this->getChild('product/product/list_module', array('products' => $listings, 'position' => $setting['position']));
+		$this->data['products'] = $this->getChild('product/data/list_module', array('products' => $listings, 'position' => $setting['position']));
 
 		$this->template = '/template/module/featured.tpl';
 

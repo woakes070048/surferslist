@@ -452,7 +452,7 @@ class ControllerAjaxProduct extends Controller {
 		$max_pages = $limit > 0 ? ceil($product_total / $limit) : 1;
 
 		foreach ($results as $result) {
-            $this->data['products'][] = $this->getChild('product/product/info', $result);
+            $this->data['products'][] = $this->getChild('product/data/info', $result);
 
 			// add to filter_ids
 			if ($module && $filter_listings) {
@@ -494,7 +494,7 @@ class ControllerAjaxProduct extends Controller {
 		));
 
 		$more_href = $page < $max_pages
-			? $this->url->link('ajax/product/more', $this->getQueryParams() . '&page=' . ($page + 1), 'SSL')
+			? $this->url->link('ajax/product/more', $this->getQueryString() . '&page=' . ($page + 1), 'SSL')
 			: $this->url->link('product/allproducts', '', 'SSL');
 
 		$json = array(

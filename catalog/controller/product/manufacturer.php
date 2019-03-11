@@ -56,7 +56,7 @@ class ControllerProductManufacturer extends Controller {
 		$this->data['breadcrumbs'] = $this->getBreadcrumbs();
 
 		// Categories
-		$url = $this->getQueryParams(array('filter_category_id'));
+		$url = $this->getQueryString(array('filter_category_id'));
 
 		$this->data['category_manufacturers'] = $this->cache->get('category.manufacturers.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'));
 
@@ -142,7 +142,7 @@ class ControllerProductManufacturer extends Controller {
 		}
 
 		// Sort, Limit
-		$url = $this->getQueryParams(array('sort', 'order'));
+		$url = $this->getQueryString(array('sort', 'order'));
 
 		$this->addSort($this->language->get('text_default'), 'sort_order-ASC', $this->url->link('product/manufacturer','&sort=sort_order&order=ASC' . $url, 'SSL'));
 		$this->addSort($this->language->get('text_name_asc'), 'name-ASC', $this->url->link('product/manufacturer','&sort=name&order=ASC' . $url, 'SSL'));
@@ -150,9 +150,9 @@ class ControllerProductManufacturer extends Controller {
 		$this->addSort($this->language->get('text_random'), 'random-' . $order, $this->url->link('product/manufacturer', '&sort=random' . $url, 'SSL'));
 
 		$this->data['sorts'] = $this->getSorts();
-		$this->data['limits'] = $this->getLimits('product/manufacturer', $this->getQueryParams(array('limit')));
+		$this->data['limits'] = $this->getLimits('product/manufacturer', $this->getQueryString(array('limit')));
 
-		$url = $this->getQueryParams(array('page'));
+		$url = $this->getQueryString(array('page'));
 
 		$this->data['pagination'] = $this->getPagination($manufacturer_total, $page, $limit, 'product/manufacturer', '', $url);
 
@@ -310,7 +310,7 @@ class ControllerProductManufacturer extends Controller {
 		$meta_description = !empty($manufacturer_info['meta_description']) ? $manufacturer_info['meta_description'] : sprintf($this->language->get('meta_description_manufacturer'), $manufacturer_info['name']);
 		$meta_keyword= !empty($manufacturer_info['meta_keyword']) ? $manufacturer_info['meta_keyword'] : sprintf($this->language->get('meta_keyword_manufacturer'), $manufacturer_info['name']);
 
-		$url = $this->getQueryParams();
+		$url = $this->getQueryString();
 
 		$this->addBreadcrumb($manufacturer_info['name'], $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $this->request->get['manufacturer_id']));
 
@@ -357,7 +357,7 @@ class ControllerProductManufacturer extends Controller {
 			$this->redirect($this->url->link('error/not_found', '', 'SSL'));
 		}
 
-		$this->data['products'] = $this->getChild('product/product/list', $this->model_catalog_product->getProducts($data));
+		$this->data['products'] = $this->getChild('product/data/list', $this->model_catalog_product->getProducts($data));
 
 		$this->data['refine'] = $this->getChild('module/refine', array(
 			'query_params' => $query_params,
@@ -397,7 +397,7 @@ class ControllerProductManufacturer extends Controller {
 			$this->cache->set('manufacturer.active.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'), $this->data['manufacturers_active'], 60 * 60 * 24); // 1 day cache expiration
 		}
 
-		$url = $this->getQueryParams(array('page'));
+		$url = $this->getQueryString(array('page'));
 
 		$this->data['pagination'] = $this->getPagination($product_total, $page, $limit, 'product/manufacturer/info', 'manufacturer_id=' . $this->request->get['manufacturer_id'], $url);
 

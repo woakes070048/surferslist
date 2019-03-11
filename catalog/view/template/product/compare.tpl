@@ -77,17 +77,11 @@
                         <td><?php echo $products[$product['product_id']]['year'] != '0000' ? $products[$product['product_id']]['year'] : $text_unknown; ?></td>
                         <?php } ?>
                       </tr>
-                      <tr class="hidden">
-                        <td><?php echo $text_summary; ?></td>
-                        <?php foreach ($products as $product) { ?>
-                        <td class="description"><?php echo $products[$product['product_id']]['description']; ?></td>
-                        <?php } ?>
-                      </tr>
                       <tr>
                         <td><?php echo $text_member; ?></td>
                         <?php foreach ($products as $product) { ?>
                         <?php if ($products[$product['product_id']]['member']) { ?>
-                        <td><a href="<?php echo $products[$product['product_id']]['member_href']; ?>"><?php echo $products[$product['product_id']]['member']; ?></a></td>
+                        <td><a href="<?php echo $products[$product['product_id']]['member']['href']; ?>"><?php echo $products[$product['product_id']]['member']['name']; ?></a></td>
                         <?php } else { ?>
                         <td></td>
                         <?php } ?>
@@ -106,11 +100,7 @@
                       <tr>
                         <td><?php echo $text_type; ?></td>
                         <?php foreach ($products as $product) { ?>
-                        <?php if ($products[$product['product_id']]['member'] && $products[$product['product_id']]['price'] >= 0) { ?>
                         <td><?php echo $products[$product['product_id']]['type']; ?></td>
-                        <?php } else { ?>
-                        <td></td>
-                        <?php } ?>
                         <?php } ?>
                       </tr>
                       <tr>
@@ -162,16 +152,16 @@
           					<a href="<?php echo $product['href']; ?>" class="button button_alt" rel="tooltip" data-placement="top" data-original-title="<?php echo $text_view; ?>">
           						<i class="fa fa-info-circle"></i><?php echo $text_view; ?>
           					</a>
-                          <?php } else if ($product['price'] && $product['type_id'] > 0) { ?>
-                          <a onclick="addToCart('<?php echo $product['product_id']; ?>');" class="button button_highlight" rel="tooltip" data-placement="top" data-original-title="<?php echo $button_cart; ?>">
-                              <i class="fa fa-shopping-cart"></i><?php echo $button_cart; ?>
-                          </a>
-                          <?php } else { ?>
-						  <a href="<?php echo $product['member_contact']; ?>" class="button button_contact" rel="tooltip" data-placement="top" data-original-title="<?php echo $button_contact; ?>">
-                              <i class="fa fa-envelope"></i> <?php echo $button_contact; ?>
-                          </a>
-						  <?php } ?>
-                          <a href="<?php echo $product['remove']; ?>" class="button b_solo_icon button_remove" data-original-title="<?php echo $button_remove; ?>" data-placement="top" rel="tooltip"><i class="fa fa-trash"></i></a>
+                            <?php } else if ($product['price'] && $product['type_id'] > 0) { ?>
+                            <a onclick="addToCart('<?php echo $product['product_id']; ?>');" class="button button_highlight" rel="tooltip" data-placement="top" data-original-title="<?php echo $button_cart; ?>">
+                                <i class="fa fa-shopping-cart"></i><?php echo $button_cart; ?>
+                            </a>
+                            <?php } else if ($product['member']) { ?>
+						    <a href="<?php echo $product['member']['contact']; ?>" class="button button_contact" rel="tooltip" data-placement="top" data-original-title="<?php echo $button_contact; ?>">
+                                <i class="fa fa-envelope"></i> <?php echo $button_contact; ?>
+                            </a>
+						    <?php } ?>
+                            <a href="<?php echo $product['remove']; ?>" class="button b_solo_icon button_remove" data-original-title="<?php echo $button_remove; ?>" data-placement="top" rel="tooltip"><i class="fa fa-trash"></i></a>
                       </td>
                       <?php } ?>
                     </tr>

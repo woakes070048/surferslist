@@ -5,7 +5,7 @@
 				<div class="thumb<?php if ($featured) { ?> promo<?php } ?>">
 					<?php if ($price && $type_id >= 0 && $special) { ?><span class="sale-badges">-<?php echo $salebadges; ?>&#37;</span><?php } ?>
 					<?php if ($featured) { ?><i class="icon icon-tag promo text-larger"></i><?php } ?>
-					<a href="<?php echo $product_href; ?>" target="_blank"><img src="<?php echo $thumb; ?>" alt="<?php echo $heading_title; ?>" /></a>
+					<a href="<?php echo $action; ?>" target="_blank"><img src="<?php echo $thumb; ?>" alt="<?php echo $heading_title; ?>" /></a>
 				</div>
 			</div>
 			<div class="right-item">
@@ -48,7 +48,9 @@
 						<?php } ?>
 						<li><b><?php echo $text_model; ?></b> <i><?php echo $model; ?></i></li>
 						<li><b><?php echo $text_size; ?></b> <i><?php echo $size; ?></i></li>
+						<?php if ($year) { ?>
 						<li><b><?php echo $text_year; ?></b> <i><?php echo $year; ?></i></li>
+						<?php } ?>
 						<?php if ($condition) { ?>
 						<li><b><?php echo $text_condition; ?></b> <i><?php echo $condition; ?></i></li>
 						<?php } ?>
@@ -99,7 +101,7 @@
 				</div>
 				<div class="buttons buttons-middle">
 					<div class="center">
-						<a href="<?php echo $product_href; ?>" target="_blank" class="button button_alt bolder" rel="tooltip" data-placement="top" data-original-title="<?php echo $button_view . ' ' . $text_product; ?>">
+						<a href="<?php echo $href; ?>" target="_blank" class="button button_alt bolder" rel="tooltip" data-placement="top" data-original-title="<?php echo $button_view . ' ' . $text_product; ?>">
 							<i class="fa fa-eye"></i><?php echo $button_view . ' ' . $text_product; ?>
 						</a>
 					</div>

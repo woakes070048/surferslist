@@ -37,8 +37,7 @@ final class Cache {
 		$cache = false;
 		$file = false;
 
-		$dir = $this->getDir($key);
-		$filepath = $this->getFilepath($key, $dir);
+		$filepath = $this->getFilepath($key);
 
 		if ($this->memory_cache_enabled) {
 			$file = $filepath . '.' . $this->getMemCache($key);  // cache value is expiration time
@@ -68,19 +67,17 @@ final class Cache {
 	}
 
 	public function set($key, $value, $expire = null) {
-		if (!$expire) $expire = $this->expire;
-
 		$dir = $this->getDir($key);
-
-		$this->delete($key, $dir);
-
-		$expiration = time() + $expire;
-
-		$file = $this->getFilepath($key, $dir) . '.' . $expiration;
 
         if ($dir && !is_dir(DIR_CACHE . $dir)) {
             mkdir(DIR_CACHE . $dir, 0755, true);
         }
+
+		$this->delete($key, $dir);
+
+		$expiration = time() + (int)($expire ?: $this->expire);
+
+		$file = $this->getFilepath($key, $dir) . '.' . $expiration;
 
 		$handle = fopen($file, 'w');
 
@@ -98,11 +95,15 @@ final class Cache {
 	}
 
 	public function delete($key, $dir = '') {
-		// needs to support multiple levels (e.g. $key of 'category' => delete 'category.1', 'category.2', 'category.2.1', etc.)
+		if (!$dir) {
+			$dir = $this->getDir($key);
+		}
 
 		if ($this->memory_cache_enabled) {
 			foreach ($this->memory_cache_files as $index => $expiration) {
-				// index `name` starts with key
+				// needs to support multiple levels
+				// (e.g. $key of 'category' => delete 'category.1', 'category.2', 'category.2.1', etc.)
+				// check if index `name` starts with key
 				if (substr($index, 0, strlen($key)) === $key) {
 					$file = $this->getFilepath($index, $dir) . '.' . $expiration;
 
@@ -128,6 +129,10 @@ final class Cache {
 	}
 
 	private function getFilepath($key, $dir = '') {
+		if (!$dir) {
+			$dir = $this->getDir($key);
+		}
+
 		return DIR_CACHE . $dir . '/' . $this->prefix . preg_replace('/[^A-Z0-9\._-]/i', '', $key);
 	}
 

@@ -6,7 +6,7 @@
 			class="grid-item itemcat<?php if ($product['price'] && $product['featured']) { ?> grid-item-promo<?php } else if ($product["price"] && $product["special"]) { ?> grid-item-sale<?php } ?>">
 			<div class="image">
 				<img src="<?php echo $product['thumb']; ?>" alt="<?php echo $product['name']; ?>" />
-				<span class="description"  title="<?php echo $product['description']; ?>">
+				<span class="description"  title="<?php echo $product['description_short']; ?>">
 					<?php if ($product['year'] != '0000') { ?>
 						<?php echo $product['year']; ?>&nbsp;
 					<?php } ?>

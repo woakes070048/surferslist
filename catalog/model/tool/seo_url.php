@@ -154,8 +154,8 @@ class ModelToolSeoUrl extends Model {
 
 		$product_data = array();
 
-		// product_id.min cache files generated in ControllerProductProduct
-		$product_cache = $this->cache->get('product_' . (int)$data['product_id'] . '.min.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)($this->customer->isLogged() ? $this->customer->getCustomerGroupId() : $this->config->get('config_customer_group_id')));
+		// check cache file first (set in product/product)
+		$product_cache = $this->cache->get('product_' . (int)$data['product_id'] . '.data.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)($this->customer->isLogged() ? $this->customer->getCustomerGroupId() : $this->config->get('config_customer_group_id')));
 
 		if ($product_cache === false) {
 			$sql = sprintf('

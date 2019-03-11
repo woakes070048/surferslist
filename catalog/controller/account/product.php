@@ -72,7 +72,7 @@ class ControllerAccountProduct extends Controller {
 						$this->session->data['success'] = $this->language->get('text_success_new');
 					}
 
-					$this->redirect($this->url->link('account/product', $this->getQueryParams(), 'SSL'));
+					$this->redirect($this->url->link('account/product', $this->getQueryString(), 'SSL'));
 				}
 			}
 
@@ -104,7 +104,7 @@ class ControllerAccountProduct extends Controller {
 					}
 				}
 
-				$this->redirect($this->url->link('account/product', $this->getQueryParams(), 'SSL'));
+				$this->redirect($this->url->link('account/product', $this->getQueryString(), 'SSL'));
 			}
 		}
 
@@ -124,7 +124,7 @@ class ControllerAccountProduct extends Controller {
 
 				$this->session->data['success'] = $this->language->get('text_success_copy');
 
-				$this->redirect($this->url->link('account/product', $this->getQueryParams(array('filter_quantity', 'filter_price', 'filter_type', 'filter_approved', 'filter_status')), 'SSL'));
+				$this->redirect($this->url->link('account/product', $this->getQueryString(array('filter_quantity', 'filter_price', 'filter_type', 'filter_approved', 'filter_status')), 'SSL'));
 			}
 		}
 
@@ -159,7 +159,7 @@ class ControllerAccountProduct extends Controller {
 				return;
 			} else {
 				$this->customer->setToken();
-				$this->redirect($this->url->link('account/product', $this->getQueryParams(), 'SSL'));
+				$this->redirect($this->url->link('account/product', $this->getQueryString(), 'SSL'));
 			}
 		}
 
@@ -194,7 +194,7 @@ class ControllerAccountProduct extends Controller {
 				return;
 			} else {
 				$this->customer->setToken();
-				$this->redirect($this->url->link('account/product', $this->getQueryParams(), 'SSL'));
+				$this->redirect($this->url->link('account/product', $this->getQueryString(), 'SSL'));
 			}
 		}
 
@@ -214,7 +214,7 @@ class ControllerAccountProduct extends Controller {
 
 				$this->session->data['success'] = sprintf($this->language->get('text_product_expired'), $count);
 
-				$this->redirect($this->url->link('account/product', $this->getQueryParams(), 'SSL'));
+				$this->redirect($this->url->link('account/product', $this->getQueryString(), 'SSL'));
 			}
 		}
 
@@ -234,7 +234,7 @@ class ControllerAccountProduct extends Controller {
 
 				$this->session->data['success'] = sprintf($this->language->get('text_product_renewed'), $count);
 
-				$this->redirect($this->url->link('account/product', $this->getQueryParams(), 'SSL'));
+				$this->redirect($this->url->link('account/product', $this->getQueryString(), 'SSL'));
 			}
 		}
 
@@ -293,7 +293,7 @@ class ControllerAccountProduct extends Controller {
 				}
 			}
 
-			$json['redirect'] = $this->url->link('account/product', $this->getQueryParams(), 'SSL');
+			$json['redirect'] = $this->url->link('account/product', $this->getQueryString(), 'SSL');
 			$json['message'] = sprintf($this->language->get('text_product_transferred'), $count, $to_member_info['member_account_name']);
 			$json['status'] = 1;
 		}
@@ -375,7 +375,7 @@ class ControllerAccountProduct extends Controller {
 			$limit = $this->config->get('member_product_manager_limit') ? (int)$this->config->get('member_product_manager_limit') : 10;
 		}
 
-		$url = $this->getQueryParams();
+		$url = $this->getQueryString();
 
 		$this->addBreadcrumb($this->language->get('text_home'), $this->url->link('common/home'));
 		$this->addBreadcrumb($this->language->get('text_account'), $this->url->link('account/account'));
@@ -474,7 +474,7 @@ class ControllerAccountProduct extends Controller {
 		}
 
 		// Query Parameters
-		$url = $this->getQueryParams(array('sort', 'order', 'limit'));
+		$url = $this->getQueryString(array('sort', 'order', 'limit'));
 
 		$url .= ($order == 'ASC') ? '&order=DESC' : '&order=ASC';
 
@@ -488,7 +488,7 @@ class ControllerAccountProduct extends Controller {
 		$this->data['sort_status'] = $this->url->link('account/product', '&sort=status' . $url, 'SSL');
 		$this->data['sort_order'] = $this->url->link('account/product', '&sort=order' . $url, 'SSL');
 
-		$url = $this->getQueryParams(array('limit', 'page'));
+		$url = $this->getQueryString(array('limit', 'page'));
 
 		$this->data['pagination'] = $this->getPagination($product_total, $page, $limit, 'account/product', '', $url);
 
@@ -602,7 +602,7 @@ class ControllerAccountProduct extends Controller {
 
         $this->data['help_image'] = sprintf($this->language->get('help_image'), $image_dimensions_min_width, $image_dimensions_min_height, $image_upload_filesize_max);
 
-		$url = $this->getQueryParams();
+		$url = $this->getQueryString();
 
 		$this->addBreadcrumb($this->language->get('text_home'), $this->url->link('common/home'));
 		$this->addBreadcrumb($this->language->get('text_account'), $this->url->link('account/account'));

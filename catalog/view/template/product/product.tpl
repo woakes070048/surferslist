@@ -3,7 +3,7 @@
     <header class="breadcrumb">
         <div class="layout">
             <h1>
-                <a href="<?php echo $page_canonical; ?>">
+                <a href="<?php echo $action; ?>">
                     <?php if ($category_icon) { ?><span class="category-icon icon-<?php echo $category_icon; ?>"></span><?php } ?><?php echo $heading_title; ?>
                 </a>
             </h1>
@@ -78,7 +78,7 @@
                         <div class="widget">
                             <div id="tabs" class="widget-top-nav">
                                 <a href="#tab-description"><i class="fa fa-info-circle"></i><strong><?php echo $tab_description; ?></strong></a>
-                                <?php if ($attribute_groups) { ?>
+                                <?php if ($attributes) { ?>
                                 <a href="#tab-attribute"><i class="fa fa-reorder"></i><strong><?php echo $tab_attribute; ?></strong></a>
                                 <?php } ?>
                                 <?php if ($question_status) { ?>
@@ -344,10 +344,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <?php if ($attribute_groups) { ?>
+                            <?php if ($attributes) { ?>
                             <div id="tab-attribute">
                                 <div class="content">
-                                    <?php foreach ($attribute_groups as $attribute_group) { ?>
+                                    <?php foreach ($attributes as $attribute_group) { ?>
                                     <ul class="global-attribute">
                                         <li class="name"><strong><?php echo $attribute_group['name']; ?></strong></li>
                                         <?php foreach ($attribute_group['attribute'] as $attribute) { ?>

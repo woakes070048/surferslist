@@ -121,7 +121,7 @@ class ControllerProductSpecial extends Controller {
 		$this->data['text_compare'] = sprintf($this->language->get('text_compare'), (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));
 
 		// get all special listings
-		$url = $this->getQueryParams();
+		$url = $this->getQueryString();
 
 		$this->data['products'] = array();
 
@@ -144,10 +144,10 @@ class ControllerProductSpecial extends Controller {
 			$this->redirect($this->url->link('error/not_found', '', 'SSL'));
 		}
 
-		$this->data['products'] = $this->getChild('product/product/list', $this->model_catalog_product->getProductSpecials($data));
+		$this->data['products'] = $this->getChild('product/data/list', $this->model_catalog_product->getProductSpecials($data));
 
 		// Sorts
-		$url = $this->getQueryParams(array('sort', 'order'));
+		$url = $this->getQueryString(array('sort', 'order'));
 
 		$this->addSort($this->language->get('text_default'), 'p.sort_order-ASC', $this->url->link('product/special', 'sort=p.sort_order&order=ASC' . $url));
 		$this->addSort($this->language->get('text_name_asc'), 'pd.name-ASC', $this->url->link('product/special', 'sort=pd.name&order=ASC' . $url));
@@ -168,9 +168,9 @@ class ControllerProductSpecial extends Controller {
 		$this->addSort($this->language->get('text_random'), 'random-' . $order, $this->url->link('product/special', '&sort=random' . $url, 'SSL'));
 
 		$this->data['sorts'] = $this->getSorts();
-		$this->data['limits'] = $this->getLimits('product/special', $this->getQueryParams(array('limit')));
+		$this->data['limits'] = $this->getLimits('product/special', $this->getQueryString(array('limit')));
 
-		$url = $this->getQueryParams(array('page'));
+		$url = $this->getQueryString(array('page'));
 
 		$this->data['pagination'] = $this->getPagination($product_total, $page, $limit, 'product/special', '', $url);
 
@@ -210,7 +210,7 @@ class ControllerProductSpecial extends Controller {
 
 		if (!$this->data['products'] && (isset($this->session->data['shipping_country_id']) || isset($this->session->data['shipping_zone_id']) || isset($this->session->data['shipping_location']))) {
 			// Remove Location
-			$url = $this->getQueryParams(array('filter_location', 'filter_country_id', 'filter_zone_id'));
+			$url = $this->getQueryString(array('filter_location', 'filter_country_id', 'filter_zone_id'));
 			$request_path = isset($this->request->server['REQUEST_URI']) ? parse_url(strtolower(urldecode($this->request->server['REQUEST_URI'])), PHP_URL_PATH) : '';
 			$location_remove_url = $this->url->link('information/location', 'location=none&redirect_path=' . urlencode(ltrim($request_path . '?' . ltrim($url, "&"), "/")), 'SSL');
 			$this->data['text_empty'] .= '&nbsp; &nbsp;' . sprintf($this->language->get('text_location_remove_url'), $location_remove_url);

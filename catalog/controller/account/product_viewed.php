@@ -52,7 +52,7 @@ class ControllerAccountProductViewed extends Controller {
 			'limit'
 		));
 
-		$url = $this->getQueryParams();
+		$url = $this->getQueryString();
 
 		$this->addBreadcrumb($this->language->get('text_home'), $this->url->link('common/home'));
 		$this->addBreadcrumb($this->language->get('text_account'), $this->url->link('account/account'));
@@ -110,7 +110,7 @@ class ControllerAccountProductViewed extends Controller {
 
  		$this->data['error_warning'] = $this->getError('warning');
 
-		$url = $this->getQueryParams(array('sort'));
+		$url = $this->getQueryString(array('sort'));
 
 		$this->data['sort_name'] = $this->url->link('account/product_viewed', '&sort=pd.name' . $url, 'SSL');
 		$this->data['sort_model'] = $this->url->link('account/product_viewed', '&sort=p.model' . $url, 'SSL');
@@ -119,7 +119,7 @@ class ControllerAccountProductViewed extends Controller {
 		$this->data['sort_status'] = $this->url->link('account/product_viewed', '&sort=p.status' . $url, 'SSL');
 		$this->data['sort_order'] = $this->url->link('account/product_viewed', '&sort=p.sort_order' . $url, 'SSL');
 
-		$url = $this->getQueryParams(array('page'));
+		$url = $this->getQueryString(array('page'));
 
 		$this->data['pagination'] = $this->getPagination($product_viewed_total, $page, 10, 'account/product_viewed', '', $url);
 

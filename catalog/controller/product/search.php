@@ -215,11 +215,11 @@ class ControllerProductSearch extends Controller {
 		if ($results) {
 			$this->load->model('tool/image');
 
-			$this->data['products'] = $this->getChild('product/product/list', $results);
+			$this->data['products'] = $this->getChild('product/data/list', $results);
 		}
 
 		// Sorts
-		$url = $this->getQueryParams(array('sort', 'order'));
+		$url = $this->getQueryString(array('sort', 'order'));
 
 		if ($expand_search) $url .= '&expand_search=' . json_encode($expand_search);
 
@@ -238,7 +238,7 @@ class ControllerProductSearch extends Controller {
 		$this->data['random'] = $this->url->link('product/search', '&sort=random' . $url, 'SSL');
 
 		// Limits
-		$url = $this->getQueryParams(array('limit'));
+		$url = $this->getQueryString(array('limit'));
 
 		if ($expand_search) {
 			$url .= '&expand_search=' . json_encode($expand_search);
@@ -247,7 +247,7 @@ class ControllerProductSearch extends Controller {
 		$this->data['limits'] = $this->getLimits('product/search', $url);
 
 		// Pagination
-		$url = $this->getQueryParams(array('page'));
+		$url = $this->getQueryString(array('page'));
 
 		if ($expand_search) $url .= '&expand_search=' . json_encode($expand_search);
 
@@ -279,7 +279,7 @@ class ControllerProductSearch extends Controller {
 
 		if (!$this->data['products'] && (isset($this->session->data['shipping_country_id']) || isset($this->session->data['shipping_zone_id']) || isset($this->session->data['shipping_location']))) {
 			// Remove Location
-			$url = $this->getQueryParams(array('location', 'country', 'state'));
+			$url = $this->getQueryString(array('location', 'country', 'state'));
 			$request_path = isset($this->request->server['REQUEST_URI']) ? parse_url(strtolower(urldecode($this->request->server['REQUEST_URI'])), PHP_URL_PATH) : '';
 			$location_remove_url = $this->url->link('information/location', 'location=none&redirect_path=' . urlencode(ltrim($request_path . '?' . ltrim($url, "&"), "/")), 'SSL');
 			$this->data['text_empty'] .= '&nbsp; &nbsp;' . sprintf($this->language->get('text_location_remove_url'), $location_remove_url);

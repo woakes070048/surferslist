@@ -69,7 +69,7 @@ class ControllerModuleRefine extends Controller {
 
         // Sort, Limit
         $this->data['sorts'] = $this->getSortOptions($data);
-        $this->data['limits'] = $this->getLimits($data['route'], $data['path'] . $this->getQueryParams(array('limit')));
+        $this->data['limits'] = $this->getLimits($data['route'], $data['path'] . $this->getQueryString(array('limit')));
 
 		// Selected Values
 		$this->data['filter'] = $data['filter']['filter_filter'];
@@ -89,11 +89,11 @@ class ControllerModuleRefine extends Controller {
 		$request_path = isset($this->request->server['REQUEST_URI']) ? parse_url(strtolower(urldecode($this->request->server['REQUEST_URI'])), PHP_URL_PATH) : '';
 
 		// Links
-        $this->data['action'] = str_replace('&amp;', '&', $this->url->link($data['route'], $data['path'] . $this->getQueryParams(array('filter', 'type', 'search'))));;
+        $this->data['action'] = str_replace('&amp;', '&', $this->url->link($data['route'], $data['path'] . $this->getQueryString(array('filter', 'type', 'search'))));;
         $this->data['location_page'] = $data['route'] !== 'embed/profile' ? $this->url->link('information/location', 'redirect_path=' . urlencode(ltrim($request_path, "/"))) : '';
-		$this->data['random'] = $this->url->link($data['route'], $data['path'] . '&sort=random' . $this->getQueryParams(array('sort', 'order')));
+		$this->data['random'] = $this->url->link($data['route'], $data['path'] . '&sort=random' . $this->getQueryString(array('sort', 'order')));
 		$this->data['compare'] = $data['route'] !== 'embed/profile' ? $this->url->link('product/compare', '') : '';
-		$this->data['reset'] = $this->getQueryParams(array('page')) ? $this->url->link($data['route'], $data['path']) . $this->anchor : '';
+		$this->data['reset'] = $this->getQueryString(array('page')) ? $this->url->link($data['route'], $data['path']) . $this->anchor : '';
 
 		$this->data['display_more_options'] = $this->display_more_options;
         $this->data['show_all_manufacturers'] = $this->show_all_manufacturers;
@@ -187,7 +187,7 @@ class ControllerModuleRefine extends Controller {
 
 		$manufacturers_filter = array();
 
-        $url = $this->getQueryParams(array('manufacturer_id', 'filter_manufacturer_id'));
+        $url = $this->getQueryString(array('manufacturer_id', 'filter_manufacturer_id'));
 
         $manufacturers_data = array(
             'filter_category_id' 		=> isset($data['category_parents'][1]['id']) ? $data['category_parents'][1]['id'] : $this->category_id,
@@ -232,7 +232,7 @@ class ControllerModuleRefine extends Controller {
 		$manufacturers_filter = array();
 
 		if ($data['product_manufacturers']) {
-			$url = $this->getQueryParams(array('filter_manufacturer_id'));
+			$url = $this->getQueryString(array('filter_manufacturer_id'));
 
 			$manufacturers_filter[] = array(
 				'id'	=> 0,
@@ -272,7 +272,7 @@ class ControllerModuleRefine extends Controller {
 			return $this->getFilterProductCategories($data);
 		}
 
-		$url = $this->getQueryParams(array('filter_category_id', 'filter_manufacturer_id', 'manufacturer_id'));
+		$url = $this->getQueryString(array('filter_category_id', 'filter_manufacturer_id', 'manufacturer_id'));
 
 		$categories_filter = array();
 
@@ -332,7 +332,7 @@ class ControllerModuleRefine extends Controller {
 			return array();
 		}
 
-		$url = $this->getQueryParams(array('filter_category_id', 'filter_manufacturer_id', 'manufacturer_id'));
+		$url = $this->getQueryString(array('filter_category_id', 'filter_manufacturer_id', 'manufacturer_id'));
 
 		$categories_filter = array();
 
@@ -405,7 +405,7 @@ class ControllerModuleRefine extends Controller {
 
         $categories_filter = array();
 
-		$url = $this->getQueryParams(array('filter_manufacturer_id', 'filter_category_id'));
+		$url = $this->getQueryString(array('filter_manufacturer_id', 'filter_category_id'));
 
 		$categories_filter[] = array(
 			'id' 		=> 0,
@@ -458,7 +458,7 @@ class ControllerModuleRefine extends Controller {
     }
 
 	protected function getSortOptions($data) {
-		$url = $this->getQueryParams(array('sort', 'order'));
+		$url = $this->getQueryString(array('sort', 'order'));
 
 		if ($this->config->get('apac_products_sort_sort_order')) {
 			$this->addSort($this->language->get('text_default'), 'p.sort_order-ASC', $this->url->link($data['route'], $data['path'] . '&sort=p.sort_order&order=ASC' . $url));

@@ -7,7 +7,7 @@ class ModelCatalogProduct extends Model {
 
 		$customer_group_id = $this->customer->isLogged() ? $this->customer->getCustomerGroupId() : $this->config->get('config_customer_group_id');
 
-		$product_data = $this->cache->get('product_' . (int)$product_id . '.full.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id);
+		$product_data = $this->cache->get('product_' . (int)$product_id . '.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id);
 
 		if ($preview || $product_data === false) {
 			$sql = "
@@ -103,55 +103,15 @@ class ModelCatalogProduct extends Model {
 
 				// Filters and Condition
 				$product_filters = $this->getProductFilters($query->row['product_id']);
-				// $condition_filter_group_id = 2;
-				// $this->load->model('catalog/filter');
-				// $condition_filter_ids = $this->model_catalog_filter->getFilterIdsByFilterGroupId($condition_filter_group_id);
-				$condition_filter_id = current(array_intersect($product_filters, array('6', '7', '8', '9', '10')));
+
+				$this->load->model('catalog/filter');
+
+				$condition_filter_ids = $this->model_catalog_filter->getFilterIdsByFilterGroupId($this->config->get('config_filter_group_condition_id'));
+				$condition_filter_id = current(array_intersect($product_filters, $condition_filter_ids));
 
 				if ($condition_filter_id) {
 					$this->load->model('catalog/filter');
 					$product_condition = $this->model_catalog_filter->getFilterByFilterId($condition_filter_id);
-				}
-
-				$type_id = $query->row['quantity'] > 0 ? 1 : ($query->row['quantity'] == 0 ? 0 : -1);
-
-				// Related Listings
-				$product_related = array(); // $this->getProductRelated($query->row['product_id']);
-				$data = array();
-				$base_category = end($product_categories);
-
-				if ($base_category) {
-					$data['filter_category_id'] = $base_category['category_id'];
-					$data['filter_sub_category'] = false;
-				} else if ($member_info) {
-					$data['filter_member_account_id'] = $member_info['member_account_id'];
-				}
-
-				// if (in_array($type_id, array(0, 1))) {
-				// 	$data['filter_listing_type'] = array('0', '1');  // for-sale
-				// }
-
-				$product_ids_related = array_map(function ($item) {
-					return $item['product_id'];
-				}, $this->getProductsIndexes($data));
-
-				if ($product_ids_related) {
-					$max_related = min(count($product_ids_related), 10);
-					$random_keys = array_rand($product_ids_related, $max_related);
-
-					if (is_array($random_keys)) {
-						foreach ($random_keys as $related_key) {
-							$next_product_id = $product_ids_related[$related_key];
-							$product_related[$next_product_id] = $this->getProductShort($next_product_id);
-						}
-					} else {
-						$next_product_id = $product_ids_related[$random_keys];
-					}
-
-					// while (count($product_related) < $max_related && next($product_ids_related)) {
-					// 	$next_product_id = current($product_ids_related);
-					// 	$product_related[$next_product_id] = $this->getProductShort($next_product_id);
-					// }
 				}
 
 				$product_data = array(
@@ -177,7 +137,7 @@ class ModelCatalogProduct extends Model {
 					'country_id'       => $query->row['country_id'],
 					'country'		   => $location_country ? $location_country['iso_code_3'] : '',
 					'quantity'         => $query->row['quantity'],
-					'type_id'          => $type_id,
+					'type_id'          => $query->row['quantity'] > 0 ? 1 : ($query->row['quantity'] == 0 ? 0 : -1),
 					'stock_status'     => $query->row['stock_status'],
 					'stock_status_id'  => $query->row['stock_status_id'],
 					'image'            => $query->row['image'],
@@ -192,8 +152,9 @@ class ModelCatalogProduct extends Model {
 					'manufacturer_info' => $manufacturer_info,
 					'manufacturer'	   => $query->row['manufacturer'],
 					'manufacturer_image' => $query->row['manufacturer_image'],
-					'category_ids'	   => array_map(function ($item) { return $item['category_id']; }, $product_categories),
 					'categories'	   => $product_categories,
+					'category_ids'	   => array_map(function ($item) { return $item['category_id']; }, $product_categories),
+					'path'			   => array_reduce($product_categories, function ($carry, $item) { return ($carry ? $carry . '_' . $item['category_id'] : $item['category_id']); }),
 					'filters'		   => $product_filters,
 					'condition_filter_id' => $condition_filter_id,
 					'condition'		   => $product_condition ? $product_condition['name'] : '',
@@ -203,7 +164,6 @@ class ModelCatalogProduct extends Model {
 					'featured'         => in_array($query->row['product_id'], explode(',', $this->config->get('featured_product'))),
 					'options'		   => $this->getProductOptions($query->row['product_id']),
 					'attributes'	   => $this->getProductAttributes($query->row['product_id']),
-					'related'		   => $product_related,
 					'reward'           => $query->row['reward'],
 					'points'           => $query->row['points'],
 					'tax_class_id'     => $query->row['tax_class_id'],
@@ -217,8 +177,8 @@ class ModelCatalogProduct extends Model {
 					'height'           => $query->row['height'],
 					'length_class_id'  => $query->row['length_class_id'],
 					'subtract'         => $query->row['subtract'],
-					'questions'        => $query->row['questions'] ? $query->row['questions'] : 0,
-					'minimum'          => $query->row['minimum'],
+					'questions'        => $query->row['questions'] ?: 0,
+					'minimum'          => $query->row['minimum'] ?: 1,
 					'sort_order'       => $query->row['sort_order'],
 					'status'           => $query->row['status'],
 					'date_added'       => $query->row['date_added'],
@@ -230,7 +190,7 @@ class ModelCatalogProduct extends Model {
 			}
 
 			if (!$preview) {
-				$this->cache->set('product_' . (int)$product_id . '.full.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id, $product_data);
+				$this->cache->set('product_' . (int)$product_id . '.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id, $product_data);
 			}
 		}
 
@@ -289,23 +249,6 @@ class ModelCatalogProduct extends Model {
 			ORDER BY path DESC
 			LIMIT 1
 		";
-		// , p.date_modified
-		// , p.date_available
-		// , p.date_expiration
-		// , p.viewed
-		// , p.minimum
-		// , p.stock_status_id
-		// , p.status
-		// , m.image AS manufacturer_image
-		// , cma.member_account_name AS member
-		// , cma.member_account_image AS member_image
-		// , cma.member_group_id
-		// LEFT JOIN " . DB_PREFIX . "customer_member_account cma ON (pm.member_account_id = cma.member_account_id)
-		// LEFT JOIN " . DB_PREFIX . "product_to_category p2c ON (p.product_id = p2c.product_id)
-		// LEFT JOIN " . DB_PREFIX . "category_path cp ON (p2c.category_id = cp.category_id)
-		// LEFT JOIN " . DB_PREFIX . "product_filter pf ON (p.product_id = pf.product_id)
-		// , GROUP_CONCAT(DISTINCT cp.path_id) AS category_ids
-		// , GROUP_CONCAT(DISTINCT pf.filter_id) AS filter_ids
 
 		$query = $this->db->query($sql);
 
@@ -335,18 +278,6 @@ class ModelCatalogProduct extends Model {
 				'date_added'       => $query->row['date_added'],
 				'featured'         => in_array($query->row['product_id'], explode(',', $this->config->get('featured_product')))
 			);
-			// 'minimum'          => $query->row['minimum'],
-			// 'stock_status_id'  => $query->row['stock_status_id'],
-			// 'member'     	   => $query->row['member'],
-			// 'member_image'     => $query->row['member_image'],
-			// 'manufacturer_image' => $query->row['manufacturer_image'],
-			// 'date_modified'    => $query->row['date_modified'],
-			// 'date_available'   => $query->row['date_available'],
-			// 'date_expiration'  => $query->row['date_expiration'],
-			// 'status'           => $query->row['status'],
-			// 'viewed'           => $query->row['viewed'],
-			// 'category_ids'	   => explode(',', $query->row['category_ids']),
-			// 'filter_ids'	   => explode(',', $query->row['filter_ids']),
 		}
 
 		return $product_data;
@@ -426,8 +357,9 @@ class ModelCatalogProduct extends Model {
 				'manufacturer_info' => $manufacturer_info,
 				'manufacturer'     => $query->row['manufacturer'],
 				'manufacturer_image'        => $query->row['manufacturer_image'],
-				'category_ids'	   => array_map(function ($item) { return $item['category_id']; }, $product_categories),
 				'categories'	   => $product_categories,
+				'category_ids'	   => array_map(function ($item) { return $item['category_id']; }, $product_categories),
+				'path'			   => array_reduce($product_categories, function ($carry, $item) { return ($carry ? $carry . '_' . $item['category_id'] : $item['category_id']); }),
 				'model'            => $query->row['model'],
 				'size'             => $query->row['size'],
 				'year'             => $query->row['year'],
@@ -447,7 +379,7 @@ class ModelCatalogProduct extends Model {
 		$random = (isset($data['sort']) && $data['sort'] == 'random') ? true : false;
 		$customer_group_id = $this->customer->isLogged() ? $this->customer->getCustomerGroupId() : $this->config->get('config_customer_group_id');
 
-		$product_data = $cache_results ? $this->cache->get('product.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . $cache) : false;
+		$product_data = $cache_results ? $this->cache->get('product.products.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . $cache) : false;
 
 		if ($product_data === false || $random) {
 			$product_data = array();
@@ -490,7 +422,7 @@ class ModelCatalogProduct extends Model {
 			}
 
 			if ($cache_results && !$random) {
-				$this->cache->set('product.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . $cache, $product_data);
+				$this->cache->set('product.products.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . $cache, $product_data);
 			}
 		}
 
@@ -529,7 +461,7 @@ class ModelCatalogProduct extends Model {
 
 		$cache = md5(http_build_query($data));
 
-		$product_indexes = $cache_results ? $this->cache->get('product.indexes.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $cache) : false;
+		$product_indexes = !$cache_results ? false : $this->cache->get('product.indexes.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $cache);
 
 		if ($product_indexes === false) {
 			$product_indexes = array();
@@ -1204,7 +1136,7 @@ class ModelCatalogProduct extends Model {
 
 		$cache = md5(http_build_query($data));
 
-		$product_data = $cache_results ? $this->cache->get('product.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . $cache) : false;
+		$product_data = !$cache_results ? false : $this->cache->get('product.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . $cache);
 
 		if ($product_data === false) {
 			$product_data = array();
@@ -1346,12 +1278,12 @@ class ModelCatalogProduct extends Model {
 		return $product_data;
 	}
 
-	public function getProductSpecials($data = array()) {
+	public function getProductSpecials($data = array(), $cache_results = true) {
 		$customer_group_id = $this->customer->isLogged() ? $this->customer->getCustomerGroupId() : $this->config->get('config_customer_group_id');
 
 		$cache = md5(http_build_query($data));
 
-		$product_data = $this->cache->get('product.special.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . $cache);
+		$product_data = !$cache_results ? false : $this->cache->get('product.special.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . $cache);
 
 		if ($product_data === false) {
 			$sql = "
@@ -1465,7 +1397,9 @@ class ModelCatalogProduct extends Model {
 				$product_data[$result['product_id']] = $this->getProductShort($result['product_id']);
 			}
 
-			$this->cache->set('product.special.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . $cache, $product_data);
+			if ($cache_results) {
+				$this->cache->set('product.special.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . $cache, $product_data);
+			}
 		}
 
 		return $product_data;

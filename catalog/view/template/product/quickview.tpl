@@ -5,7 +5,7 @@
 				<div class="thumb<?php if ($featured) { ?> promo<?php } ?>">
 					<?php if ($price && $type_id >= 0 && $special) { ?><span class="sale-badges">-<?php echo $salebadges; ?>&#37;</span><?php } ?>
 					<?php if ($featured) { ?><i class="icon icon-tag promo text-larger"></i><?php } ?>
-					<a href="<?php echo $product_href; ?>" title="<?php echo $button_view . ' ' . $heading_title; ?>">
+					<a href="<?php echo $action; ?>" title="<?php echo $button_view . ' ' . $heading_title; ?>">
 						<img src="<?php echo $thumb; ?>" alt="<?php echo $heading_title; ?>" />
 					</a>
 				</div>
@@ -102,7 +102,7 @@
 				</div>
 				<div id="buttons-item" class="buttons buttons-middle">
 					<div class="center">
-						<a href="<?php echo $product_href; ?>" class="button button_highlight bigger fullwidth" rel="tooltip" data-placement="top" data-original-title="<?php echo $button_view . ' ' . $text_product; ?>">
+						<a href="<?php echo $href; ?>" class="button button_highlight bigger fullwidth" rel="tooltip" data-placement="top" data-original-title="<?php echo $button_view . ' ' . $text_product; ?>">
 							<i class="fa fa-eye"></i><?php echo $button_view; ?>
 						</a>
 						<?php if ($learn_more) { ?>

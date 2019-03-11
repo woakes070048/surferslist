@@ -15,7 +15,7 @@
 				<img src="<?php echo $product['thumb']; ?>" alt="<?php echo $product['name']; ?>" />
 			</a>
 			<span class="description">
-				<a href="<?php echo $product['href']; ?>"><?php echo $product['description']; ?></a>
+				<a href="<?php echo $product['href']; ?>"><?php echo $product['description_short']; ?></a>
 			</span>
 		</div>
 		<div class="quickview">

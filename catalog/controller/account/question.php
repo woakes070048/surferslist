@@ -48,7 +48,7 @@ class ControllerAccountQuestion extends Controller {
 
 				$this->session->data['success'] = $this->language->get('text_success');
 
-				$this->redirect($this->url->link('account/question', $this->getQueryParams(), 'SSL'));
+				$this->redirect($this->url->link('account/question', $this->getQueryString(), 'SSL'));
 			}
 		}
 
@@ -79,7 +79,7 @@ class ControllerAccountQuestion extends Controller {
 
 			$this->session->data['success'] = sprintf($this->language->get('text_question_enabled'), $enabled_count);
 
-			$this->redirect($this->url->link('account/question', $this->getQueryParams(), 'SSL'));
+			$this->redirect($this->url->link('account/question', $this->getQueryString(), 'SSL'));
 		} else {
 			$this->setError('warning', $this->language->get('error_notchecked'));
 		}
@@ -111,7 +111,7 @@ class ControllerAccountQuestion extends Controller {
 
 			$this->session->data['success'] = sprintf($this->language->get('text_question_disabled'), $disabled_count);
 
-			$this->redirect($this->url->link('account/question', $this->getQueryParams(), 'SSL'));
+			$this->redirect($this->url->link('account/question', $this->getQueryString(), 'SSL'));
 		} else {
 			$this->setError('warning', $this->language->get('error_notchecked'));
 		}
@@ -137,7 +137,7 @@ class ControllerAccountQuestion extends Controller {
 
 				$this->session->data['success'] = $this->language->get('text_success');
 
-				$this->redirect($this->url->link('account/question', $this->getQueryParams(), 'SSL'));
+				$this->redirect($this->url->link('account/question', $this->getQueryString(), 'SSL'));
 			}
 		} else {
 			$this->setError('warning', $this->language->get('error_notchecked'));
@@ -152,7 +152,7 @@ class ControllerAccountQuestion extends Controller {
 		$limit = isset($this->request->get['limit']) && (int)$this->request->get['limit'] > 0 ? (int)$this->request->get['limit'] : 15;  // $this->config->get('config_admin_limit');
 		$page = isset($this->request->get['page']) && (int)$this->request->get['page'] > 0 ? (int)$this->request->get['page'] : 1;
 
-		$url = $this->getQueryParams();
+		$url = $this->getQueryString();
 
 		$this->addBreadcrumb($this->language->get('text_home'), $this->url->link('common/home'));
 		$this->addBreadcrumb($this->language->get('text_account'), $this->url->link('account/account'));
@@ -205,7 +205,7 @@ class ControllerAccountQuestion extends Controller {
 			);
 		}
 
-		$url = $this->getQueryParams(array('sort'));
+		$url = $this->getQueryString(array('sort'));
 
 		$this->data['sort_location'] = $this->url->link('account/question', '&sort=location' . $url, 'SSL');
 		$this->data['sort_member'] = $this->url->link('account/question', '&sort=m1.member_account_name' . $url, 'SSL');
@@ -213,7 +213,7 @@ class ControllerAccountQuestion extends Controller {
 		$this->data['sort_status'] = $this->url->link('account/question', '&sort=q.status' . $url, 'SSL');
 		$this->data['sort_date_added'] = $this->url->link('account/question', '&sort=q.date_added' . $url, 'SSL');
 
-		$url = $this->getQueryParams(array('page'));
+		$url = $this->getQueryString(array('page'));
 
 		$this->data['pagination'] = $this->getPagination($question_total, $page, $limit, 'account/question', '', $url);
 
@@ -246,7 +246,7 @@ class ControllerAccountQuestion extends Controller {
 	private function getForm() {
 		$this->data['error_text'] = $this->getError('text');
 
-		$url = $this->getQueryParams();
+		$url = $this->getQueryString();
 
 		$this->addBreadcrumb($this->language->get('text_home'), $this->url->link('common/home'));
 		$this->addBreadcrumb($this->language->get('text_account'), $this->url->link('account/account'));

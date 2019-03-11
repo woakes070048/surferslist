@@ -1,33 +1,39 @@
 <?php
 trait Param {
-	protected $params;
+	protected $params = array();
 
-	protected function setQueryParams($params = array()) {
-		$this->params = $params;
-	}
-
-	protected function getQueryParams($exclude = array()) {
-		if (!isset($this->params)) {
-			return '';
+	protected function setQueryParams($names = array()) {
+		foreach ($names as $name) {
+			$this->params[$name] = isset($this->request->get[$name]) ? $this->request->get[$name] : '';
 		}
-
-		return $this->getQueryParamsOnlyThese($this->params, $exclude);
 	}
 
-	protected function getQueryParamsOnlyThese($params = array(), $exclude = array()) {
-		if (!$params || !is_array($params) || !is_array($exclude)) {
+	protected function getQueryParam($name) {
+		return isset($this->params[$name]) ? $this->params[$name] : '';
+	}
+
+	protected function getQueryString($exclude = array()) {
+		return $this->getQueryStringOnlyThese(array_keys($this->params), $exclude);
+	}
+
+	protected function getQueryStringOnlyThese($names = array(), $exclude = array()) {
+		if (!$names || !is_array($names) || !is_array($exclude)) {
 			return '';
 		}
 
 		$url = '';
 
-		foreach ($params as $param) {
-			if ($exclude && in_array($param, $exclude)) {
+		foreach ($names as $name) {
+			if (($exclude && in_array($name, $exclude)) || empty($this->params[$name]) ) {
 				continue;
 			}
 
-			if (isset($this->request->get[$param]) && !is_array($this->request->get[$param])) {
-				$url .= '&' . $param . '=' . urlencode(html_entity_decode($this->request->get[$param], ENT_QUOTES, 'UTF-8'));
+			if (!is_array($this->params[$name])) {
+				$url .= '&' . $name . '=' . urlencode(html_entity_decode($this->params[$name], ENT_QUOTES, 'UTF-8'));
+			} else {
+				foreach ($this->params[$name] as $value) {
+					$url .= '&' . $name . '=' . urlencode(html_entity_decode($value, ENT_QUOTES, 'UTF-8'));
+				}
 			}
 		}
 

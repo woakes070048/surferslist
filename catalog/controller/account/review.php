@@ -54,7 +54,7 @@ class ControllerAccountReview extends Controller {
 
 				$this->session->data['success'] = $this->language->get('text_success');
 
-				$this->redirect($this->url->link('account/review', $this->getQueryParams(), 'SSL'));
+				$this->redirect($this->url->link('account/review', $this->getQueryString(), 'SSL'));
 			}
 		}
 
@@ -85,7 +85,7 @@ class ControllerAccountReview extends Controller {
 
 			$this->session->data['success'] = sprintf($this->language->get('text_review_enabled'), $enabled_count);
 
-			$this->redirect($this->url->link('account/review', $this->getQueryParams(), 'SSL'));
+			$this->redirect($this->url->link('account/review', $this->getQueryString(), 'SSL'));
 		} else {
 			$this->setError('warning', $this->language->get('error_notchecked'));
 		}
@@ -117,7 +117,7 @@ class ControllerAccountReview extends Controller {
 
 			$this->session->data['success'] = sprintf($this->language->get('text_review_disabled'), $disabled_count);
 
-			$this->redirect($this->url->link('account/review', $this->getQueryParams(), 'SSL'));
+			$this->redirect($this->url->link('account/review', $this->getQueryString(), 'SSL'));
 		} else {
 			$this->setError('warning', $this->language->get('error_notchecked'));
 		}
@@ -143,7 +143,7 @@ class ControllerAccountReview extends Controller {
 
 				$this->session->data['success'] = $this->language->get('text_success');
 
-				$this->redirect($this->url->link('account/review', $this->getQueryParams(), 'SSL'));
+				$this->redirect($this->url->link('account/review', $this->getQueryString(), 'SSL'));
 			}
 		} else {
 			$this->setError('warning', $this->language->get('error_notchecked'));
@@ -158,7 +158,7 @@ class ControllerAccountReview extends Controller {
 		$limit = isset($this->request->get['limit']) && (int)$this->request->get['limit'] > 0 ? $this->request->get['limit'] : 15;  // $this->config->get('config_admin_limit');
 		$page = isset($this->request->get['page']) && (int)$this->request->get['page'] > 0 ? $this->request->get['page'] : 1;
 
-		$url = $this->getQueryParams();
+		$url = $this->getQueryString();
 
 		$this->addBreadcrumb($this->language->get('text_home'), $this->url->link('common/home'));
 		$this->addBreadcrumb($this->language->get('text_account'), $this->url->link('account/account'));
@@ -211,7 +211,7 @@ class ControllerAccountReview extends Controller {
 			);
 		}
 
-		$url = $this->getQueryParams(array('sort'));
+		$url = $this->getQueryString(array('sort'));
 
 		$this->data['sort_member'] = $this->url->link('account/review', '&sort=m1.member_account_name' . $url, 'SSL');
 		$this->data['sort_order_product'] = $this->url->link('account/review', '&sort=op.name' . $url, 'SSL');
@@ -219,7 +219,7 @@ class ControllerAccountReview extends Controller {
 		$this->data['sort_status'] = $this->url->link('account/review', '&sort=r.status' . $url, 'SSL');
 		$this->data['sort_date_added'] = $this->url->link('account/review', '&sort=r.date_added' . $url, 'SSL');
 
-		$url = $this->getQueryParams(array('page'));
+		$url = $this->getQueryString(array('page'));
 
 		$this->data['pagination'] = $this->getPagination($review_total, $page, $limit, 'account/review', '', $url);
 
@@ -253,7 +253,7 @@ class ControllerAccountReview extends Controller {
 		$this->data['error_review'] = $this->getError('review');
 		$this->data['error_rating'] = $this->getError('rating');
 
-		$url = $this->getQueryParams();
+		$url = $this->getQueryString();
 
 		$this->addBreadcrumb($this->language->get('text_home'), $this->url->link('common/home'));
 		$this->addBreadcrumb($this->language->get('text_account'), $this->url->link('account/account'));

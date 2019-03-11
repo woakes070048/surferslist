@@ -138,7 +138,7 @@ class ControllerEmbedProfile extends Controller {
 		$meta_keyword .= !empty($member_info['member_tag']) ? ', ' . $member_info['member_tag'] : '';
 
 		// Breadcrumb
-		$url = $this->getQueryParams($query_params);
+		$url = $this->getQueryString($query_params);
 
 		$this->addBreadcrumb($member_info['member_account_name'] . '\'s ' . $this->language->get('text_all_products'), $this->url->link('embed/profile', 'profile_id=' . $this->request->get['profile_id']));
 
@@ -175,7 +175,7 @@ class ControllerEmbedProfile extends Controller {
 			return $this->profileNotFound();
 		}
 
-		$this->data['products'] = $this->getChild('product/product/embed', $this->model_catalog_product->getProducts($data, false));
+		$this->data['products'] = $this->getChild('product/data/embed', $this->model_catalog_product->getProducts($data, false));
 
 		$this->data['refine'] = $this->getChild('module/refine', array(
 			'query_params' => $query_params,
@@ -188,7 +188,7 @@ class ControllerEmbedProfile extends Controller {
 			'display_more_options' => $display_more_options,
 		));
 
-		$url = $this->getQueryParams(array('page'));
+		$url = $this->getQueryString(array('page'));
 
 		$this->data['pagination'] = $this->getPagination($product_total, $page, $limit, 'embed/profile', 'profile_id=' . $this->request->get['profile_id'], $url);
 

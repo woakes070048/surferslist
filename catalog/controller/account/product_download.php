@@ -53,7 +53,7 @@ class ControllerAccountProductDownload extends Controller {
 
 				$this->session->data['success'] = $this->language->get('text_success');
 
-				$this->redirect($this->url->link('account/product_download', $this->getQueryParams(), 'SSL'));
+				$this->redirect($this->url->link('account/product_download', $this->getQueryString(), 'SSL'));
 			}
 		}
 
@@ -80,7 +80,7 @@ class ControllerAccountProductDownload extends Controller {
 
 				$this->session->data['success'] = $this->language->get('text_success');
 
-				$this->redirect($this->url->link('account/product_download', $this->getQueryParams(), 'SSL'));
+				$this->redirect($this->url->link('account/product_download', $this->getQueryString(), 'SSL'));
 			}
 		}
 
@@ -109,7 +109,7 @@ class ControllerAccountProductDownload extends Controller {
 
 				$this->session->data['success'] = $this->language->get('text_success');
 
-				$this->redirect($this->url->link('account/product_download', $this->getQueryParams(), 'SSL'));
+				$this->redirect($this->url->link('account/product_download', $this->getQueryString(), 'SSL'));
 			}
     	}
 
@@ -121,7 +121,7 @@ class ControllerAccountProductDownload extends Controller {
 		$order = isset($this->request->get['order']) ? (string)$this->request->get['order'] : 'ASC';
 		$page = isset($this->request->get['page']) ? (int)$this->request->get['page'] : 1;
 
-		$url = $this->getQueryParams();
+		$url = $this->getQueryString();
 
 		$this->addBreadcrumb($this->language->get('text_home'), $this->url->link('common/home'));
 		$this->addBreadcrumb($this->language->get('text_account'), $this->url->link('account/account'));
@@ -174,12 +174,12 @@ class ControllerAccountProductDownload extends Controller {
 			$this->data['success'] = '';
 		}
 
-		$url = $this->getQueryParams(array('sort'));
+		$url = $this->getQueryString(array('sort'));
 
 		$this->data['sort_name'] = $this->url->link('account/product_download', '' . '&sort=dd.name' . $url, 'SSL');
 		$this->data['sort_remaining'] = $this->url->link('account/product_download', '' . '&sort=d.remaining' . $url, 'SSL');
 
-		$url = $this->getQueryParams(array('page'));
+		$url = $this->getQueryString(array('page'));
 
 		$this->data['pagination'] = $this->getPagination($download_total, $page, 10, 'account/product_download', '', $url);
 
@@ -228,7 +228,7 @@ class ControllerAccountProductDownload extends Controller {
 			$this->data['action'] = $this->url->link('account/product_download/update', 'download_id=' . $this->request->get['download_id'], 'SSL');
 		}
 
-		$this->data['cancel'] = $this->url->link('account/product_download', $this->getQueryParams(), 'SSL');
+		$this->data['cancel'] = $this->url->link('account/product_download', $this->getQueryString(), 'SSL');
 
 		$this->load->model('localisation/language');
 

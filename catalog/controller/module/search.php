@@ -215,7 +215,7 @@ class ControllerModuleSearch extends Controller {
 		$this->data['is_home'] = $is_home;
 
 		// Sort, Order, Limit
-		$url = $this->getQueryParamsOnlyThese(array('sort', 'order', 'limit'));
+		$url = $this->getQueryStringOnlyThese(array('sort', 'order', 'limit'));
 
 		$this->data['action'] = $this->url->link('product/search', $url, 'SSL');
 		$this->data['search_page'] = $this->url->link('product/search', '', 'SSL');

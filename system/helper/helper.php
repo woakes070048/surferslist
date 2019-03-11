@@ -116,3 +116,7 @@ function generate_password($length) {
 function is_hex_color($color) {
 	return preg_match('/^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/', htmlspecialchars_decode($color));
 }
+
+function days_since_date($date) {
+	return floor(abs(time() - strtotime($date)) / (60 * 60 * 24));
+}

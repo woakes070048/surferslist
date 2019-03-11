@@ -206,7 +206,7 @@ class ControllerProductCategory extends Controller {
 			$this->redirect($this->url->link('error/not_found', '', 'SSL'));
 		}
 
-		$this->data['products'] = $this->getChild('product/product/list', $this->model_catalog_product->getProducts($data));
+		$this->data['products'] = $this->getChild('product/data/list', $this->model_catalog_product->getProducts($data));
 
 		$this->data['refine'] = $this->getChild('module/refine', array(
 			'query_params' => $query_params,
@@ -219,7 +219,7 @@ class ControllerProductCategory extends Controller {
 			'forsale' => $forsale
 		));
 
-		$url = $this->getQueryParams(array('page'));
+		$url = $this->getQueryString(array('page'));
 
 		$this->data['pagination'] = $this->getPagination($product_total, $page, $limit, 'product/category', 'path=' . $category_info['path'] . ($filter_manufacturer_id ? '&manufacturer_id=' . $filter_manufacturer_id : ''), $url);
 
@@ -243,7 +243,7 @@ class ControllerProductCategory extends Controller {
 
 		if (!$this->data['products'] && (isset($this->session->data['shipping_country_id']) || isset($this->session->data['shipping_zone_id']) || isset($this->session->data['shipping_location']))) {
 			$request_path = isset($this->request->server['REQUEST_URI']) ? parse_url(strtolower(urldecode($this->request->server['REQUEST_URI'])), PHP_URL_PATH) : '';
-			$url = $this->getQueryParams(array('filter_location', 'filter_country_id', 'filter_zone_id'));
+			$url = $this->getQueryString(array('filter_location', 'filter_country_id', 'filter_zone_id'));
 			$location_remove_url = $this->url->link('information/location', 'location=none&redirect_path=' . urlencode(ltrim($request_path . '?' . ltrim($url, "&"), "/")), 'SSL');
 			$this->data['text_empty'] .= '&emsp;' . sprintf($this->language->get('text_location_remove_url'), $location_remove_url);
 		}
