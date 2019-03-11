@@ -201,9 +201,6 @@ if ($filterWidget.length) {
 
 // Search
 if ($searchWidget.length) {
-    $('.search-page .product-filter').appendTo('#searchwidget .content');
-    $('.search-page .widget-search + .global-page').empty();
-
     var $params = $('.parameters');
 
     var getParamValue = function(obj) {
