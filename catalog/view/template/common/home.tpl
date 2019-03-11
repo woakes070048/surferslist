@@ -1,21 +1,16 @@
 <?php echo $header; ?>
 <main class="container-page home-page">
-    <?php if ($content_top) { ?>
-    <div class="container-top">
-        <?php echo $content_top; ?>
-    </div>
-    <?php } ?>
+    <?php if ($notification) { ?>
     <div class="layout">
-        <?php echo $column_right; ?>
-        <?php echo $column_left; ?>
         <section class="container-center">
             <div class="content-page">
                 <?php echo $notification; ?>
             </div>
         </section>
     </div>
-    <div class="container-bottom">
-        <?php echo $content_bottom; ?>
+    <?php } ?>
+    <div class="container-top">
+        <?php echo $content_top; ?>
 
         <div class="widget widget-search">
         	<form action="<?php echo $search; ?>" method="post" enctype="multipart/form-data" id="searchwidget">
@@ -79,7 +74,7 @@
                     </div>
 
                 </div>
-                
+
                 <input type="hidden" name="country_id" value="<?php echo $country_id; ?>" />
                 <input type="hidden" name="zone_id" value="<?php echo $zone_id; ?>" />
                 <input type="hidden" name="location" value="<?php echo $location; ?>" />
@@ -98,5 +93,16 @@
             </div>
         </div>
     </div>
+    <?php if ($content_bottom) { ?>
+    <div class="layout">
+        <?php echo $column_right; ?>
+        <?php echo $column_left; ?>
+        <section class="container-center">
+            <div class="container-bottom">
+                <?php echo $content_bottom; ?>
+            </div>
+        </section>
+    </div>
+    <?php } ?>
 </main>
 <?php echo $footer; ?>

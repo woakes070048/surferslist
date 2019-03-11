@@ -43,7 +43,7 @@
                             <span class="sale-badges">-<?php echo $salebadges; ?>&#37;</span>
                             <?php } ?>
     						<?php if ($featured) { ?>
-                            <i class="icon icon-tag promo text-larger"></i>
+                            <i class="fa fa-tag icon promo text-larger"></i>
                             <?php } ?>
     						<a href="<?php echo $image_large; ?>" class="zoom" id="image">
                                 <img src="<?php echo $image_small; ?>" alt="<?php echo $heading_title; ?>" id="image-small" />

@@ -4,7 +4,7 @@
 			<div class="left-item">
 				<div class="thumb<?php if ($featured) { ?> promo<?php } ?>">
 					<?php if ($price && $type_id >= 0 && $special) { ?><span class="sale-badges">-<?php echo $salebadges; ?>&#37;</span><?php } ?>
-					<?php if ($featured) { ?><i class="icon icon-tag promo text-larger"></i><?php } ?>
+					<?php if ($featured) { ?><i class="fa fa-tag icon promo text-larger"></i><?php } ?>
 					<a href="<?php echo $action; ?>" target="_blank"><img src="<?php echo $thumb; ?>" alt="<?php echo $heading_title; ?>" /></a>
 				</div>
 			</div>

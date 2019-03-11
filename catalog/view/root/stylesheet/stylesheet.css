@@ -2832,10 +2832,6 @@ table .success, table .warning, table .attention, table .information {
     box-sizing: border-box;
 }
 
-.container-bottom .slideshow {
-    margin-bottom: 0;
-}
-
 .slideshow a {
     text-decoration: none;
     cursor: pointer;
@@ -4153,13 +4149,14 @@ input[name="member[member_name]"]:valid {
     border-color: transparent;
 }
 
-.home-page .slideshow {
+.home-page .container-top .slideshow {
     min-height: 500px;
     max-height: 650px;
     overflow: hidden;
+    margin-bottom: 0;
 }
 
-.home-page .slideshow img {
+.home-page .container-top .slideshow img {
     min-height: 500px;
     max-width: none;
     width: auto;
@@ -7679,7 +7676,7 @@ a.highlight, b.highlight, i.highlight, span.highlight {
         /* 44.50% */
     }
 
-    .home-page .slideshow img {
+    .home-page .container-top .slideshow img {
         width: 100%;
     }
 
@@ -8413,11 +8410,11 @@ a.highlight, b.highlight, i.highlight, span.highlight {
         margin: 0 auto;
     }
 
-    .home-page .slideshow .slideshow-prev, .home-page .slideshow .slideshow-next {
+    .home-page .container-top .slideshow .slideshow-prev, .home-page .slideshow .slideshow-next {
         display: none !important;
     }
 
-    .home-page .slideshow, .home-page .slideshow img {
+    .home-page .container-top .slideshow, .home-page .container-top .slideshow img {
         height: 360px;
         min-height: 360px;
     }
@@ -8552,7 +8549,7 @@ a.highlight, b.highlight, i.highlight, span.highlight {
     }
 
     .middle-header .logo-regular,
-    .home-page .slideshow .slideshow-title,
+    .home-page .container-top .slideshow .slideshow-title,
     .middle-header .menu,
     #header .join-now {
         display: none;

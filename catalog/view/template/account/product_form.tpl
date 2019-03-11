@@ -348,7 +348,7 @@
                                         <i class="fa fa-question-circle float-right grey-text" title="<?php echo $entry_image . $help_required; ?>" data-content="<?php echo $help_image; ?>" data-placement="left" rel="popover" data-container="body" data-trigger="hover"></i>
 									</p>
 									<div class="image image-border">
-										<?php if ($featured) { ?><i class="icon icon-tag promo"></i><?php } ?>
+										<?php if ($featured) { ?><i class="fa fa-tag icon promo"></i><?php } ?>
 										<img src="<?php echo $thumb; ?>" alt="" id="thumb" class="thumb" /><br />
 										<input type="hidden" name="image" value="<?php echo $image; ?>" id="image" />
 										<?php if ($permissions['inventory_enabled']) { ?><a data-image-row="" class="button button_images button_alt upload-images" title="<?php echo $text_browse; ?>" rel="tooltip" data-container="body"><i class="fa fa-file"></i><?php echo $text_browse; ?></a><?php } ?>

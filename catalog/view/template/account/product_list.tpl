@@ -148,7 +148,7 @@
 							<tr>
 							  <td class="center">
                                   <div class="image image-border">
-                                      <?php if ($product['featured']) { ?><i class="icon icon-tag promo"></i><?php } ?>
+                                      <?php if ($product['featured']) { ?><i class="fa fa-tag icon promo"></i><?php } ?>
                                       <img src="<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>" />
                                   </div>
                               </td>
