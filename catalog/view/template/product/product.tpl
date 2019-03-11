@@ -93,11 +93,11 @@
                                     <div class="addto clearafter">
                                         <div class="float-left">
                                             <a id="shortlink" class="links button_shortlink" title="<?php echo $text_shortlink_help; ?>" data-content="<?php echo $page_shortlink; ?>" data-placement="bottom" rel="popover" data-trigger="click"><i class="fa fa-link"></i><?php echo $text_shortlink; ?></a>
-                                            <a onclick="addToWishList('<?php echo $product_id; ?>');" class="links button_wishlist" title="<?php echo $button_wishlist; ?>" rel="tooltip" data-container="body"><i class="fa fa-save"></i><?php echo $button_wishlist; ?></a>
+                                            <a id="wishlist" onclick="addToWishList('<?php echo $product_id; ?>');" class="links button_wishlist"><i class="fa fa-save"></i><?php echo $button_wishlist; ?></a>
                         					<?php if ($compare) { ?>
-                                            <a onclick="removeFromCompare('<?php echo $product_id; ?>');" class="links button_compare" title="<?php echo $button_compare; ?>" rel="tooltip" data-container="body"><i class="fa fa-copy"></i><?php echo $button_compare; ?></a>
+                                            <a id="compare" onclick="removeFromCompare('<?php echo $product_id; ?>');" class="links button_compare" title="<?php echo $button_remove . ' ' . $button_compare; ?>" rel="tooltip" data-container="body"><i class="fa fa-copy"></i><?php echo $button_remove; ?></a>
                         					<?php } else { ?>
-                                            <a onclick="addToCompare('<?php echo $product_id; ?>');" class="links button_compare" title="<?php echo $button_compare; ?>" rel="tooltip" data-container="body"><i class="fa fa-copy"></i><?php echo $button_compare; ?></a>
+                                            <a id="compare" onclick="addToCompare('<?php echo $product_id; ?>');" class="links button_compare" title="<?php echo $button_add . ' ' . $button_compare; ?>" rel="tooltip" data-container="body"><i class="fa fa-copy"></i><?php echo $button_add; ?></a>
                                             <?php } ?>
                                         </div>
                                         <?php if ($member_customer_id) { ?>

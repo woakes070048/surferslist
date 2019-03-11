@@ -168,7 +168,7 @@ function addToWishList(product_id) {
                 $('#notification .bg').fadeOut('slow');
 
                 if (json['success']) {
-                    $('#wishlist-total').html(json['total']);
+                    $('.wishlist-total').html(json['total']);
                 }
             }, 2000);
         }
@@ -202,13 +202,21 @@ function addToCompare(product_id) {
                 }
 
                 if (json['success']) {
-                    $('#compare-total').html(json['total']);
+                    $('.compare-total').html(json['total']);
                     $('.product-compare').addClass('active');
 
-                    var html = '<a onclick=\"removeFromCompare(\'' + product_id + '\');\" rel=\"tooltip\" data-placement=\"top\" data-original-title=\"' + json['compare'] + '\"><i class="fa fa-copy"></i></a>';
+                    if ($('#listing-' + product_id).length) {
+                        var html = '<a onclick=\"removeFromCompare(\'' + product_id + '\');\" rel=\"tooltip\" data-placement=\"top\" data-original-title=\"' + json['compare'] + '\"><i class="fa fa-copy"></i></a>';
 
-                    $('#listing-' + product_id + ' footer a:last-child').replaceWith(html);
-                    $('#listing-' + product_id).addClass('grid-item-compare');
+                        $('#listing-' + product_id + ' footer a:last-child').replaceWith(html);
+                        $('#listing-' + product_id).addClass('grid-item-compare');
+                    }
+
+                    if ($('#compare').length) {
+                        var html = '<a id=\"compare\" onclick=\"removeFromCompare(\'' + product_id + '\');\" class=\"links button_compare\" rel=\"tooltip\" data-placement=\"top\" data-original-title=\"' + json['compare'] + '\"><i class="fa fa-copy"></i>' + json['compare'] + '</a>';
+
+                        $('#compare').replaceWith(html);
+                    }
                 }
             }, 2000);
         }
@@ -242,16 +250,24 @@ function removeFromCompare(product_id) {
                 }
 
                 if (json['success']) {
-                    $('#compare-total').html(json['total']);
+                    $('.compare-total').html(json['total']);
 
-                    if (json['total'].indexOf('0') !== -1) {
+                    if (json['total'].indexOf('(0)') !== -1) {
                         $('.product-compare').removeClass('active');
                     }
 
-                    var html = '<a onclick=\"addToCompare(\'' + product_id + '\');\" rel=\"tooltip\" data-placement=\"top\" data-original-title=\"' + json['compare'] + '\"><i class="fa fa-copy"></i></a>';
+                    if ($('#listing-' + product_id).length) {
+                        var html = '<a onclick=\"addToCompare(\'' + product_id + '\');\" rel=\"tooltip\" data-placement=\"top\" data-original-title=\"' + json['compare'] + '\"><i class="fa fa-copy"></i></a>';
 
-                    $('#listing-' + product_id + ' footer a:last-child').replaceWith(html);
-                    $('#listing-' + product_id).removeClass('grid-item-compare');
+                        $('#listing-' + product_id + ' footer a:last-child').replaceWith(html);
+                        $('#listing-' + product_id).removeClass('grid-item-compare');
+                    }
+
+                    if ($('#compare').length) {
+                        var html = '<a id=\"compare\" onclick=\"addToCompare(\'' + product_id + '\');\" class=\"links button_compare\" rel=\"tooltip\" data-placement=\"top\" data-original-title=\"' + json['compare'] + '\"><i class="fa fa-copy"></i>' + json['compare'] + '</a>';
+
+                        $('#compare').replaceWith(html);
+                    }
                 }
             }, 2000);
         }

@@ -127,7 +127,7 @@ class ControllerAjaxProduct extends Controller {
             } else {
                 $this->session->data['compare'] = array_diff($this->session->data['compare'], array($product_id));
 
-                $json['success'] = $this->language->get('text_remove');
+                $json['success'] = sprintf($this->language->get('text_remove'), $this->url->link('product/compare'));
                 $json['total'] = sprintf($this->language->get('text_compare'), count($this->session->data['compare']));
             }
         }

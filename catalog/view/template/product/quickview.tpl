@@ -102,7 +102,7 @@
 				</div>
 				<div id="buttons-item" class="buttons buttons-middle">
 					<div class="center">
-						<a href="<?php echo $href; ?>" class="button button_highlight bigger fullwidth" rel="tooltip" data-placement="top" data-original-title="<?php echo $button_view . ' ' . $text_product; ?>">
+						<a href="<?php echo $action; ?>" class="button button_highlight bigger fullwidth" rel="tooltip" data-placement="top" data-original-title="<?php echo $button_view . ' ' . $text_product; ?>">
 							<i class="fa fa-eye"></i><?php echo $button_view; ?>
 						</a>
 						<?php if ($learn_more) { ?>

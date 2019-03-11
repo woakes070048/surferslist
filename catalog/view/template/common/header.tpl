@@ -194,10 +194,11 @@
         							<?php if (!$activated) { ?>
         							<li><a href="<?php echo $activate; ?>" class="highlight"><i class="fa fa-user highlight"></i><?php echo $text_activate_profile; ?></a></li>
                                     <?php } else { ?>
-                                    <li><a href="<?php echo $listings; ?>" id="listings-total"><i class="fa fa-th-list"></i><?php echo $text_listings; ?></a></li>
+                                    <li><a href="<?php echo $listings; ?>" class="listings-total"><i class="fa fa-th-list"></i><?php echo $text_listings; ?></a></li>
         							<li><a href="<?php echo $profile; ?>"><i class="fa fa-user"></i><?php echo $text_profile; ?></a></li>
         							<?php } ?>
-                                    <li><a href="<?php echo $wishlist; ?>" id="wishlist-total"><i class="fa fa-heart"></i><?php echo $text_wishlist; ?></a></li>
+                                    <li><a href="<?php echo $wishlist; ?>" class="wishlist-total"><i class="fa fa-heart"></i><?php echo $text_wishlist; ?></a></li>
+                                    <li><a href="<?php echo $compare; ?>" class="compare-total"><i class="fa fa-copy"></i><?php echo $text_compare; ?></a></li>
         							<li><a href="<?php echo $logout; ?>"><i class="fa fa-sign-out"></i><?php echo $text_logout; ?></a></li>
                                 </ul>
                             </div>

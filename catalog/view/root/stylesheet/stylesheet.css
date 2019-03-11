@@ -3232,6 +3232,7 @@ table .success, table .warning, table .attention, table .information {
     text-decoration: none;
     line-height: 18px;
     border-top: 1px solid #e9e9e9;
+    position: relative;
     white-space: -o-pre-wrap;
     white-space: -moz-pre-wrap;
     word-wrap: break-word;
@@ -3270,6 +3271,10 @@ table .success, table .warning, table .attention, table .information {
     text-align: right;
 }
 
+.prevnext.full li:only-child {
+    text-align: center;
+}
+
 .prevnext.full .column1 li {
     width: 100%;
 }
@@ -3297,6 +3302,13 @@ table .success, table .warning, table .attention, table .information {
 
 .prevnext li:last-child i {
     float: right;
+}
+
+.prevnext li:only-child i {
+    float: none;
+    position: absolute;
+    left: 50%;
+    margin-left: -45px;
 }
 
 .prevnext.compact {

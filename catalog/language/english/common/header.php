@@ -42,6 +42,7 @@ $_['text_profile']        = 'View Profile';
 $_['text_activate']       = 'Activate';
 $_['text_activate_profile'] = 'Activate Profile';
 $_['text_wishlist']       = 'Saved (%s)';
+$_['text_compare']        = 'Compare (%s)';
 $_['text_shopping_cart']  = 'Cart';
 $_['text_checkout']       = 'Checkout';
 $_['text_search']         = 'Search';

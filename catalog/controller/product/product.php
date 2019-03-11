@@ -93,7 +93,9 @@ class ControllerProductProduct extends Controller {
 			$this->data['category_icon'] = !empty($product_data['categories'][0]['name']) ? friendly_url($product_data['categories'][0]['name']) : '';
 			$this->data['page_shortlink'] = $product_data['keyword'] ? $this->config->get('config_url') . $product_data['keyword'] : '';
 			$this->data['action'] = $product_data['href'];
-			// $this->data['compare'] = false;
+			$this->data['tab_question'] = $this->language->get('tab_question'); // sprintf($this->language->get('tab_question'), $product_data['questions']),
+			$this->data['text_questions'] = sprintf($this->language->get('text_questions'), (int)$product_data['questions']);
+			$this->data['text_minimum'] = sprintf($this->language->get('text_minimum'), $product_data['minimum']);
 			$this->data['help_discussion'] = !$this->customer->isLogged() && !$this->isAdmin()
 				? $this->language->get('help_discussion') . '<br />' . sprintf($this->language->get('help_unauthorized'), $this->url->link('account/login', '', 'SSL'), $this->url->link('account/register', '', 'SSL'))
 				: $this->language->get('help_discussion');
@@ -179,7 +181,7 @@ class ControllerProductProduct extends Controller {
 			}
 
 			// Questions / Discussion
-			$this->data['question_status'] = $this->config->get('config_review_status') && ($profile_active_account || !$profile_link);
+			$this->data['question_status'] = $this->config->get('config_review_status') && !$preview_listing && ($profile_active_account || !$profile_link);
 
 			// shipping
 			if ($this->config->get('member_data_field_shipping') && $this->config->get('product_shipping_status') && $product_data['shipping']) {
@@ -217,7 +219,6 @@ class ControllerProductProduct extends Controller {
 			}
 
 			// related listings, prev/next and page views
-			$product_related = array();  // $this->getProductRelated($query->row['product_id']);
 			$product_prev = array();
 			$product_next = array();
 			$filter_category_id = 0;
@@ -258,7 +259,7 @@ class ControllerProductProduct extends Controller {
 			$sort = $this->getQueryParam('sort') ?: $this->config->get('apac_products_sort_default');
 			$sort_order = $this->getQueryParam('order') ?: (($sort == 'p.date_added') ? 'DESC' : 'ASC');
 
-			$products = $this->model_catalog_product->getProductsIndexes(array(
+			$products = !$preview_listing ? $this->model_catalog_product->getProductsIndexes(array(
 				'filter_category_id' => $filter_category_id,
 				'filter_sub_category' => false,
 				'filter_member_account_id' => $filter_member_account_id,
@@ -268,23 +269,9 @@ class ControllerProductProduct extends Controller {
 				'filter_location' => isset($this->session->data['shipping_location']) ? $this->session->data['shipping_location'] : '',
 				'sort' => $sort,
 				'order' => $sort_order
-			), true);
+			), true) : array();
 
-			// related listings (random)
-			$product_related_ids = array_map(function ($item) {
-				return $item['product_id'];
-			}, $products);
-
-			if ($product_related_ids) {
-				$random_keys = array_rand($product_related_ids, min(count($product_related_ids), 10));
-
-				if (is_array($random_keys)) {
-					foreach ($random_keys as $key) {
-						$product_related_id = $product_related_ids[$key];
-						$product_related[$product_related_id] = $this->model_catalog_product->getProduct($product_related_id);
-					}
-				}
-			}
+			$product_related = $this->model_catalog_product->getProductRelatedRandom($products);
 
 			$this->data['products'] = $this->getChild('product/data/list', $product_related);
 
@@ -349,7 +336,7 @@ class ControllerProductProduct extends Controller {
 			$this->data['back_url'] = $back_url;
 			$this->data['nav_cols'] = $nav_cols;
 
-			$this->data['button_view'] = ($preview_listing ? $this->language->get('button_preview') : $this->language->get('button_view')) . ' ' . $this->language->get('text_product');
+			$this->data['preview_mode'] = $preview_listing;
 
 			// update view count
 			if (!$preview_listing) {

@@ -63,6 +63,7 @@ class ControllerCommonHeader extends Controller {
 		$this->data['logo_img'] = $this->config->get('config_logo_img');
 		$this->data['favicon'] = $this->config->get('config_favicon');
 		$this->data['text_wishlist'] = sprintf($this->language->get('text_wishlist'), (isset($this->session->data['wishlist']) ? count($this->session->data['wishlist']) : 0));
+		$this->data['text_compare'] = sprintf($this->language->get('text_compare'), (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));
 		$this->data['google_analytics'] = html_entity_decode($this->config->get('config_google_analytics'), ENT_QUOTES, 'UTF-8');
 
 		$this->data['location_code'] = $this->getLocationCode();
@@ -85,6 +86,7 @@ class ControllerCommonHeader extends Controller {
 		$this->data['login'] = $this->url->link('account/login');
 		$this->data['logout'] = $this->url->link('account/logout');
 		$this->data['wishlist'] = $this->url->link('account/wishlist', '', 'SSL');
+		$this->data['compare'] = $this->url->link('product/compare', '', 'SSL');
 		$this->data['logged'] = $this->customer->isLogged();
 		$this->data['account'] = $this->url->link('account/account', '', 'SSL');
 		$this->data['listings'] = $this->url->link('account/product', '', 'SSL');

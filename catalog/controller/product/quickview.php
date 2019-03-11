@@ -46,6 +46,9 @@ class ControllerProductQuickview extends Controller {
 			$this->data['heading_title'] = $product_data['name'];
 			$this->data['thumb'] = $product_data['image'];
 			$this->data['action'] = $product_data['href'];
+			$this->data['tab_question'] = $this->language->get('tab_question'); // sprintf($this->language->get('tab_question'), $product_data['questions']),
+			$this->data['text_questions'] = sprintf($this->language->get('text_questions'), (int)$product_data['questions']);
+			$this->data['text_minimum'] = sprintf($this->language->get('text_minimum'), $product_data['minimum']);
 
 			if ($preview_listing) {
 				$this->data['action'] .= ($url ? '&' : '?') . 'preview_listing=' . $this->request->get['preview_listing'];
@@ -63,6 +66,8 @@ class ControllerProductQuickview extends Controller {
 			if (!$preview_listing) {
 				$this->model_catalog_product->updateViewed($this->request->get['listing_id']);
 			}
+
+			$this->data['button_view'] = ($preview_listing ? $this->language->get('button_preview') : $this->language->get('button_view')) . ' ' . $this->language->get('text_product');
 
 			$this->template = '/template/product/quickview.tpl';
 

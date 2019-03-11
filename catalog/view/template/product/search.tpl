@@ -46,7 +46,7 @@
                             </select>
                         </div>
                         <a href="<?php echo $random; ?>" id="random" class="text-grey" title="<?php echo $help_random; ?>" rel="tooltip" data-container="body"><i class="fa fa-random"></i><?php echo $text_random; ?></a>
-                        <a class="product-compare<?php if (!empty($this->session->data['compare'])) { ?> active<?php } ?>" title="<?php echo $button_compare; ?>" rel="tooltip" href="<?php echo $compare; ?>"><i class="fa fa-copy"></i><span id="compare-total"><?php echo $text_compare; ?></span></a>
+                        <a class="product-compare<?php if (!empty($this->session->data['compare'])) { ?> active<?php } ?> compare-total" title="<?php echo $button_compare; ?>" rel="tooltip" href="<?php echo $compare; ?>"><?php echo $text_compare; ?></a>
                     </div>
                 </div>
 

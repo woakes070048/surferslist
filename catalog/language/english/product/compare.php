@@ -20,7 +20,7 @@ $_['text_weight']       = 'Weight';
 $_['text_dimension']    = 'Dimensions (L x W x H)';
 
 $_['text_success']      = 'You have added <a href="%s">%s</a> to your <a href="%s">Listing Comparison</a>!';
-$_['text_remove']       = 'You have modified your listing comparison!';
+$_['text_remove']       = 'You have modified your <a href="%s">Listing Comparison</a>!';
 $_['text_empty']        = 'No listings selected to compare.';
 $_['text_full']         = '<a href="%s">Listing Comparison</a> is full (%s)!';
 $_['text_exists']       = 'Item already added to <a href="%s">Listing Comparison</a>!';

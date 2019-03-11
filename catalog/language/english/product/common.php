@@ -13,7 +13,7 @@ $_['text_all_manufacturers']    = 'Brands';
 $_['text_all_members']          = 'Profiles';
 $_['text_products']             = 'Listings';
 $_['text_product_count']        = ' (%s)';
-$_['text_compare']              = 'Compare (%s)';
+$_['text_compare']              = '<i class="fa fa-copy"></i> Compare (%s)';
 $_['text_display']              = 'Display:';
 $_['text_list']                 = 'List';
 $_['text_grid']                 = 'Grid';

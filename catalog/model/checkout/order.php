@@ -180,7 +180,7 @@ class ModelCheckoutOrder extends Model {
 			$this->cache->delete('product_' . (int)$order_product['order_product_id']);
 		}
 
-		$this->cache->delete('product');
+		$this->cache->delete('product.');
 
 		$order_download = $this->hasOrderDownloads($order_id);
 

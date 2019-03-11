@@ -50,7 +50,7 @@
                                 </a>
                                 <div class="product-filter">
                                     <a href="<?php echo $random; ?>" id="random"><i class="fa fa-random"></i><?php echo $text_random; ?></a>
-                                    <a class="product-compare<?php if (!empty($this->session->data['compare'])) { ?> active<?php } ?>" href="<?php echo $compare; ?>"><i class="fa fa-copy"></i><span id="compare-total"><?php echo $text_compare; ?></span></a>
+                                    <a class="product-compare<?php if (!empty($this->session->data['compare'])) { ?> active<?php } ?> compare-total" href="<?php echo $compare; ?>"><?php echo $text_compare; ?></a>
                                 </div>
                             </div>
                         </div>
@@ -105,7 +105,7 @@
                 </div>
 
                 <?php } ?>
-                
+
                 <?php echo $content_bottom; ?>
             </div>
         </section>

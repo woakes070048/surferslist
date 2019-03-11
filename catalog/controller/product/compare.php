@@ -19,7 +19,7 @@ class ControllerProductCompare extends Controller {
 				unset($this->session->data['compare'][$key]);
 			}
 
-			$this->session->data['success'] = $this->language->get('text_remove');
+			$this->session->data['success'] = sprintf($this->language->get('text_remove'), $this->url->link('product/compare'));
 
 			$this->redirect($this->url->link('product/compare', '', 'SSL'));
 		}
