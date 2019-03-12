@@ -314,7 +314,7 @@ class ControllerProductData extends Controller {
 			$product_data = array_merge($product_data, array(
 				'page_title'		=> $page_title,
 				'image'				=>  $this->model_tool_image->resize($data['image'], $this->config->get('config_image_thumb_width'), $this->config->get('config_image_thumb_height'), 'fw'),
-				'manufacturer_image' => !empty($data['manufacturer_image']) && $data['manufacturer_id'] != 1 ? $this->model_tool_image->resize($data['manufacturer_image'], 100, 40, 'fh') : false,
+				'manufacturer_image' => $this->model_tool_image->resize($data['manufacturer_image'], 100, 40, 'fh'),
 				'manufacturer_href' => $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $data['manufacturer_id'], 'SSL'),
 				'member'            => $member,
 				'member_customer_id' => isset($data['customer_id']) ? (int)$data['customer_id'] : 0,
