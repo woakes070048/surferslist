@@ -111,7 +111,7 @@ class ControllerAjaxAutocomplete extends Controller {
 		foreach ($results as $result) {
 			if (!$this->admin && $result['customer_id'] == 0) continue; // filter out profiles without a linked account
 
-			$member_image = ($result['member_account_image']) ? $result['member_account_image'] : 'no_image.jpg';
+			$member_image = $result['member_account_image'] ?: 'no_image.jpg';
 
 			$json[] = array(
 				'member_id'				=> $result['member_account_id'],

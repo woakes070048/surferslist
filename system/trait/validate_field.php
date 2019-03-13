@@ -58,7 +58,7 @@ trait ValidateField {
 	}
 
 	protected function validateStringLength($string, $min = 0, $max = 255) {
-		if (!$string && $min > 0) {
+		if (!is_string($string) || (!$string && $min > 0)) {
 			return false;
 		}
 

@@ -582,23 +582,9 @@ class ControllerAccountProduct extends Controller {
         // Help
         $this->data['help_description'] = sprintf($this->language->get('help_description'), $this->config->get('member_data_field_description_min'), $this->config->get('member_data_field_description_max'));
 
-		if ($this->config->get('member_image_upload_filesize_max')) {
-			$image_upload_filesize_max = $this->config->get('member_image_upload_filesize_max') / 1024; // kB to MB
-		} else {
-			$image_upload_filesize_max = 5; // MB
-		}
-
-		if ($this->config->get('member_image_dimensions_min_width')) {
-			$image_dimensions_min_width = $this->config->get('member_image_dimensions_min_width');
-		} else {
-			$image_dimensions_min_width = 245;
-		}
-
-		if ($this->config->get('member_image_dimensions_min_height')) {
-			$image_dimensions_min_height = $this->config->get('member_image_dimensions_min_height');
-		} else {
-			$image_dimensions_min_height = 245;
-		}
+		$image_upload_filesize_max = $this->config->get('member_image_upload_filesize_max') ? ($this->config->get('member_image_upload_filesize_max') / 1024) : 5; // kB to MB
+		$image_dimensions_min_width = $this->config->get('member_image_dimensions_min_width') ?: 245;
+		$image_dimensions_min_height = $this->config->get('member_image_dimensions_min_height') ?: 245;
 
         $this->data['help_image'] = sprintf($this->language->get('help_image'), $image_dimensions_min_width, $image_dimensions_min_height, $image_upload_filesize_max);
 
@@ -970,11 +956,11 @@ class ControllerAccountProduct extends Controller {
 			$this->data['product_images'] = array();
 
 			foreach ($product_images as $product_image) {
-				$image = $product_image['image'] ? $product_image['image'] : '';
+				if (!$product_image['image']) continue;
 
 				$this->data['product_images'][] = array(
-					'image'      => $image,
-					'thumb'      => $image ? $this->model_tool_image->resize($image, $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height')) : $this->model_tool_image->resize('no_image.jpg', $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height')),
+					'image'      => $product_image['image'],
+					'thumb'      => $this->model_tool_image->resize($product_image['image'], $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height')),
 					'sort_order' => $product_image['sort_order']
 				);
 			}
@@ -1490,11 +1476,9 @@ class ControllerAccountProduct extends Controller {
     	}
 
 		if ($this->config->get('member_data_field_image')) {
-			if (empty($data['image'])) {
+			if (empty($data['image']) || !$this->validateStringLength($data['image'], 5, 255)) {
 				$this->setError('image', $this->language->get('error_image'));
-			}
-
-			if (!is_file(DIR_IMAGE . $data['image'])) {
+			} else if (!is_file(DIR_IMAGE . $data['image'])) {
 				$this->setError('image', sprintf($this->language->get('error_exists'), $data['image']));
 			}
 		}
@@ -1505,8 +1489,10 @@ class ControllerAccountProduct extends Controller {
 			}
 
 			foreach ($data['product_image'] as $product_image) {
-				if (!is_file(DIR_IMAGE . $product_image)) {
-					$this->setError('image', sprintf($this->language->get('error_exists'), $product_image));
+				if (empty($product_image['image']) || !$this->validateStringLength($product_image['image'], 5, 255)) {
+					$this->setError('images', $this->language->get('error_image'));
+				} else if (!is_file(DIR_IMAGE . $product_image['image'])) {
+					$this->setError('images', sprintf($this->language->get('error_exists'), $product_image['image']));
 				}
 			}
 		}
