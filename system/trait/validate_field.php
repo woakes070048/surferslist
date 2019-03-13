@@ -33,8 +33,8 @@ trait ValidateField {
 		return preg_match('/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{' . preg_quote($min-1, '/') . ',' . preg_quote($max, '/') . '}$/', $pw);
 	}
 
-	protected function validateNumber($number) {
-		if (!$number) {
+	protected function validateNumeric($number) {
+		if (!$number || !is_numeric($number)) {
 			return false;
 		}
 
@@ -42,7 +42,7 @@ trait ValidateField {
 	}
 
 	protected function validateYear($year, $length = 4) {
-		if (!$year) {
+		if (!$this->validateNumeric($year)) {
 			return false;
 		}
 
@@ -50,7 +50,7 @@ trait ValidateField {
 	}
 
 	protected function validatePrice($price) {
-		if ($price < 0) {
+		if (!$this->validateNumeric($price) || $price < 0) {
 			return false;
 		}
 

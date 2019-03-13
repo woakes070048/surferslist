@@ -255,7 +255,7 @@ class Customer {
 		unset($this->session->data['customer_login_time']);
 		unset($this->session->data['wishlist']);
 
-		$this->removeUnusedImages();
+		$this->removeUnusedImages($this->config->get('member_image_orphan_max_age'));
 		$this->setProperties();
 	}
 
@@ -499,26 +499,42 @@ class Customer {
 		return $image_ophans;
 	}
 
-	private function removeUnusedImages() {
+	private function removeUnusedImages($max_age = 0) {
 		$image_ophans = $this->getMemberImageOrphans();
 
-		if ($image_ophans) {
-			$log = new Log('images_debug.log');
+		if (!$image_ophans) {
+			return;
+		}
 
-			foreach ($image_ophans as $path) {
-				$sub_path = utf8_substr($path, strlen(DIR_IMAGE . 'data/'));
-				$log->write('ORPHANED image: ' . $sub_path);
+		$delete = true;
 
-				if (file_exists($path) && is_file($path)) {
-					$file_last_modified = filemtime($path);
-					$file_age = $file_last_modified ? time() - $file_last_modified : 0;
+		$log = new Log('images_debug.log');
 
-					// remove orphaned image if greater than 1 week old
-					if ($file_age > 60 * 60 * 24 * 7 || $file_age === 0) {
-						$log->write('AUTO DELETED image: ' . $path);
-						@unlink($path);
-					}
+		foreach ($image_ophans as $path) {
+			if (!is_file($path)) {
+				continue;
+			}
+
+			$delete = true;
+
+			$sub_path = utf8_substr($path, strlen(DIR_IMAGE . 'data/'));
+
+			$log->write('ORPHANED image: ' . $sub_path);
+
+			if ($max_age !== 0) {
+				$file_last_modified = filemtime($path);
+				$file_age = $file_last_modified ? time() - $file_last_modified : 0;
+
+				// keep orphaned image if less than max age
+				if ($file_age <= $max_age) {
+					$delete = false;
 				}
+			}
+
+			if ($delete) {
+				@unlink($path);
+
+				$log->write('AUTO DELETED image: ' . $sub_path);
 			}
 		}
 	}

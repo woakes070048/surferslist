@@ -97,22 +97,7 @@ class Image {
 		$xpos = (int)(($width - $new_width) / 2);
 		$ypos = (int)(($height - $new_height) / 2);
 
-		$image_old = $this->image;
-		$this->image = imagecreatetruecolor($width, $height);
-
-		if ($this->info['mime'] == 'image/png') {
-			imagealphablending($this->image, false);
-			imagesavealpha($this->image, true);
-			$background = imagecolorallocatealpha($this->image, 255, 255, 255, 127);
-			imagecolortransparent($this->image, $background);
-		} else {
-			$background = imagecolorallocate($this->image, 255, 255, 255);
-		}
-
-		imagefilledrectangle($this->image, 0, 0, $width, $height, $background);
-		imagecopyresampled($this->image, $image_old, $xpos, $ypos, 0, 0, $new_width, $new_height, $this->info['width'], $this->info['height']);
-
-		imagedestroy($image_old);
+		$this->reCreate($width, $height, $xpos, $ypos, 0, 0, $new_width, $new_height, $this->info['width'], $this->info['height']);
 
 		$this->info['width']  = $width;
 		$this->info['height'] = $height;
@@ -124,17 +109,17 @@ class Image {
 		$watermark_width = imagesx($watermark);
 		$watermark_height = imagesy($watermark);
 
-		switch($position) {
+		switch ($position) {
 			case 'center':
-				$watermark_pos_x = ($this->info['width'] - $watermark_width)/2;
-				$watermark_pos_y = ($this->info['height'] - $watermark_height)/2;
+				$watermark_pos_x = ($this->info['width'] - $watermark_width) / 2;
+				$watermark_pos_y = ($this->info['height'] - $watermark_height) / 2;
 				break;
 			case 'top':
-				$watermark_pos_x = ($this->info['width'] - $watermark_width)/2;
+				$watermark_pos_x = ($this->info['width'] - $watermark_width) / 2;
 				$watermark_pos_y = 0;
 				break;
 			case 'bottom':
-				$watermark_pos_x = ($this->info['width'] - $watermark_width)/2;
+				$watermark_pos_x = ($this->info['width'] - $watermark_width) / 2;
 				$watermark_pos_y = $this->info['height'] - $watermark_height;
 				break;
 			case 'topleft':
@@ -154,12 +139,14 @@ class Image {
 				$watermark_pos_y = $this->info['height'] - $watermark_height;
 				break;
 			default:
-				$watermark_pos_x = ($this->info['width'] - $watermark_width)/2;
-				$watermark_pos_y = ($this->info['height'] - $watermark_height)/2;
+				$watermark_pos_x = ($this->info['width'] - $watermark_width) / 2;
+				$watermark_pos_y = ($this->info['height'] - $watermark_height) / 2;
 				break;
 		}
 
 		$opacity = $this->info['mime'] == 'image/png' ? 65 : 75;
+
+		imagecolortransparent($watermark, imagecolorat($watermark, 0, 0));
 
 		imagecopymerge($this->image, $watermark, $watermark_pos_x, $watermark_pos_y, 0, 0, $watermark_width, $watermark_height, $opacity);
 
@@ -170,23 +157,7 @@ class Image {
 		$width = $bottom_x - $top_x;
 		$height = $bottom_y - $top_y;
 
-		$image_old = $this->image;
-		$this->image = imagecreatetruecolor($width, $height);
-
-		// imagecopy($this->image, $image_old, 0, 0, $top_x, $top_y, $this->info['width'], $this->info['height']);
-		if ($this->info['mime'] == 'image/png') {
-			imagealphablending($this->image, false);
-			imagesavealpha($this->image, true);
-			$background = imagecolorallocatealpha($this->image, 255, 255, 255, 127);
-			imagecolortransparent($this->image, $background);
-		} else {
-			$background = imagecolorallocate($this->image, 255, 255, 255);
-		}
-
-		imagefilledrectangle($this->image, 0, 0, $width, $height, $background);
-		imagecopyresampled($this->image, $image_old, 0, 0, $top_x, $top_y, $width, $height, $width, $height);
-
-		imagedestroy($image_old);
+		$this->reCreate($width, $height, 0, 0, $top_x, $top_y, $width, $height, $width, $height);
 
 		$this->info['width'] = $width;
 		$this->info['height'] = $height;
@@ -203,6 +174,25 @@ class Image {
 
 	public function getMimeType() {
 		return $this->info['mime']; // e.g. 'image/jpeg', 'image/png', 'image/gif'
+	}
+
+	private function reCreate($width, $height, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h) {
+		$image_old = $this->image;
+		$this->image = imagecreatetruecolor($width, $height);
+
+		if ($this->info['mime'] == 'image/png') {
+			imagealphablending($this->image, false);
+			imagesavealpha($this->image, true);
+			$background = imagecolorallocatealpha($this->image, 255, 255, 255, 127);
+			imagecolortransparent($this->image, $background);
+		} else {
+			$background = imagecolorallocate($this->image, 255, 255, 255);
+		}
+
+		imagefilledrectangle($this->image, 0, 0, $width, $height, $background);
+		imagecopyresampled($this->image, $image_old, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h);
+
+		imagedestroy($image_old);
 	}
 
 	private function filter($filter) {

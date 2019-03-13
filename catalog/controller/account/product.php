@@ -1510,7 +1510,7 @@ class ControllerAccountProduct extends Controller {
     	if ($this->config->get('member_tab_discount') && isset($data['price_discount']) && ($data['price_discount'] !== '')) {
 			if ($data['price_discount'] == 0 || !$this->validatePrice($data['price_discount'])) {
 				$this->setError('price', $this->language->get('error_discount'));
-			} else if ($data['discount_quantity'] < 0 || !$this->validateNumber($data['discount_quantity'])) {
+			} else if ($data['discount_quantity'] < 0 || !$this->validateNumeric($data['discount_quantity'])) {
 				$this->setError('price', $this->language->get('error_discount_quantity'));
 			} else if ($data['discount_quantity'] && !empty($data['price_special'])) {
 				$this->setError('price', $this->language->get('error_special_discount'));
@@ -1566,15 +1566,15 @@ class ControllerAccountProduct extends Controller {
 
     	if ($this->config->get('member_data_field_quantity') && $data['for_sale'] == 1) {
 			if (isset($data['quantity'])) {
-				if ($data['type'] == 1 && ($data['quantity'] <= 0 || !$this->validateNumber($data['quantity']))) {
+				if ($data['type'] == 1 && ($data['quantity'] <= 0 || !$this->validateNumeric($data['quantity']))) {
 					$this->setError('quantity', $this->language->get('error_quantity'));
-				// } else if ($data['type'] == 0 && ($data['quantity'] > 1 || !$this->validateNumber($data['quantity']))) {
+				// } else if ($data['type'] == 0 && ($data['quantity'] > 1 || !$this->validateNumeric($data['quantity']))) {
 				// 	$this->setError('quantity', $this->language->get('error_quantity_classified'));
 				}
 			}
 
 			if (isset($data['minimum'])) {
-				if ($data['type'] == 1 && ($data['minimum'] <= 0 || !$this->validateNumber($data['minimum']))) {
+				if ($data['type'] == 1 && ($data['minimum'] <= 0 || !$this->validateNumeric($data['minimum']))) {
 					$this->setError('minimum', $this->language->get('error_minimum'));
 				}
 			}

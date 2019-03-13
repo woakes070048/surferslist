@@ -113,8 +113,6 @@ class ControllerAjaxFileManager extends Controller {
 
 		$json = array();
 
-		$directory = clean_path($this->request->post['directory']);
-
 		$allowed = array(
 			'.jpg',
 			'.jpeg',
@@ -122,69 +120,70 @@ class ControllerAjaxFileManager extends Controller {
 			'.gif'
 		);
 
-		$files = $this->customer->getMemberImages($directory, false);
+		$suffix = array(
+			'B',
+			'KB',
+			'MB',
+			'GB',
+			'TB',
+			'PB',
+			'EB',
+			'ZB',
+			'YB'
+		);
 
-		if ($files) {
-			$this->load->model('tool/image');
-			$count = 0;
+		$files = $this->customer->getMemberImages(clean_path($this->request->post['directory']), false);
 
-			// usort($files, create_function('$a,$b', 'return filemtime($b) - filemtime($a);')); // PHP 5.3+
-			// usort($files, function($a, $b) {return filemtime($a) < filemtime($b);}); // > PHP 5.3
-			array_multisort(array_map('filemtime', $files), SORT_NUMERIC, SORT_DESC, $files);
+		if (!$files) {
+			return false;
+		}
 
-			$image_ophans = $this->customer->getMemberImageOrphans($files);
+		$this->load->model('tool/image');
+		$count = 0;
+		$max_age = $this->config->get('member_image_orphan_max_age');
 
-			foreach ($files as $file) {
-				if (is_file($file)) {
-					$ext = strrchr($file, '.');
-				} else {
-					$ext = '';
-				}
+		// sort by age desc
+		array_multisort(array_map('filemtime', $files), SORT_NUMERIC, SORT_DESC, $files);
 
-				if (in_array(strtolower($ext), $allowed)) {
-					$size = filesize($file);
+		$image_ophans = $this->customer->getMemberImageOrphans($files);
 
-					$i = 0;
-
-					$suffix = array(
-						'B',
-						'KB',
-						'MB',
-						'GB',
-						'TB',
-						'PB',
-						'EB',
-						'ZB',
-						'YB'
-					);
-
-					while (($size / 1024) > 1) {
-						$size = $size / 1024;
-						$i++;
-					}
-
-					$filename = basename($file);
-					$file_short = utf8_substr($file, utf8_strlen(DIR_IMAGE . 'data/' . $this->customer->getMemberImagesDirectory()));
-
-					$file_last_modified = filemtime($file);  // date('M d, Y', filemtime($file))
-					$file_age = $file_last_modified ? time() - $file_last_modified : 'unknown';
-					$file_old = $file_age > 60 * 60 * 24 * 7 || $file_age === 'unknown' ? true : false;
-					$file_orphaned = in_array($file, $image_ophans) ? true : false;
-
-					$image = $this->model_tool_image->resize('data/' . $this->customer->getMemberImagesDirectory() . $file_short, $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height'), 'autocrop');
-
-					$json[] = array(
-						'img'	   => $count < $this->config->get('config_catalog_limit') ? $image : '',
-						'filename' => utf8_strlen($filename) > 65 ? utf8_substr($filename, 65) . $this->language->get('text_ellipses') : $filename,
-						'file'     => $file_short,
-						'size'     => round(utf8_substr($size, 0, utf8_strpos($size, '.') + 4), 2) . $suffix[$i],
-						'orphaned' => $file_orphaned ? true : false,
-						'expired'  => $file_orphaned && $file_old ? true : false
-					);
-
-					$count++;
-				}
+		foreach ($files as $file) {
+			if (!is_file($file)) {
+				continue;
 			}
+
+			$ext = strrchr($file, '.');
+
+			if (!in_array(strtolower($ext), $allowed)) {
+				continue;
+			}
+
+			$size = filesize($file);
+
+			$i = 0;
+
+			while (($size / 1024) > 1) {
+				$size = $size / 1024;
+				$i++;
+			}
+
+			$filename = basename($file);
+			$file_short = utf8_substr($file, utf8_strlen(DIR_IMAGE . 'data/' . $this->customer->getMemberImagesDirectory()));
+			$file_last_modified = filemtime($file);  // date('M d, Y', filemtime($file))
+			$file_age = $file_last_modified ? time() - $file_last_modified : 'unknown';
+			$file_old = ($file_age > $max_age || $file_age === 'unknown');
+			$file_orphaned = in_array($file, $image_ophans);
+
+			$json[] = array(
+				'img'	   => $count >= $this->config->get('config_catalog_limit') ? '' : $this->model_tool_image->resize('data/' . $this->customer->getMemberImagesDirectory() . $file_short, $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height'), 'autocrop'),
+				'filename' => utf8_strlen($filename) <= 65 ? $filename : utf8_substr($filename, 65) . $this->language->get('text_ellipses'),
+				'file'     => $file_short,
+				'size'     => round(utf8_substr($size, 0, utf8_strpos($size, '.') + 4), 2) . $suffix[$i],
+				'orphaned' => $file_orphaned,
+				'expired'  => ($file_orphaned && $file_old)
+			);
+
+			$count++;
 		}
 
 		$this->response->setOutput(json_encode($json));

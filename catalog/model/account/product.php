@@ -661,7 +661,7 @@ class ModelAccountProduct extends Model {
 	}
 
 	private function copyProductImages(&$data, $to_directory) {
-		if (empty($data['image']) || empty($data['keyword']) || $to_directory = '') {
+		if (empty($data['image']) || empty($data['keyword']) || $to_directory == '') {
 			return;
 		}
 

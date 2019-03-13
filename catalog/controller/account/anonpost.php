@@ -555,7 +555,7 @@ class ControllerAccountAnonPost extends Controller {
 				$this->setError('import', sprintf($this->language->get('error_file_size'), $this->config->get('member_image_upload_filesize_max')));
 			}
 
-			if ((utf8_strlen($filename) < 5) || (utf8_strlen($filename) > 128)) {
+			if (!$this->validateStringLength($filename, 5, 128)) {
 				$this->setError('import', sprintf($this->language->get('error_filename'), 5, 128));
 			}
 
@@ -685,11 +685,12 @@ class ControllerAccountAnonPost extends Controller {
 			if (empty($data['image']) && empty($data['image_url']) && empty($data['image_file']['tmp_name'])) {
 				$this->setError('image', $this->language->get('error_image'));
 			} else if (!empty($data['image'])) {
-				if (is_file(DIR_IMAGE . $data['image'])) {
-					// sub-path to image uploaded via ajax
-					$this->image = $data['image'];
-				} else {
+				if (!is_file(DIR_IMAGE . $data['image'])) {
+					$this->setError('image', $this->language->get('error_exists'));
+				} else if (!$this->validateStringLength($data['image'], 5, 255)) {
 					$this->setError('image', $this->language->get('error_image'));
+				} else {
+					$this->image = $data['image'];  // sub-path to image uploaded via ajax
 				}
 			} else if ($this->isAdmin() && !empty($data['image_file']['tmp_name'])) {
 				if ($data['image_file']['error'] != UPLOAD_ERR_OK) {
@@ -705,18 +706,20 @@ class ControllerAccountAnonPost extends Controller {
 		}
 
 		if ($this->config->get('member_data_field_category')) {
-			if (empty($data['category_id'])) {
+			if (empty($data['category_id']) || !$this->validateNumeric($data['category_id'])) {
 				$this->setError('category', $this->language->get('error_category'));
 			}
 
-			if (empty($data['sub_category_id'])) {
+			if (empty($data['sub_category_id']) || !$this->validateNumeric($data['sub_category_id'])) {
 				$this->setError('category', $this->language->get('error_category'));
 				$this->setError('category_sub', $this->language->get('error_category_sub'));
 			}
 		}
 
-		if ($this->config->get('member_data_field_manufacturer') && empty($data['manufacturer_id'])) {
-			$this->setError('manufacturer', $this->language->get('error_manufacturer'));
+		if ($this->config->get('member_data_field_manufacturer')) {
+			if (empty($data['manufacturer_id']) || !$this->validateNumeric($data['manufacturer_id'])) {
+				$this->setError('manufacturer', $this->language->get('error_manufacturer'));
+			}
 		}
 
 	    if (empty($data['model']) || !$this->validateStringLength($this->request->post['model'], 1, 128)) {
