@@ -156,6 +156,7 @@ $_['text_shipping_zone_none']   = 'Sorry, there are no shipping zones available!
 $_['heading_shipping_zones']    = 'Shipping Zones Available';
 $_['text_more_options']         = 'Show More Fields';
 $_['text_hide_options']         = 'Hide More Fields';
+$_['text_upload']               = 'Image uploaded!';
 
 // Column
 $_['column_name']            = 'Title';
@@ -478,9 +479,15 @@ $_['error_download_filename'] = 'Download filename must be between 3 and 128 cha
 $_['error_download_exists']   = 'Download file does not exist!';
 $_['error_download_mask']     = 'Download mask must be between 3 and 128 characters!';
 $_['error_download_filetype'] = 'Invalid file type!';
-$_['error_exists']            = 'File %s does not exist!';
+$_['error_exists']            = 'File %s does not exist or is invalid!';
+$_['error_exists_dir']        = 'Directory %s does not exist or is invalid!';
 $_['error_filename']          = 'Image filename must be between %s and %s characters!';
 $_['error_filetype']          = 'Invalid image file type! Must be JPG or PNG.';
+$_['error_filesize']          = 'Image file size must be less than %sMB!';
+$_['error_image_dimensions']  = 'Image must be at least %spx by %spx!';
+$_['error_image_scale']       = 'Image height cannot be more than twice the width!';
+$_['error_banner_scale']      = 'Width of banner image must be at least twice its height!';
+$_['error_banner_dimensions'] = 'Width of banner image must be at least %s!';
 $_['error_too_fast']          = 'Too fast! Please wait %s seconds and try again.';
 $_['error_timeout']           = 'Time expired! Please wait %s seconds and try again.';
 $_['error_image_url']         = 'Cannot read Image URL!';

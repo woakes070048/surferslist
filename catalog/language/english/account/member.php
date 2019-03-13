@@ -18,7 +18,6 @@ $_['text_custom_fields']    = 'Social Links';
 $_['text_select_zone']      = '--- Select State ---';
 $_['text_select_country']   = '--- Select Country ---';
 $_['text_select_customer_group'] = '--- Select Profile Type ---';
-$_['text_upload']           = 'Image uploaded!';
 $_['text_success_add']      = 'Profile created!';
 $_['text_success_edit']     = 'Profile updated!';
 $_['text_no_paypal']        = 'Enter a PayPal e-mail address to offer <a class="colorbox color-2 bolder" href="%s" title="%s">"Buy Now"</a> listings for sale.';
@@ -86,10 +85,6 @@ $_['error_city']                           = 'City must be between %s and %s cha
 $_['error_country']                        = 'Please select a country!';
 $_['error_zone']                           = 'Please select a state!';
 $_['error_url']                            = '%s link does not appear valid! Be sure to include \'http://\'.';
-$_['error_filename']                       = 'Image filename must be between %s and %s characters!';
-$_['error_filetype']                       = 'Invalid image file type! Must be JPG or PNG.';
-$_['error_too_fast']                       = 'Too fast! Please wait %s seconds and try again.';
-$_['error_timeout']                        = 'Time expired! Please wait %s seconds and try again.';
 
 // Help
 $_['text_help']                            = 'Help';

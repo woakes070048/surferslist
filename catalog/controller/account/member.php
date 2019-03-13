@@ -79,24 +79,19 @@ class ControllerAccountMember extends Controller {
 
 		$this->data['member_custom_fields'] = $member_custom_fields;
 
-		// Help
-		$image_upload_filesize_max = $this->config->get('member_image_upload_filesize_max')
-			? $this->config->get('member_image_upload_filesize_max') / 1024 // kB to MB
-			: $image_upload_filesize_max = 5; // MB
+		// config membership image settings
+        $image_upload_filesize_max = ((int)$this->config->get('member_image_upload_filesize_max') ?: 5120) * 1024; // bytes
+		$image_dimensions_min_width = (int)$this->config->get('member_image_dimensions_min_width') ?: 450;
+		$image_dimensions_min_height = (int)$this->config->get('member_image_dimensions_min_height') ?: 450;
+		$image_dimensions_resize_width = (int)$this->config->get('member_image_dimensions_resize_width') ?: 1200;
+        $image_dimensions_resize_height = (int)$this->config->get('member_image_dimensions_resize_height') ?: 1200;
+        $image_dimensions_profile_width = (int)$this->config->get('member_image_dimensions_profile_width') ?: 306;
+        $image_dimensions_profile_height = (int)$this->config->get('member_image_dimensions_profile_height') ?: 306;
+        $image_dimensions_banner_width = (int)$this->config->get('member_image_dimensions_banner_width') ?: 1200;
+        $image_dimensions_banner_height = (int)$this->config->get('member_image_dimensions_banner_height') ?: 360;
 
-        $this->data['help_member_account_image'] = sprintf(
-			$this->language->get('help_member_account_image'),
-			($this->config->get('member_image_dimensions_min_width') ?: 600),
-			($this->config->get('member_image_dimensions_min_height') ?: 600),
-			$image_upload_filesize_max
-		);
-
-        $this->data['help_member_account_banner'] = sprintf(
-			$this->language->get('help_member_account_banner'),
-			'1200',
-			$image_upload_filesize_max
-		);
-
+        $this->data['help_member_account_image'] = sprintf($this->language->get('help_member_account_image'), $image_dimensions_min_width, $image_dimensions_min_height, $image_upload_filesize_max / (1024 * 1024));
+		$this->data['help_member_account_banner'] = sprintf($this->language->get('help_member_account_banner'), $image_dimensions_banner_width, $image_upload_filesize_max / (1024 * 1024));
         $this->data['help_member_url_alias'] = sprintf($this->language->get('help_member_url_alias'), $this->config->get('config_url'));
 
 		$data_field_errors = array(
@@ -246,24 +241,27 @@ class ControllerAccountMember extends Controller {
 			$this->data['member_activity'] = array();
 		}
 
+		$no_image = $this->model_tool_image->resize('no_image.jpg', $image_dimensions_profile_width, $image_dimensions_profile_height, 'autocrop');
+		$no_banner = $this->model_tool_image->resize('no_image.jpg', $image_dimensions_resize_width, $image_dimensions_banner_height, 'autocrop');
+
 		if (!empty($this->request->post['member_account_image'])) {
-			$this->data['member_account_image_thumb'] = $this->model_tool_image->resize($this->request->post['member_account_image'], 306, 306, 'autocrop');
+			$this->data['member_account_image_thumb'] = $this->model_tool_image->resize($this->request->post['member_account_image'], $image_dimensions_profile_width, $image_dimensions_profile_height, 'autocrop');
 		} elseif (isset($member_info) && !empty($member_info['member_account_image'])) {
-			$this->data['member_account_image_thumb'] = $this->model_tool_image->resize($member_info['member_account_image'], 306, 306, 'autocrop');
+			$this->data['member_account_image_thumb'] = $this->model_tool_image->resize($member_info['member_account_image'], $image_dimensions_profile_width, $image_dimensions_profile_height, 'autocrop');
 		} else {
-			$this->data['member_account_image_thumb'] = $this->model_tool_image->resize('no_image.jpg', 306, 306, 'autocrop');
+			$this->data['member_account_image_thumb'] = $no_image;
 		}
 
 		if (!empty($this->request->post['member_account_banner'])) {
-			$this->data['member_account_banner_thumb'] = $this->model_tool_image->resize($this->request->post['member_account_banner'], 1200, 360, 'autocrop');
+			$this->data['member_account_banner_thumb'] = $this->model_tool_image->resize($this->request->post['member_account_banner'], $image_dimensions_resize_width, $image_dimensions_banner_height, 'autocrop');
 		} elseif (isset($member_info) && !empty($member_info['member_account_banner'])) {
-			$this->data['member_account_banner_thumb'] = $this->model_tool_image->resize($member_info['member_account_banner'], 1200, 360, 'autocrop');
+			$this->data['member_account_banner_thumb'] = $this->model_tool_image->resize($member_info['member_account_banner'], $image_dimensions_resize_width, $image_dimensions_banner_height, 'autocrop');
 		} else {
-			$this->data['member_account_banner_thumb'] = $this->model_tool_image->resize('no_image.jpg', 1200, 360);
+			$this->data['member_account_banner_thumb'] = $this->model_tool_image->resize('no_image.jpg', $image_dimensions_resize_width, $image_dimensions_banner_height);
 		}
 
-		$this->data['no_image'] = $this->model_tool_image->resize('no_image.jpg', 306, 306, 'autocrop');
-		$this->data['no_banner'] = $this->model_tool_image->resize('no_image.jpg', 1200, 360);
+		$this->data['no_image'] = $no_image;
+		$this->data['no_banner'] = $no_banner;
 
 		// Customer and Member Groups
 		$this->data['customer_groups'] = $this->model_account_customer_group->getCustomerGroups();

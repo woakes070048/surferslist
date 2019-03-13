@@ -156,15 +156,16 @@ class ModelToolImage extends Model {
 		return $file_info;
 	}
 
-	public function edit($filepath, $width, $height, $fill_dimension = '') {
-		if (!file_exists($filepath) || !is_file($filepath)) {
+	public function edit($filepath, $width, $height, $dimension = '') {
+		if (!is_file($filepath)) {
 			return;
 		}
 
 		$filepath_extension = strtolower(pathinfo($filepath, PATHINFO_EXTENSION));
 
 		$image = new Image($filepath);
-		$image->resize($width, $height, $fill_dimension);
+		
+		$image->resize($width, $height, $dimension);
 
 		if ($image->getMimeType() == 'image/jpeg' && ($filepath_extension == 'jpg' || $filepath_extension == 'jpeg')) {
 			// fix orientation if necessary (iPhone!)

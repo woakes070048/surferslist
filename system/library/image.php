@@ -68,7 +68,7 @@ class Image {
 	*				   h = fill according to height
 	*
 	*/
-	public function resize($width = 0, $height = 0, $default = '') {
+	public function resize($width = 0, $height = 0, $dimension = '') {
 		if (!$this->info['width'] || !$this->info['height'] || $this->info['mime'] == 'image/vnd.microsoft.icon') {
 			return;
 		}
@@ -80,9 +80,9 @@ class Image {
 		$scale_w = $width / $this->info['width'];
 		$scale_h = $height / $this->info['height'];
 
-		if ($default == 'w') {
+		if ($dimension == 'w') {
 			$scale = $scale_w;
-		} elseif ($default == 'h'){
+		} elseif ($dimension == 'h'){
 			$scale = $scale_h;
 		} else {
 			$scale = min($scale_w, $scale_h);
@@ -179,6 +179,8 @@ class Image {
 	private function reCreate($width, $height, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h) {
 		$image_old = $this->image;
 		$this->image = imagecreatetruecolor($width, $height);
+
+		if (!$this->image) return;
 
 		if ($this->info['mime'] == 'image/png') {
 			imagealphablending($this->image, false);
