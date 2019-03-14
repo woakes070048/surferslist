@@ -706,18 +706,18 @@ class ControllerAccountAnonPost extends Controller {
 		}
 
 		if ($this->config->get('member_data_field_category')) {
-			if (empty($data['category_id']) || !$this->validateNumeric($data['category_id'])) {
+			if (empty($data['category_id']) || !$this->validateNumeric($data['category_id'], true)) {
 				$this->setError('category', $this->language->get('error_category'));
 			}
 
-			if (empty($data['sub_category_id']) || !$this->validateNumeric($data['sub_category_id'])) {
+			if (empty($data['sub_category_id']) || !$this->validateNumeric($data['sub_category_id'], true)) {
 				$this->setError('category', $this->language->get('error_category'));
 				$this->setError('category_sub', $this->language->get('error_category_sub'));
 			}
 		}
 
 		if ($this->config->get('member_data_field_manufacturer')) {
-			if (empty($data['manufacturer_id']) || !$this->validateNumeric($data['manufacturer_id'])) {
+			if (empty($data['manufacturer_id']) || !$this->validateNumeric($data['manufacturer_id'], true)) {
 				$this->setError('manufacturer', $this->language->get('error_manufacturer'));
 			}
 		}

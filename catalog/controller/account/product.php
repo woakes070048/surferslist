@@ -555,6 +555,8 @@ class ControllerAccountProduct extends Controller {
 			'images'			=>	'error_images',
 			'for_sale'			=>	'error_for_sale',
 			'price'				=>	'error_price',
+			'price_special'		=>	'error_price_special',
+			'price_discount'	=>	'error_price_discount',
 			'value'				=>	'error_value',
 			'condition'			=>	'error_condition',
 			'size'				=>	'error_size',
@@ -1488,8 +1490,10 @@ class ControllerAccountProduct extends Controller {
 				$this->setError('images', sprintf($this->language->get('error_max_images'), $this->config->get('member_image_max_number')));
 			}
 
-			foreach ($data['product_image'] as $product_image) {
-				if (empty($product_image['image']) || !$this->validateStringLength($product_image['image'], 5, 255)) {
+			foreach ($data['product_image'] as $key => $product_image) {
+				if (empty($product_image['image'])) {
+					unset($data['product_image'][$key]);
+				} else if (!$this->validateStringLength($product_image['image'], 5, 255)) {
 					$this->setError('images', $this->language->get('error_image'));
 				} else if (!is_file(DIR_IMAGE . $product_image['image'])) {
 					$this->setError('images', sprintf($this->language->get('error_exists'), $product_image['image']));
@@ -1498,7 +1502,7 @@ class ControllerAccountProduct extends Controller {
 		}
 
 		if ($data['for_sale'] == 0) {
-	    	if ($data['value'] < 0 || ($data['value'] > 0 && !$this->validatePrice($data['value']))) {
+	    	if (!empty($data['value']) && !$this->validatePrice($data['value'])) {
 	      		$this->setError('value', $this->language->get('error_value'));
 	    	}
 		} else {
@@ -1509,17 +1513,18 @@ class ControllerAccountProduct extends Controller {
 
     	if ($this->config->get('member_tab_discount') && isset($data['price_discount']) && ($data['price_discount'] !== '')) {
 			if ($data['price_discount'] == 0 || !$this->validatePrice($data['price_discount'])) {
-				$this->setError('price', $this->language->get('error_discount'));
-			} else if ($data['discount_quantity'] < 0 || !$this->validateNumeric($data['discount_quantity'])) {
-				$this->setError('price', $this->language->get('error_discount_quantity'));
-			} else if ($data['discount_quantity'] && !empty($data['price_special'])) {
-				$this->setError('price', $this->language->get('error_special_discount'));
+				$this->setError('price_discount', $this->language->get('error_discount'));
+			} else if (!isset($data['discount_quantity']) || !$this->validateNumeric($data['discount_quantity'], true)) {
+				$this->setError('price_discount', $this->language->get('error_discount_quantity'));
+			} else if (!empty($data['discount_quantity']) && !empty($data['price_special'])) {
+				$this->setError('price_discount', $this->language->get('error_special_discount'));
+				$this->setError('price_special', $this->language->get('error_special_discount'));
 			}
 		}
 
     	if ($this->config->get('member_tab_special') && isset($data['price_special']) && ($data['price_special'] !== '')) {
 			if ($data['price_special'] == 0 || !$this->validatePrice($data['price_special'])) {
-				$this->setError('price', $this->language->get('error_special'));
+				$this->setError('price_special', $this->language->get('error_special'));
 			}
 		}
 
@@ -1556,7 +1561,7 @@ class ControllerAccountProduct extends Controller {
 			$this->setError('size', $this->language->get('error_size'));
 		}
 
-		if ($this->config->get('member_data_field_part_numbers') && $data['for_sale'] == 1) {
+		if ($this->config->get('member_data_field_part_numbers') && isset($data['for_sale']) && $data['for_sale'] == 1) {
 			if (isset($data['mpn']) && isset($data['sku']) && isset($data['upc']) && isset($data['ean']) && isset($data['jan'])) {
 				if (utf8_strlen($data['mpn']) > 64 || utf8_strlen($data['sku']) > 64 || utf8_strlen($data['upc']) > 64 || utf8_strlen($data['ean']) > 64 || utf8_strlen($data['jan']) > 64) {
 					$this->setError('part_number', $this->language->get('error_part_number'));
@@ -1564,17 +1569,17 @@ class ControllerAccountProduct extends Controller {
 			}
 		}
 
-    	if ($this->config->get('member_data_field_quantity') && $data['for_sale'] == 1) {
-			if (isset($data['quantity'])) {
-				if ($data['type'] == 1 && ($data['quantity'] <= 0 || !$this->validateNumeric($data['quantity']))) {
+    	if ($this->config->get('member_data_field_quantity') && isset($data['for_sale']) && $data['for_sale'] == 1) {
+			if (isset($data['quantity']) && isset($data['type'])) {
+				if ($data['type'] == 1 && !$this->validateNumeric($data['quantity'], true)) {
 					$this->setError('quantity', $this->language->get('error_quantity'));
-				// } else if ($data['type'] == 0 && ($data['quantity'] > 1 || !$this->validateNumeric($data['quantity']))) {
+				// } else if ($data['type'] == 0 && ($data['quantity'] > 1 || !$this->validateNumeric($data['quantity'], true))) {
 				// 	$this->setError('quantity', $this->language->get('error_quantity_classified'));
 				}
 			}
 
-			if (isset($data['minimum'])) {
-				if ($data['type'] == 1 && ($data['minimum'] <= 0 || !$this->validateNumeric($data['minimum']))) {
+			if (isset($data['minimum']) && isset($data['type'])) {
+				if ($data['type'] == 1 && !$this->validateNumeric($data['minimum'], true)) {
 					$this->setError('minimum', $this->language->get('error_minimum'));
 				}
 			}
@@ -1788,6 +1793,10 @@ class ControllerAccountProduct extends Controller {
 			// $meta_description .= $this->language->get('entry_description') . ': ' . utf8_substr(trim(strip_tags(html_entity_decode($value['description'], ENT_QUOTES, 'UTF-8'))), 0, 100) . ';';
 
 			$data['product_description'][$language_id]['meta_description'] = $meta_description;
+		}
+
+		foreach (array('price', 'value', 'price_discount', 'price_special') as $value) {
+			$data[$value] = strtr($data[$value], array(',' => ''));
 		}
 
 		if ($data['price']) {

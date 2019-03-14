@@ -33,8 +33,21 @@ trait ValidateField {
 		return preg_match('/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{' . preg_quote($min-1, '/') . ',' . preg_quote($max, '/') . '}$/', $pw);
 	}
 
-	protected function validateNumeric($number) {
-		if (!$number || !is_numeric($number)) {
+	protected function validateNumeric($number, $positive_only = false, $decimal_allowed = false) {
+		if ($positive_only && (int)$number < 0) {
+			return false;
+		}
+
+		$replace = array(',' => '');
+
+		if ($decimal_allowed) {
+			$replace['.'] = '';
+		}
+
+		$number = strtr($number, $replace);
+
+		if (!is_numeric($number)) {
+			$this->log->write('num:' . $number);
 			return false;
 		}
 
@@ -42,19 +55,20 @@ trait ValidateField {
 	}
 
 	protected function validateYear($year, $length = 4) {
-		if (!$this->validateNumeric($year)) {
+		if (!$this->validateNumeric($year, true)) {
 			return false;
 		}
 
 		return preg_match('/^(\d{' . preg_quote($length, '/') . '})?$/', $year);
 	}
 
-	protected function validatePrice($price) {
-		if (!$this->validateNumeric($price) || $price < 0) {
+	protected function validatePrice(&$price) {
+		if (!$this->validateNumeric($price, true, true)) {
+			$this->log->write('price:' . $price);
 			return false;
 		}
 
-		return preg_match('/^(?:[0-9]\d*)(?:\.\d{1,2})?$/', $price);
+		return preg_match('/^(?:[0-9]\d*)(?:\.\d{1,2})?$/', strtr($price, array(',' => '')));
 	}
 
 	protected function validateStringLength($string, $min = 0, $max = 255) {

@@ -55,6 +55,8 @@
                                     <?php if ($error_value) { ?><span><i class="fa fa-exclamation-triangle"></i><?php echo $error_value; ?> <a class="trigger-click" data-target="tab-sell"><?php echo $text_fix; ?></a></span><?php } ?>
                                     <?php if ($error_type) { ?><span><i class="fa fa-exclamation-triangle"></i><?php echo $error_type; ?> <a class="trigger-click" data-target="tab-sell"><?php echo $text_fix; ?></a></span><?php } ?>
                                     <?php if ($error_price) { ?><span><i class="fa fa-exclamation-triangle"></i><?php echo $error_price; ?> <a class="trigger-click" data-target="tab-sell"><?php echo $text_fix; ?></a></span><?php } ?>
+                                    <?php if ($error_price_discount) { ?><span><i class="fa fa-exclamation-triangle"></i><?php echo $error_price_discount; ?> <a class="trigger-click" data-target="tab-sell"><?php echo $text_fix; ?></a></span><?php } ?>
+                                    <?php if ($error_price_special && $error_price_special != $error_price_discount) { ?><span><i class="fa fa-exclamation-triangle"></i><?php echo $error_price_special; ?> <a class="trigger-click" data-target="tab-sell"><?php echo $text_fix; ?></a></span><?php } ?>
                                     <?php if ($permissions['inventory_enabled']) { ?>
                                     <?php if ($error_quantity) { ?><span><i class="fa fa-exclamation-triangle"></i><?php echo $error_quantity; ?> <a class="trigger-click" data-target="tab-sell"><?php echo $text_fix; ?></a></span><?php } ?>
                                     <?php if ($error_minimum) { ?><span><i class="fa fa-exclamation-triangle"></i><?php echo $error_minimum; ?> <a class="trigger-click" data-target="tab-sell"><?php echo $text_fix; ?></a></span><?php } ?>
@@ -470,6 +472,7 @@
                                             <i class="fa fa-question-circle float-right grey-text" title="<?php echo $entry_special . $help_optional; ?>" data-content="<?php echo $help_special; ?>" data-placement="left" rel="popover" data-container="body" data-trigger="hover"></i>
                                           </p>
                                           <input type="text" name="price_special" value="<?php echo $price_special; ?>" placeholder="<?php if ($currency['symbol_left']) { ?><?php echo $currency['symbol_left']; ?>&nbsp;<?php } ?><?php echo $entry_special . ' (' . $currency['code'] . ')'; ?><?php if ($currency['symbol_right']) { ?>&nbsp;<?php echo $currency['symbol_right']; ?><?php } ?>" size="6" />
+                                          <?php if ($error_price_special) { ?><span class="error"><i class="fa fa-exclamation-triangle"></i><?php echo $error_price_special; ?></span><?php } ?>
                                         </div>
                                         <?php } ?>
 
@@ -482,6 +485,7 @@
                                             <i class="fa fa-question-circle float-right grey-text" title="<?php echo $entry_discount . $help_optional; ?>" data-content="<?php echo $help_discount; ?>" data-placement="left" rel="popover" data-container="body" data-trigger="hover"></i>
                                           </p>
                                           <input type="text" name="price_discount" value="<?php echo $price_discount; ?>" placeholder="<?php if ($currency['symbol_left']) { ?><?php echo $currency['symbol_left']; ?>&nbsp;<?php } ?><?php echo $entry_discount . ' (' . $currency['code'] . ')'; ?><?php if ($currency['symbol_right']) { ?>&nbsp;<?php echo $currency['symbol_right']; ?><?php } ?>" size="6" />
+                                          <?php if ($error_price_discount) { ?><span class="error"><i class="fa fa-exclamation-triangle"></i><?php echo $error_price_discount; ?></span><?php } ?>
                                         </div>
 
                                         <div class="formbox formbox-type">
