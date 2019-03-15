@@ -29,7 +29,7 @@ class ControllerAjaxCart extends Controller {
             }
 
             if ($product_info['quantity'] == 0) {
-                $json['error'] = sprintf($this->language->get('error_classified'), $this->url->link('information/contact', 'contact_id=' . $product_info['customer_id'], 'SSL'));
+                $json['error'] = sprintf($this->language->get('error_classified'), $this->url->link('information/contact', 'contact_id=' . $product_info['customer_id']));
             } else {
                 $product_options = $this->model_catalog_product->getProductOptions($this->request->post['product_id']);
 

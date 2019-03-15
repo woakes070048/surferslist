@@ -103,7 +103,7 @@ class ControllerAjaxReview extends Controller {
 
             $this->data['reviews'][] = array(
                 'name'       => $name,
-                'href'       => $result['author_member_id'] ? $this->url->link('product/member/info', 'member_id=' . $result['author_member_id'], 'SSL') : '',
+                'href'       => $result['author_member_id'] ? $this->url->link('product/member/info', 'member_id=' . $result['author_member_id']) : '',
                 'image'      => $image,
                 'text'       => $result['text'],
                 'rating'     => (int)$result['rating'],

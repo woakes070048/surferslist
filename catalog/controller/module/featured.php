@@ -115,9 +115,9 @@ class ControllerModuleFeatured extends Controller {
 				$url .= $listing['product_id'] . ',';
 			}
 
-			$this->data['more'] = $this->url->link('ajax/product/more', 'module=true&featured=true&filter_listings=' . rtrim($url, ','), 'SSL');
+			$this->data['more'] = $this->url->link('ajax/product/more', 'module=true&featured=true&filter_listings=' . rtrim($url, ','));
 		} else {
-			$this->data['more'] = $this->url->link('product/featured', '', 'SSL');
+			$this->data['more'] = $this->url->link('product/featured');
 		}
 
 		if ($setting['position'] == 'column_right' || $setting['position'] == 'column_left') {

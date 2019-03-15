@@ -97,7 +97,7 @@ class ControllerModuleMember extends Controller {
 		$this->data['image_width'] = $image_width;
 		$this->data['image_height'] = $image_height;
 
-		$this->data['more'] = $this->url->link('product/member', '', 'SSL');
+		$this->data['more'] = $this->url->link('product/member');
 		$this->data['text_more'] = $this->language->get('text_view_all') . ' ' . $this->language->get('text_all_members');
 
 		$this->template = '/template/module/member.tpl';

@@ -21,7 +21,7 @@ class ControllerModuleBestSeller extends Controller {
 			$url .= $result['product_id'] . ',';
 		}
 
-		$this->data['more'] = $this->url->link('ajax/product/more', 'module=true&bestseller=true&filter_listings=' . rtrim($url, ','), 'SSL');
+		$this->data['more'] = $this->url->link('ajax/product/more', 'module=true&bestseller=true&filter_listings=' . rtrim($url, ','));
 
 		$this->data['products'] = $this->getChild('product/data/list_module', array('products' => $listings, 'position' => $setting['position']));
 

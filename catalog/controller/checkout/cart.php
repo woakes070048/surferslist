@@ -197,10 +197,10 @@ class ControllerCheckoutCart extends Controller {
 				'model'    => $product['model'],
 				'manufacturer_id'  => $product['manufacturer_id'],
 				'manufacturer'     => $product['manufacturer'],
-				'manufacturer_href' => $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $product['manufacturer_id'], 'SSL'),
+				'manufacturer_href' => $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $product['manufacturer_id']),
 				'manufacturer_image'        => $product['manufacturer_image'],
 				'member' => (!empty($product['member']) ? $product['member'] : '' ),
-				'member_href' => (!empty($product['member_id']) ? $this->url->link('product/member/info', 'member_id=' . $product['member_id'], 'SSL') : ''),
+				'member_href' => (!empty($product['member_id']) ? $this->url->link('product/member/info', 'member_id=' . $product['member_id']) : ''),
 				'member_customer_id' => (!empty($product['member_customer_id']) ? $product['member_customer_id'] : '' ),
 				'option'   => $option_data,
 				'available' => $product['available'],
@@ -352,8 +352,8 @@ class ControllerCheckoutCart extends Controller {
 		$this->data['totals'] = $total_data;
 
 		$this->data['continue'] = $this->order_member_id
-			? $this->url->link('product/member/info', 'member_id=' . $this->order_member_id, 'SSL')
-			: $this->url->link('product/allproducts', '', 'SSL');
+			? $this->url->link('product/member/info', 'member_id=' . $this->order_member_id)
+			: $this->url->link('product/allproducts');
 
 		$this->data['checkout'] = $this->url->link('checkout/checkout', '', 'SSL');
 
@@ -380,7 +380,7 @@ class ControllerCheckoutCart extends Controller {
 
 		$this->data['text_error'] = $this->language->get('text_empty');
 
-		$this->data['continue'] = $this->url->link('common/home', '', 'SSL');
+		$this->data['continue'] = $this->url->link('common/home');
 
 		unset($this->session->data['success']);
 
@@ -407,9 +407,9 @@ class ControllerCheckoutCart extends Controller {
 		$this->addBreadcrumb($this->language->get('heading_title'), $this->url->link('checkout/cart'));
 
 		$this->data['breadcrumbs'] = $this->getBreadcrumbs();
-		
+
 		$this->data['action'] = $this->url->link('checkout/cart', '', 'SSL');
-		$this->data['search'] = $this->url->link('product/search', '', 'SSL');
+		$this->data['search'] = $this->url->link('product/search');
 	}
 
 	protected function validateCoupon() {
@@ -484,7 +484,7 @@ class ControllerCheckoutCart extends Controller {
 			if (!empty($product['member_id']) && !array_key_exists($product['member_id'], $order_members)) {
 				$order_members[$product['member_id']] = array(
 					'name' => $product['member'],
-					'href' => $this->url->link('product/member/info', 'member_id=' . $product['member_id'], 'SSL')
+					'href' => $this->url->link('product/member/info', 'member_id=' . $product['member_id'])
 				);
 			}
 		}

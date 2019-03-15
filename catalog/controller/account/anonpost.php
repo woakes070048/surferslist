@@ -214,22 +214,23 @@ class ControllerAccountAnonPost extends Controller {
 
 		// Manufacturers (Brands)
 		$manufacturers = array();
+		$manufacturer_id = isset($this->request->post['manufacturer_id']) ? $this->request->post['manufacturer_id'] : 0;
+		$manufacturer_name = '';
+		$manufacturer_thumb = '';
 
 		if ($this->config->get('member_data_field_manufacturer')) {
-			$this->data['manufacturer_id'] = isset($this->request->post['manufacturer_id']) ? $this->request->post['manufacturer_id'] : 0;
-
-			if ($this->data['manufacturer_id'] > 1) {
-				$manufacturer_info = $this->model_catalog_manufacturer->getManufacturer($this->data['manufacturer_id']);
-				$this->data['manufacturer_thumb'] = !empty($manufacturer_info['image']) ? $this->model_tool_image->resize($manufacturer_info['image'], $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height'), 'fw') : '';
-				$this->data['manufacturer_name'] = !empty($manufacturer_info['name']) ? $manufacturer_info['name'] : '';
-			} else {
-				$this->data['manufacturer_thumb'] = '';
-				$this->data['manufacturer_name'] = '';
+			if ($manufacturer_id) {
+				$manufacturer_info = $this->model_catalog_manufacturer->getManufacturer($manufacturer_id);
+				$manufacturer_name = $manufacturer_info['name'];
+				$manufacturer_thumb = $this->model_tool_image->resize($manufacturer_info['image'], $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height'), 'fw');
 			}
 
 			$manufacturers = $this->model_catalog_manufacturer->getManufacturers();
 		}
 
+		$this->data['manufacturer_id'] = $manufacturer_id;
+		$this->data['manufacturer_name'] = $manufacturer_name;
+		$this->data['manufacturer_thumb'] = $manufacturer_thumb;
 		$this->data['manufacturers'] = $manufacturers;
 		$this->data['manufacturers_all'] = htmlspecialchars(json_encode($manufacturers), ENT_COMPAT);
 
@@ -652,7 +653,7 @@ class ControllerAccountAnonPost extends Controller {
 		if (!empty($data['product_description'])) {
 			foreach ($data['product_description'] as $language_id => $value) {
 				if (!empty($value['name'])) {
-					if (!$this->validateStringLength($value['name'], 3, 255) || !preg_match('/^[a-zA-Z0-9-_ \.\'\"\/\&]*$/', htmlspecialchars_decode($value['name']))) {
+					if (!$this->validateStringLength($value['name'], 3, 255) || !preg_match('/^[a-zA-Z0-9-_ \(\)\.\'\"\/\&]*$/', htmlspecialchars_decode($value['name']))) {
 						$this->appendError('name', sprintf($this->language->get('error_name'), 3, 255), $language_id);
 					}
 

@@ -6,7 +6,7 @@ class ControllerCommonHome extends Controller {
 		$this->document->setTitle($this->config->get('config_title'));
 		$this->document->setDescription($this->config->get('config_meta_description'));
 		$this->document->setKeywords($this->config->get('config_meta_keyword'));
-		$this->document->setUrl($this->url->link('common/home', '', 'SSL'));
+		$this->document->setUrl($this->url->link('common/home'));
 
 		if (is_file(DIR_IMAGE . $this->config->get('config_banner_image'))) {
 			$this->load->model('tool/image');
@@ -45,7 +45,7 @@ class ControllerCommonHome extends Controller {
 					$this->data['categories'][] = array(
 						'category_id' => $category_1['category_id'],
 						'name'        => strtoupper($category_1_name),
-						'url'		  => $this->url->link('product/category', 'path=' . $category_1['category_id'], 'SSL')
+						'url'		  => $this->url->link('product/category', 'path=' . $category_1['category_id'])
 					);
 				}
 			}
@@ -57,10 +57,10 @@ class ControllerCommonHome extends Controller {
 		$this->data['zone_id'] = isset($this->session->data['shipping_zone_id']) ? $this->session->data['shipping_zone_id'] : '';
 		$this->data['location'] = isset($this->session->data['shipping_location']) ? $this->session->data['shipping_location'] : '';
 
-		$this->data['search'] = $this->url->link('product/search', '', 'SSL');
-		$this->data['product_random'] = $this->url->link('product/allproducts', 'sort=random', 'SSL');
+		$this->data['search'] = $this->url->link('product/search');
+		$this->data['product_random'] = $this->url->link('product/allproducts', 'sort=random');
 		$this->data['post'] = $this->url->link('account/anonpost', '', 'SSL');
-		$this->data['about'] = $this->url->link('information/information', 'information_id=4', 'SSL'); // About Us
+		$this->data['about'] = $this->url->link('information/information', 'information_id=4'); // About Us
 
 		$this->data['help_about'] = sprintf($this->language->get('help_about'), $this->config->get('config_name')); // About Us
 

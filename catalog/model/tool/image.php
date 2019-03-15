@@ -33,11 +33,7 @@ class ModelToolImage extends Model {
 
 	public function resize($filename, $width, $height, $type = "") {
 		if (!$filename || !is_file(DIR_IMAGE . $filename)) {
-			if (is_file(DIR_IMAGE . 'no_image.jpg')) {
-				$filename = 'no_image.jpg';
-			} else {
-				return '';
-			}
+			$filename = 'no_image.jpg';
 		}
 
 		// height of each image uploaded shouldn't be more than twice its width
@@ -164,7 +160,7 @@ class ModelToolImage extends Model {
 		$filepath_extension = strtolower(pathinfo($filepath, PATHINFO_EXTENSION));
 
 		$image = new Image($filepath);
-		
+
 		$image->resize($width, $height, $dimension);
 
 		if ($image->getMimeType() == 'image/jpeg' && ($filepath_extension == 'jpg' || $filepath_extension == 'jpeg')) {

@@ -77,17 +77,17 @@ class ControllerAjaxProduct extends Controller {
         $compare_total = count($this->session->data['compare']);
 
         if ($compare_total >= $compare_max) {
-            $json['error'] = sprintf($this->language->get('text_full'), $this->url->link('product/compare', '', 'SSL'), $compare_total);
-            $json['redirect'] = $this->url->link('product/compare', '', 'SSL');
+            $json['error'] = sprintf($this->language->get('text_full'), $this->url->link('product/compare'), $compare_total);
+            $json['redirect'] = $this->url->link('product/compare');
         }
 
         if (!$json['error']) {
             if (in_array($product_id, $this->session->data['compare'])) {
-                $json['error'] = sprintf($this->language->get('text_exists'), $this->url->link('product/compare', '', 'SSL'));
+                $json['error'] = sprintf($this->language->get('text_exists'), $this->url->link('product/compare'));
             } else {
                 $this->session->data['compare'][] = $product_id;
 
-                $json['success'] = sprintf($this->language->get('text_success'), $this->url->link('product/product', 'product_id=' . $product_id, 'SSL'), $product_info['name'], $this->url->link('product/compare'));
+                $json['success'] = sprintf($this->language->get('text_success'), $this->url->link('product/product', 'product_id=' . $product_id), $product_info['name'], $this->url->link('product/compare'));
                 $json['total'] = sprintf($this->language->get('text_compare'), count($this->session->data['compare']));
             }
         }
@@ -118,12 +118,12 @@ class ControllerAjaxProduct extends Controller {
         );
 
         if (empty($this->session->data['compare'])) {
-            $json['error'] = sprintf($this->language->get('text_empty'), $this->url->link('product/compare', '', 'SSL'), $compare_total);
+            $json['error'] = sprintf($this->language->get('text_empty'), $this->url->link('product/compare'), $compare_total);
         }
 
         if (!$json['error']) {
             if (!in_array($product_id, $this->session->data['compare'])) {
-                $json['error'] = sprintf($this->language->get('text_does_not_exist'), $this->url->link('product/compare', '', 'SSL'));
+                $json['error'] = sprintf($this->language->get('text_does_not_exist'), $this->url->link('product/compare'));
             } else {
                 $this->session->data['compare'] = array_diff($this->session->data['compare'], array($product_id));
 
@@ -281,7 +281,7 @@ class ControllerAjaxProduct extends Controller {
 		if (!$this->config->get('apac_status')
 			|| !$this->config->get('apac_products_status')
 			|| (!$this->request->checkReferer($this->config->get('config_url')) && !$this->request->checkReferer($this->config->get('config_ssl')))) {
-	  		$this->redirect($this->url->link('product/allproducts', '', 'SSL'));
+	  		$this->redirect($this->url->link('product/allproducts'));
 		}
 
 		$this->load->language('product/common');
@@ -494,8 +494,8 @@ class ControllerAjaxProduct extends Controller {
 		));
 
 		$more_href = $page < $max_pages
-			? $this->url->link('ajax/product/more', $this->getQueryString() . '&page=' . ($page + 1), 'SSL')
-			: $this->url->link('product/allproducts', '', 'SSL');
+			? $this->url->link('ajax/product/more', $this->getQueryString() . '&page=' . ($page + 1))
+			: $this->url->link('product/allproducts');
 
 		$json = array(
 			'listings' 		=> $this->data['products'],

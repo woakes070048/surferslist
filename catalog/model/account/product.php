@@ -114,6 +114,7 @@ class ModelAccountProduct extends Model {
 
 		// delete listing cache
 		$this->cache->delete('product.');
+		$this->cache->delete('category');
 
 		return $product_id;
 	}
@@ -362,6 +363,7 @@ class ModelAccountProduct extends Model {
 		}
 
 		$this->cache->delete('product.');
+		$this->cache->delete('category');
 
 		return $product_id;
 	}
@@ -538,6 +540,7 @@ class ModelAccountProduct extends Model {
 
 		$this->cache->delete('product_' . (int)$product_id);
 		$this->cache->delete('product.');
+		$this->cache->delete('category');
 
 		return true;
 	}
@@ -791,6 +794,7 @@ class ModelAccountProduct extends Model {
 
 		$this->cache->delete('product_' . (int)$product_id);
 		$this->cache->delete('product.');
+		$this->cache->delete('category');
 
 		return true;
 	}
@@ -810,6 +814,7 @@ class ModelAccountProduct extends Model {
 
 		$this->cache->delete('product_' . (int)$product_id);
 		$this->cache->delete('product.');
+		$this->cache->delete('category');
 
 		return true;
 	}
@@ -829,6 +834,7 @@ class ModelAccountProduct extends Model {
 
 		$this->cache->delete('product_' . (int)$product_id);
 		$this->cache->delete('product.');
+		$this->cache->delete('category');
 
 		return true;
 	}
@@ -849,6 +855,7 @@ class ModelAccountProduct extends Model {
 
 		$this->cache->delete('product_' . (int)$product_id);
 		$this->cache->delete('product.');
+		$this->cache->delete('category');
 
 		return true;
 	}
@@ -869,6 +876,7 @@ class ModelAccountProduct extends Model {
 
 		$this->cache->delete('product_' . (int)$product_id);
 		$this->cache->delete('product.');
+		$this->cache->delete('category');
 
 		return true;
 	}
@@ -904,6 +912,7 @@ class ModelAccountProduct extends Model {
 
 		$this->cache->delete('product_' . (int)$product_id);
 		$this->cache->delete('product.');
+		$this->cache->delete('category');
 
 		return true;
 	}

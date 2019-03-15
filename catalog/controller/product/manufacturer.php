@@ -66,7 +66,7 @@ class ControllerProductManufacturer extends Controller {
 			$this->data['category_manufacturers'][] = array(
 				'id'	=> 0,
 				'name'	=> $this->language->get('text_category_all'),
-				'href'	=> $this->url->link('product/manufacturer', 'filter_category_id=0' . $url, 'SSL')
+				'href'	=> $this->url->link('product/manufacturer', 'filter_category_id=0' . $url)
 			);
 
 			$category_manufacturers = $this->model_catalog_category->getCategories(0);
@@ -90,7 +90,7 @@ class ControllerProductManufacturer extends Controller {
 				$this->data['category_manufacturers'][] = array(
 					'id'	=> $category_manufacturer['category_id'],
 					'name'  => utf8_strtoupper($category_name) . sprintf($this->language->get('text_product_count'), $category_manufacturer_total),
-					'href'  => $this->url->link('product/manufacturer', 'filter_category_id=' . $category_manufacturer['category_id'] . $url, 'SSL')
+					'href'  => $this->url->link('product/manufacturer', 'filter_category_id=' . $category_manufacturer['category_id'] . $url)
 				);
 			}
 
@@ -115,7 +115,7 @@ class ControllerProductManufacturer extends Controller {
 		$max_pages = $limit > 0 ? ceil($manufacturer_total / $limit) : 1;
 
 		if ($page <= 0 || $limit <= 0 || ($max_pages > 0 && $page > $max_pages)) {
-			$this->redirect($this->url->link('error/not_found', '', 'SSL'));
+			$this->redirect($this->url->link('error/not_found'));
 		}
 
 		$results = $this->model_catalog_manufacturer->getManufacturers($data);
@@ -144,10 +144,10 @@ class ControllerProductManufacturer extends Controller {
 		// Sort, Limit
 		$url = $this->getQueryString(array('sort', 'order'));
 
-		$this->addSort($this->language->get('text_default'), 'sort_order-ASC', $this->url->link('product/manufacturer','&sort=sort_order&order=ASC' . $url, 'SSL'));
-		$this->addSort($this->language->get('text_name_asc'), 'name-ASC', $this->url->link('product/manufacturer','&sort=name&order=ASC' . $url, 'SSL'));
-		$this->addSort($this->language->get('text_name_desc'), 'name-DESC', $this->url->link('product/manufacturer','&sort=name&order=DESC' . $url, 'SSL'));
-		$this->addSort($this->language->get('text_random'), 'random-' . $order, $this->url->link('product/manufacturer', '&sort=random' . $url, 'SSL'));
+		$this->addSort($this->language->get('text_default'), 'sort_order-ASC', $this->url->link('product/manufacturer','&sort=sort_order&order=ASC' . $url));
+		$this->addSort($this->language->get('text_name_asc'), 'name-ASC', $this->url->link('product/manufacturer','&sort=name&order=ASC' . $url));
+		$this->addSort($this->language->get('text_name_desc'), 'name-DESC', $this->url->link('product/manufacturer','&sort=name&order=DESC' . $url));
+		$this->addSort($this->language->get('text_random'), 'random-' . $order, $this->url->link('product/manufacturer', '&sort=random' . $url));
 
 		$this->data['sorts'] = $this->getSorts();
 		$this->data['limits'] = $this->getLimits('product/manufacturer', $this->getQueryString(array('limit')));
@@ -173,11 +173,11 @@ class ControllerProductManufacturer extends Controller {
 		$this->data['order'] = $order;
 		$this->data['limit'] = $limit;
 
-		$this->data['random'] = $this->url->link('product/manufacturer', '&sort=random' . $url, 'SSL');
-		$this->data['back'] = ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->request->server['HTTP_REFERER'] : $this->url->link('product/allproducts', '', 'SSL');
-		$this->data['search'] = $this->url->link('product/search', '', 'SSL');
-		$this->data['reset'] = $this->url->link('product/manufacturer', '', 'SSL');
-		$this->data['continue'] = $this->url->link('common/home', '', 'SSL');
+		$this->data['random'] = $this->url->link('product/manufacturer', '&sort=random' . $url);
+		$this->data['back'] = ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->request->server['HTTP_REFERER'] : $this->url->link('product/allproducts');
+		$this->data['search'] = $this->url->link('product/search');
+		$this->data['reset'] = $this->url->link('product/manufacturer');
+		$this->data['continue'] = $this->url->link('common/home');
 
 		$this->template = '/template/product/manufacturer_list.tpl';
 
@@ -302,8 +302,7 @@ class ControllerProductManufacturer extends Controller {
 
 		if (!$manufacturer_info) {
 			$this->session->data['warning'] = $this->language->get('text_error');
-			return $this->forward('error/notfound');
-			// $this->redirect($this->url->link('error/not_found', '', 'SSL'));
+			$this->redirect($this->url->link('error/not_found'));
 		}
 
 		$heading_title = $manufacturer_info['name'];
@@ -354,7 +353,7 @@ class ControllerProductManufacturer extends Controller {
 		$max_pages = $limit > 0 && $products ? ceil($product_total / $limit) : 1;
 
 		if ($page <= 0 || $limit <= 0 || ($max_pages > 0 && $page > $max_pages)) {
-			$this->redirect($this->url->link('error/not_found', '', 'SSL'));
+			$this->redirect($this->url->link('error/not_found'));
 		}
 
 		$this->data['products'] = $this->getChild('product/data/list', $this->model_catalog_product->getProducts($data));
@@ -379,7 +378,7 @@ class ControllerProductManufacturer extends Controller {
 			$this->data['manufacturers_active'][0] = array(
 				'id'	=> 0,
 				'name'	=> $this->language->get('text_manufacturer_all'),
-				'href'	=> $this->url->link('product/manufacturer', '', 'SSL')
+				'href'	=> $this->url->link('product/manufacturer')
 			);
 
 			$manufacturers = $this->model_catalog_manufacturer->getManufacturers(array(), false); // do not cache in model
@@ -389,7 +388,7 @@ class ControllerProductManufacturer extends Controller {
 					$this->data['manufacturers_active'][$manufacturer['manufacturer_id']] = array(
 						'id'	=> $manufacturer['manufacturer_id'],
 						'name'  => $manufacturer['name'],
-						'href'  => $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $manufacturer['manufacturer_id'], 'SSL')
+						'href'  => $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $manufacturer['manufacturer_id'])
 					);
 				}
 			}
@@ -413,7 +412,7 @@ class ControllerProductManufacturer extends Controller {
 		$this->document->setTitle($heading_title);
 		$this->document->setDescription($meta_description);
 		$this->document->setKeywords($meta_keyword);
-		$this->document->setUrl($this->url->link('product/manufacturer/info','manufacturer_id=' . $this->request->get['manufacturer_id'], 'SSL'));
+		$this->document->setUrl($this->url->link('product/manufacturer/info','manufacturer_id=' . $this->request->get['manufacturer_id']));
 
 		if ($image_info) {
 			$this->document->setImage($image, $image_info['mime'], $image_info[0], $image_info[1]);
@@ -422,12 +421,12 @@ class ControllerProductManufacturer extends Controller {
 		$this->data['manufacturer_id'] = $manufacturer_id;
 		$this->data['url'] = $url;
 
-		$this->data['action'] = str_replace('&amp;', '&', $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $this->request->get['manufacturer_id'] . $url, 'SSL'));
+		$this->data['action'] = str_replace('&amp;', '&', $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $this->request->get['manufacturer_id'] . $url));
 		$this->data['back'] = ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->request->server['HTTP_REFERER'] : $this->url->link('product/manufacturer');
-		$this->data['search'] = $this->url->link('product/search', '', 'SSL');
-		$this->data['reset'] = $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $this->request->get['manufacturer_id'], 'SSL') . $jumpTo;
-		$this->data['continue'] = $this->url->link('common/home', '', 'SSL');
-		$this->data['more'] = $page < $max_pages ? $this->url->link('ajax/product/more', 'manufacturer_id=' . $this->request->get['manufacturer_id'] . $url . '&page=' . ($page + 1), 'SSL') : '';
+		$this->data['search'] = $this->url->link('product/search');
+		$this->data['reset'] = $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $this->request->get['manufacturer_id']) . $jumpTo;
+		$this->data['continue'] = $this->url->link('common/home');
+		$this->data['more'] = $page < $max_pages ? $this->url->link('ajax/product/more', 'manufacturer_id=' . $this->request->get['manufacturer_id'] . $url . '&page=' . ($page + 1)) : '';
 
 		$this->model_catalog_manufacturer->updateViewed($this->request->get['manufacturer_id']);
 

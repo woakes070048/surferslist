@@ -70,7 +70,7 @@ class ControllerModuleManufacturer extends Controller {
 						'name'    	 		=> $result['name'],
 						'product_count' 	=> $this->config->get('config_product_count') ? $result['product_count'] : false,
 						'text_products' 	=> $this->config->get('config_product_count') ? sprintf($this->language->get('text_products'), $result['product_count']) : '',
-						'href'    	 		=> $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $result['manufacturer_id'], 'SSL')
+						'href'    	 		=> $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $result['manufacturer_id'])
 					);
 
 					$count++;
@@ -80,7 +80,7 @@ class ControllerModuleManufacturer extends Controller {
 			$this->cache->set('manufacturer.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $cache, $this->data['manufacturers'], 60 * 60 * 24); // 1 day cache expiration
 		}
 
-		$this->data['more'] = $this->url->link('product/manufacturer', '', 'SSL');
+		$this->data['more'] = $this->url->link('product/manufacturer');
 		$this->data['text_more'] = $this->language->get('text_view_all') . ' ' . $this->language->get('text_all_manufacturers');
 
 		$this->template = '/template/module/manufacturer.tpl';

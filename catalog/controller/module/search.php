@@ -141,7 +141,7 @@ class ControllerModuleSearch extends Controller {
 					$this->data['categories'][] = array(
 						'category_id' => $category_1['category_id'],
 						'name'        => strtoupper($category_1_name),
-						'url'		  => $this->url->link('product/category', 'path=' . $category_1['category_id'], 'SSL')
+						'url'		  => $this->url->link('product/category', 'path=' . $category_1['category_id'])
 					);
 				}
 			}
@@ -217,11 +217,11 @@ class ControllerModuleSearch extends Controller {
 		// Sort, Order, Limit
 		$url = $this->getQueryStringOnlyThese(array('sort', 'order', 'limit'));
 
-		$this->data['action'] = $this->url->link('product/search', $url, 'SSL');
-		$this->data['search_page'] = $this->url->link('product/search', '', 'SSL');
-		$this->data['products_page'] = $this->url->link('product/allproducts', '', 'SSL');
-		$this->data['location_page'] = $this->url->link('information/location', 'redirect_path=' . urlencode(ltrim($request_path, "/")), 'SSL');
-		$this->data['location_remove'] = $this->url->link('information/location', 'location=none&redirect_path=' . urlencode(ltrim($request_path, "/")), 'SSL');
+		$this->data['action'] = $this->url->link('product/search', $url);
+		$this->data['search_page'] = $this->url->link('product/search');
+		$this->data['products_page'] = $this->url->link('product/allproducts');
+		$this->data['location_page'] = $this->url->link('information/location', 'redirect_path=' . urlencode(ltrim($request_path, "/")));
+		$this->data['location_remove'] = $this->url->link('information/location', 'location=none&redirect_path=' . urlencode(ltrim($request_path, "/")));
 
 		$this->data['display_more_options'] = !$no_search_options || !empty($this->request->get['more']) ? true : false;
 

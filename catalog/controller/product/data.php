@@ -179,12 +179,12 @@ class ControllerProductData extends Controller {
     			'zone_id'           => $data['zone_id'],
     			'country_id'        => $data['country_id'],
                 'path'		        => $data['path'],
-				'href'              => $this->url->link('product/product', 'product_id=' . $data['product_id'], 'SSL'),
+				'href'              => $this->url->link('product/product', 'product_id=' . $data['product_id']),
             	'type'              => $data['type_id'] == 1 ? $this->language->get('text_buy_now') : ($data['type_id'] == 0 ? $this->language->get('text_classified') : $this->language->get('text_shared')),
 				'year' 				=> $data['year'] != '0000' ? $data['year'] : '', // $this->language->get('text_unknown')
                 'thumb'             => $this->model_tool_image->resize($data['image'], $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height'), 'fw'),
                 'description_short' => $short_description,
-                'quickview'         => $this->url->link('product/quickview', 'listing_id=' . $data['product_id'], 'SSL')
+                'quickview'         => $this->url->link('product/quickview', 'listing_id=' . $data['product_id'])
             );
 
 			if ($cache) {
@@ -315,7 +315,7 @@ class ControllerProductData extends Controller {
 				'page_title'		=> $page_title,
 				'image'				=>  $this->model_tool_image->resize($data['image'], $this->config->get('config_image_thumb_width'), $this->config->get('config_image_thumb_height'), 'fw'),
 				'manufacturer_image' => $this->model_tool_image->resize($data['manufacturer_image'], 100, 40, 'fh'),
-				'manufacturer_href' => $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $data['manufacturer_id'], 'SSL'),
+				'manufacturer_href' => $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $data['manufacturer_id']),
 				'member'            => $member,
 				'member_customer_id' => isset($data['customer_id']) ? (int)$data['customer_id'] : 0,
 				'categories'		=> $categories,

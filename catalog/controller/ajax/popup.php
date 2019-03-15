@@ -29,7 +29,7 @@ class ControllerAjaxPopup extends Controller {
 			$product_data = $this->model_catalog_product->getProduct($this->request->get['listing_id']);
 
 			if ($product_data && $product_data['status'] == '1') {
-				$message = sprintf($this->language->get('text_message_listing'), html_entity_decode($product_data['name'], ENT_QUOTES, 'UTF-8'), $this->url->link('product/product', 'product_id=' . $this->request->get['listing_id'], 'SSL'));
+				$message = sprintf($this->language->get('text_message_listing'), html_entity_decode($product_data['name'], ENT_QUOTES, 'UTF-8'), $this->url->link('product/product', 'product_id=' . $this->request->get['listing_id']));
 				$this->model_catalog_product->updateViewed($this->request->get['listing_id']);
 			}
 		}
@@ -40,7 +40,7 @@ class ControllerAjaxPopup extends Controller {
 			$profile_data = $this->model_catalog_member->getMember($this->request->get['profile_id']);
 
 			if ($profile_data && !$profile_data['customer_id']) {
-				$message = sprintf($this->language->get('text_message_profile'), html_entity_decode($profile_data['member_account_name'], ENT_QUOTES, 'UTF-8'), $this->url->link('product/member/info', 'member_id=' . $this->request->get['profile_id'], 'SSL'));
+				$message = sprintf($this->language->get('text_message_profile'), html_entity_decode($profile_data['member_account_name'], ENT_QUOTES, 'UTF-8'), $this->url->link('product/member/info', 'member_id=' . $this->request->get['profile_id']));
 				$this->model_catalog_member->updateViewed($this->request->get['profile_id']);
 			}
 		}
@@ -66,7 +66,7 @@ class ControllerAjaxPopup extends Controller {
 		$this->data['captcha_enabled'] = $this->getCaptchaStatus();
 		$this->data['csrf_token'] = $this->getCSRFToken();
 
-		$this->data['action'] = $this->url->link('information/contact', $url . '&popup=true', 'SSL');
+		$this->data['action'] = $this->url->link('information/contact', $url . '&popup=true');
 		$this->data['member'] = !empty($member_data) ? $member_data : array();
 		$this->data['logged'] = $this->customer->isLogged();
 		$this->data['name'] = $this->customer->isLogged() ? $this->customer->getFirstName() : ($this->isAdmin() ? $this->config->get('config_name') : '');
@@ -75,7 +75,7 @@ class ControllerAjaxPopup extends Controller {
 		$this->data['help_unauthorized'] = !$this->isAdmin() && !$this->customer->isLogged() ? sprintf($this->language->get('help_unauthorized'), $this->url->link('account/login', '', 'SSL'), $this->url->link('account/register', '', 'SSL')) : '';
 
 		// information_id = 15 => Listing Discussions
-		$this->data['text_contact_form_footer'] = sprintf($this->language->get('text_contact_form_footer'), $this->url->link('information/information', 'information_id=15', 'SSL'), $this->language->get('text_contact_listing_questions'));
+		$this->data['text_contact_form_footer'] = sprintf($this->language->get('text_contact_form_footer'), $this->url->link('information/information', 'information_id=15'), $this->language->get('text_contact_listing_questions'));
 
 		$this->template = '/template/common/popup_contact.tpl';
 		$this->response->setOutput($this->render());
@@ -153,8 +153,8 @@ class ControllerAjaxPopup extends Controller {
 
 					if ($info_terms_of_use) {
 						$this->data['text_register_agree'] = sprintf($this->language->get('text_register_agree'),
-							$this->url->link('information/information', 'information_id=' . $terms_of_use_id, 'SSL'), $info_terms_of_use['title'], $info_terms_of_use['title'],
-							$this->url->link('information/information', 'information_id=' . $privacy_policy_id, 'SSL'), $info_privacy_policy['title'], $info_privacy_policy['title']);
+							$this->url->link('information/information', 'information_id=' . $terms_of_use_id), $info_terms_of_use['title'], $info_terms_of_use['title'],
+							$this->url->link('information/information', 'information_id=' . $privacy_policy_id), $info_privacy_policy['title'], $info_privacy_policy['title']);
 					} else {
 						$this->data['text_register_agree'] = '';
 					}

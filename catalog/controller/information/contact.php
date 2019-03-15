@@ -25,11 +25,11 @@ class ControllerInformationContact extends Controller {
 			if (!empty($this->member)) {
 				$contact_data['email'] = $this->member['email'];
 				$contact_data['recipient'] = $this->member['member_account_name'];
-				$contact_data['recipient_url'] = $this->url->link('product/member/info', 'member_id=' . $this->member['member_account_id'], 'SSL');
+				$contact_data['recipient_url'] = $this->url->link('product/member/info', 'member_id=' . $this->member['member_account_id']);
 			} else {
 				$contact_data['email'] = $this->config->get('config_email');
 				$contact_data['recipient'] = $this->config->get('config_name');
-				$contact_data['recipient_url'] = $this->url->link('common/home', '', 'SSL');
+				$contact_data['recipient_url'] = $this->url->link('common/home');
 			}
 
 			$mail_sent = $this->sendContact($contact_data);
@@ -54,7 +54,7 @@ class ControllerInformationContact extends Controller {
 			} else {
 				if (!$this->hasError()) {
 					$this->session->data['success'] = isset($success) ? $success : '';
-					$this->redirect($this->url->link('information/contact', '', 'SSL'));
+					$this->redirect($this->url->link('information/contact'));
 				}
 			}
     	}
@@ -67,8 +67,8 @@ class ControllerInformationContact extends Controller {
 
 		$this->data['breadcrumbs'] = $this->getBreadcrumbs();
 
-    	$this->data['text_intro'] = sprintf($this->language->get('text_intro'), $this->url->link('product/member', '', 'SSL'));
-    	$this->data['text_footer'] = sprintf($this->language->get('text_footer'), $this->url->link('information/information', 'information_id=15', 'SSL'), $this->language->get('text_listing_questions'));  // 15 => Member Questions and Answers
+    	$this->data['text_intro'] = sprintf($this->language->get('text_intro'), $this->url->link('product/member'));
+    	$this->data['text_footer'] = sprintf($this->language->get('text_footer'), $this->url->link('information/information', 'information_id=15'), $this->language->get('text_listing_questions'));  // 15 => Member Questions and Answers
 
 		$this->session->data['warning'] = $this->getError('warning');
 
@@ -93,7 +93,7 @@ class ControllerInformationContact extends Controller {
 			$product_data = $this->model_catalog_product->getProduct($this->request->get['listing_id']);
 
 			if ($product_data && $product_data['status'] == '1') {
-				$message = sprintf($this->language->get('text_message_listing'), html_entity_decode($product_data['name'], ENT_QUOTES, 'UTF-8'), $this->url->link('product/product', 'product_id=' . $this->request->get['listing_id'], 'SSL'));
+				$message = sprintf($this->language->get('text_message_listing'), html_entity_decode($product_data['name'], ENT_QUOTES, 'UTF-8'), $this->url->link('product/product', 'product_id=' . $this->request->get['listing_id']));
 				$this->model_catalog_product->updateViewed($this->request->get['listing_id']);
 			}
 		}
@@ -102,7 +102,7 @@ class ControllerInformationContact extends Controller {
 			$profile_data = $this->model_catalog_member->getMember($this->request->get['profile_id']);
 
 			if ($profile_data && !$profile_data['customer_id']) {
-				$message = sprintf($this->language->get('text_message_profile'), html_entity_decode($profile_data['member_account_name'], ENT_QUOTES, 'UTF-8'), $this->url->link('product/member/info', 'member_id=' . $this->request->get['profile_id'], 'SSL'));
+				$message = sprintf($this->language->get('text_message_profile'), html_entity_decode($profile_data['member_account_name'], ENT_QUOTES, 'UTF-8'), $this->url->link('product/member/info', 'member_id=' . $this->request->get['profile_id']));
 				$this->model_catalog_member->updateViewed($this->request->get['profile_id']);
 			}
 		}
@@ -185,9 +185,9 @@ class ControllerInformationContact extends Controller {
 		$this->data['captcha_enabled'] = $this->getCaptchaStatus();
 		$this->data['csrf_token'] = $this->getCSRFToken();
 
-		$this->data['members'] = $this->url->link('product/member', '', 'SSL');
-		$this->data['page'] = $this->url->link('information/contact', '', 'SSL');
-		$this->data['action'] = $this->url->link('information/contact', '', 'SSL');
+		$this->data['members'] = $this->url->link('product/member');
+		$this->data['page'] = $this->url->link('information/contact');
+		$this->data['action'] = $this->url->link('information/contact');
 
 		$this->data['contact_deails'] = $this->config->get('config_contact_details');
 		$this->data['contact_store'] = $this->config->get('config_name');

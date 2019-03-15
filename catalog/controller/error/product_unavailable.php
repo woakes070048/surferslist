@@ -14,7 +14,7 @@ class ControllerErrorProductUnavailable extends Controller {
 		$product_info = $listing_id ? $this->model_catalog_product->getProduct($listing_id) : array();
 
 		if ($product_info && $product_info['status'] == '1') {
-			$this->redirect($this->url->link('product/product', 'product_id=' . $listing_id, 'SSL'), 302);
+			$this->redirect($this->url->link('product/product', 'product_id=' . $listing_id), 302);
 		}
 
 		$config_product_count = false; // $this->config->get('config_product_count')
@@ -26,7 +26,7 @@ class ControllerErrorProductUnavailable extends Controller {
 		$this->addBreadcrumb($this->language->get('text_home'), $this->url->link('common/home'));
 
 		if (!isset($this->request->get['route']) || empty($this->request->get['listing_id'])) {
-			$this->redirect($this->url->link('common/home', '', 'SSL'));
+			$this->redirect($this->url->link('common/home'));
 		}
 
 		if ($this->config->get('apac_status') && $this->config->get('apac_categories_status') && $this->config->get('apac_categories_breadcrumb')) {
@@ -56,7 +56,7 @@ class ControllerErrorProductUnavailable extends Controller {
 			$product_member = array(
 				'name'        => $member_info['member_account_name'] . ($config_product_count ? sprintf($this->language->get('text_product_count'), $member_info['product_count']) : ''),
 				'thumb'       => $this->model_tool_image->resize($member_info['member_account_image'], $this->config->get('config_image_product_width'), 120),
-				'href'        => $this->url->link('product/member/info', 'member_id=' . $member_info['member_account_id'], 'SSL')
+				'href'        => $this->url->link('product/member/info', 'member_id=' . $member_info['member_account_id'])
 			);
 		}
 
@@ -101,7 +101,7 @@ class ControllerErrorProductUnavailable extends Controller {
 				$product_categories[] = array(
 					'name'  	=> $category_name . ($config_product_count ? sprintf($this->language->get('text_product_count'), $category['product_count']) : ''),
 					'thumb'		=> $this->model_tool_image->resize($category['image'], $this->config->get('config_image_product_width'), 120),
-					'href'		=> $this->url->link('product/category', 'path=' . $category['path'], 'SSL')
+					'href'		=> $this->url->link('product/category', 'path=' . $category['path'])
 				);
 			}
 		}
@@ -141,12 +141,12 @@ class ControllerErrorProductUnavailable extends Controller {
 		$this->data['text_search'] = $this->language->get('text_search');
 
 		$this->data['button_continue'] = $this->language->get('button_continue');
-		$this->data['continue'] = $this->url->link('common/home', '', 'SSL');
+		$this->data['continue'] = $this->url->link('common/home');
 
 		$this->data['button_search'] = $this->language->get('button_search');
 		$this->data['search'] = $category_id
-			? $this->url->link('product/search', 'category=' . $category_id, 'SSL')
-			: $this->url->link('product/search', '', 'SSL');
+			? $this->url->link('product/search', 'category=' . $category_id)
+			: $this->url->link('product/search');
 
 		$this->session->data['notification'] = $this->language->get('text_error');
 

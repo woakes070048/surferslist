@@ -206,7 +206,7 @@ class ControllerProductSearch extends Controller {
 			$max_pages = $limit > 0 ? ceil($product_total / $limit) : 1;
 
 			if ($page <= 0 || $limit <= 0 || ($max_pages > 0 && $page > $max_pages)) {
-				$this->redirect($this->url->link('error/not_found', '', 'SSL'));
+				$this->redirect($this->url->link('error/not_found'));
 			}
 
 			$results = $this->model_catalog_product->getProducts($data);
@@ -223,19 +223,19 @@ class ControllerProductSearch extends Controller {
 
 		if ($expand_search) $url .= '&expand_search=' . json_encode($expand_search);
 
-		$this->addSort($this->language->get('text_default'), 'p.sort_order-ASC', $this->url->link('product/search', 'sort=p.sort_order&order=ASC' . $url, 'SSL'));
-		$this->addSort($this->language->get('text_name_asc'), 'pd.name-ASC', $this->url->link('product/search', 'sort=pd.name&order=ASC' . $url, 'SSL'));
-		$this->addSort($this->language->get('text_name_desc'), 'pd.name-DESC', $this->url->link('product/search', 'sort=pd.name&order=DESC' . $url, 'SSL'));
-		$this->addSort($this->language->get('text_date_asc'), 'p.date_added-ASC', $this->url->link('product/search','&sort=p.date_added&order=ASC' . $url, 'SSL'));
-		$this->addSort($this->language->get('text_date_desc'), 'p.date_added-DESC', $this->url->link('product/search','&sort=p.date_added&order=DESC' . $url, 'SSL'));
-		$this->addSort($this->language->get('text_price_asc'), 'p.price-ASC', $this->url->link('product/search', 'sort=p.price&order=ASC' . $url, 'SSL'));
-		$this->addSort($this->language->get('text_price_desc'), 'p.price-DESC', $this->url->link('product/search', 'sort=p.price&order=DESC' . $url, 'SSL'));
-		$this->addSort($this->language->get('text_model_asc'), 'p.model-ASC', $this->url->link('product/search', 'sort=p.model&order=ASC' . $url, 'SSL'));
-		$this->addSort($this->language->get('text_model_desc'), 'p.model-DESC', $this->url->link('product/search', 'sort=p.model&order=DESC' . $url, 'SSL'));
-		$this->addSort($this->language->get('text_random'), 'random-' . $order, $this->url->link('product/search', '&sort=random' . $url, 'SSL'));
+		$this->addSort($this->language->get('text_default'), 'p.sort_order-ASC', $this->url->link('product/search', 'sort=p.sort_order&order=ASC' . $url));
+		$this->addSort($this->language->get('text_name_asc'), 'pd.name-ASC', $this->url->link('product/search', 'sort=pd.name&order=ASC' . $url));
+		$this->addSort($this->language->get('text_name_desc'), 'pd.name-DESC', $this->url->link('product/search', 'sort=pd.name&order=DESC' . $url));
+		$this->addSort($this->language->get('text_date_asc'), 'p.date_added-ASC', $this->url->link('product/search','&sort=p.date_added&order=ASC' . $url));
+		$this->addSort($this->language->get('text_date_desc'), 'p.date_added-DESC', $this->url->link('product/search','&sort=p.date_added&order=DESC' . $url));
+		$this->addSort($this->language->get('text_price_asc'), 'p.price-ASC', $this->url->link('product/search', 'sort=p.price&order=ASC' . $url));
+		$this->addSort($this->language->get('text_price_desc'), 'p.price-DESC', $this->url->link('product/search', 'sort=p.price&order=DESC' . $url));
+		$this->addSort($this->language->get('text_model_asc'), 'p.model-ASC', $this->url->link('product/search', 'sort=p.model&order=ASC' . $url));
+		$this->addSort($this->language->get('text_model_desc'), 'p.model-DESC', $this->url->link('product/search', 'sort=p.model&order=DESC' . $url));
+		$this->addSort($this->language->get('text_random'), 'random-' . $order, $this->url->link('product/search', '&sort=random' . $url));
 
 		$this->data['sorts'] = $this->getSorts();
-		$this->data['random'] = $this->url->link('product/search', '&sort=random' . $url, 'SSL');
+		$this->data['random'] = $this->url->link('product/search', '&sort=random' . $url);
 
 		// Limits
 		$url = $this->getQueryString(array('limit'));
@@ -269,19 +269,19 @@ class ControllerProductSearch extends Controller {
 		$this->data['limit'] = $limit;
 		$this->data['url'] = $url;
 
-		$this->data['compare'] = $this->url->link('product/compare', '', 'SSL');
-		$this->data['back'] = ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->request->server['HTTP_REFERER'] : $this->url->link('product/allproducts', '', 'SSL');
-		$this->data['search'] = $this->url->link('product/search', $url, 'SSL');
-		$this->data['reset'] = $this->url->link('product/search', '', 'SSL');
-		$this->data['continue'] = $this->url->link('common/home', '', 'SSL');
+		$this->data['compare'] = $this->url->link('product/compare');
+		$this->data['back'] = ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->request->server['HTTP_REFERER'] : $this->url->link('product/allproducts');
+		$this->data['search'] = $this->url->link('product/search', $url);
+		$this->data['reset'] = $this->url->link('product/search');
+		$this->data['continue'] = $this->url->link('common/home');
 
-		$this->data['more'] = $page < $max_pages ? $this->url->link('ajax/product/more', $url . '&page=' . ($page + 1), 'SSL') : '';
+		$this->data['more'] = $page < $max_pages ? $this->url->link('ajax/product/more', $url . '&page=' . ($page + 1)) : '';
 
 		if (!$this->data['products'] && (isset($this->session->data['shipping_country_id']) || isset($this->session->data['shipping_zone_id']) || isset($this->session->data['shipping_location']))) {
 			// Remove Location
 			$url = $this->getQueryString(array('location', 'country', 'state'));
 			$request_path = isset($this->request->server['REQUEST_URI']) ? parse_url(strtolower(urldecode($this->request->server['REQUEST_URI'])), PHP_URL_PATH) : '';
-			$location_remove_url = $this->url->link('information/location', 'location=none&redirect_path=' . urlencode(ltrim($request_path . '?' . ltrim($url, "&"), "/")), 'SSL');
+			$location_remove_url = $this->url->link('information/location', 'location=none&redirect_path=' . urlencode(ltrim($request_path . '?' . ltrim($url, "&"), "/")));
 			$this->data['text_empty'] .= '&nbsp; &nbsp;' . sprintf($this->language->get('text_location_remove_url'), $location_remove_url);
 		}
 

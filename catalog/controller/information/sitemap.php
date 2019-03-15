@@ -81,14 +81,14 @@ class ControllerInformationSitemap extends Controller {
 			$this->data['categories'] = $categories;
 
 			// BROWSE
-			$this->data['listings'] = $this->url->link('product/allproducts', '', 'SSL');
-			$this->data['category'] = $this->url->link('product/allcategories', '', 'SSL');
-			$this->data['manufacturer'] = $this->url->link('product/manufacturer', '', 'SSL');
-			$this->data['member'] = $this->url->link('product/member', '', 'SSL');
-			$this->data['featured'] = $this->url->link('product/featured', '', 'SSL');
-			$this->data['special'] = $this->url->link('product/special', '', 'SSL');
-			$this->data['search'] = $this->url->link('product/search', '', 'SSL');
-			$this->data['compare'] = $this->url->link('product/compare', '', 'SSL');
+			$this->data['listings'] = $this->url->link('product/allproducts');
+			$this->data['category'] = $this->url->link('product/allcategories');
+			$this->data['manufacturer'] = $this->url->link('product/manufacturer');
+			$this->data['member'] = $this->url->link('product/member');
+			$this->data['featured'] = $this->url->link('product/featured');
+			$this->data['special'] = $this->url->link('product/special');
+			$this->data['search'] = $this->url->link('product/search');
+			$this->data['compare'] = $this->url->link('product/compare');
 
 			// ACCOUNT SERVICES
 			$this->data['register'] = $this->url->link('account/register', '', 'SSL');
@@ -121,9 +121,9 @@ class ControllerInformationSitemap extends Controller {
 			$this->data['checkout'] = $this->url->link('checkout/checkout', '', 'SSL');
 
 			// INFORMATION
-			$this->data['location'] = $this->url->link('information/location', '', 'SSL');
-			$this->data['contact'] = $this->url->link('information/contact', '', 'SSL');
-			$this->data['sitemap'] = $this->url->link('information/sitemap', '', 'SSL');
+			$this->data['location'] = $this->url->link('information/location');
+			$this->data['contact'] = $this->url->link('information/contact');
+			$this->data['sitemap'] = $this->url->link('information/sitemap');
 
 			$this->load->model('catalog/information');
 
@@ -132,14 +132,14 @@ class ControllerInformationSitemap extends Controller {
 			foreach ($this->model_catalog_information->getInformations() as $result) {
 				$this->data['informations'][] = array(
 					'title' => $result['title'],
-					'href'  => $this->url->link('information/information', 'information_id=' . $result['information_id'], 'SSL')
+					'href'  => $this->url->link('information/information', 'information_id=' . $result['information_id'])
 				);
 			}
 
 			// OTHER
-			$this->data['home'] = $this->url->link('common/home', '', 'SSL');
+			$this->data['home'] = $this->url->link('common/home');
 			$this->data['email'] = $this->config->get('config_email');
-			$this->data['text_footer_contact'] = sprintf($this->language->get('text_footer_contact'), $this->url->link('information/contact', 'contact_id=0', 'SSL'));
+			$this->data['text_footer_contact'] = sprintf($this->language->get('text_footer_contact'), $this->url->link('information/contact', 'contact_id=0'));
 
 			$this->cache->set('sitemap.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'), $this->data, 60 * 60 * 24 * 30); // 1 month cache expiration
 		}

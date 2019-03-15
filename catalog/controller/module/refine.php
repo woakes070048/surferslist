@@ -237,7 +237,7 @@ class ControllerModuleRefine extends Controller {
 			$manufacturers_filter[] = array(
 				'id'	=> 0,
 				'name'	=> $this->language->get('text_manufacturer_all'),
-				'href'	=> $this->url->link($data['route'], $data['path'] . '&filter_manufacturer_id=0' . $url, 'SSL') . $this->anchor
+				'href'	=> $this->url->link($data['route'], $data['path'] . '&filter_manufacturer_id=0' . $url) . $this->anchor
 			);
 
 			foreach ($data['product_manufacturers'] as $manufacturer) {
@@ -254,7 +254,7 @@ class ControllerModuleRefine extends Controller {
 						'id'	=> $manufacturer['manufacturer_id'],
 						'name'  => $manufacturer['name'] . ($this->config_product_count ? sprintf($this->language->get('text_product_count'), $product_total_manufacturer) : ''),
 						'product_count' => $this->config_product_count ? $product_total_manufacturer : null,
-						'href'  => $this->url->link($data['route'], $data['path'] . '&filter_manufacturer_id=' . $manufacturer['manufacturer_id'] . $url, 'SSL') . $this->anchor
+						'href'  => $this->url->link($data['route'], $data['path'] . '&filter_manufacturer_id=' . $manufacturer['manufacturer_id'] . $url) . $this->anchor
 					);
 				}
 			}
@@ -410,7 +410,7 @@ class ControllerModuleRefine extends Controller {
 		$categories_filter[] = array(
 			'id' 		=> 0,
 			'name'      => $this->language->get('text_category_all'),
-			'href'      => $this->url->link($data['route'], $data['path'] . '&filter_category_id=0' . $url, 'SSL') . $this->anchor
+			'href'      => $this->url->link($data['route'], $data['path'] . '&filter_category_id=0' . $url) . $this->anchor
 		);
 
 		foreach ($data['product_categories'] as $category_info) {
@@ -448,8 +448,8 @@ class ControllerModuleRefine extends Controller {
 					'id' 		  => $category_info['category_id'],
 					'name'        => $category_name . ($this->config_product_count ? sprintf($this->language->get('text_product_count'), $product_total_category) : ''),
 					'product_count' => $this->config_product_count ? $product_total_category : null,
-					'link'        => $this->url->link('product/category', 'path=' . $category_info['path'], 'SSL'),
-					'href'        => $this->url->link($data['route'], $data['path'] . '&filter_category_id=' . $category_info['category_id'] . $url, 'SSL') . $this->anchor
+					'link'        => $this->url->link('product/category', 'path=' . $category_info['path']),
+					'href'        => $this->url->link($data['route'], $data['path'] . '&filter_category_id=' . $category_info['category_id'] . $url) . $this->anchor
 				);
 			}
 		}

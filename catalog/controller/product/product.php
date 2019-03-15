@@ -19,7 +19,7 @@ class ControllerProductProduct extends Controller {
 
 		if (!$product_info || ($product_info['status'] == '0' && !$preview_listing)) {
 			$this->response->addHeader($this->request->server['SERVER_PROTOCOL'] . ' 307 Temporary Redirect');
-			$this->response->redirect($this->url->link('error/product_unavailable', 'listing_id=' . $product_id, 'SSL'));
+			$this->response->redirect($this->url->link('error/product_unavailable', 'listing_id=' . $product_id));
 		}
 
 		$this->setQueryParams(array(
@@ -187,7 +187,7 @@ class ControllerProductProduct extends Controller {
 			if ($this->config->get('member_data_field_shipping') && $this->config->get('product_shipping_status') && $product_data['shipping']) {
 				$product_shipping = $this->model_catalog_product->getProductShipping($product_id);
 				$this->data['shipping'] = $product_shipping
-					? sprintf($this->language->get('text_shipping_yes'), $this->url->link('ajax/product/shipping_rates', 'shipping_rate_id=' . $product_id, 'SSL'))
+					? sprintf($this->language->get('text_shipping_yes'), $this->url->link('ajax/product/shipping_rates', 'shipping_rate_id=' . $product_id))
 					: $this->language->get('text_yes');
 				$this->data['shipping_display'] = true;
 				$this->data['shipping_display_dimensions'] = $product_shipping ? false : true;
@@ -239,7 +239,7 @@ class ControllerProductProduct extends Controller {
 				$filter_category_id = $category_info['category_id'];
 				$url .= '&path=' . $category_info['path'];
 
-				$more_url = $this->url->link('product/category', $url, 'SSL');
+				$more_url = $this->url->link('product/category', $url);
 				$this->data['more_title'] = utf8_strlen($category_info['name']) > $max_prevnext_length ? utf8_substr($category_info['name'], 0, $max_prevnext_length) . $this->language->get('text_ellipses') : $category_info['name'];
 			} else if ($product_data['member']) {
 				$filter_member_account_id = $product_data['member']['member_id'];
@@ -249,7 +249,7 @@ class ControllerProductProduct extends Controller {
 				// 	$url .= '&filter_category_id=' . $category_info['category_id'];
 				// }
 
-				$more_url = $this->url->link('product/member/info', 'member_id=' . $product_data['member']['member_id'] . $url, 'SSL') . '#member-listings';
+				$more_url = $this->url->link('product/member/info', 'member_id=' . $product_data['member']['member_id'] . $url) . '#member-listings';
 				$this->data['more_title'] = utf8_strlen($product_data['member']['name']) > $max_prevnext_length ? utf8_substr($product_data['member']['name'], 0, $max_prevnext_length) . $this->language->get('text_ellipses') : $product_data['member']['name'];
 			} else {
 				$more_url = $this->url->link('product/allproducts');

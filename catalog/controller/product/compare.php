@@ -21,7 +21,7 @@ class ControllerProductCompare extends Controller {
 
 			$this->session->data['success'] = sprintf($this->language->get('text_remove'), $this->url->link('product/compare'));
 
-			$this->redirect($this->url->link('product/compare', '', 'SSL'));
+			$this->redirect($this->url->link('product/compare'));
 		}
 
 		$this->document->setTitle($this->language->get('heading_title'));
@@ -74,7 +74,7 @@ class ControllerProductCompare extends Controller {
 				}
 
 				$product_data['thumb'] = $this->model_tool_image->resize($product_info['image'], $this->config->get('config_image_additional_width'), $this->config->get('config_image_additional_height'), 'autocrop');
-				$product_data['remove'] = $this->url->link('product/compare', 'remove=' . $product_data['product_id'], 'SSL');
+				$product_data['remove'] = $this->url->link('product/compare', 'remove=' . $product_data['product_id']);
 
 				$this->data['products'][$product_data['product_id']] = $product_data;
 			} else {
@@ -82,10 +82,10 @@ class ControllerProductCompare extends Controller {
 			}
 		}
 
-		$this->data['back'] = ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->request->server['HTTP_REFERER'] : $this->url->link('product/allproducts', '', 'SSL');
-		$this->data['search'] = $this->url->link('product/search', '', 'SSL');
-		$this->data['reset'] = $this->url->link('product/featured', '', 'SSL');
-		$this->data['continue'] = $this->url->link('common/home', '', 'SSL');
+		$this->data['back'] = ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->request->server['HTTP_REFERER'] : $this->url->link('product/allproducts');
+		$this->data['search'] = $this->url->link('product/search');
+		$this->data['reset'] = $this->url->link('product/featured');
+		$this->data['continue'] = $this->url->link('common/home');
 
 		$this->template = '/template/product/compare.tpl';
 

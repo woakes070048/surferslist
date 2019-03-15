@@ -81,7 +81,7 @@ class ControllerProductQuickview extends Controller {
 
 			$this->data['heading_title'] = $this->language->get('text_error');
 
-			$this->data['search'] = $this->url->link('product/search', '', 'SSL');
+			$this->data['search'] = $this->url->link('product/search');
 			$this->data['continue'] = $this->url->link('common/home');
 
 			$this->template = '/template/error/not_found.tpl';

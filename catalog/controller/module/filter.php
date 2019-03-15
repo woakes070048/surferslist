@@ -73,13 +73,13 @@ class ControllerModuleFilter extends Controller {
 			}
 
 			if ($category_info) {
-				$this->data['action'] = str_replace('&amp;', '&', $this->url->link('product/category', 'path=' . $this->request->get['path'] . $url, 'SSL'));
+				$this->data['action'] = str_replace('&amp;', '&', $this->url->link('product/category', 'path=' . $this->request->get['path'] . $url));
 			} else if ($manufacturer_id) {
-				$this->data['action'] = str_replace('&amp;', '&', $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $manufacturer_id . $url, 'SSL'));
+				$this->data['action'] = str_replace('&amp;', '&', $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $manufacturer_id . $url));
 			} else if ($member_id) {
-				$this->data['action'] = str_replace('&amp;', '&', $this->url->link('product/member/info', 'member_id=' . $member_id . $url, 'SSL'));
+				$this->data['action'] = str_replace('&amp;', '&', $this->url->link('product/member/info', 'member_id=' . $member_id . $url));
 			} else {
-				$this->data['action'] = str_replace('&amp;', '&', $this->url->link('product/allproducts', $url, 'SSL'));
+				$this->data['action'] = str_replace('&amp;', '&', $this->url->link('product/allproducts', $url));
 			}
 
 			if (isset($this->request->get['filter'])) {

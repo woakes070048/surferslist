@@ -26,7 +26,7 @@ class ControllerCommonFooter extends Controller {
 		$this->data['text_logo_footer'] = sprintf($this->language->get('text_logo_footer'), $this->config->get('config_name'));
 
 		// Information
-		$this->data['about'] = $this->url->link('information/information', 'information_id=4', 'SSL'); // About Us
+		$this->data['about'] = $this->url->link('information/information', 'information_id=4'); // About Us
 		$this->data['informations'] = $this->cache->get('information.primary.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'));
 		$this->data['informations_extra'] = $this->cache->get('information.other.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'));
 
@@ -64,17 +64,17 @@ class ControllerCommonFooter extends Controller {
 			$this->cache->set('information.other.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'), $this->data['informations_extra'], 60 * 60 * 24 * 30); // 1 month cache expiration
 		}
 
-		$this->data['home'] = $this->url->link('common/home', '', 'SSL');
-		$this->data['location'] = $this->url->link('information/location', '', 'SSL');
+		$this->data['home'] = $this->url->link('common/home');
+		$this->data['location'] = $this->url->link('information/location');
 
 		// Listings Links
-		$this->data['product'] = $this->url->link('product/allproducts', '', 'SSL');
-		$this->data['category'] = $this->url->link('product/allcategories', '', 'SSL');
-		$this->data['manufacturer'] = $this->url->link('product/manufacturer', '', 'SSL');
-		$this->data['member'] = $this->url->link('product/member', '', 'SSL');
-		$this->data['search'] = $this->url->link('product/search', '', 'SSL');
-		$this->data['featured'] = $this->url->link('product/featured', '', 'SSL');
-		$this->data['special'] = $this->url->link('product/special', '', 'SSL');
+		$this->data['product'] = $this->url->link('product/allproducts');
+		$this->data['category'] = $this->url->link('product/allcategories');
+		$this->data['manufacturer'] = $this->url->link('product/manufacturer');
+		$this->data['member'] = $this->url->link('product/member');
+		$this->data['search'] = $this->url->link('product/search');
+		$this->data['featured'] = $this->url->link('product/featured');
+		$this->data['special'] = $this->url->link('product/special');
 
 		// Account Links
 		$this->data['account'] = $this->url->link('account/account', '', 'SSL');
@@ -83,7 +83,7 @@ class ControllerCommonFooter extends Controller {
 		$this->data['post'] = $this->customer->isLogged() ? $this->url->link('account/product/insert', '', 'SSL') : $this->url->link('account/anonpost', '', 'SSL');
 		// $this->data['newsletter'] = $this->url->link('account/newsletter', '', 'SSL');
 		$this->data['forgotten'] = $this->url->link('account/forgotten', '', 'SSL');
-		$this->data['compare'] = $this->url->link('product/compare', '', 'SSL');
+		$this->data['compare'] = $this->url->link('product/compare');
 		$this->data['profile'] = $this->customer->isLogged() && $this->customer->hasProfile()
 			? $this->customer->getProfileUrl()
 			: $this->url->link('account/member', '', 'SSL');
@@ -92,8 +92,8 @@ class ControllerCommonFooter extends Controller {
 		$this->data['login'] = $this->url->link('account/login', '', 'SSL');
 
 		// Site Links
-		$this->data['contact'] = $this->url->link('information/contact', '', 'SSL');
-		$this->data['sitemap'] = $this->url->link('information/sitemap', '', 'SSL');
+		$this->data['contact'] = $this->url->link('information/contact');
+		$this->data['sitemap'] = $this->url->link('information/sitemap');
 
 		$this->data['logged'] = $this->customer->isLogged();
 

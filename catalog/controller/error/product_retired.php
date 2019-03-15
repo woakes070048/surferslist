@@ -2,7 +2,7 @@
 class ControllerErrorProductRetired extends Controller {
 	public function index() {
 		if (!isset($this->request->get['route']) || empty($this->request->get['product_id'])) {
-			$this->redirect($this->url->link('common/home', '', 'SSL'));
+			$this->redirect($this->url->link('common/home'));
 		}
 
 		$this->data = array_merge(
@@ -51,7 +51,7 @@ class ControllerErrorProductRetired extends Controller {
 			$product_member = array(
 				'name'        => $member_info['member_account_name'] . ($config_product_count ? sprintf($this->language->get('text_product_count'), $member_info['product_count']) : ''),
 				'thumb'       => $this->model_tool_image->resize($member_info['member_account_image'], $this->config->get('config_image_product_width'), 120),
-				'href'        => $this->url->link('product/member/info', 'member_id=' . $member_info['member_account_id'], 'SSL')
+				'href'        => $this->url->link('product/member/info', 'member_id=' . $member_info['member_account_id'])
 			);
 		}
 
@@ -96,7 +96,7 @@ class ControllerErrorProductRetired extends Controller {
 				$product_categories[] = array(
 					'name'  	=> $category_name . ($config_product_count ? sprintf($this->language->get('text_product_count'), $category['product_count']) : ''),
 					'thumb'		=> $this->model_tool_image->resize($category['image'], $this->config->get('config_image_product_width'), 120),
-					'href'		=> $this->url->link('product/category', 'path=' . $category['path'], 'SSL')
+					'href'		=> $this->url->link('product/category', 'path=' . $category['path'])
 				);
 			}
 		}
@@ -136,10 +136,10 @@ class ControllerErrorProductRetired extends Controller {
 		$this->data['text_search'] = $this->language->get('text_search');
 
 		$this->data['button_continue'] = $this->language->get('button_continue');
-		$this->data['continue'] = $this->url->link('common/home', '', 'SSL');
+		$this->data['continue'] = $this->url->link('common/home');
 
 		$this->data['button_search'] = $this->language->get('button_search');
-		$this->data['search'] = $category_id ? $this->url->link('product/search', 'category=' . $category_id, 'SSL') : $this->url->link('product/search', '', 'SSL');
+		$this->data['search'] = $category_id ? $this->url->link('product/search', 'category=' . $category_id) : $this->url->link('product/search');
 
 		$this->session->data['notification'] = $this->language->get('text_error');
 

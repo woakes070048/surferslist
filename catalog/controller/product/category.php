@@ -149,8 +149,7 @@ class ControllerProductCategory extends Controller {
 
 		if (!$category_info || ($filter_manufacturer_id && !in_array($filter_manufacturer_id, explode(',', $category_info['manufacturer_ids'])))) {
 			$this->session->data['warning'] = $this->language->get('text_error');
-			return $this->forward('error/notfound');
-			// return $this->redirect($this->url->link('error/not_found', '', 'SSL'));
+			return $this->redirect($this->url->link('error/not_found'));
 		}
 
 		// $heading_title = substr_count($category_info['path'], '_') > 0 ? sprintf($this->language->get('text_for_sale'), $category_info['name']) : sprintf($this->language->get('text_for_sale'), $category_info['name'] . ' ' . $this->language->get('text_equipment'));
@@ -203,7 +202,7 @@ class ControllerProductCategory extends Controller {
 		$max_pages = $limit > 0 && $product_total ? ceil($product_total / $limit) : 1;
 
 		if ($page <= 0 || $limit <= 0 || ($max_pages > 0 && $page > $max_pages)) {
-			$this->redirect($this->url->link('error/not_found', '', 'SSL'));
+			$this->redirect($this->url->link('error/not_found'));
 		}
 
 		$this->data['products'] = $this->getChild('product/data/list', $this->model_catalog_product->getProducts($data));
@@ -233,18 +232,18 @@ class ControllerProductCategory extends Controller {
 		$this->document->setDescription($meta_description);
 		$this->document->setKeywords($meta_keyword);
 
-		$this->data['action'] = str_replace('&amp;', '&', $this->url->link('product/category', 'path=' . $category_info['path'] . $url, 'SSL'));
-		$this->data['back'] = ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->request->server['HTTP_REFERER'] : $this->url->link('product/allproducts', '', 'SSL');
-		$this->data['search'] = $this->url->link('product/search', '', 'SSL');
-		$this->data['reset'] = $this->url->link('product/category', 'path=' . $category_info['path'], 'SSL');
-		$this->data['continue'] = $this->url->link('common/home', '', 'SSL');
-		$this->data['more'] = $page < $max_pages ? $this->url->link('ajax/product/more', 'path=' . $category_info['path'] . $url . '&page=' . ($page + 1), 'SSL') : '';
+		$this->data['action'] = str_replace('&amp;', '&', $this->url->link('product/category', 'path=' . $category_info['path'] . $url));
+		$this->data['back'] = ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->request->server['HTTP_REFERER'] : $this->url->link('product/allproducts');
+		$this->data['search'] = $this->url->link('product/search');
+		$this->data['reset'] = $this->url->link('product/category', 'path=' . $category_info['path']);
+		$this->data['continue'] = $this->url->link('common/home');
+		$this->data['more'] = $page < $max_pages ? $this->url->link('ajax/product/more', 'path=' . $category_info['path'] . $url . '&page=' . ($page + 1)) : '';
 		$this->data['url'] = $url;
 
 		if (!$this->data['products'] && (isset($this->session->data['shipping_country_id']) || isset($this->session->data['shipping_zone_id']) || isset($this->session->data['shipping_location']))) {
 			$request_path = isset($this->request->server['REQUEST_URI']) ? parse_url(strtolower(urldecode($this->request->server['REQUEST_URI'])), PHP_URL_PATH) : '';
 			$url = $this->getQueryString(array('filter_location', 'filter_country_id', 'filter_zone_id'));
-			$location_remove_url = $this->url->link('information/location', 'location=none&redirect_path=' . urlencode(ltrim($request_path . '?' . ltrim($url, "&"), "/")), 'SSL');
+			$location_remove_url = $this->url->link('information/location', 'location=none&redirect_path=' . urlencode(ltrim($request_path . '?' . ltrim($url, "&"), "/")));
 			$this->data['text_empty'] .= '&emsp;' . sprintf($this->language->get('text_location_remove_url'), $location_remove_url);
 		}
 

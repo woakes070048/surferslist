@@ -70,23 +70,23 @@ class ControllerCommonHeader extends Controller {
 		$this->data['location_geo'] = $this->getLocationName('short') ?: $this->language->get('text_location_change');
 
 		$this->data['home'] = $this->url->link('common/home');
-		$this->data['product'] = $this->url->link('product/allproducts', '', 'SSL');
-		$this->data['product_search'] = $this->url->link('product/search', '', 'SSL');
-		$this->data['category'] = $this->url->link('product/allcategories', '', 'SSL');
-		$this->data['manufacturer'] = $this->url->link('product/manufacturer', '', 'SSL');
-		$this->data['member'] = $this->url->link('product/member', '', 'SSL');
-		$this->data['featured'] = $this->url->link('product/featured', '', 'SSL');
-		$this->data['special'] = $this->url->link('product/special', '', 'SSL');
+		$this->data['product'] = $this->url->link('product/allproducts');
+		$this->data['product_search'] = $this->url->link('product/search');
+		$this->data['category'] = $this->url->link('product/allcategories');
+		$this->data['manufacturer'] = $this->url->link('product/manufacturer');
+		$this->data['member'] = $this->url->link('product/member');
+		$this->data['featured'] = $this->url->link('product/featured');
+		$this->data['special'] = $this->url->link('product/special');
 		$this->data['post'] = $this->customer->isLogged() ? $this->url->link('account/product/insert', '', 'SSL') : $this->url->link('account/anonpost', '', 'SSL');
 		$this->data['post_link'] = $this->url->link('account/anonpost', '', 'SSL');
-		$this->data['about'] = $this->url->link('information/information', 'information_id=4', 'SSL'); // About Us
-		$this->data['faq'] = $this->url->link('information/information', 'information_id=11', 'SSL'); // FAQ
-		// $this->data['blog'] = $this->url->link('blog/blog_home', '', 'SSL');
+		$this->data['about'] = $this->url->link('information/information', 'information_id=4'); // About Us
+		$this->data['faq'] = $this->url->link('information/information', 'information_id=11'); // FAQ
+		// $this->data['blog'] = $this->url->link('blog/blog_home');
 		$this->data['register'] = $this->url->link('account/register');
 		$this->data['login'] = $this->url->link('account/login');
 		$this->data['logout'] = $this->url->link('account/logout');
 		$this->data['wishlist'] = $this->url->link('account/wishlist', '', 'SSL');
-		$this->data['compare'] = $this->url->link('product/compare', '', 'SSL');
+		$this->data['compare'] = $this->url->link('product/compare');
 		$this->data['logged'] = $this->customer->isLogged();
 		$this->data['account'] = $this->url->link('account/account', '', 'SSL');
 		$this->data['listings'] = $this->url->link('account/product', '', 'SSL');
@@ -95,9 +95,9 @@ class ControllerCommonHeader extends Controller {
 		$this->data['profile'] = $this->customer->getId() ? $this->customer->getProfileUrl() : $this->url->link('account/member', '', 'SSL');
 		$this->data['shopping_cart'] = $this->url->link('checkout/cart');
 		$this->data['checkout'] = $this->url->link('checkout/checkout', '', 'SSL');
-		$this->data['location'] = $this->url->link('information/location', 'redirect_path=' . urlencode(ltrim($request_path . '?' . $request_params, '/')), 'SSL');
-		$this->data['location_remove'] = $this->url->link('information/location', 'location=none&redirect_path=' . urlencode(ltrim($request_path . '?' . $request_params, '/')), 'SSL');
-		$this->data['contact'] = $this->url->link('information/contact', '', 'SSL');
+		$this->data['location'] = $this->url->link('information/location', 'redirect_path=' . urlencode(ltrim($request_path . '?' . $request_params, '/')));
+		$this->data['location_remove'] = $this->url->link('information/location', 'location=none&redirect_path=' . urlencode(ltrim($request_path . '?' . $request_params, '/')));
+		$this->data['contact'] = $this->url->link('information/contact');
 
 		$this->data['stores'] = array();
 

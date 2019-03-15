@@ -139,7 +139,7 @@ class ControllerAjaxQuestion extends Controller {
 
 			$this->data['questions'][] = array(
 				'name'       => $name,
-				'href'       => $result['author_member_id'] ? $this->url->link('product/member/info', 'member_id=' . $result['author_member_id'], 'SSL') : '',
+				'href'       => $result['author_member_id'] ? $this->url->link('product/member/info', 'member_id=' . $result['author_member_id']) : '',
 				'image'      => $image,
 				'text'       => nl2br($result['text']),
 				'date_added' => date($this->language->get('date_format_medium'), strtotime($result['date_added']))
@@ -189,7 +189,7 @@ class ControllerAjaxQuestion extends Controller {
 
 			$this->data['questions'][] = array(
 				'name'       => $name,
-				'href'       => $result['author_member_id'] ? $this->url->link('product/member/info', 'member_id=' . $result['author_member_id'], 'SSL') : '',
+				'href'       => $result['author_member_id'] ? $this->url->link('product/member/info', 'member_id=' . $result['author_member_id']) : '',
 				'image'      => $image,
 				'text'       => nl2br($result['text']),
 				'questions'  => sprintf($this->language->get('text_discussions'), (int)$discussion_total),
@@ -292,7 +292,7 @@ class ControllerAjaxQuestion extends Controller {
 
 			$message = sprintf(
 				$this->language->get('text_question_mail'),
-				'"' . $product_name . '" (' . $this->url->link('product/product', 'product_id=' . $data['product_id'], 'SSL') . ')',
+				'"' . $product_name . '" (' . $this->url->link('product/product', 'product_id=' . $data['product_id']) . ')',
 				$asker_name,
 				$message_text
 			);
@@ -311,7 +311,7 @@ class ControllerAjaxQuestion extends Controller {
 
 			$message = sprintf(
 				$this->language->get('text_disucssion_mail'),
-				'"' . $member_name . '" (' . $this->url->link('product/member/info', 'member_id=' . $data['member_id'], 'SSL') . ')',
+				'"' . $member_name . '" (' . $this->url->link('product/member/info', 'member_id=' . $data['member_id']) . ')',
 				$asker_name,
 				$message_text
 			);

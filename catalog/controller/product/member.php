@@ -5,7 +5,7 @@ class ControllerProductMember extends Controller {
 	public function index() {
 		if (!$this->config->get('member_status') || !$this->config->get('member_member_pages')) {
 			$this->session->data['warning'] = $this->language->get('error_membership');
-			$this->redirect($this->url->link('common/home', '', 'SSL'));
+			$this->redirect($this->url->link('common/home'));
 		}
 
 		$this->data = array_merge(
@@ -135,7 +135,7 @@ class ControllerProductMember extends Controller {
 			$this->data['keys'][] = array(
 				'name' => $key,
 				'href' => $this->url->link('product/member',
-				'filter_member_account_name=' . $letter . $url, 'SSL')
+				'filter_member_account_name=' . $letter . $url)
 			);
 		}
 
@@ -158,7 +158,7 @@ class ControllerProductMember extends Controller {
 		$max_pages = $limit > 0 ? ceil($members_total / $limit) : 1;
 
 		if ($page <= 0 || $limit <= 0 || ($max_pages > 0 && $page > $max_pages)) {
-			$this->redirect($this->url->link('error/not_found', '', 'SSL'));
+			$this->redirect($this->url->link('error/not_found'));
 		}
 
 		$results = $this->model_catalog_member->getMembers($data);
@@ -186,11 +186,11 @@ class ControllerProductMember extends Controller {
 					'member_custom_field_03' 	=> $display_custom_fields && isset($result['member_custom_field_03']) ? $result['member_custom_field_03'] : '',
 					'member_custom_field_04' 	=> $display_custom_fields && isset($result['member_custom_field_04']) ? $result['member_custom_field_04'] : '',
 					'member_custom_field_05' 	=> $display_custom_fields && isset($result['member_custom_field_05']) ? $result['member_custom_field_05'] : '',
-					'member_custom_field_06' 	=> $display_custom_fields && !empty($result['member_custom_field_06']) ? $this->url->link('embed/profile', 'profile_id=' . $result['customer_id'], 'SSL') : '',
+					'member_custom_field_06' 	=> $display_custom_fields && !empty($result['member_custom_field_06']) ? $this->url->link('embed/profile', 'profile_id=' . $result['customer_id']) : '',
 					'reviews'            		=> $result['reviews'] ? (int)$result['reviews'] : 0,
 					'rating'             		=> $rating,
 					'help_member_rating' 		=> sprintf($this->language->get('help_member_rating'), number_format($result['rating'], 2), (int)$result['reviews']),
-					'href'               		=> $this->url->link('product/member/info', 'member_id=' . $result['member_account_id'] . $url, 'SSL')
+					'href'               		=> $this->url->link('product/member/info', 'member_id=' . $result['member_account_id'] . $url)
 				);
 			// }
 		}
@@ -205,7 +205,7 @@ class ControllerProductMember extends Controller {
 		$this->data['locations'][] = array(
 			'text'  => $this->language->get('text_default'),
 			'value' => 'All Locations - ASC',
-			'href'  => $this->url->link('product/member', $url, 'SSL')
+			'href'  => $this->url->link('product/member', $url)
 		);
 
 		$locations = $this->model_catalog_member->getMemberLocations();
@@ -216,7 +216,7 @@ class ControllerProductMember extends Controller {
 			$this->data['locations'][] = array(
 				'text'  => $value['location'],
 				'value' => $value['location'],
-				'href'  => $this->url->link('product/member', 'filter_location=' . $value['location'] . $url, 'SSL')
+				'href'  => $this->url->link('product/member', 'filter_location=' . $value['location'] . $url)
 			);
 		}
 		* */
@@ -227,7 +227,7 @@ class ControllerProductMember extends Controller {
 		$this->data['countries'][] = array(
 			'id'	=> 0,
 			'name'	=> $this->language->get('text_country_all'),
-			'href'	=> $this->url->link('product/member', 'filter_country_id=0' . $url, 'SSL')
+			'href'	=> $this->url->link('product/member', 'filter_country_id=0' . $url)
 		);
 
 		$countries = $this->model_localisation_country->getCountries();
@@ -244,7 +244,7 @@ class ControllerProductMember extends Controller {
 			$this->data['countries'][] = array(
 				'id'	=> $country['country_id'],
 				'name'  => $country['name'] . ($config_product_count ? ' (' . $member_total . ')' : ''),
-				'href'  => $this->url->link('product/member', 'filter_country_id=' . $country['country_id'] . $url, 'SSL')
+				'href'  => $this->url->link('product/member', 'filter_country_id=' . $country['country_id'] . $url)
 			);
 		}
 
@@ -256,7 +256,7 @@ class ControllerProductMember extends Controller {
 		$this->data['zones'][] = array(
 			'id'	=> 0,
 			'name'	=> $this->language->get('text_zone_all'),
-			'href'	=> $this->url->link('product/member', 'filter_zone_id=0' . $url, 'SSL')
+			'href'	=> $this->url->link('product/member', 'filter_zone_id=0' . $url)
 		);
 
 		if ($filter_country_id) {
@@ -275,7 +275,7 @@ class ControllerProductMember extends Controller {
 				$this->data['zones'][] = array(
 					'id'	=> $zone['zone_id'],
 					'name'  => $zone['name'] . ($config_product_count ? ' (' . $member_total . ')' : ''),
-					'href'  => $this->url->link('product/member', 'filter_zone_id=' . $zone['zone_id'] . $url, 'SSL')
+					'href'  => $this->url->link('product/member', 'filter_zone_id=' . $zone['zone_id'] . $url)
 				);
 			}
 		}
@@ -296,13 +296,13 @@ class ControllerProductMember extends Controller {
 		$url = $this->getQueryString(array('sort', 'order'));
 
 		if ($this->config->get('member_members_list_sort')) {
-			$this->addSort($this->language->get('text_default'), 'default-' . $order, $this->url->link('product/member', '&sort=default' . $url, 'SSL'));
+			$this->addSort($this->language->get('text_default'), 'default-' . $order, $this->url->link('product/member', '&sort=default' . $url));
 		}
 
-		$this->addSort($this->language->get('text_name_asc'), 'name-ASC', $this->url->link('product/member', '&sort=name&order=ASC' . $url, 'SSL'));
-		$this->addSort($this->language->get('text_name_desc'), 'name-DESC', $this->url->link('product/member', '&sort=name&order=DESC' . $url, 'SSL'));
-		$this->addSort($this->language->get('text_rating'), 'rating', $this->url->link('product/member', '&sort=rating' . $url, 'SSL'));
-		$this->addSort($this->language->get('text_random'), 'random-' . $order, $this->url->link('product/member', '&sort=random' . $url, 'SSL'));
+		$this->addSort($this->language->get('text_name_asc'), 'name-ASC', $this->url->link('product/member', '&sort=name&order=ASC' . $url));
+		$this->addSort($this->language->get('text_name_desc'), 'name-DESC', $this->url->link('product/member', '&sort=name&order=DESC' . $url));
+		$this->addSort($this->language->get('text_rating'), 'rating', $this->url->link('product/member', '&sort=rating' . $url));
+		$this->addSort($this->language->get('text_random'), 'random-' . $order, $this->url->link('product/member', '&sort=random' . $url));
 
 		$this->data['sorts'] = $this->getSorts();
 		$this->data['limits'] = $this->getLimits('product/member', $this->getQueryString(array('limit')));
@@ -333,17 +333,17 @@ class ControllerProductMember extends Controller {
 
 		$request_path = isset($this->request->server['REQUEST_URI']) ? parse_url(strtolower(urldecode($this->request->server['REQUEST_URI'])), PHP_URL_PATH) : '';
 
-		$this->data['location_page'] = $this->url->link('information/location', 'redirect_path=' . urlencode(ltrim($request_path, "/")), 'SSL');
-		$this->data['random'] = $this->url->link('product/member', '&sort=random' . $url, 'SSL');
-		$this->data['back'] = ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->request->server['HTTP_REFERER'] : $this->url->link('product/allproducts', '', 'SSL');
-		$this->data['search'] = $this->url->link('product/search', '', 'SSL');
-		$this->data['reset'] = $this->url->link('product/member', '', 'SSL');
-		$this->data['continue'] = $this->url->link('common/home', '', 'SSL');
+		$this->data['location_page'] = $this->url->link('information/location', 'redirect_path=' . urlencode(ltrim($request_path, "/")));
+		$this->data['random'] = $this->url->link('product/member', '&sort=random' . $url);
+		$this->data['back'] = ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->request->server['HTTP_REFERER'] : $this->url->link('product/allproducts');
+		$this->data['search'] = $this->url->link('product/search');
+		$this->data['reset'] = $this->url->link('product/member');
+		$this->data['continue'] = $this->url->link('common/home');
 
 		if (!$this->data['members'] && (isset($this->session->data['shipping_country_id']) || isset($this->session->data['shipping_zone_id']) || isset($this->session->data['shipping_location']))) {
 			// Remove Location
 			$url = $this->getQueryString(array('filter_location', 'filter_country_id', 'filter_zone_id'));
-			$location_remove_url = $this->url->link('information/location', 'location=none&redirect_path=' . urlencode(ltrim($request_path . '?' . ltrim($url, "&"), "/")), 'SSL');
+			$location_remove_url = $this->url->link('information/location', 'location=none&redirect_path=' . urlencode(ltrim($request_path . '?' . ltrim($url, "&"), "/")));
 			$this->data['text_empty_members'] .= '&emsp;' . sprintf($this->language->get('text_location_remove_url'), $location_remove_url);
 		}
 
@@ -365,7 +365,7 @@ class ControllerProductMember extends Controller {
 	public function info() {
 		if (!$this->config->get('member_status') || !$this->config->get('member_member_pages')) {
 			$this->session->data['warning'] = $this->language->get('error_membership');
-			$this->redirect($this->url->link('common/home', '', 'SSL'));
+			$this->redirect($this->url->link('common/home'));
 		}
 
 		$this->data = array_merge(
@@ -488,8 +488,7 @@ class ControllerProductMember extends Controller {
 
 		if (!$member_info) {
 			$this->session->data['warning'] = $this->language->get('text_error');
-			return $this->forward('error/notfound');
-			// $this->redirect($this->url->link('error/not_found', '', 'SSL'));
+			$this->redirect($this->url->link('error/not_found'));
 		}
 
 		$heading_title = $member_info['member_account_name'];
@@ -520,8 +519,8 @@ class ControllerProductMember extends Controller {
 		$this->data['member_name'] = $member_info['member_account_name'];
 		$this->data['member_type'] = $member_info['account_group'];
 		$this->data['member_date_added'] = date($this->language->get('date_format_long'), strtotime($member_info['date_added']));
-		$this->data['member_page'] = $this->url->link('product/member/info', 'member_id=' . $this->request->get['member_id'], 'SSL');
-		$this->data['member_url_alias'] = substr($this->data['member_page'], strlen($this->url->link('common/home', '', 'SSL')));
+		$this->data['member_page'] = $this->url->link('product/member/info', 'member_id=' . $this->request->get['member_id']);
+		$this->data['member_url_alias'] = substr($this->data['member_page'], strlen($this->url->link('common/home')));
 
 		// social links
 		for ($i = 1; $i <= 6; $i++) {
@@ -529,7 +528,7 @@ class ControllerProductMember extends Controller {
 			$this->data["member_custom_field_0{$i}"] = (isset($member_info["member_custom_field_0{$i}"]) ? $member_info["member_custom_field_0{$i}"] : '');
 		}
 
-		$this->data['member_custom_field_06'] = !empty($member_info['member_custom_field_06']) && !empty($member_info['customer_id']) ? $this->url->link('embed/profile', 'profile_id=' . $member_info['customer_id'], 'SSL') : '';
+		$this->data['member_custom_field_06'] = !empty($member_info['member_custom_field_06']) && !empty($member_info['customer_id']) ? $this->url->link('embed/profile', 'profile_id=' . $member_info['customer_id']) : '';
 
 		// hashtag/keywords
 		$this->data['member_tags'] = array();
@@ -540,7 +539,7 @@ class ControllerProductMember extends Controller {
 			foreach ($tags as $tag) {
 				$this->data['member_tags'][] = array(
 					'tag'  => trim($tag),
-					'href' => $this->url->link('product/member', 'tag=' . trim($tag), 'SSL')
+					'href' => $this->url->link('product/member', 'tag=' . trim($tag))
 				);
 			}
 		}
@@ -574,7 +573,7 @@ class ControllerProductMember extends Controller {
 		$this->data['member_location'] = $member_info['member_city'];
 		$this->data['member_location_zone'] = $member_zone['name'];
 		$this->data['member_location_country'] = $member_country['iso_code_3'];
-		$this->data['member_location_href'] = $this->url->link('product/search', 'country=' . $member_info['member_country_id'] . '&state=' . $member_info['member_zone_id'], 'SSL');
+		$this->data['member_location_href'] = $this->url->link('product/search', 'country=' . $member_info['member_country_id'] . '&state=' . $member_info['member_zone_id']);
 
 		// Listings
 		$this->data['text_products'] = $member_info['product_count'] ? sprintf($this->language->get('text_products'), $member_info['product_count']) : '';
@@ -630,8 +629,8 @@ class ControllerProductMember extends Controller {
 		$this->data['text_empty'] = $this->language->get('text_empty_products');
 
 		$this->data['contact_member'] = $member_info['customer_id']
-			? $this->url->link('information/contact', 'contact_id=' . $member_info['customer_id'], 'SSL')
-			: $this->url->link('information/contact', 'contact_id=0&profile_id=' . $this->request->get['member_id'], 'SSL') ;
+			? $this->url->link('information/contact', 'contact_id=' . $member_info['customer_id'])
+			: $this->url->link('information/contact', 'contact_id=0&profile_id=' . $this->request->get['member_id']) ;
 
 		$jumpTo = '#member-listings';
 
@@ -662,7 +661,7 @@ class ControllerProductMember extends Controller {
 		$max_pages = $limit > 0 && $product_total ? ceil($product_total / $limit) : 1;
 
 		if ($page <= 0 || $limit <= 0 || ($max_pages > 0 && $page > $max_pages)) {
-			$this->redirect($this->url->link('error/not_found', '', 'SSL'));
+			$this->redirect($this->url->link('error/not_found'));
 		}
 
 		$this->data['products'] = $this->getChild('product/data/list', $this->model_catalog_product->getProducts($data));
@@ -695,7 +694,7 @@ class ControllerProductMember extends Controller {
 		$this->document->setTitle($heading_title);
 		$this->document->setDescription($meta_description);
 		$this->document->setKeywords($meta_keyword);
-		$this->document->setUrl($this->url->link('product/member/info','member_id=' . $this->request->get['member_id'], 'SSL'));
+		$this->document->setUrl($this->url->link('product/member/info','member_id=' . $this->request->get['member_id']));
 
 		if ($image_info) {
 			$this->document->setImage($this->data['member_image'], $image_info['mime'], $image_info[0], $image_info[1]);
@@ -704,12 +703,12 @@ class ControllerProductMember extends Controller {
 		$this->data['customer_id'] = $member_info['customer_id'];
 		$this->data['profile_id'] = $this->request->get['member_id'];
 
-		$this->data['action'] = str_replace('&amp;', '&', $this->url->link('product/member/info', 'member_id=' . $this->request->get['member_id'] . $url, 'SSL'));
-		$this->data['back'] = ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->request->server['HTTP_REFERER'] : $this->url->link('product/member', '', 'SSL');
-		$this->data['search'] = $this->url->link('product/search', '', 'SSL');
-		$this->data['reset'] = $this->url->link('product/member/info', 'member_id=' . $this->request->get['member_id'], 'SSL') . $jumpTo;
-		$this->data['continue'] = $this->url->link('common/home', '', 'SSL');
-		$this->data['more'] = $page < $max_pages ? $this->url->link('ajax/product/more', 'member_id=' . $this->request->get['member_id'] . $url . '&page=' . ($page + 1), 'SSL') : '';
+		$this->data['action'] = str_replace('&amp;', '&', $this->url->link('product/member/info', 'member_id=' . $this->request->get['member_id'] . $url));
+		$this->data['back'] = ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->request->server['HTTP_REFERER'] : $this->url->link('product/member');
+		$this->data['search'] = $this->url->link('product/search');
+		$this->data['reset'] = $this->url->link('product/member/info', 'member_id=' . $this->request->get['member_id']) . $jumpTo;
+		$this->data['continue'] = $this->url->link('common/home');
+		$this->data['more'] = $page < $max_pages ? $this->url->link('ajax/product/more', 'member_id=' . $this->request->get['member_id'] . $url . '&page=' . ($page + 1)) : '';
 		$this->data['url'] = $url;
 
 		$this->model_catalog_member->updateViewed($this->request->get['member_id']);

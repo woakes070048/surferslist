@@ -13,8 +13,8 @@ class ControllerErrorCartEmpty extends Controller {
 		$this->data['text_error'] = $this->language->get('text_empty');
 
 		$this->data['action'] = $this->url->link('checkout/cart', '', 'SSL');
-		// $this->data['search'] = $this->url->link('product/search', '', 'SSL');
-		$this->data['continue'] = $this->url->link('common/home', '', 'SSL');
+		// $this->data['search'] = $this->url->link('product/search');
+		$this->data['continue'] = $this->url->link('common/home');
 
 		$this->template = '/template/error/not_found.tpl';
 

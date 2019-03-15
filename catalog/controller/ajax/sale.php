@@ -24,9 +24,9 @@ class ControllerAjaxSale extends Controller {
 				$order_member_info = $this->model_checkout_order->getOrderMember($order_id);
 
 				if (!empty($order_member_info['customer_id'])) {
-					$contact_member = $this->url->link('information/contact', 'contact_id=' . $order_member_info['customer_id'], 'SSL');
+					$contact_member = $this->url->link('information/contact', 'contact_id=' . $order_member_info['customer_id']);
 				} else {
-					$contact_member = $this->url->link('information/contact', '', 'SSL');
+					$contact_member = $this->url->link('information/contact');
 				}
 
 				$this->data['error'] = sprintf($this->language->get('error_comment'), 10, 255, $contact_member);
@@ -88,7 +88,7 @@ class ControllerAjaxSale extends Controller {
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->config->get('member_report_sales_history') && (!$this->data['error'])) {
 			if (!$this->validateStringLength($this->request->post['comment'], 10, 255)) {
 				$sale_info = $this->model_account_sales->getSale($this->request->get['sale_id']);
-				$this->data['error'] = sprintf($this->language->get('error_comment'), 10, 255, $this->url->link('information/contact', 'contact_id=' . $sale_info['customer_id'], 'SSL'));
+				$this->data['error'] = sprintf($this->language->get('error_comment'), 10, 255, $this->url->link('information/contact', 'contact_id=' . $sale_info['customer_id']));
 			} else {
 				$this->model_account_sales->addSalesHistory($this->request->get['sale_id'], strip_tags_decode($this->request->post));
 				$this->data['success'] = $this->language->get('text_history_success');

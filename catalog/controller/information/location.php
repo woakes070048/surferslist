@@ -200,7 +200,7 @@ class ControllerInformationLocation extends Controller {
 			if ($redirect_path) {
 				$this->redirect($this->config->get('config_ssl') . $redirect_path);
 			} else {
-				$this->redirect($this->url->link('product/search', '', 'SSL'));
+				$this->redirect($this->url->link('product/search'));
 			}
 		}
 
@@ -210,7 +210,7 @@ class ControllerInformationLocation extends Controller {
 		$this->data['countries_select'][] = array(
 			'country_id' => 0,
 			'name'       => $this->language->get('text_none'),
-			'href'       => $this->url->link('information/location', 'location=none', 'SSL'),
+			'href'       => $this->url->link('information/location', 'location=none'),
 			'iso_code_2' => ''
 		);
 
@@ -224,7 +224,7 @@ class ControllerInformationLocation extends Controller {
 			$this->data['countries_select'][] = array(
 				'country_id' => $enabled_country['country_id'],
 				'name'       => $enabled_country['name'],
-				'href'       => $this->url->link('information/location', 'country=' . strtolower($enabled_country['iso_code_2']), 'SSL'),
+				'href'       => $this->url->link('information/location', 'country=' . strtolower($enabled_country['iso_code_2'])),
 				'iso_code_2' => strtolower($enabled_country['iso_code_2'])
 			);
 		}
@@ -241,7 +241,7 @@ class ControllerInformationLocation extends Controller {
 		$this->data['zones_select'][] = array(
 			'zone_id' 	 => 0,
 			'name'       => $this->language->get('text_none'),
-			'href'       => $this->url->link('information/location', 'country=' . $country_code . '&zone=none', 'SSL'),
+			'href'       => $this->url->link('information/location', 'country=' . $country_code . '&zone=none'),
 			'iso_code'   => ''
 		);
 
@@ -253,7 +253,7 @@ class ControllerInformationLocation extends Controller {
 			$this->data['zones_select'][] = array(
 				'zone_id' 	 => $zone['zone_id'],
 				'name'       => $zone['name'],
-				'href'       => $this->url->link('information/location', 'country=' . strtolower($zone['country_iso_code_2']) . '&zone=' . strtolower($zone['code']), 'SSL'),
+				'href'       => $this->url->link('information/location', 'country=' . strtolower($zone['country_iso_code_2']) . '&zone=' . strtolower($zone['code'])),
 				'iso_code' 	 => strtolower($zone['code'])
 			);
 		}
@@ -263,7 +263,7 @@ class ControllerInformationLocation extends Controller {
 		$this->document->setKeywords($this->language->get('meta_keyword'));
 
 		$this->data['help_location_logged'] = sprintf($this->language->get('help_location_logged'), $this->url->link('account/login', '', 'SSL'));
-		$this->data['help_location_add'] = sprintf($this->language->get('help_location_add'), $this->url->link('information/contact', 'contact_id=0', 'SSL'));
+		$this->data['help_location_add'] = sprintf($this->language->get('help_location_add'), $this->url->link('information/contact', 'contact_id=0'));
 
 		$this->data['country_id'] = $country_id;
 		$this->data['country_code'] = $country_code;
@@ -274,11 +274,11 @@ class ControllerInformationLocation extends Controller {
 		$this->data['location_name'] = ucwords($location_name);
 		$this->data['redirect_path'] = $redirect_path;
 
-		$this->data['action'] = $this->url->link('information/location', 'redirect_path=' . urlencode($redirect_path), 'SSL'); // for js, do not add any more query params
-		$this->data['reset'] = $this->url->link('information/location', 'location=none&redirect_path=' . urlencode($redirect_path), 'SSL');
-		$this->data['listings'] = $this->url->link('product/allproducts', '', 'SSL');
-		$this->data['search'] = $this->url->link('product/search', '', 'SSL');
-		$this->data['continue'] = $this->url->link('common/home', '', 'SSL');
+		$this->data['action'] = $this->url->link('information/location', 'redirect_path=' . urlencode($redirect_path)); // for js, do not add any more query params
+		$this->data['reset'] = $this->url->link('information/location', 'location=none&redirect_path=' . urlencode($redirect_path));
+		$this->data['listings'] = $this->url->link('product/allproducts');
+		$this->data['search'] = $this->url->link('product/search');
+		$this->data['continue'] = $this->url->link('common/home');
 
 		$this->document->addStyle('catalog/view/root/jqvmap/jqvmap.min.css');
 		$this->document->addScript('catalog/view/root/jqvmap/jquery.vmap.min.js');
