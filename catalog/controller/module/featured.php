@@ -100,8 +100,9 @@ class ControllerModuleFeatured extends Controller {
 			$results = $this->model_catalog_product->getProductFeatured($data, false); // don't cache in model
 
 			foreach ($results as $result) {
+				$featured_thumb = $this->model_tool_image->resize($result['image'], $image_width, $image_height, $image_crop);
 				$listings[$result['product_id']] = $this->getChild('product/data/info', $result);
-				$listings[$result['product_id']]['thumb'] = $this->model_tool_image->resize($result['image'], $image_width, $image_height, $image_crop);
+				$listings[$result['product_id']]['thumb'] = $featured_thumb;
 			}
 
 			$this->cache->set('product.module.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . (int)$currency_id . '.' . $cache, $listings, 60 * 60 * 24 * 7); // 1 week cache expiration
