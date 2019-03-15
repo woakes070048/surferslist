@@ -386,71 +386,71 @@ if ($searchWidget.length) {
 
     	var url = $searchWidget.attr('action');
         var searchParams = getSearchParameters();
+        var search = [];
 
     	if (searchParams.search.value) {
-    		url += url.indexOf('?') !== -1
-                ? '&s=' + encodeURIComponent(searchParams.search.value)
-                : '?s=' + encodeURIComponent(searchParams.search.value);
+            search.push('s=' + encodeURIComponent(searchParams.search.value));
     	}
 
     	if (searchParams.tag.value) {
-    		url += url.indexOf('?') !== -1
-                ? '&tag=' + encodeURIComponent(searchParams.tag.value)
-                : '?tag=' + encodeURIComponent(searchParams.tag.value);
+    		search.push('tag=' + encodeURIComponent(searchParams.tag.value));
     	}
 
-        if (!searchParams.search.value && !searchParams.tag.value) {
-            url += url.indexOf('?') !== -1 ? '&s=' : '?s=';
-        } else if (searchParams.description.value) {
-    		url += '&description=true';
+        if (searchParams.description.value) {
+            search.push('description=true');
     	}
 
     	if (searchParams.category.value > 0) {
-    		url += '&category=' + encodeURIComponent(searchParams.category.value);
+            var path = searchParams.category.value;
 
         	if (searchParams.category_sub.value > 0 && searchParams.category_sub.value != searchParams.category.value) {
-        		url += '_' + encodeURIComponent(searchParams.category_sub.value);
+        		path += '_' + searchParams.category_sub.value;
         	}
 
         	if (searchParams.category_third.value > 0 && searchParams.category_third.value != searchParams.category.value) {
-        		url += '_' + encodeURIComponent(searchParams.category_third.value);
+        		path += '_' + searchParams.category_third.value;
         	}
+
+            search.push('category=' + encodeURIComponent(path));
     	}
 
     	if (searchParams.brand.value > 0) {
-    		url += '&brand=' + encodeURIComponent(searchParams.brand.value);
+            search.push('brand=' + encodeURIComponent(searchParams.brand.value));
     	}
 
     	if (searchParams.filter.length) {
-    		url += '&filter=' + encodeURIComponent(searchParams.filter.join());
+            search.push('filter=' + encodeURIComponent(searchParams.filter.join()));
     	}
 
     	if (searchParams.type.length) {
-    		url += '&type=' + encodeURIComponent(searchParams.type.map(getParamValue).join());
+            search.push('type=' + encodeURIComponent(searchParams.type.map(getParamValue).join()));
     	}
 
-        if (searchParams.forSale.value) {
-            url += '&forsale=true';
-        }
-
     	if (searchParams.member.length) {
-    		url += '&member=' + encodeURIComponent(searchParams.member.map(getParamValue).join());
+            search.push('member=' + encodeURIComponent(searchParams.member.map(getParamValue).join()));
     	}
 
     	if (searchParams.country.value > 0) {
-    		url += '&country=' + encodeURIComponent(searchParams.country.value);
+            search.push('country=' + encodeURIComponent(searchParams.country.value));
     	}
 
     	if (searchParams.zone.value > 0) {
-    		url += '&state=' + encodeURIComponent(searchParams.zone.value);
+            search.push('state=' + encodeURIComponent(searchParams.zone.value));
     	}
 
     	if (searchParams.location.value) {
-    		url += '&location=' + encodeURIComponent(searchParams.location.value);
+            search.push('location=' + encodeURIComponent(searchParams.location.value));
     	}
 
-        //console.log(url);
-        //console.log(searchParams)
+        if (searchParams.forSale.value) {
+            search.push('forsale=true');
+        }
+
+        if (search.length) {
+            url += url.indexOf('?') !== -1 ? '&' : '?';
+            url += search.join('&');
+        }
+
     	location = url;
     }
 
@@ -888,9 +888,13 @@ $(document).ready(function() {
                     $('select[name=\'category_id\']').val(categories[0]).trigger('change');
                 case 2:
                 case 3:
-                    $('select[name=\'sub_category_id\']').val(categories[1]).trigger('change');
+                    setTimeout(function() {
+                        $('select[name=\'sub_category_id\']').val(categories[1]).trigger('change');
+                    }, 300);
                 case 3:
-                    $('select[name=\'third_category_id\']').val(categories[2]).trigger('change');
+                    setTimeout(function() {
+                        $('select[name=\'third_category_id\']').val(categories[2]);
+                    }, 600);
                     break;
                 default:
                     // do nothing
