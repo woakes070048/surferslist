@@ -58,7 +58,7 @@ class ModelCatalogReview extends Model {
 			));
         }
 
-		$this->cache->delete('member');
+		$this->cache->delete('member_' . (int)$member_id);
 	}
 
 	public function getReviewsByMemberId($member_id, $start = 0, $limit = 20) {

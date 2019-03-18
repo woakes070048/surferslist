@@ -11,7 +11,7 @@ class ModelCatalogInformation extends Model {
 	}
 
 	public function getInformation($information_id) {
-		$information_data = $this->cache->get('information.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$information_id);
+		$information_data = $this->cache->get('information_' . (int)$information_id . '.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'));
 
 		if ($information_data === false) {
 			$query = $this->db->query("
@@ -27,7 +27,7 @@ class ModelCatalogInformation extends Model {
 
 			$information_data = $query->row;
 
-			$this->cache->set('information.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$information_id, $information_data, $this->cache_expires);
+			$this->cache->set('information_' . (int)$information_id . '.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'), $information_data, $this->cache_expires);
 		}
 
 		return $information_data;

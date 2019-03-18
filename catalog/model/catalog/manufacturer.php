@@ -5,7 +5,7 @@ class ModelCatalogManufacturer extends Model {
 	public function getManufacturer($manufacturer_id) {
 		if (!$manufacturer_id) return array();
 
-		$manufacturer_data = $this->cache->get('manufacturer.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$manufacturer_id);
+		$manufacturer_data = $this->cache->get('manufacturer_' . (int)$manufacturer_id . '.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'));
 
 		if ($manufacturer_data === false) {
 			$manufacturer_data = array();
@@ -38,7 +38,7 @@ class ModelCatalogManufacturer extends Model {
 				$manufacturer_data['product_categories'] = $this->getManufacturerProductCategories($manufacturer_id);
 			}
 
-			$this->cache->set('manufacturer.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$manufacturer_id, $manufacturer_data, $this->cache_expires);
+			$this->cache->set('manufacturer_' . (int)$manufacturer_id . '.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'), $manufacturer_data, $this->cache_expires);
 		}
 
 		return $manufacturer_data;

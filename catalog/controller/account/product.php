@@ -310,6 +310,8 @@ class ControllerAccountProduct extends Controller {
 
 			if ($product_info && $product_info['member_approved']) {
 				$count += $this->model_account_product->{$method}($product_id);
+
+				$this->cache->delete('manufacturer_' . (int)$product_info['manufacturer_id']);
 			}
 		}
 

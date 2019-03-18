@@ -2179,7 +2179,14 @@ class ModelCatalogProduct extends Model {
 			));
 
 			$this->cache->delete('product_' . (int)$product_id);
+			$this->cache->delete('manufacturer_' . (int)$product_info['manufacturer_id']);
+
+			if (!empty($member_info)) {
+				$this->cache->delete('member_' . (int)$product_info['member_id']);
+			}
+
 			$this->cache->delete('product.');
+			$this->cache->delete('category');
         }
 	}
 

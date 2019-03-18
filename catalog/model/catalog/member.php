@@ -2,10 +2,10 @@
 class ModelCatalogMember extends Model {
 	private $cache_expires = 60 * 60 * 24; // 1 day cache expiration
 
-	public function getMember($member_account_id) {
-		if ((int)$member_account_id <= 0) return array();
+	public function getMember($member_id) {
+		if ((int)$member_id <= 0) return array();
 
-		$member_data = $this->cache->get('member.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$member_account_id);
+		$member_data = $this->cache->get('member_' . (int)$member_id . '.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'));
 
 		if ($member_data === false) {
 			$member_data = array();
@@ -21,7 +21,7 @@ class ModelCatalogMember extends Model {
 				, (SELECT AVG(r1.rating) AS total FROM " . DB_PREFIX . "review r1 WHERE r1.member_id = m.member_account_id AND r1.status = '1' GROUP BY r1.member_id) AS rating
 				, (SELECT COUNT(r2.review_id) AS total FROM " . DB_PREFIX . "review r2 WHERE r2.member_id = m.member_account_id AND r2.status = '1' GROUP BY r2.member_id) AS reviews
 				, (SELECT COUNT(q.question_id) AS total FROM " . DB_PREFIX . "question q WHERE q.member_id = m.member_account_id AND q.status = '1' AND product_id = '0' GROUP BY q.member_id) AS questions
-				, (SELECT keyword FROM " . DB_PREFIX . "url_alias WHERE query = 'member_id=" . (int)$member_account_id . "') AS keyword
+				, (SELECT keyword FROM " . DB_PREFIX . "url_alias WHERE query = 'member_id=" . (int)$member_id . "') AS keyword
 				, (SELECT COUNT(p.product_id) AS total
 					FROM " . DB_PREFIX . "product p
 					INNER JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id)
@@ -40,7 +40,7 @@ class ModelCatalogMember extends Model {
 				LEFT JOIN " . DB_PREFIX . "customer_group_description cgd ON (c.customer_group_id = cgd.customer_group_id)
 					AND cgd.language_id = '" . (int)$this->config->get('config_language_id') . "'
 				LEFT JOIN " . DB_PREFIX . "customer_member_group cmg ON (m.member_group_id = cmg.member_group_id)
-				WHERE m.member_account_id = '" . (int)$member_account_id . "'
+				WHERE m.member_account_id = '" . (int)$member_id . "'
 			";
 
 			$query = $this->db->query($sql);
@@ -48,20 +48,20 @@ class ModelCatalogMember extends Model {
 			$member_data = $query->row;
 
 			if ($member_data) {
-				$member_data['product_categories'] = $this->getMemberProductCategories($member_account_id);
-				$member_data['product_manufacturers'] = $this->getMemberProductManufacturers($member_account_id);
+				$member_data['product_categories'] = $this->getMemberProductCategories($member_id);
+				$member_data['product_manufacturers'] = $this->getMemberProductManufacturers($member_id);
 			}
 
-			$this->cache->set('member.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$member_account_id, $member_data, $this->cache_expires);
+			$this->cache->set('member_' . (int)$member_id . '.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'), $member_data, $this->cache_expires);
 		}
 
 		return $member_data;
 	}
 
 	public function getMemberByCustomerId($customer_id) {
-		$member_account_id = $this->getMemberIdByCustomerId($customer_id);
+		$member_id = $this->getMemberIdByCustomerId($customer_id);
 
-		return $this->getMember($member_account_id);
+		return $this->getMember($member_id);
 	}
 
 	public function getMemberIdByCustomerId($customer_id) {
@@ -141,23 +141,33 @@ class ModelCatalogMember extends Model {
 			";
 
 			if (!empty($data['filter_country_id'])) {
-				$sql .= " AND m.member_country_id = '" . (int)$data['filter_country_id'] . "'";
+				$sql .= "
+					AND m.member_country_id = '" . (int)$data['filter_country_id'] . "'
+				";
 			}
 
 			if (!empty($data['filter_zone_id'])) {
-				$sql .= " AND m.member_zone_id = '" . (int)$data['filter_zone_id'] . "'";
+				$sql .= "
+					AND m.member_zone_id = '" . (int)$data['filter_zone_id'] . "'
+				";
 			}
 
 			if (!empty($data['filter_location'])) {
-				$sql .= " AND LCASE(m.member_city) LIKE '%" . $this->db->escape(utf8_strtolower($data['filter_location'])) . "%'";
+				$sql .= "
+					AND LCASE(m.member_city) LIKE '%" . $this->db->escape(utf8_strtolower($data['filter_location'])) . "%'
+				";
 			}
 
 			if (!empty($data['filter_customer_name'])) {
-				$sql .= " AND LCASE(CONCAT(c.lastname, ', ', c.firstname)) LIKE '%" . $this->db->escape(utf8_strtolower($data['filter_customer_name'])) . "%'";
+				$sql .= "
+					AND LCASE(CONCAT(c.lastname, ', ', c.firstname)) LIKE '%" . $this->db->escape(utf8_strtolower($data['filter_customer_name'])) . "%'
+				";
 			}
 
 			if (!empty($data['filter_member_account_name']) || !empty($data['filter_tag'])) {
-				$sql .= " AND (";
+				$sql .= "
+					AND (
+				";
 
 				if (!empty($data['filter_member_account_name'])) {
 					$implode = array();
@@ -165,7 +175,9 @@ class ModelCatalogMember extends Model {
 					$words = explode(' ', trim(preg_replace('/\s+/', ' ', $data['filter_member_account_name'])));
 
 					foreach ($words as $word) {
-						$implode[] = "LCASE(m.member_account_name) LIKE '%" . $this->db->escape(utf8_strtolower($word)) . "%'";
+						$implode[] = "
+							LCASE(m.member_account_name) LIKE '%" . $this->db->escape(utf8_strtolower($word)) . "%'
+						";
 					}
 
 					if ($implode) {
@@ -179,11 +191,15 @@ class ModelCatalogMember extends Model {
 				}
 
 				if (!empty($data['filter_member_account_name']) && !empty($data['filter_tag'])) {
-					$sql .= " OR ";
+					$sql .= "
+						OR
+					";
 				}
 
 				if (!empty($data['filter_tag'])) {
-					$sql .= "LCASE(m.member_tag) LIKE '%" . $this->db->escape(utf8_strtolower($data['filter_tag'])) . "%'";
+					$sql .= "
+						LCASE(m.member_tag) LIKE '%" . $this->db->escape(utf8_strtolower($data['filter_tag'])) . "%'
+					";
 				}
 
 				$sql .= ")";
@@ -355,8 +371,8 @@ class ModelCatalogMember extends Model {
 		return $query->row['total'];
 	}
 
-	private function getMemberProductCategories($member_account_id) {
-		if (empty($member_account_id)) return array();
+	private function getMemberProductCategories($member_id) {
+		if (empty($member_id)) return array();
 
 		$sql = "
 			SELECT p2c.category_id
@@ -379,7 +395,7 @@ class ModelCatalogMember extends Model {
 				AND cd2.language_id = '" . (int)$this->config->get('config_language_id') . "'
 			LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p2c.product_id = p2s.product_id)
 				AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "'
-			WHERE pm.member_account_id = '" . (int)$member_account_id . "'
+			WHERE pm.member_account_id = '" . (int)$member_id . "'
 			AND p.date_expiration >= NOW()
 			AND p.status = '1'
 			AND p.member_approved = '1'
@@ -396,8 +412,8 @@ class ModelCatalogMember extends Model {
 		return $query->rows;
 	}
 
-	private function getMemberProductManufacturers($member_account_id) {
-		if (empty($member_account_id)) return array();
+	private function getMemberProductManufacturers($member_id) {
+		if (empty($member_id)) return array();
 
 		$sql = "
 			SELECT m.manufacturer_id
@@ -411,7 +427,7 @@ class ModelCatalogMember extends Model {
 				AND m2s.store_id = '" . (int)$this->config->get('config_store_id') . "'
 			INNER JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id)
 				AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "'
-			WHERE pm.member_account_id = '" . (int)$member_account_id . "'
+			WHERE pm.member_account_id = '" . (int)$member_id . "'
 			AND p.status = '1'
 			AND p.member_approved = '1'
 			AND p.date_available <= NOW()
@@ -444,7 +460,7 @@ class ModelCatalogMember extends Model {
 		return $query->rows;
 	}
 
-	public function getNextPreviousMember($member_name, $member_account_id, $next_previous = 0) {
+	public function getNextPreviousMember($member_name, $member_id, $next_previous = 0) {
 		$sql = "
 			SELECT DISTINCT m.customer_id
 			, m.member_account_name
@@ -659,13 +675,13 @@ class ModelCatalogMember extends Model {
 		return $query->num_rows ? $query->row['embed_settings'] : '';
 	}
 
-	public function updateViewed($member_account_id) {
-		if ((int)$member_account_id <= 0) return false;
+	public function updateViewed($member_id) {
+		if ((int)$member_id <= 0) return false;
 
 		$this->db->query("
 			UPDATE " . DB_PREFIX . "customer_member_account
 			SET viewed = (viewed + 1)
-			WHERE member_account_id = '" . (int)$member_account_id . "'
+			WHERE member_account_id = '" . (int)$member_id . "'
 		");
 	}
 

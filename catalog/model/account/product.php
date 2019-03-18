@@ -112,7 +112,13 @@ class ModelAccountProduct extends Model {
 			));
 		}
 
-		// delete listing cache
+		// delete cache
+		$this->cache->delete('manufacturer_' . (int)$data['manufacturer_id']);
+
+		if (!empty($data['member_account_id'])) {
+			$this->cache->delete('member_' . (int)$data['member_account_id']);
+		}
+
 		$this->cache->delete('product.');
 		$this->cache->delete('category');
 
@@ -362,6 +368,8 @@ class ModelAccountProduct extends Model {
 			));
 		}
 
+		$this->cache->delete('manufacturer_' . (int)$data['manufacturer_id']);
+		$this->cache->delete('member_' . (int)$member_account_id);
 		$this->cache->delete('product.');
 		$this->cache->delete('category');
 
@@ -539,6 +547,8 @@ class ModelAccountProduct extends Model {
 		}
 
 		$this->cache->delete('product_' . (int)$product_id);
+		$this->cache->delete('manufacturer_' . (int)$data['manufacturer_id']);
+		$this->cache->delete('member_' . (int)$this->customer->getProfileId());
 		$this->cache->delete('product.');
 		$this->cache->delete('category');
 
@@ -793,6 +803,8 @@ class ModelAccountProduct extends Model {
 		$this->expireProduct($product_id);
 
 		$this->cache->delete('product_' . (int)$product_id);
+		$this->cache->delete('manufacturer_' . (int)$data['manufacturer_id']);
+		$this->cache->delete('member_' . (int)$this->customer->getProfileId());
 		$this->cache->delete('product.');
 		$this->cache->delete('category');
 
@@ -813,6 +825,7 @@ class ModelAccountProduct extends Model {
 		}
 
 		$this->cache->delete('product_' . (int)$product_id);
+		$this->cache->delete('member_' . (int)$this->customer->getProfileId());
 		$this->cache->delete('product.');
 		$this->cache->delete('category');
 
@@ -833,6 +846,7 @@ class ModelAccountProduct extends Model {
 		}
 
 		$this->cache->delete('product_' . (int)$product_id);
+		$this->cache->delete('member_' . (int)$this->customer->getProfileId());
 		$this->cache->delete('product.');
 		$this->cache->delete('category');
 
@@ -854,6 +868,7 @@ class ModelAccountProduct extends Model {
 		}
 
 		$this->cache->delete('product_' . (int)$product_id);
+		$this->cache->delete('member_' . (int)$this->customer->getProfileId());
 		$this->cache->delete('product.');
 		$this->cache->delete('category');
 
@@ -875,6 +890,7 @@ class ModelAccountProduct extends Model {
 		}
 
 		$this->cache->delete('product_' . (int)$product_id);
+		$this->cache->delete('member_' . (int)$this->customer->getProfileId());
 		$this->cache->delete('product.');
 		$this->cache->delete('category');
 
@@ -910,8 +926,9 @@ class ModelAccountProduct extends Model {
 		$this->deleteProductShipping($product_id);
 		$this->deleteProductKeyword($product_id);
 
-		$this->cache->delete('product_' . (int)$product_id);
 		$this->cache->delete('product.');
+		$this->cache->delete('member_' . (int)$this->customer->getProfileId());
+		$this->cache->delete('product_' . (int)$product_id);
 		$this->cache->delete('category');
 
 		return true;

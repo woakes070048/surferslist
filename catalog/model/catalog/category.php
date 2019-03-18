@@ -3,7 +3,7 @@ class ModelCatalogCategory extends Model {
 	private $cache_expires = 60 * 60 * 24 * 30; // 1 month cache expiration
 
 	public function getCategory($category_id) {
-		$category_data = $this->cache->get('category.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$category_id);
+		$category_data = $this->cache->get('category_' . (int)$category_id . '.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'));
 
 		if ($category_data === false) {
 			$sql = "
@@ -41,7 +41,7 @@ class ModelCatalogCategory extends Model {
 				$category_data['path_name'] = $this->getCategoyPathName($category_id);
 			}
 
-			$this->cache->set('category.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$category_id, $category_data, $this->cache_expires);
+			$this->cache->set('category_' . (int)$category_id . '.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'), $category_data, $this->cache_expires);
 		}
 
 		return $category_data;

@@ -178,9 +178,16 @@ class ModelCheckoutOrder extends Model {
 			}
 
 			$this->cache->delete('product_' . (int)$order_product['order_product_id']);
+			$this->cache->delete('manufacturer_' . (int)$order_product['manufacturer_id']);
+			$this->cache->delete('member_' . (int)$order_product['member_customer_id']);
+		}
+
+		if ($this->customer->hasProfile()) {
+			$this->cache->delete('member_' . (int)$this->customer->getProfileId());
 		}
 
 		$this->cache->delete('product.');
+		$this->cache->delete('category');
 
 		$order_download = $this->hasOrderDownloads($order_id);
 
@@ -502,6 +509,7 @@ class ModelCheckoutOrder extends Model {
 			, member.member_account_name AS member
 			, member.member_group_id
 			, cmg.inventory_enabled
+			, m.manufacturer_id
 			, m.name AS manufacturer
 			, m.image AS manufacturer_image
 			, p.quantity AS product_quantity

@@ -859,7 +859,7 @@ class ControllerAccountAnonPost extends Controller {
 		$listing_model = ucwords($data['model']);
 		$listing_size = ucwords($data['size']);
 		$listing_year = !empty($data['year']) ? $data['year'] : '0000';
-		$listing_price = !empty($data['price']) ? round($data['price'], 2) : 0;
+		$listing_price = !empty($data['price']) ? round(strtr($data['price'], array(',' => '')), 2) : 0;
 		$listing_condition_id = !empty($data['condition_id']) ? (int)($data['condition_id']) : 0;
 		$listing_location = !empty($data['location']) ? $data['location'] : '';
 		$listing_customer_id = !empty($data['member_customer_id']) ? $data['member_customer_id'] : ($this->customer->isLogged() ? $this->customer->getId() : 0);

@@ -47,7 +47,6 @@ trait ValidateField {
 		$number = strtr($number, $replace);
 
 		if (!is_numeric($number)) {
-			$this->log->write('num:' . $number);
 			return false;
 		}
 
@@ -64,7 +63,6 @@ trait ValidateField {
 
 	protected function validatePrice(&$price) {
 		if (!$this->validateNumeric($price, true, true)) {
-			$this->log->write('price:' . $price);
 			return false;
 		}
 

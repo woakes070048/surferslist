@@ -175,7 +175,7 @@ class ModelAccountMember extends Model {
 		}
 		*/
 
-		$this->cache->delete('member');
+		$this->cache->delete('member.');
 
 		// email notification
 		$this->load->language('mail/member');
@@ -325,7 +325,8 @@ class ModelAccountMember extends Model {
 			");
 		}
 
-		$this->cache->delete('member');
+		$this->cache->delete('member.');
+		$this->cache->delete('member_' . (int)$this->customer->getProfileId());
 	}
 
 	public function getMemberIdByName($name, $zone_id = 0, $country_id = 0) {
