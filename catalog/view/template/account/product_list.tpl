@@ -33,7 +33,7 @@
                           <a href="<?php echo $continue; ?>" class="button button_alt button_back"><i class="fa fa-undo"></i><?php echo $button_back; ?></a>
 						</div>
                         <?php if ($products) { ?>
-						<div class="right">
+						<div class="right hidden-small">
   						  <a id="delete-listings" href="<?php echo $delete; ?>" class="button button_trash submit-form" title="<?php echo $help_delete; ?>" rel="tooltip" data-container="body"><i class="fa fa-trash"></i><?php echo $button_delete; ?></a>
                           <?php if (!$permissions['inventory_enabled']) { ?>
   						  <a id="renew-listings" href="<?php echo $renew; ?>" class="button button_renew submit-form" title="<?php echo $help_renew; ?>" rel="tooltip" data-container="body"><i class="fa fa-refresh"></i><?php echo $button_renew; ?></a>

@@ -46,9 +46,9 @@
 						<table class="list">
 							<thead>
 								<tr>
-									<td class="left"><h3><?php echo $text_payment_address; ?></h3></td>
+									<td class="left"><b><?php echo $text_payment_address; ?></b></td>
 									<?php if ($shipping_address) { ?>
-									<td class="left"><h3><?php echo $text_shipping_address; ?></h3></td>
+									<td class="left"><b><?php echo $text_shipping_address; ?></b></td>
 									<?php } ?>
 								</tr>
 							</thead>
@@ -110,9 +110,7 @@
 							<tfoot>
 							<?php foreach ($totals as $total) { ?>
 							<tr>
-								<td></td>
-								<td></td>
-								<td class="right"><b><?php echo $total['title']; ?>:</b></td>
+								<td colspan="3" class="right"><b><?php echo $total['title']; ?>:</b></td>
 								<td class="right"><?php echo $total['text']; ?></td>
 							</tr>
 							<?php } ?>

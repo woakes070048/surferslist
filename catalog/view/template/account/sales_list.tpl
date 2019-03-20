@@ -38,9 +38,15 @@
 							  <th class="left hidden-small"><?php echo $text_customer; ?></th>
 							  <th class="center hidden-small"><?php echo $text_products; ?></th>
 							  <th class="right hidden-very-small"><?php echo $text_total; ?></th>
-							  <?php if ($this->config->get('member_report_sales_commission')) { ?><th class="right hidden-small"><?php echo $text_commission; ?></th><?php } ?>
-							  <?php if ($this->config->get('member_report_sales_tax')) { ?><th class="right hidden-small"><?php echo $text_tax; ?></th><?php } ?>
-							  <?php if ($this->config->get('member_report_sales_commission') || $this->config->get('member_report_sales_tax')) { ?><th class="right hidden-very-small"><?php echo $text_grand_total; ?> *</th><?php } ?>
+							  <?php if ($this->config->get('member_report_sales_commission')) { ?>
+                              <th class="right hidden-small"><?php echo $text_commission; ?></th>
+                              <?php } ?>
+							  <?php if ($this->config->get('member_report_sales_tax')) { ?>
+                              <th class="right hidden-small"><?php echo $text_tax; ?></th>
+                              <?php } ?>
+							  <?php if ($this->config->get('member_report_sales_commission') || $this->config->get('member_report_sales_tax')) { ?>
+                              <th class="right hidden-very-small"><?php echo $text_grand_total; ?> *</th>
+                              <?php } ?>
 							  <th class="right action"><?php // echo $text_info; ?></th>
 							</tr>
 						  </thead>
@@ -50,10 +56,17 @@
 							  <td class="center"><b><?php echo $sale['order_id']; ?></b></td>
 							  <td class="left date hidden-very-small"><?php echo $sale['date_added']; ?></td>
 							  <td class="left"><?php echo $sale['status']; ?></td>
-							  <td class="left hidden-small"><?php if ($sale['member_href']) { ?><a href="<?php echo $sale['member_href']; ?>"><?php echo $sale['name']; ?></a><?php } else { ?><?php echo $sale['name']; ?><?php } ?></td>
+							  <td class="left hidden-small">
+                              <?php if ($sale['member_href']) { ?>
+                              <a href="<?php echo $sale['member_href']; ?>"><?php echo $sale['name']; ?></a>
+                              <?php } else { ?>
+                              <?php echo $sale['name']; ?>
+                              <?php } ?></td>
 							  <td class="center hidden-small"><?php echo $sale['products']; ?></td>
 							  <td class="right hidden-very-small"><?php echo $sale['sales']; ?></td>
-							  <?php if ($this->config->get('member_report_sales_commission')) { ?><td class="right hidden-small">- <?php echo $sale['commission']; ?></td><?php } ?>
+							  <?php if ($this->config->get('member_report_sales_commission')) { ?>
+                              <td class="right hidden-small">- <?php echo $sale['commission']; ?></td>
+                              <?php } ?>
 							  <?php if ($this->config->get('member_report_sales_tax')) { ?>
 							  <?php if ($this->config->get('member_report_sales_tax_add')) { ?>
 							  <td class="right hidden-small"><?php echo $sale['tax']; ?></td>
@@ -65,13 +78,15 @@
 							  <td class="right action"><a href="<?php echo $sale['href']; ?>" class="button smaller"><i class="fa fa-eye"></i><?php echo $button_view; ?></a></td>
 							</tr>
 							<?php } ?>
-							<tr>
+							<tr class="hidden-very-small">
 							  <td class="center"></td>
 							  <td class="left hidden-small"></td>
-							  <td class="right hidden-very-small" colspan="2"><?php if ($this->config->get('member_report_sales_commission') || $this->config->get('member_report_sales_tax')) { ?>* <?php echo $text_total_calculation; ?><?php } ?></td>
+							  <td class="right" colspan="2"><?php if ($this->config->get('member_report_sales_commission') || $this->config->get('member_report_sales_tax')) { ?>* <?php echo $text_total_calculation; ?><?php } ?></td>
 							  <td class="center hidden-small"><b><?php echo $totals['products']; ?></b></td>
 							  <td class="right"><b><?php echo $totals['sales']; ?></b></td>
-							  <?php if ($this->config->get('member_report_sales_commission')) { ?><td class="right hidden-small"><b>- <?php echo $totals['commissions']; ?></b></td><?php } ?>
+							  <?php if ($this->config->get('member_report_sales_commission')) { ?>
+                              <td class="right hidden-small"><b>- <?php echo $totals['commissions']; ?></b></td>
+                              <?php } ?>
 							  <?php if ($this->config->get('member_report_sales_tax')) { ?>
 							  <?php if ($this->config->get('member_report_sales_tax_add')) { ?>
 							  <td class="right hidden-small"><b><?php echo $totals['tax']; ?></b></td>
@@ -79,7 +94,9 @@
 							  <td class="right hidden-small"><b>- <?php echo $totals['tax']; ?></b></td>
 							  <?php } ?>
 							  <?php } ?>
-							  <?php if ($this->config->get('member_report_sales_commission') || $this->config->get('member_report_sales_tax')) { ?><td class="right hidden-very-small"><b><?php echo $totals['grand']; ?></b></td><?php } ?>
+							  <?php if ($this->config->get('member_report_sales_commission') || $this->config->get('member_report_sales_tax')) { ?>
+                              <td class="right"><b><?php echo $totals['grand']; ?></b></td>
+                              <?php } ?>
 							  <td class="right"></td>
 							</tr>
 						  </tbody>

@@ -25,7 +25,7 @@
     							<a href="<?php echo $continue; ?>" class="button button_alt"><i class="fa fa-undo"></i><?php echo $button_back; ?></a>
     						</div>
                             <?php if ($questions) { ?>
-    						<div class="right">
+    						<div class="right hidden-small">
     						  <a onclick="submit_form('<?php echo $enable; ?>');" class="button button_yes"><i class="fa fa-eye"></i><?php echo $button_enable; ?></a>
     						  <a onclick="submit_form('<?php echo $disable; ?>');" class="button button_no"><i class="fa fa-eye-slash"></i><?php echo $button_disable; ?></a>
                               <?php if ($delete) { ?>

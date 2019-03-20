@@ -28,7 +28,7 @@
                             </div>
         					<?php } ?>
                             <?php if ($sorts) { ?>
-                            <div class="sort" title="<?php echo $help_sort; ?>" rel="tooltip" data-container="body">
+                            <div class="sort fullwidth" title="<?php echo $help_sort; ?>" rel="tooltip" data-container="body">
                                 <label for="sort" class="hidden"><?php echo $text_sort; ?></label>
                                 <select name="sort" onchange="location = this.value;">
                                     <?php foreach ($sorts as $sort_option) { ?>
@@ -43,7 +43,7 @@
                             <?php } ?>
                         </div>
                         <div class="buttons">
-                            <div class="left">
+                            <div class="center">
                                 <a href="<?php echo $reset; ?>" class="button button_alt button_reset"><i class="fa fa-refresh"></i><?php echo $button_reset; ?></a>
                             </div>
                         </div>

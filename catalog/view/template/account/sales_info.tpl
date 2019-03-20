@@ -46,14 +46,18 @@
 						<table class="list">
 							<thead>
 								<tr>
-									<td class="left"><h3><?php echo $text_payment_address; ?></h3></td>
-									<?php if ($shipping_address) { ?><td class="left"><h3><?php echo $text_shipping_address; ?></h3></td><?php } ?>
+									<td class="left"><b><?php echo $text_payment_address; ?></b></td>
+									<?php if ($shipping_address) { ?>
+                                    <td class="left"><b><?php echo $text_shipping_address; ?></b></td>
+                                    <?php } ?>
 								</tr>
 							</thead>
 							<tbody>
 								<tr>
 									<td class="left"><?php echo $payment_address; ?></td>
-									<?php if ($shipping_address) { ?><td class="left"><?php echo $shipping_address; ?></td><?php } ?>
+									<?php if ($shipping_address) { ?>
+                                    <td class="left"><?php echo $shipping_address; ?></td>
+                                    <?php } ?>
 								</tr>
 							</tbody>
 						</table>
@@ -106,11 +110,7 @@
 							<tfoot>
 								<?php foreach ($totals as $total) { ?>
 								<tr>
-									<td class="center"></td>
-									<td class="left"></td>
-									<td class="left hidden-very-small"></td>
-									<td class="left hidden-small"></td>
-									<td class="right hidden-small"><b><?php echo $total['title']; ?>:</b></td>
+									<td  colspan="5" class="right"><b><?php echo $total['title']; ?>:</b></td>
 									<td class="right"><?php echo $total['text']; ?></td>
 								</tr>
 								<?php } ?>

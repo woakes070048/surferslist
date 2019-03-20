@@ -28,7 +28,7 @@
                                 <label for="account-edit-form-submit" class="button button-submit button_save"><i class="fa fa-save"></i> <?php echo $button_save; ?></label>
 								<a href="<?php echo $back; ?>" class="button button_cancel"><i class="fa fa-ban"></i><?php echo $button_cancel; ?></a>
 							</div>
-							<div class="right">
+							<div class="right hidden-small">
 								<a href="<?php echo $addresses; ?>" class="button button_alt"><i class="fa fa-address-book-o"></i><?php echo $text_edit . ' ' . $text_addresses; ?></a>
 							</div>
 						</div>
