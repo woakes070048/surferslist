@@ -123,7 +123,7 @@ class ControllerModuleCart extends Controller {
 		$this->data['cart'] = $this->url->link('checkout/cart');
 		$this->data['checkout'] = $this->url->link('checkout/checkout', '', 'SSL');
 
-		$this->template = '/template/module/cart.tpl';
+		$this->template = 'template/module/cart.tpl';
 
 		$this->response->setOutput($this->render());
 	}

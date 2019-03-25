@@ -76,7 +76,7 @@ class ControllerAccountDownload extends Controller {
 
 			$this->data['continue'] = $this->url->link('account/account', '', 'SSL');
 
-			$this->template = '/template/account/download.tpl';
+			$this->template = 'template/account/download.tpl';
 
 			$this->children = array(
 				'common/column_left',
@@ -95,7 +95,7 @@ class ControllerAccountDownload extends Controller {
 			$this->data['button_continue'] = $this->language->get('button_back');
 			$this->data['continue'] = $this->url->link('account/account', '', 'SSL');
 
-			$this->template = '/template/error/not_found.tpl';
+			$this->template = 'template/error/not_found.tpl';
 
 			$this->children = array(
 				'common/column_left',

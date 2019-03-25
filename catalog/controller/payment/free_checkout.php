@@ -9,7 +9,7 @@ class ControllerPaymentFreeCheckout extends Controller {
 
 		$this->data['continue'] = $this->url->link('checkout/success', 'order_no=' . $order_no, 'SSL');
 
-		$this->template = '/template/payment/free_checkout.tpl';
+		$this->template = 'template/payment/free_checkout.tpl';
 
 		$this->render();
 	}

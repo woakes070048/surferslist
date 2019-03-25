@@ -152,7 +152,7 @@ class ControllerModuleFilter extends Controller {
 					);
 				}
 
-				$this->template = '/template/module/filter.tpl';
+				$this->template = 'template/module/filter.tpl';
 
 				$this->render();
 			}

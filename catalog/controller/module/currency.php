@@ -71,7 +71,7 @@ class ControllerModuleCurrency extends Controller {
 			$this->data['redirect'] = $this->url->link($route, $url, $connection);
 		}
 
-		$this->template = '/template/module/currency.tpl';
+		$this->template = 'template/module/currency.tpl';
 
 		$this->render();
 	}

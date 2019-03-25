@@ -49,7 +49,7 @@ class ControllerCommonMaintenance extends Controller {
 		$this->response->addHeader($this->request->server['SERVER_PROTOCOL'] . '/1.1 503 Service Temporarily Unavailable');
 		$this->response->addHeader('Retry-After: ' . gmdate('D, d M Y H:i:s T', time() + 60 * 60 * 24));
 
-		$this->template = '/template/common/maintenance.tpl';
+		$this->template = 'template/common/maintenance.tpl';
 
 		$this->children = array(
 			'common/header'

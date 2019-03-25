@@ -83,7 +83,7 @@ class ControllerModuleManufacturer extends Controller {
 		$this->data['more'] = $this->url->link('product/manufacturer');
 		$this->data['text_more'] = $this->language->get('text_view_all') . ' ' . $this->language->get('text_all_manufacturers');
 
-		$this->template = '/template/module/manufacturer.tpl';
+		$this->template = 'template/module/manufacturer.tpl';
 
 		$this->render();
 	}

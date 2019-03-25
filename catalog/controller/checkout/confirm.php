@@ -421,7 +421,7 @@ class ControllerCheckoutConfirm extends Controller {
 			$this->data['redirect'] = $redirect;
 		}
 
-		$this->template = '/template/checkout/confirm.tpl';
+		$this->template = 'template/checkout/confirm.tpl';
 
 		$this->response->setOutput($this->render());
 	}

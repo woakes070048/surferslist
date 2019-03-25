@@ -69,7 +69,7 @@ class ControllerProductQuickview extends Controller {
 
 			$this->data['button_view'] = ($preview_listing ? $this->language->get('button_preview') : $this->language->get('button_view')) . ' ' . $this->language->get('text_product');
 
-			$this->template = '/template/product/quickview.tpl';
+			$this->template = 'template/product/quickview.tpl';
 
 			$this->response->setOutput($this->render());
 		} else {
@@ -84,7 +84,7 @@ class ControllerProductQuickview extends Controller {
 			$this->data['search'] = $this->url->link('product/search');
 			$this->data['continue'] = $this->url->link('common/home');
 
-			$this->template = '/template/error/not_found.tpl';
+			$this->template = 'template/error/not_found.tpl';
 
 			$this->children = array(
 				'common/column_left',

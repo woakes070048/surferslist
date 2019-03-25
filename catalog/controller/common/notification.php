@@ -26,7 +26,7 @@ class ControllerCommonNotification extends Controller {
 			$this->data['notification'] = '';
 		}
 
-		$this->template = '/template/common/notification.tpl';
+		$this->template = 'template/common/notification.tpl';
 
 		$this->render();
 	}

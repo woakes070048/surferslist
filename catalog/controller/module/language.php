@@ -67,7 +67,7 @@ class ControllerModuleLanguage extends Controller {
 			$this->data['redirect'] = $this->url->link($route, $url, $connection);
 		}
 
-		$this->template = '/template/module/language.tpl';
+		$this->template = 'template/module/language.tpl';
 
 		$this->render();
 	}

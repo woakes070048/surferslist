@@ -234,7 +234,7 @@ class ControllerAccountReview extends Controller {
 
 		$this->document->addScript('catalog/view/root/javascript/account.js');
 
-		$this->template = '/template/account/review_list.tpl';
+		$this->template = 'template/account/review_list.tpl';
 
 		$this->children = array(
 			'common/notification',
@@ -306,7 +306,7 @@ class ControllerAccountReview extends Controller {
 
  		$this->session->data['warning'] = $this->getError('warning');
 
-		$this->template = '/template/account/review_form.tpl';
+		$this->template = 'template/account/review_form.tpl';
 
 		$this->children = array(
 			'common/notification',

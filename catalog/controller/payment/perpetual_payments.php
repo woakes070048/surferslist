@@ -45,7 +45,7 @@ class ControllerPaymentPerpetualPayments extends Controller {
 			);
 		}
 
-		$this->template = '/template/payment/perpetual_payments.tpl';
+		$this->template = 'template/payment/perpetual_payments.tpl';
 
 		$this->render();
 	}

@@ -50,7 +50,7 @@ class ControllerProductData extends Controller {
 
 		$this->data['products'] = $product_data;
 
-		$this->template = '/template/product/products.tpl';
+		$this->template = 'template/product/products.tpl';
 
 		$this->render();
 	}
@@ -88,7 +88,7 @@ class ControllerProductData extends Controller {
 
 		$this->data['position'] = $data['position'];
 
-		$this->template = '/template/module/products.tpl';
+		$this->template = 'template/module/products.tpl';
 
 		$this->render();
 	}
@@ -121,7 +121,7 @@ class ControllerProductData extends Controller {
 
 		$this->data['products'] = $product_data;
 
-		$this->template = '/template/embed/products.tpl';
+		$this->template = 'template/embed/products.tpl';
 
 		$this->render();
 	}

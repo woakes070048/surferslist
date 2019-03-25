@@ -151,7 +151,7 @@ class ControllerProductAllCategories extends Controller {
 
 		$this->document->addScript('catalog/view/root/wookmark/wookmark.min.js');
 
-		$this->template = '/template/product/allcategories.tpl';
+		$this->template = 'template/product/allcategories.tpl';
 
 		$this->children = array(
 			'common/notification',

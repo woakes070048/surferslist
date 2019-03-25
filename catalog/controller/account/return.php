@@ -56,7 +56,7 @@ class ControllerAccountReturn extends Controller {
 
 		$this->document->addScript('catalog/view/root/javascript/account.js');
 
-		$this->template = '/template/account/return_list.tpl';
+		$this->template = 'template/account/return_list.tpl';
 
 		$this->children = array(
 			'common/column_left',
@@ -131,7 +131,7 @@ class ControllerAccountReturn extends Controller {
 
 			$this->data['continue'] = $this->url->link('account/return', $url, 'SSL');
 
-			$this->template = '/template/account/return_info.tpl';
+			$this->template = 'template/account/return_info.tpl';
 
 			$this->children = array(
 				'common/column_left',
@@ -161,7 +161,7 @@ class ControllerAccountReturn extends Controller {
 			$this->data['search'] = $this->url->link('product/search', '', 'SSL');
 			$this->data['continue'] = $this->url->link('account/return', '', 'SSL');
 
-			$this->template = '/template/error/not_found.tpl';
+			$this->template = 'template/error/not_found.tpl';
 
 			$this->children = array(
 				'common/column_left',
@@ -354,7 +354,7 @@ class ControllerAccountReturn extends Controller {
 
 		$this->document->addScript('catalog/view/root/ui/jquery-ui-timepicker-addon.js');
 
-		$this->template = '/template/account/return_form.tpl';
+		$this->template = 'template/account/return_form.tpl';
 
 		$this->children = array(
 			'common/column_left',
@@ -383,7 +383,7 @@ class ControllerAccountReturn extends Controller {
 
 		$this->data['continue'] = $this->url->link('common/home');
 
-		$this->template = '/template/common/success.tpl';
+		$this->template = 'template/common/success.tpl';
 
 		$this->children = array(
 			'common/column_left',

@@ -101,7 +101,7 @@ class ControllerAccountVoucher extends Controller {
 			$this->data['agree'] = false;
 		}
 
-		$this->template = '/template/account/voucher.tpl';
+		$this->template = 'template/account/voucher.tpl';
 
 		$this->children = array(
 			'common/column_left',
@@ -127,7 +127,7 @@ class ControllerAccountVoucher extends Controller {
 
 		$this->data['continue'] = $this->url->link('checkout/cart');
 
-		$this->template = '/template/common/success.tpl';
+		$this->template = 'template/common/success.tpl';
 
 		$this->children = array(
 			'common/column_left',

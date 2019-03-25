@@ -50,7 +50,7 @@ class ControllerModuleBanner extends Controller {
 
 		$this->data['module'] = $module++;
 
-		$this->template = '/template/module/banner.tpl';
+		$this->template = 'template/module/banner.tpl';
 		$this->render();
 	}
 }

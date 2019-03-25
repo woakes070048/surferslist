@@ -58,7 +58,7 @@ class ControllerAccountReward extends Controller {
 
 		$this->data['continue'] = $this->url->link('account/account', '', 'SSL');
 
-		$this->template = '/template/account/reward.tpl';
+		$this->template = 'template/account/reward.tpl';
 
 		$this->children = array(
 			'common/column_left',

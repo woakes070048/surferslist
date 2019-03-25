@@ -64,7 +64,7 @@ class ControllerCommonHome extends Controller {
 
 		$this->data['help_about'] = sprintf($this->language->get('help_about'), $this->config->get('config_name')); // About Us
 
-		$this->template = '/template/common/home.tpl';
+		$this->template = 'template/common/home.tpl';
 
 		$this->children = array(
 			'common/notification',

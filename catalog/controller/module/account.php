@@ -25,7 +25,7 @@ class ControllerModuleAccount extends Controller {
 		$this->data['sales'] = $this->url->link('account/sales', '', 'SSL');
 		$this->data['product'] = $this->url->link('account/product', '', 'SSL');
 
-		$this->template = '/template/module/account.tpl';
+		$this->template = 'template/module/account.tpl';
 
 		$this->render();
 	}

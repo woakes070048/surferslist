@@ -117,7 +117,7 @@ class ControllerAjaxReview extends Controller {
 
         $this->data['pagination'] = $this->getPagination($review_total, $page, $limit, 'product/member/review', 'member_id=' . $member_id);
 
-        $this->template = '/template/product/review.tpl';
+        $this->template = 'template/product/review.tpl';
 
         $this->response->setOutput($this->render());
     }

@@ -94,7 +94,7 @@ class ControllerPaymentSagepayDirect extends Controller {
 			);
 		}
 
-		$this->template = '/template/payment/sagepay_direct.tpl';
+		$this->template = 'template/payment/sagepay_direct.tpl';
 
 		$this->render();
 	}

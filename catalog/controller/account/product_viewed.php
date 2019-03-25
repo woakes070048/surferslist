@@ -136,7 +136,7 @@ class ControllerAccountProductViewed extends Controller {
 		$this->document->addScript('catalog/view/root/ui/jquery-ui.min.js');
 		$this->document->addScript('catalog/view/root/javascript/account.js');
 
-		$this->template = '/template/account/product_viewed.tpl';
+		$this->template = 'template/account/product_viewed.tpl';
 
 		$this->children = array(
 			'common/column_left',

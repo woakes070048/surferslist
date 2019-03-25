@@ -247,7 +247,7 @@ class ControllerProductCategory extends Controller {
 			$this->data['text_empty'] .= '&emsp;' . sprintf($this->language->get('text_location_remove_url'), $location_remove_url);
 		}
 
-		$this->template = '/template/product/category.tpl';
+		$this->template = 'template/product/category.tpl';
 
 		$this->children = array(
 			'common/notification',

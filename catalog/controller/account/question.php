@@ -228,7 +228,7 @@ class ControllerAccountQuestion extends Controller {
 
 		$this->document->addScript('catalog/view/root/javascript/account.js');
 
-		$this->template = '/template/account/question_list.tpl';
+		$this->template = 'template/account/question_list.tpl';
 
 		$this->children = array(
 			'common/notification',
@@ -289,7 +289,7 @@ class ControllerAccountQuestion extends Controller {
 
  		$this->session->data['warning'] = $this->getError('warning');
 
-		$this->template = '/template/account/question_form.tpl';
+		$this->template = 'template/account/question_form.tpl';
 
 		$this->children = array(
 			'common/notification',

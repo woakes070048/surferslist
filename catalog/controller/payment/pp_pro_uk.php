@@ -75,7 +75,7 @@ class ControllerPaymentPPProUK extends Controller {
 			);
 		}
 
-		$this->template = '/template/payment/pp_pro_uk.tpl';
+		$this->template = 'template/payment/pp_pro_uk.tpl';
 
 		$this->render();
 	}

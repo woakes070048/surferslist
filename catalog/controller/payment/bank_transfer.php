@@ -13,7 +13,7 @@ class ControllerPaymentBankTransfer extends Controller {
 
 		$this->data['continue'] = $this->url->link('checkout/success');
 
-		$this->template = '/template/payment/bank_transfer.tpl';
+		$this->template = 'template/payment/bank_transfer.tpl';
 
 		$this->render();
 	}

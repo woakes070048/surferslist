@@ -5,7 +5,7 @@ class ControllerPaymentCod extends Controller {
 
 		$this->data['continue'] = $this->url->link('checkout/success');
 
-		$this->template = '/template/payment/cod.tpl';
+		$this->template = 'template/payment/cod.tpl';
 
 		$this->render();
 	}

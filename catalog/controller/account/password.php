@@ -53,7 +53,7 @@ class ControllerAccountPassword extends Controller {
 
 		$this->data['back'] = $this->url->link('account/account', '', 'SSL');
 
-		$this->template = '/template/account/password.tpl';
+		$this->template = 'template/account/password.tpl';
 
 		$this->children = array(
 			'common/column_left',

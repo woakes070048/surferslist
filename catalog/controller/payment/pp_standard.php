@@ -168,7 +168,7 @@ class ControllerPaymentPPStandard extends Controller {
 
 			$this->data['custom'] = $order_no;
 
-			$this->template = '/template/payment/pp_standard.tpl';
+			$this->template = 'template/payment/pp_standard.tpl';
 
 			$this->render();
 		}

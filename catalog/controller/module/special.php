@@ -37,7 +37,7 @@ class ControllerModuleSpecial extends Controller {
 
 		$this->data['products'] = $this->getChild('product/data/list_module', array('products' => $listings, 'position' => $setting['position']));
 
-		$this->template = '/template/module/special.tpl';
+		$this->template = 'template/module/special.tpl';
 
 		$this->render();
 	}

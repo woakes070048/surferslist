@@ -152,7 +152,7 @@ class ControllerErrorProductUnavailable extends Controller {
 
 		$this->document->addScript('catalog/view/root/wookmark/wookmark.min.js');
 
-		$this->template = '/template/error/product_unavailable.tpl';
+		$this->template = 'template/error/product_unavailable.tpl';
 
 		$this->children = array(
 			'common/notification',

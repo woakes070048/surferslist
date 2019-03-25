@@ -87,7 +87,7 @@ class ControllerProductCompare extends Controller {
 		$this->data['reset'] = $this->url->link('product/featured');
 		$this->data['continue'] = $this->url->link('common/home');
 
-		$this->template = '/template/product/compare.tpl';
+		$this->template = 'template/product/compare.tpl';
 
 		$this->children = array(
 			'common/notification',

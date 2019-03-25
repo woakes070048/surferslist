@@ -33,7 +33,7 @@ class ControllerPaymentAuthorizeNetAim extends Controller {
 			);
 		}
 
-		$this->template = '/template/payment/authorizenet_aim.tpl';
+		$this->template = 'template/payment/authorizenet_aim.tpl';
 
 		$this->render();
 	}

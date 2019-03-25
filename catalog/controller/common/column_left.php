@@ -5,7 +5,7 @@ class ControllerCommonColumnLeft extends Controller {
 
 		$this->data['sidebar_exists'] = $this->getChild('common/module/hasSidebar');
 
-		$this->template = '/template/common/column_left.tpl';
+		$this->template = 'template/common/column_left.tpl';
 
 		$this->render();
 	}

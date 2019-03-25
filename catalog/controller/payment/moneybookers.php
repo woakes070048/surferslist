@@ -44,7 +44,7 @@ class ControllerPaymentMoneybookers extends Controller {
 
 		$this->data['order_id'] = $this->session->data['order_id'];
 
-		$this->template = '/template/payment/moneybookers.tpl';
+		$this->template = 'template/payment/moneybookers.tpl';
 
 		$this->render();
 	}

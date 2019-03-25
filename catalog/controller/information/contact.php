@@ -202,7 +202,7 @@ class ControllerInformationContact extends Controller {
 		$this->document->addScript('catalog/view/root/ui/jquery-ui.min.js');
 		$this->document->addScript('catalog/view/root/javascript/contact.js');
 
-		$this->template = '/template/information/contact.tpl';
+		$this->template = 'template/information/contact.tpl';
 
 		$this->children = array(
 			'common/notification',

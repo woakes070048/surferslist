@@ -125,7 +125,7 @@ class ControllerModuleSlideshow extends Controller {
 
 		$this->document->addScript('catalog/view/root/slick/slick.min.js');
 
-		$this->template = '/template/module/slideshow.tpl';
+		$this->template = 'template/module/slideshow.tpl';
 
 		$this->render();
 	}

@@ -14,7 +14,7 @@ class ControllerEmbedFooter extends Controller {
 		$this->data['social_buttons'] = false; // isset($this->request->get['route']) && $this->request->get['route'] == 'embed/profile' ? true : false;
 		$this->data['contact_enabled'] = false; // Google reCaptcha js included if true
 
-		$this->template = '/template/embed/footer.tpl';
+		$this->template = 'template/embed/footer.tpl';
 		$this->render();
 	}
 }

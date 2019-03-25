@@ -67,7 +67,7 @@ class ControllerAjaxSale extends Controller {
 
         $this->data['pagination'] = $this->getPagination($history_total, $page, 12, 'account/order/history', 'order_no=' . $this->request->get['order_no']);
 
-		$this->template = '/template/account/order_history.tpl';
+		$this->template = 'template/account/order_history.tpl';
 
 		$this->response->setOutput($this->render());
 	}
@@ -125,7 +125,7 @@ class ControllerAjaxSale extends Controller {
 
         $this->data['pagination'] = $this->getPagination($history_total, $page, 12, 'account/order/history', 'sale_id=' . $this->request->get['sale_id']);
 
-		$this->template = '/template/account/order_history.tpl';
+		$this->template = 'template/account/order_history.tpl';
 
 		$this->response->setOutput($this->render());
 	}

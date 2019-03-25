@@ -177,7 +177,7 @@ class ControllerCommonHeader extends Controller {
 			'module/cart'
 		);
 
-		$this->template = '/template/common/header.tpl';
+		$this->template = 'template/common/header.tpl';
 
 		$this->render();
 	}

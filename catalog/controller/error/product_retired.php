@@ -145,7 +145,7 @@ class ControllerErrorProductRetired extends Controller {
 
 		$this->document->addScript('catalog/view/root/wookmark/wookmark.min.js');
 
-		$this->template = '/template/error/product_retired.tpl';
+		$this->template = 'template/error/product_retired.tpl';
 
 		$this->children = array(
 			'common/notification',

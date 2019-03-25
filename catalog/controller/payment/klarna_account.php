@@ -275,7 +275,7 @@ class ControllerPaymentKlarnaAccount extends Controller {
 				);
 			}
 
-			$this->template = '/template/payment/klarna_account.tpl';
+			$this->template = 'template/payment/klarna_account.tpl';
 
 			$this->render();
 		}

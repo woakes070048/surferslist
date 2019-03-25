@@ -11,7 +11,7 @@ class ControllerModuleGoogleTalk extends Controller {
 			$this->data['code'] = html_entity_decode($this->config->get('google_talk_code'));
 		}
 
-		$this->template = '/template/module/google_talk.tpl';
+		$this->template = 'template/module/google_talk.tpl';
 
 		$this->render();
 	}

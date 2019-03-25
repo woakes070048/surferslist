@@ -156,7 +156,7 @@ class ControllerCheckoutGuest extends Controller {
 			$this->data['shipping_address'] = true;
 		}
 
-		$this->template = '/template/checkout/guest.tpl';
+		$this->template = 'template/checkout/guest.tpl';
 
 		$this->response->setOutput($this->render());
 	}

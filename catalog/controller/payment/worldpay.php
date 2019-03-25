@@ -32,7 +32,7 @@ class ControllerPaymentWorldPay extends Controller {
 		$this->data['email'] = $order_info['email'];
 		$this->data['test'] = $this->config->get('worldpay_test');
 
-		$this->template = '/template/payment/worldpay.tpl';
+		$this->template = 'template/payment/worldpay.tpl';
 
 		$this->render();
 	}
@@ -107,13 +107,13 @@ class ControllerPaymentWorldPay extends Controller {
 
 			$this->data['continue'] = $this->url->link('checkout/success');
 
-			$this->template = '/template/payment/worldpay_success.tpl';
+			$this->template = 'template/payment/worldpay_success.tpl';
 
 			$this->response->setOutput($this->render());
 		} else {
 			$this->data['continue'] = $this->url->link('checkout/cart');
 
-			$this->template = '/template/payment/worldpay_failure.tpl';
+			$this->template = 'template/payment/worldpay_failure.tpl';
 
 			$this->response->setOutput($this->render());
 		}

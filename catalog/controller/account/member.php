@@ -379,7 +379,7 @@ class ControllerAccountMember extends Controller {
 			$this->document->addScript('catalog/view/root/colorpicker/spectrum.js');
 		}
 
-		$this->template = '/template/account/member.tpl';
+		$this->template = 'template/account/member.tpl';
 
 		$this->children = array(
 			'common/notification',

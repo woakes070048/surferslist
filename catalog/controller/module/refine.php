@@ -102,7 +102,7 @@ class ControllerModuleRefine extends Controller {
 
         $this->data['products'] = $data['products'] ? true : false;
 
-        $this->template = '/template/module/refine.tpl';
+        $this->template = 'template/module/refine.tpl';
 
         $this->render();
     }

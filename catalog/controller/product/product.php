@@ -381,7 +381,7 @@ class ControllerProductProduct extends Controller {
 				$this->document->addScript('catalog/view/root/ui/jquery-ui-timepicker-addon.js');
 			}
 
-			$this->template = '/template/product/product.tpl';
+			$this->template = 'template/product/product.tpl';
 
 			$this->children = array(
 				'common/notification',

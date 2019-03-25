@@ -214,7 +214,7 @@ class ControllerEmbedProfile extends Controller {
 
 		$this->model_catalog_member->updateViewed($member_account_id);
 
-		$this->template = '/template/embed/profile.tpl';
+		$this->template = 'template/embed/profile.tpl';
 
 		$this->children = array(
 			// 'module/language',
@@ -236,7 +236,7 @@ class ControllerEmbedProfile extends Controller {
 		$this->data['heading_title'] = $this->language->get('text_error');
 		$this->data['text_error'] = $this->language->get('text_error');
 
-		$this->template = '/template/embed/not_found.tpl';
+		$this->template = 'template/embed/not_found.tpl';
 
 		$this->children = array(
 			'embed/header',

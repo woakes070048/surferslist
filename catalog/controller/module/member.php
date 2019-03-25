@@ -100,7 +100,7 @@ class ControllerModuleMember extends Controller {
 		$this->data['more'] = $this->url->link('product/member');
 		$this->data['text_more'] = $this->language->get('text_view_all') . ' ' . $this->language->get('text_all_members');
 
-		$this->template = '/template/module/member.tpl';
+		$this->template = 'template/module/member.tpl';
 
 		$this->render();
 	}

@@ -114,7 +114,7 @@ class ControllerCommonFooter extends Controller {
 			$this->model_tool_online->whosonline($ip, $this->customer->getId(), $url, $referer);
 		}
 
-		$this->template = '/template/common/footer.tpl';
+		$this->template = 'template/common/footer.tpl';
 		$this->render();
 	}
 }

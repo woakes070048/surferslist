@@ -152,7 +152,7 @@ class ControllerAjaxQuestion extends Controller {
 
 		$this->data['pagination'] = $this->getPagination($question_total, $page, $limit, 'ajax/question/show_listing', 'listing_id=' . $listing_id);
 
-		$this->template = '/template/product/question.tpl';
+		$this->template = 'template/product/question.tpl';
 
 		$this->response->setOutput($this->render());
 	}
@@ -202,7 +202,7 @@ class ControllerAjaxQuestion extends Controller {
 
 		$this->data['pagination'] = $this->getPagination($discussion_total, $page, $limit, 'ajax/question/show_member', 'member_id=' . $member_id);
 
-		$this->template = '/template/product/question.tpl';
+		$this->template = 'template/product/question.tpl';
 
 		$this->response->setOutput($this->render());
 	}

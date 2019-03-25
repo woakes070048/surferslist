@@ -112,7 +112,7 @@ class ControllerModuleCategory extends Controller {
 			$this->cache->set('category.module.category.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $cache, $this->data['categories'], 60 * 60 * 24 * 30); // 1 month cache expiration
 		}
 
-		$this->template = '/template/module/category.tpl';
+		$this->template = 'template/module/category.tpl';
 
 		$this->render();
 	}

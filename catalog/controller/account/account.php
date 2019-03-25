@@ -244,7 +244,7 @@ class ControllerAccountAccount extends Controller {
 		$this->data['activated'] = $this->customer->hasProfile();
 		$this->data['enabled'] = $this->customer->isProfileEnabled();
 
-		$this->template = '/template/account/account.tpl';
+		$this->template = 'template/account/account.tpl';
 
 		$this->children = array(
 			'common/notification',

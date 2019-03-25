@@ -23,7 +23,7 @@ class ControllerPaymentCheque extends Controller {
 
 		$this->data['continue'] = $this->url->link('checkout/success', 'order_no=' . $order_no, 'SSL');
 
-		$this->template = '/template/payment/cheque.tpl';
+		$this->template = 'template/payment/cheque.tpl';
 
 		$this->render();
 	}

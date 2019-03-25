@@ -127,7 +127,7 @@ class ControllerModuleFeatured extends Controller {
 
 		$this->data['products'] = $this->getChild('product/data/list_module', array('products' => $listings, 'position' => $setting['position']));
 
-		$this->template = '/template/module/featured.tpl';
+		$this->template = 'template/module/featured.tpl';
 
 		$this->render();
 	}

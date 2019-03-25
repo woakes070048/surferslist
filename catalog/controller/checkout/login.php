@@ -13,7 +13,7 @@ class ControllerCheckoutLogin extends Controller {
 
 		$this->data['csrf_token'] = $this->getCSRFToken();
 
-		$this->template = '/template/checkout/login.tpl';
+		$this->template = 'template/checkout/login.tpl';
 
 		$this->response->setOutput($this->render());
 	}

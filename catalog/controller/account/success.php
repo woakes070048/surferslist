@@ -27,7 +27,7 @@ class ControllerAccountSuccess extends Controller {
 			$this->data['continue'] = $this->url->link('account/account', '', 'SSL');
 		}
 
-		$this->template = '/template/common/success.tpl';
+		$this->template = 'template/common/success.tpl';
 
 		$this->children = array(
 			'common/column_left',

@@ -169,7 +169,7 @@ class ControllerAccountRegister extends Controller {
 
 		$this->document->addScript('catalog/view/root/javascript/login.js');
 
-		$this->template = '/template/account/register.tpl';
+		$this->template = 'template/account/register.tpl';
 
 		$this->children = array(
 			'common/column_left',

@@ -22,7 +22,7 @@ class ControllerModuleInformation extends Controller {
 		$this->data['contact'] = $this->url->link('information/contact');
 		$this->data['sitemap'] = $this->url->link('information/sitemap');
 
-		$this->template = '/template/module/information.tpl';
+		$this->template = 'template/module/information.tpl';
 
 		$this->render();
 	}

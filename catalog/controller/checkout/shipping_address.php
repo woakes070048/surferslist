@@ -43,7 +43,7 @@ class ControllerCheckoutShippingAddress extends Controller {
 
 		$this->data['countries'] = $this->model_localisation_country->getCountries();
 
-		$this->template = '/template/checkout/shipping_address.tpl';
+		$this->template = 'template/checkout/shipping_address.tpl';
 
 		$this->response->setOutput($this->render());
 	}

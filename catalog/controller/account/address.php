@@ -199,7 +199,7 @@ class ControllerAccountAddress extends Controller {
 		$this->data['insert'] = $this->url->link('account/address/insert', '', 'SSL');
 		$this->data['back'] = $this->url->link('account/account', '', 'SSL');
 
-		$this->template = '/template/account/address_list.tpl';
+		$this->template = 'template/account/address_list.tpl';
 
 		$this->children = array(
 			'common/notification',
@@ -412,7 +412,7 @@ class ControllerAccountAddress extends Controller {
 
 		$this->document->addScript('catalog/view/root/javascript/account.js');
 
-		$this->template = '/template/account/address_form.tpl';
+		$this->template = 'template/account/address_form.tpl';
 
 		$this->children = array(
 			'common/notification',

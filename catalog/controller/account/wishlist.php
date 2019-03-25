@@ -62,7 +62,7 @@ class ControllerAccountWishList extends Controller {
 
 		$this->data['continue'] = $this->url->link('account/account', '', 'SSL');
 
-		$this->template = '/template/account/wishlist.tpl';
+		$this->template = 'template/account/wishlist.tpl';
 
 		$this->children = array(
 			'common/column_left',

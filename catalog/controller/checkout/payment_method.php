@@ -99,7 +99,7 @@ class ControllerCheckoutPaymentMethod extends Controller {
 			$this->data['comment'] = '';
 		}
 
-		$this->template = '/template/checkout/payment_method.tpl';
+		$this->template = 'template/checkout/payment_method.tpl';
 
 		$this->response->setOutput($this->render());
 	}

@@ -179,7 +179,7 @@ class ControllerProductManufacturer extends Controller {
 		$this->data['reset'] = $this->url->link('product/manufacturer');
 		$this->data['continue'] = $this->url->link('common/home');
 
-		$this->template = '/template/product/manufacturer_list.tpl';
+		$this->template = 'template/product/manufacturer_list.tpl';
 
 		$this->children = array(
 			'common/notification',
@@ -430,7 +430,7 @@ class ControllerProductManufacturer extends Controller {
 
 		$this->model_catalog_manufacturer->updateViewed($this->request->get['manufacturer_id']);
 
-		$this->template = '/template/product/manufacturer_info.tpl';
+		$this->template = 'template/product/manufacturer_info.tpl';
 
 		$this->children = array(
 			'common/notification',

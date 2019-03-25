@@ -82,7 +82,7 @@ class ControllerCheckoutGuestShipping extends Controller {
 
 		$this->data['countries'] = $this->model_localisation_country->getCountries();
 
-		$this->template = '/template/checkout/guest_shipping.tpl';
+		$this->template = 'template/checkout/guest_shipping.tpl';
 
 		$this->response->setOutput($this->render());
 	}

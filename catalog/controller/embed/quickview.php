@@ -107,7 +107,7 @@ class ControllerEmbedQuickview extends Controller {
 
 			$this->model_catalog_product->updateViewed($this->request->get['listing_id']);
 
-			$this->template = '/template/embed/quickview.tpl';
+			$this->template = 'template/embed/quickview.tpl';
 
 			$this->response->setOutput($this->render());
 		} else {
@@ -119,7 +119,7 @@ class ControllerEmbedQuickview extends Controller {
 			$this->data['heading_title'] = $this->language->get('text_error');
 			$this->data['text_error'] = $this->language->get('text_error');
 
-			$this->template = '/template/embed/not_found.tpl';
+			$this->template = 'template/embed/not_found.tpl';
 
 			$this->children = array(
 				'embed/header',

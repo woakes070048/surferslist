@@ -524,7 +524,7 @@ class ControllerAccountProduct extends Controller {
 			$this->document->addScript('catalog/view/root/javascript/contact.js');
 		}
 
-		$this->template = '/template/account/product_list.tpl';
+		$this->template = 'template/account/product_list.tpl';
 
 		$this->children = array(
 			'common/notification',
@@ -1277,7 +1277,7 @@ class ControllerAccountProduct extends Controller {
 			$this->document->addScript('catalog/view/root/ui/jquery-ui-timepicker-addon.js');
 		}
 
-		$this->template = '/template/account/product_form.tpl';
+		$this->template = 'template/account/product_form.tpl';
 
 		$this->children = array(
 			'common/notification',

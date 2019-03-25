@@ -43,7 +43,7 @@ class ControllerModuleCarousel extends Controller {
 
 		$this->data['module'] = $module++;
 
-		$this->template = '/template/module/carousel.tpl';
+		$this->template = 'template/module/carousel.tpl';
 		$this->render();
 	}
 }

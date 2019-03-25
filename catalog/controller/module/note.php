@@ -26,7 +26,7 @@ class ControllerModuleNote extends Controller {
 		$this->data['note_image'] = $setting['note_image'];
 		$this->data['image_location'] = $setting['image_location']
 
-		$this->template = '/template/module/note.tpl';
+		$this->template = 'template/module/note.tpl';
 
 		$this->data['module'] = $module++;
 

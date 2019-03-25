@@ -34,7 +34,7 @@ class ControllerInformationInformation extends Controller {
 
 			$this->model_catalog_information->updateViewed($this->request->get['information_id']);
 
-			$this->template = '/template/information/information.tpl';
+			$this->template = 'template/information/information.tpl';
 		} else {
 			$this->addBreadcrumb($this->language->get('text_error'), $this->url->link('information/information', 'information_id=' . $information_id));
 
@@ -45,7 +45,7 @@ class ControllerInformationInformation extends Controller {
 			$this->data['search'] = $this->url->link('product/search');
 			$this->data['continue'] = $this->url->link('common/home');
 
-			$this->template = '/template/error/not_found.tpl';
+			$this->template = 'template/error/not_found.tpl';
 
 			$this->response->addHeader($this->request->server['SERVER_PROTOCOL'] . ' 404 Not Found');
 		}

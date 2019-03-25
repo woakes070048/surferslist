@@ -34,7 +34,7 @@ class ControllerAjaxFileManager extends Controller {
 		$this->data['fingerprint'] = $js_min ? '?v=' . rtrim(substr($js_min, strpos($js_min, '-') + 1), '.min.js') : '';
 		$this->data['server'] = CDN_SERVER ?: ($this->request->isSecure() ? $this->config->get('config_ssl') : $this->config->get('config_url'));
 
-		$this->template = '/template/account/filemanager.tpl';
+		$this->template = 'template/account/filemanager.tpl';
 
 		$this->response->setOutput($this->render());
 	}

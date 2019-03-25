@@ -347,7 +347,7 @@ class ControllerProductMember extends Controller {
 			$this->data['text_empty_members'] .= '&emsp;' . sprintf($this->language->get('text_location_remove_url'), $location_remove_url);
 		}
 
-		$this->template = '/template/product/member_list.tpl';
+		$this->template = 'template/product/member_list.tpl';
 
 		$this->children = array(
 			'common/notification',
@@ -713,7 +713,7 @@ class ControllerProductMember extends Controller {
 
 		$this->model_catalog_member->updateViewed($this->request->get['member_id']);
 
-		$this->template = '/template/product/member_info.tpl';
+		$this->template = 'template/product/member_info.tpl';
 
 		$this->children = array(
 			'common/notification',

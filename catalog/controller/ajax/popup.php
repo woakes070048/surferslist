@@ -77,7 +77,7 @@ class ControllerAjaxPopup extends Controller {
 		// information_id = 15 => Listing Discussions
 		$this->data['text_contact_form_footer'] = sprintf($this->language->get('text_contact_form_footer'), $this->url->link('information/information', 'information_id=15'), $this->language->get('text_contact_listing_questions'));
 
-		$this->template = '/template/common/popup_contact.tpl';
+		$this->template = 'template/common/popup_contact.tpl';
 		$this->response->setOutput($this->render());
 	}
 
@@ -110,7 +110,7 @@ class ControllerAjaxPopup extends Controller {
 				$this->data['redirect'] = '';
 			}
 
-			$this->template = '/template/common/popup_login.tpl';
+			$this->template = 'template/common/popup_login.tpl';
 
 			$json = array(
 				'html' => $this->render(),
@@ -167,7 +167,7 @@ class ControllerAjaxPopup extends Controller {
 
 			$this->data['redirect'] = ''; // ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->url->link('account/account', '', 'SSL') : '';
 
-			$this->template = '/template/common/popup_register.tpl';
+			$this->template = 'template/common/popup_register.tpl';
 
 			$json = array(
 				'html' => $this->render(),

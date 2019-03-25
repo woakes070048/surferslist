@@ -66,7 +66,7 @@ class ControllerAccountLogout extends Controller {
 
 		$this->data['continue'] = $this->url->link('common/home');
 
-		$this->template = '/template/common/success.tpl';
+		$this->template = 'template/common/success.tpl';
 
 		$this->children = array(
 			'common/column_left',

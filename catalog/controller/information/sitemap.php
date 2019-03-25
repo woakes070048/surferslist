@@ -144,7 +144,7 @@ class ControllerInformationSitemap extends Controller {
 			$this->cache->set('sitemap.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'), $this->data, 60 * 60 * 24 * 30); // 1 month cache expiration
 		}
 
-		$this->template = '/template/information/sitemap.tpl';
+		$this->template = 'template/information/sitemap.tpl';
 
 		$this->children = array(
 			'common/notification',

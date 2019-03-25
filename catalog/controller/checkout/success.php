@@ -93,7 +93,7 @@ class ControllerCheckoutSuccess extends Controller {
 		$this->data['account'] = $this->url->link('account/account', '', 'SSL');
 		$this->data['continue'] = $this->url->link('common/home', '', 'SSL');
 
-		$this->template = '/template/common/success.tpl';
+		$this->template = 'template/common/success.tpl';
 
 		$this->children = array(
 			'common/notification',

@@ -34,7 +34,7 @@ class ControllerPaymentWebPaymentSoftware extends Controller {
 			);
 		}
 
-		$this->template = '/template/payment/web_payment_software.tpl';
+		$this->template = 'template/payment/web_payment_software.tpl';
 
 		$this->render();
 	}

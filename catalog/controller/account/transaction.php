@@ -58,7 +58,7 @@ class ControllerAccountTransaction extends Controller {
 
 		$this->data['continue'] = $this->url->link('account/account', '', 'SSL');
 
-		$this->template = '/template/account/transaction.tpl';
+		$this->template = 'template/account/transaction.tpl';
 
 		$this->children = array(
 			'common/column_left',

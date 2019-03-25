@@ -125,7 +125,7 @@ class ControllerCheckoutShippingMethod extends Controller {
 
 		$this->data['insurance'] = !empty($this->session->data['insurance']) ? $this->session->data['insurance'] : '';
 
-		$this->template = '/template/checkout/shipping_method.tpl';
+		$this->template = 'template/checkout/shipping_method.tpl';
 
 		$this->response->setOutput($this->render());
 	}

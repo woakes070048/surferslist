@@ -69,7 +69,7 @@ class ControllerCheckoutCheckout extends Controller {
 			$this->document->addScript('catalog/view/root/javascript/login.js');
 		}
 
-		$this->template = '/template/checkout/checkout.tpl';
+		$this->template = 'template/checkout/checkout.tpl';
 
 		$this->children = array(
 			'common/column_left',

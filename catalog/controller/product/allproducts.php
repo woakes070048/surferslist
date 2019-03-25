@@ -243,7 +243,7 @@ class ControllerProductAllProducts extends Controller {
 			$this->data['text_empty'] .= '&nbsp; &nbsp;' . sprintf($this->language->get('text_location_remove_url'), $location_remove_url);
 		}
 
-		$this->template = '/template/product/allproducts.tpl';
+		$this->template = 'template/product/allproducts.tpl';
 
 		$this->children = array(
 			'common/notification',

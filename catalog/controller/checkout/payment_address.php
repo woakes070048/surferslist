@@ -74,7 +74,7 @@ class ControllerCheckoutPaymentAddress extends Controller {
 			$this->data['zones'] = array();
 		}
 
-		$this->template = '/template/checkout/payment_address.tpl';
+		$this->template = 'template/checkout/payment_address.tpl';
 
 		$this->response->setOutput($this->render());
 	}

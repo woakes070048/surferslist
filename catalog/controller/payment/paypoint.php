@@ -63,7 +63,7 @@ class ControllerPaymentPaypoint extends Controller {
 
 		$this->data['options'] = 'test_status=' . $status . ',dups=false,cb_post=false';
 
-		$this->template = '/template/payment/paypoint.tpl';
+		$this->template = 'template/payment/paypoint.tpl';
 
 		$this->render();
 	}
@@ -143,7 +143,7 @@ class ControllerPaymentPaypoint extends Controller {
 
 				$this->data['continue'] = $this->url->link('checkout/success');
 
-				$this->template = '/template/payment/paypoint_success.tpl';
+				$this->template = 'template/payment/paypoint_success.tpl';
 
 				$this->children = array(
 					'common/column_left',
@@ -158,7 +158,7 @@ class ControllerPaymentPaypoint extends Controller {
 			} else {
 				$this->data['continue'] = $this->url->link('checkout/cart');
 
-				$this->template = '/template/payment/paypoint_failure.tpl';
+				$this->template = 'template/payment/paypoint_failure.tpl';
 
 				$this->children = array(
 					'common/column_left',

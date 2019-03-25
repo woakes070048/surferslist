@@ -40,7 +40,7 @@ class ControllerModuleStore extends Controller {
 				);
 			}
 
-			$this->template = '/template/module/store.tpl';
+			$this->template = 'template/module/store.tpl';
 
 			$this->render();
 		}

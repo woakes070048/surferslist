@@ -16,7 +16,7 @@ class ControllerErrorCartEmpty extends Controller {
 		// $this->data['search'] = $this->url->link('product/search');
 		$this->data['continue'] = $this->url->link('common/home');
 
-		$this->template = '/template/error/not_found.tpl';
+		$this->template = 'template/error/not_found.tpl';
 
 		$this->children = array(
 			'common/column_left',

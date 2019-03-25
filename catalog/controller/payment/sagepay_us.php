@@ -33,7 +33,7 @@ class ControllerPaymentSagepayUS extends Controller {
 			);
 		}
 
-		$this->template = '/template/payment/sagepay_us.tpl';
+		$this->template = 'template/payment/sagepay_us.tpl';
 
 		$this->render();
 	}

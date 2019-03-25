@@ -76,7 +76,7 @@ class ControllerAccountEdit extends Controller {
 
 		$this->document->addScript('catalog/view/root/javascript/account.js');
 
-		$this->template = '/template/account/edit.tpl';
+		$this->template = 'template/account/edit.tpl';
 
 		$this->children = array(
 			'common/notification',

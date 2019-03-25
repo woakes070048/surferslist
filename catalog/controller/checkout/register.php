@@ -63,7 +63,7 @@ class ControllerCheckoutRegister extends Controller {
 			$this->data['text_agree'] = '';
 		}
 
-		$this->template = '/template/checkout/register.tpl';
+		$this->template = 'template/checkout/register.tpl';
 
 		$this->response->setOutput($this->render());
 	}

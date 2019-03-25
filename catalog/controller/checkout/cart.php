@@ -361,7 +361,7 @@ class ControllerCheckoutCart extends Controller {
 			$this->document->addScript('catalog/view/root/javascript/cart.js');
 		}
 
-		$this->template = '/template/checkout/cart.tpl';
+		$this->template = 'template/checkout/cart.tpl';
 
 		$this->children = array(
 			'common/column_left',
@@ -384,7 +384,7 @@ class ControllerCheckoutCart extends Controller {
 
 		unset($this->session->data['success']);
 
-		$this->template = '/template/error/not_found.tpl';
+		$this->template = 'template/error/not_found.tpl';
 
 		$this->children = array(
 			'common/column_left',

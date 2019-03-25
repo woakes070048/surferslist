@@ -90,7 +90,7 @@ class ControllerAccountForgotten extends Controller {
 		$this->data['action'] = $this->url->link('account/forgotten', '', 'SSL');
 		$this->data['cancel'] = $this->url->link('common/home', '', 'SSL');
 
-		$this->template = '/template/account/forgotten.tpl';
+		$this->template = 'template/account/forgotten.tpl';
 
 		$this->children = array(
 			'common/column_left',

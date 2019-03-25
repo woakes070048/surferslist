@@ -88,7 +88,7 @@ class ControllerEmbedHeader extends Controller {
 
 		$this->data['customcolor'] = $custom_color;
 
-		$this->template = '/template/embed/header.tpl';
+		$this->template = 'template/embed/header.tpl';
 		$this->render();
 	}
 	

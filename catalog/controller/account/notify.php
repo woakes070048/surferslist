@@ -68,7 +68,7 @@ class ControllerAccountNotify extends Controller {
 
 		$this->document->addScript('catalog/view/root/javascript/account.js');
 
-		$this->template = '/template/account/notify.tpl';
+		$this->template = 'template/account/notify.tpl';
 
 		$this->children = array(
 			'common/notification',

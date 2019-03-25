@@ -229,7 +229,7 @@ class ControllerModuleSearch extends Controller {
 		$this->data['session_zoned_id'] = $session_zone_id;
 		$this->data['session_location'] = $session_location;
 
-		$this->template = '/template/module/search.tpl';
+		$this->template = 'template/module/search.tpl';
 
 		$this->render();
 	}

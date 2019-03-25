@@ -30,7 +30,7 @@ class ControllerErrorNotFound extends Controller {
 		$this->data['continue'] = $this->url->link('common/home');
 		$this->data['search'] = $this->url->link('product/search');
 
-		$this->template = '/template/error/not_found.tpl';
+		$this->template = 'template/error/not_found.tpl';
 
 		$this->children = array(
 			'common/column_left',

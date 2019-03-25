@@ -333,7 +333,7 @@ class ControllerInformationLocation extends Controller {
 
 		$this->document->addScript('catalog/view/root/javascript/location.js');
 
-		$this->template = '/template/information/location.tpl';
+		$this->template = 'template/information/location.tpl';
 
 		$this->children = array(
 			'common/notification',
