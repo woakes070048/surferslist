@@ -12,14 +12,11 @@ class ControllerBlogRSS extends Controller {
         $this->load->model('blog/article');
         $this->load->model('tool/image');
 
-        $blog_name = $setting_info['blog_name'];
-        $blog_meta_description = $setting_info['blog_meta_description'];
-
         $output = '<?xml version="1.0" encoding="UTF-8" ?>';
         $output .= '<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">';
         $output .= '<channel>';
-        $output .= '<title>' . $blog_name[$this->config->get('config_language_id')] . '</title>';
-        $output .= '<description>' . $blog_meta_description[$this->config->get('config_language_id')] . '</description>';
+        $output .= '<title>' . $setting_info['blog_title'][$this->config->get('config_language_id')] . '</title>';
+        $output .= '<description>' . $setting_info['blog_meta_description'][$this->config->get('config_language_id')] . '</description>';
         $output .= '<link>' . HTTP_SERVER . '</link>';
 
         $articles = $this->model_blog_article->getBlogArticles();

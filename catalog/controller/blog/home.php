@@ -13,7 +13,6 @@ class ControllerBlogHome extends Controller {
 
         $this->load->model('blog/article');
 
-        $name = $blog_setting['blog_name'][$this->config->get('config_language_id')];
         $heading_title = $blog_setting['blog_title'][$this->config->get('config_language_id')];
         $meta_description = $blog_setting['blog_meta_description'][$this->config->get('config_language_id')];
         $meta_keyword = $blog_setting['blog_meta_keyword'][$this->config->get('config_language_id')];
@@ -68,15 +67,15 @@ class ControllerBlogHome extends Controller {
 		$this->data['articles'] = $article_total ? $this->getChild('blog/data/list', $this->model_blog_article->getBlogArticles($data)) : array();
 
         $this->data['sidebar'] = $this->getChild('blog/sidebar', array(
-            'query_params' => $query_params,
-            'route' => 'blog/search',
-            'path' => '',
-            'filter' => $data
+            'query_params'  => $query_params,
+            'route'         => 'blog/search',
+            'path'          => '',
+            'filter'        => $data
         ));
 
         $this->data['empty'] = $this->getChild('blog/empty', array(
-            'route' => 'blog/home',
-            'path' => ''
+            'route'         => 'blog/home',
+            'path'          => ''
         ));
 
 		$this->data['pagination'] = $this->getPagination($article_total, $page, $limit, 'blog/search', '', $url);

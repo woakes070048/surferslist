@@ -100,15 +100,15 @@ class ControllerBlogCategory extends Controller {
     		$this->data['articles'] = $article_total ? $this->getChild('blog/data/list', $this->model_blog_article->getBlogArticles($data)) : array();
 
             $this->data['sidebar'] = $this->getChild('blog/sidebar', array(
-                'query_params' => $query_params,
-                'route' => 'blog/search',
-                'path' => 'blog_category_id=' . $blog_category_id,
-                'filter' => $data
+                'query_params'  => $query_params,
+                'route'         => 'blog/search',
+                'path'          => 'blog_category_id=' . $blog_category_id,
+                'filter'        => $data
             ));
 
             $this->data['empty'] = $this->getChild('blog/empty', array(
-                'route' => 'blog/category',
-                'path' => 'path_blog=' . $this->request->get['path_blog']
+                'route'         => 'blog/category',
+                'path'          => 'path_blog=' . $this->request->get['path_blog']
             ));
 
     		$this->data['pagination'] = $this->getPagination($article_total, $page, $limit, 'blog/category', 'path_blog=' . $this->request->get['path_blog'], $url);

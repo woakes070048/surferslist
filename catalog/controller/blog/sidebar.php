@@ -42,7 +42,9 @@ class ControllerBlogSidebar extends Controller {
 		// Links
         $this->data['action'] = str_replace('&amp;', '&', $this->url->link($data['route'], $data['path'] . $this->getQueryString(array('description', 'search'))));
 		$this->data['reset'] = $this->getQueryString(array('page')) ? $this->url->link($data['route'], $data['path']) : '';
+		$this->data['continue'] = $this->url->link('blog/home');
 
+		$this->log->write($this->getQueryString(array('page')));
         $this->template = 'template/blog/sidebar.tpl';
 
         $this->render();

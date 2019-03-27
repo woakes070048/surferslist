@@ -60,9 +60,9 @@ class ControllerCommonHome extends Controller {
 		$this->data['search'] = $this->url->link('product/search');
 		$this->data['product_random'] = $this->url->link('product/allproducts', 'sort=random');
 		$this->data['post'] = $this->url->link('account/anonpost', '', 'SSL');
-		$this->data['about'] = $this->url->link('information/information', 'information_id=4'); // About Us
+		$this->data['about'] = $this->url->link('information/information', 'information_id=' . $this->config->get('config_about_information_id'));
 
-		$this->data['help_about'] = sprintf($this->language->get('help_about'), $this->config->get('config_name')); // About Us
+		$this->data['help_about'] = sprintf($this->language->get('help_about'), $this->config->get('config_name'));
 
 		$this->template = '/template/common/home.tpl';
 

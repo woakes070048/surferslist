@@ -2417,17 +2417,23 @@ table .success, table .warning, table .attention, table .information {
 .review-mini .info .image, .review-mini .info .avatar {
     display: table-cell;
     vertical-align: middle;
-    width: 30px;
+}
+
+.review-mini .info .image, .review-mini .info .avatar, .avatar {
+    padding-right: 8px;
+    width: 40px;
+    height: 40px;
+}
+
+.avatar img {
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
 }
 
 .review-mini .info .image img {
     max-width: 80px;
     height: auto;
-}
-
-.review-mini .info .avatar, .review-mini .info .avatar img {
-    width: 40px;
-    height: 40px;
 }
 
 .review-mini .info .item {

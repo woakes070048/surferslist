@@ -4,7 +4,7 @@
         <div class="ac-content">
             <div class="content">
                 <?php if (count($categories) > 1) { ?>
-                <div class="filter category-filter" title="<?php echo $help_category; ?>" rel="tooltip" data-container="body">
+                <div class="filter category-filter">
                     <ul id="filtersbrands">
                         <?php foreach ($categories as $category) { ?>
                             <li data-filter="<?php echo $category['name']; ?>">
@@ -20,7 +20,7 @@
                     <input type="text" name="filter_search" value="<?php echo $filter_search; ?>" placeholder="<?php echo $text_search; ?>" />
                 </div>
 
-                <div class="filter description-filter clearafter" title="<?php echo $help_description; ?>" rel="tooltip" data-container="body">
+                <div class="filter description-filter clearafter hidden" title="<?php echo $help_description; ?>" rel="tooltip" data-container="body">
                     <?php if ($filter_description) { ?>
                     <span class="label">
                         <input type="checkbox" name="description" value="1" id="description" checked="checked" />
@@ -65,11 +65,14 @@
                     <a id="button-filter" href="<?php echo $action; ?>" class="button">
                         <i class="fa fa-search"></i> <?php echo $button_search; ?>
                     </a>
-                    <?php if ($reset) { ?>
-                    <a id="button-reset" href="<?php echo $reset; ?>" class="button button_alt">
-                        <i class="fa fa-refresh"></i><?php echo $button_reset; ?>
-                    </a>
-                    <?php } ?>
+                </div>
+                <div class="left">
+                    <div class="product-filter">
+                        <?php if ($reset) { ?>
+                        <a href="<?php echo $reset; ?>" class="grid-2 grey-text"><i class="fa fa-refresh"></i><?php echo $button_reset; ?></a>
+                        <?php } ?>
+                        <a href="<?php echo $continue; ?>" class="grid-2 grey-text"><i class="fa fa-home"></i><?php echo $heading_blog_home; ?></a>
+                    </div>
                 </div>
             </div>
         </div>

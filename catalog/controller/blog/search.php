@@ -112,15 +112,15 @@ class ControllerBlogSearch extends Controller {
 		$this->data['articles'] = $article_total ? $this->getChild('blog/data/list', $this->model_blog_article->getBlogArticles($data)) : array();
 
         $this->data['sidebar'] = $this->getChild('blog/sidebar', array(
-            'query_params' => $query_params,
-            'route' => 'blog/search',
-            'path' => '',
-            'filter' => $data
+            'query_params'  => $query_params,
+            'route'         => 'blog/search',
+            'path'          => '',
+            'filter'        => $data
         ));
 
         $this->data['empty'] = $this->getChild('blog/empty', array(
-            'route' => 'blog/search',
-            'path' => ''
+            'route'         => 'blog/search',
+            'path'          => ''
         ));
 
 		$this->data['pagination'] = $this->getPagination($article_total, $page, $limit, 'blog/search', '', $url);
@@ -148,7 +148,7 @@ class ControllerBlogSearch extends Controller {
         $this->document->addStyle('catalog/view/root/stylesheet/blog.css');
         $this->document->addScript('catalog/view/root/javascript/blog.js');
 
-        $this->template = '/template/blog/search.tpl';
+        $this->template = 'template/blog/search.tpl';
 
         $this->data['breadcrumbs'] = $this->getBreadcrumbs();
 

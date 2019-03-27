@@ -50,6 +50,8 @@ class ModelBlogArticle extends Model {
 					'date_added'       => $query->row['date_added'],
 					'date_modified'    => $query->row['date_modified'],
                     'sort_order'	   => $query->row['sort_order'],
+					'status'	       => $query->row['status'],
+					'approved'	       => $query->row['approved'],
                     'viewed'	       => $query->row['viewed'],
 					'name'             => $query->row['name'],
 					'description'      => $query->row['description'],
@@ -186,7 +188,7 @@ class ModelBlogArticle extends Model {
 				, ad.name
 				, cma.member_group_id
 				, cmg.customer_group_id
-				, GROUP_CONCAT(DISTINCT a2c.blog_category_id) AS category_ids
+				, GROUP_CONCAT(DISTINCT a2c.blog_category_id) AS blog_category_ids
 				FROM " . DB_PREFIX . "blog_category_path cp
 				LEFT JOIN " . DB_PREFIX . "blog_article_to_category a2c ON (cp.blog_category_id = a2c.blog_category_id)
                 LEFT JOIN " . DB_PREFIX . "blog_article a ON (a2c.blog_article_id = a.blog_article_id)
@@ -212,13 +214,12 @@ class ModelBlogArticle extends Model {
 
 			foreach ($query->rows as $result) {
 				$blog_indexes[] = array(
-					'blog_article_id'  => $result['blog_article_id'],
-					'name'             => $result['name'],
-					'member_id' 	   => $result['member_id'],
-					'member_group_id'  => $result['member_group_id'],
+					'blog_article_id'	=> $result['blog_article_id'],
+					'name'				=> $result['name'],
+					'member_id'			=> $result['member_id'],
+					'member_group_id'	=> $result['member_group_id'],
 					'customer_group_id' => $result['customer_group_id'],
-					'category_ids'	   => explode(',', $result['category_ids']),
-					'filter_ids'	   => explode(',', $result['filter_ids'])
+					'blog_category_ids'	=> explode(',', $result['blog_category_ids']),
 				);
 			}
 
@@ -495,6 +496,55 @@ class ModelBlogArticle extends Model {
 		}
 	}
 
+	public function getArticleCategoryIds($blog_article_id) {
+		if (empty($blog_article_id)) return array();
+
+		$article_category_data = array();
+
+		$query = $this->db->query("
+			SELECT blog_article_id
+			, blog_category_id
+			FROM " . DB_PREFIX . "blog_article_to_category
+			WHERE blog_article_id = '" . (int)$blog_article_id . "'
+		");
+
+		foreach ($query->rows as $result) {
+			$article_category_data[] = $result['blog_category_id'];
+		}
+
+		return $article_category_data;
+	}
+
+	public function getArticleCategories($blog_article_id) {
+		if (empty($blog_article_id)) return array();
+
+		$sql = "
+			SELECT c.blog_category_id
+			, cd.name
+			, c.image
+			, cp.level
+			, COUNT(DISTINCT a2c.blog_article_id) AS article_count
+			, GROUP_CONCAT(cp.path_id ORDER BY cp.level SEPARATOR '_') AS path_blog
+			FROM " . DB_PREFIX . "blog_article_to_category a2c
+			INNER JOIN " . DB_PREFIX . "blog_article_to_store a2s ON (a2c.blog_article_id = a2s.blog_article_id)
+				AND a2s.store_id = '" . (int)$this->config->get('config_store_id') . "'
+			LEFT JOIN " . DB_PREFIX . "blog_category c ON (a2c.blog_category_id = c.blog_category_id)
+			LEFT JOIN " . DB_PREFIX . "blog_category_description cd ON (c.blog_category_id = cd.blog_category_id)
+				AND cd.language_id = '" . (int)$this->config->get('config_language_id') . "'
+			LEFT JOIN " . DB_PREFIX . "blog_category_to_store c2s ON (c.blog_category_id = c2s.blog_category_id)
+				AND c2s.store_id = '" . (int)$this->config->get('config_store_id') . "'
+			LEFT JOIN " . DB_PREFIX . "blog_category_path cp ON (a2c.blog_category_id = cp.blog_category_id)
+			WHERE a2c.blog_article_id = '" . (int)$blog_article_id . "'
+			AND c.status = '1'
+			GROUP BY cp.blog_category_id
+			ORDER BY c.sort_order, LCASE(cd.name)
+		";
+
+		$query = $this->db->query($sql);
+
+		return $query->rows;
+	}
+
     public function getRelatedProduct($blog_article_id) {
         if (empty($blog_article_id)) return array();
 
@@ -503,7 +553,8 @@ class ModelBlogArticle extends Model {
         $product_data = array();
 
         $query = $this->db->query("
-            SELECT *
+            SELECT a2p.blog_article_id
+			, p.product_id
             FROM " . DB_PREFIX . "blog_article_to_product a2p
             LEFT JOIN " . DB_PREFIX . "product p ON (a2p.product_id = p.product_id)
             LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id)
@@ -548,7 +599,9 @@ class ModelBlogArticle extends Model {
 
     public function getArticleImage($blog_article_id) {
         $query = $this->db->query("
-            SELECT *
+            SELECT blog_article_id
+			, image
+			, sort_order
             FROM " . DB_PREFIX . "blog_article_image
             WHERE blog_article_id = '" . (int)$blog_article_id . "'
             ORDER BY sort_order ASC
