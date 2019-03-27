@@ -73,8 +73,6 @@ class ControllerProductAllCategories extends Controller {
 			'limit'              => 999
 		);
 
-		$categories_total = $this->model_catalog_category->getTotalCategories($data);
-
 		$categories = $this->model_catalog_category->getAllCategories($data);
 
 		foreach ($categories as $category) {

@@ -1,6 +1,6 @@
 <?php echo $header; ?>
-<div class="container-page">
-    <div class="breadcrumb">
+<main class="container-page">
+    <header class="breadcrumb">
         <div class="layout">
             <h1><?php echo $heading_title; ?></h1>
             <div class="links">
@@ -9,10 +9,10 @@
                 <?php } ?>
             </div>
         </div>
-    </div>
+    </header>
     <div class="layout">
         <?php echo $column_left; ?>
-        <div class="container-center">
+        <section class="container-center">
             <div class="content-page">
                 <?php echo isset($notification) ? $notification : ''; ?>
             	<?php echo $content_top; ?>
@@ -30,8 +30,8 @@
                 </div>
                 <?php echo $content_bottom; ?>
             </div>
-        </div>
+        </section>
         <?php echo $column_right; ?>
     </div>
-</div>
+</main>
 <?php echo $footer; ?>

@@ -171,12 +171,12 @@ class ControllerCommonSeoUrl extends Controller {
 					$this->request->get['route'] = 'information/information';
 				} elseif (isset($this->request->get['forum_post_id'])) {
 					$this->request->get['route'] = 'forum/read';
-				} elseif (isset($this->request->get['forum_path'])) {
-					$this->request->get['route'] = 'forum/forum_category';
+				} elseif (isset($this->request->get['path_forum'])) {
+					$this->request->get['route'] = 'forum/category';
 				} elseif (isset($this->request->get['blog_article_id'])) {
-                    $this->request->get['route'] = 'blog/blog_article';
+                    $this->request->get['route'] = 'blog/article';
 				} elseif (isset($this->request->get['path_blog'])) {
-                    $this->request->get['route'] = 'blog/blog_category';
+                    $this->request->get['route'] = 'blog/category';
 				} else {
 					// check `url_alias` db table one more time again for a keyword with the entire path which a matching route, as a last-ditch effort (e.g. quickviews)
 					$query = $this->getQuery($route);
@@ -226,10 +226,10 @@ class ControllerCommonSeoUrl extends Controller {
 				unset($data['manufacturer_id']);
 				unset($data['member_id']);
 				unset($data['path']);
+				unset($data['blog_article_id']);
+				unset($data['path_blog']);
 				// unset($data['forum_post_id']);
-				// unset($data['blog_article_id']);
-				// unset($data['forum_path']);
-				// unset($data['path_blog']);
+				// unset($data['path_forum']);
 			}
 
 			// force product page url rewrite to include category(ies) and manufacturer
@@ -277,8 +277,7 @@ class ControllerCommonSeoUrl extends Controller {
 						} else if (($data['route'] == 'product/product' && ($key == 'product_id' || $key == 'manufacturer_id'))
 							|| ($data['route'] == 'product/manufacturer/info' && $key == 'manufacturer_id')
 							|| ($data['route'] == 'information/information' && $key == 'information_id')
-							|| ($data['route'] == 'product/member/info' && $key == 'member_id')
-							|| ($data['route'] == 'forum/read' && $key == 'forum_post_id')) {
+							|| ($data['route'] == 'product/member/info' && $key == 'member_id')) {
 
 							$query = $key . '=' . (int)$value;
 
@@ -305,10 +304,9 @@ class ControllerCommonSeoUrl extends Controller {
 							$keyword .= '/' . $this->cache[$data['route']];
 							// $this->log->write('cache | ' . $data['route'] . ' | ' . $keyword);
 							unset($data[$key]);
-						} else if ($key == 'path_blog') {
-							// prefix all blog category urls with blog_home keyword
-							$keyword .=  '/blog';
-							// $keyword .= '/' . $this->getKeyword('blog/blog_home');
+						} else if ($key == 'path_blog' || $key == 'path_forum') {
+							$root = explode('_', $key)[1];
+							$keyword .=  '/' . $root;
 
 							$blog_categories = explode('_', $value);
 
@@ -317,21 +315,9 @@ class ControllerCommonSeoUrl extends Controller {
 							}
 
 							unset($data[$key]);
-						} else if ($data['route'] == 'blog/blog_article' && $key == 'blog_article_id') {
-							// prefix all blog category urls with blog_home keyword
-							// $keyword .= '/' . $this->getKeyword('blog/blog_home');
-
-							$keyword .= '/blog/' . $this->getKeyword($key . '=' . (int)$value);
-							unset($data[$key]);
-						} else if ($key == 'forum_path') {
-							$keyword .=  '/forum';
-
-							$forum_categories = explode('_', $value);
-
-							foreach ($forum_categories as $forum_category) {
-								$keyword .= '/' . $this->getKeyword('forum_category_id=' . (int)$forum_category);
-							}
-
+						} else if (($data['route'] == 'blog/article' && $key == 'blog_article_id') || ($data['route'] == 'forum/read' && $key == 'forum_post_id')) {
+							$root = explode('_', $key)[0];
+							$keyword .= '/' . $root . '/' . $this->getKeyword($key . '=' . (int)$value);
 							unset($data[$key]);
 						} else {
 							$keyword_temp = $this->getKeyword($data['route']);
@@ -377,31 +363,62 @@ class ControllerCommonSeoUrl extends Controller {
 		$url = explode('=', $query);
 
 		if ($set_route) {
-			if ($url[0] == 'product_id') {
-				$this->request->get['product_id'] = $url[1];
-				$this->request->get['route'] = 'product/product';
-			} else if ($url[0] == 'information_id') {
-				$this->request->get['information_id'] = $url[1];
-				$this->request->get['route'] = 'information/information';
-			} else if ($url[0] == 'manufacturer_id') {
-				$this->request->get['manufacturer_id'] = $url[1];
-				$this->request->get['route'] = 'product/manufacturer/info';
-			} else if ($url[0] == 'member_id') {
-				$this->request->get['member_id'] = $url[1];
-				$this->request->get['route'] = 'product/member/info';
+			if ($url[0] == 'product_id' || $url[0] == 'information_id' || $url[0] == 'manufacturer_id' || $url[0] == 'member_id' || $url[0] == 'blog_article_id' || $url[0] == 'forum_post_id') {
+				switch ($url[0]) {
+					case 'product_id':
+						$route = 'product/product';
+						break;
+
+					case 'information_id':
+						$route = 'information/information';
+						break;
+
+					case 'manufacturer_id':
+						$route = 'product/manufacturer/info';
+						break;
+
+					case 'member_id':
+						$route = 'product/member/info';
+						break;
+
+					case 'blog_article_id':
+						$route = 'blog/article';
+						break;
+
+					case 'forum_post_id':
+						$route = 'forum/read';
+						break;
+				}
+
+				$this->request->get[$url[0]] = $url[1];
+				$this->request->get['route'] = $route;
 			} else if ($url[0] == $query) {
 				$this->request->get['route'] = $url[0];
 			}
 		} else {
-			if ($url[0] == 'product_id') {
-				$this->request->get['product_id'] = $url[1];
+			if ($url[0] == 'product_id' || $url[0] == 'information_id' || $url[0] == 'blog_article_id' || $url[0] == 'forum_post_id') {
+				$this->request->get[$url[0]] = $url[1];
 			}
 
-			if ($url[0] == 'category_id') {
-				if (!isset($this->request->get['path'])) {
-					$this->request->get['path'] = $url[1];
+			if ($url[0] == 'category_id' || $url[0] == 'blog_category_id' || $url[0] == 'forum_category_id') {
+				switch ($url[0]) {
+					case 'category_id':
+						$path = 'path';
+						break;
+
+					case 'blog_category_id':
+						$path = 'path_blog';
+						break;
+
+					case 'forum_category_id':
+						$path = 'path_forum';
+						break;
+				}
+
+				if (!isset($this->request->get[$path])) {
+					$this->request->get[$path] = $url[1];
 				} else {
-					$this->request->get['path'] .= '_' . $url[1];
+					$this->request->get[$path] .= '_' . $url[1];
 				}
 			}
 
@@ -415,39 +432,8 @@ class ControllerCommonSeoUrl extends Controller {
 				$this->request->get['filter_manufacturer_id'] = $url[1];
 			}
 
-			if ($url[0] == 'information_id') {
-				$this->request->get['information_id'] = $url[1];
-			}
-
-			// Unavailable
 			if ($url[0] == 'error/product_unavailable') {
 				$this->request->get['route'] = 'error/product_unavailable';
-			}
-
-			// Blog
-			if ($url[0] == 'blog_article_id') {
-				$this->request->get['blog_article_id'] = $url[1];
-			}
-
-			if ($url[0] == 'blog_category_id') {
-				if (!isset($this->request->get['path_blog'])) {
-					$this->request->get['path_blog'] = $url[1];
-				} else {
-					$this->request->get['path_blog'] .= '_' . $url[1];
-				}
-			}
-
-			// Forum
-			if ($url[0] == 'forum_post_id') {
-				$this->request->get['forum_post_id'] = $url[1];
-			}
-
-			if ($url[0] == 'forum_category_id') {
-				if (!isset($this->request->get['forum_path'])) {
-					$this->request->get['forum_path'] = $url[1];
-				} else {
-					$this->request->get['forum_path'] .= '_' . $url[1];
-				}
 			}
 		}
 	}
@@ -507,7 +493,11 @@ class ControllerCommonSeoUrl extends Controller {
 		    'product/manufacturer/info',
 		    'product/member/info',
 		    'information/information',
-		    'information/information/info'
+		    'information/information/info',
+		    'blog/article',
+		    'blog/category',
+		    'forum/read',
+		    'forum/category'
 		));
 	}
 
