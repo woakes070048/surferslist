@@ -29,7 +29,7 @@ class ControllerBlogSearch extends Controller {
 			$this->redirect($this->url->link('blog/home'));
         }
 
-        $heading_title = $this->language->get('heading_blog');
+        $heading_title = $this->language->get('heading_blog_search');
         $meta_description = $this->language->get('meta_description');
         $meta_keyword = $this->language->get('meta_keyword');
 

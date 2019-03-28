@@ -1,4 +1,6 @@
 <?php
+$_['heading_blog_search']       = 'Search Blog: ';
+
 // Meta
 $_['meta_description']      = 'Search blog articles about extreme water sports equipment on SurfersList.';
 $_['meta_keyword']          = 'blog, search, learn, extreme, water sports, equipment';

@@ -9,14 +9,14 @@
 		<div class="content widget-no-heading clearafter">
 			<?php if ($article['thumb']) { ?>
 			<div class="grid-3">
-				<div class="article-image image image-border">
+				<div class="grid-1 article-image image image-border">
 					<a href="<?php echo $article['href'];?>">
 						<img src="<?php echo $article['thumb']; ?>" />
 					</a>
 				</div>
 			</div>
 			<?php } ?>
-			<div class="grid-6">
+			<div class="grid-6<?php if (!$article['thumb']) { ?> no-thumbnail<?php } ?>">
 				<div class="article-preview">
 					<header class="article-heading">
 						<div class="article-date">

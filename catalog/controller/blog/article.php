@@ -73,12 +73,12 @@ class ControllerBlogArticle extends Controller {
         }
 
         if (($blog_article_info && $blog_article_info['status'] == '1') || ($blog_article_info && $preview_article)) {
-            $this->addBreadcrumb($blog_article_info['name'], $this->url->link('blog/article', 'blog_article_id=' . $this->request->get['blog_article_id']) . $url);
+            $this->addBreadcrumb($blog_article_info['name'], $this->url->link('blog/article', 'blog_article_id=' . $blog_article_id) . $url);
 
             $this->load->model('catalog/product');
             $this->load->model('tool/image');
 
-            $heading_title = html_entity_decode($blog_article_info['name'], ENT_QUOTES, 'UTF-8');
+            $heading_title = $blog_article_info['name'];
 
             if ($preview_article) {
 				$heading_title = $this->language->get('button_preview') . ': ' . $heading_title;
@@ -144,9 +144,9 @@ class ControllerBlogArticle extends Controller {
 			$sort_order = $this->getQueryParam('order') ?: 'DESC';
 
 			$articles = !$preview_article ? $this->model_blog_article->getBlogArticlesIndexes(array(
-				'filter_category_id'        => $filter_category_id,
-				'filter_sub_category'       => true,
-				'filter_member_account_id'  => $filter_member_account_id,
+				// 'filter_category_id'        => $filter_category_id,
+				// 'filter_sub_category'       => true,
+				// 'filter_member_account_id'  => $filter_member_account_id,
 				'sort'                      => $sort,
 				'order'                     => $sort_order
 			), true) : array();
@@ -216,13 +216,13 @@ class ControllerBlogArticle extends Controller {
 
 			// update view count
 			if (!$preview_article) {
-                $this->model_blog_article->updateViewed($this->request->get['blog_article_id']);
+                $this->model_blog_article->updateViewed($blog_article_id);
             }
 
             $this->document->setTitle($heading_title);
-            $this->document->setDescription(($blog_article_info['meta_description'] ?: $article_data['short_description']));
-            $this->document->setKeywords($blog_article_info['meta_keyword']);
-			$this->document->setUrl($this->url->link('blog/article', 'blog_article_id=' . $this->request->get['blog_article_id']));
+            $this->document->setDescription(($article_data['meta_description']));
+            $this->document->setKeywords($article_data['meta_keyword']);
+			$this->document->setUrl($this->url->link('blog/article', 'blog_article_id=' . $blog_article_id));
 
 			$image_info = $this->model_tool_image->getFileInfo($this->data['thumb']);
 
@@ -230,9 +230,9 @@ class ControllerBlogArticle extends Controller {
 				$this->document->setImage($this->data['thumb'], $image_info['mime'], $image_info[0], $image_info[1]);
 			}
 
-			$this->document->addLink($this->url->link('blog/article', 'blog_article_id=' . $this->request->get['blog_article_id']), 'canonical');
+			$this->document->addLink($this->url->link('blog/article', 'blog_article_id=' . $blog_article_id), 'canonical');
 
-            $this->data['page'] = $this->url->link('blog/article', 'blog_article_id=' . $blog_article_info['blog_article_id']);
+            $this->data['page'] = $this->url->link('blog/article', 'blog_article_id=' . $blog_article_id);
             $this->data['blog_article_id'] = $blog_article_id;
 
             $this->document->addStyle('catalog/view/root/stylesheet/blog.css');

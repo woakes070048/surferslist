@@ -22,8 +22,8 @@
                 	<?php echo $content_top; ?>
     				<?php echo $notification; ?>
 
-                    <div class="global-page">
-                        <div class="article-body" itemprop="articleBody">
+                    <div class="widget article-body" itemprop="articleBody">
+                        <div class="content">
                             <div class="article-heading">
                                 <div class="article-date">
                                     <span class="month"><?php echo $month; ?></span>
@@ -68,6 +68,7 @@
 
                             <?php if ($article_images) { ?>
                             <div class="article-images images">
+                                <h2 class="hidden"><?php echo $text_image_gallery; ?></h2>
                                 <?php foreach ($article_images as $article_image) { ?>
                                 <div class="article-image image image-border">
                                     <a href="<?php echo $article_image['popup']; ?>" class="lightbox" rel="article-images" data-small-image="<?php echo $article_image['image']; ?>">
@@ -88,26 +89,32 @@
                                 <a class="label label-default" href="<?php echo $tag['href']; ?>"><?php echo $tag['tag']; ?></a>
                                 <?php } ?>
                             </div>
+
+                            <input type="hidden" name="blog_article_id" value="<?php echo $blog_article_id; ?>" />
                         </div>
-
-                        <div class="share">
-                            <div class="sharethis-inline-share-buttons"></div>
-                        </div>
-
-                        <input type="hidden" name="blog_article_id" value="<?php echo $blog_article_id; ?>" />
-                    </div>
-
-                    <?php if ($related_products) { ?>
-                    <div id="article-related">
-                        <h2><?php echo $text_related_product; ?></h2>
-
-                        <section id="related-listings" class="widget-module">
-                            <div id="filterscat">
-                                <?php echo $related_products; ?>
+                        
+                        <div class="buttons-footer">
+                            <div class="share">
+                                <div class="sharethis-inline-share-buttons"></div>
                             </div>
-                        </section>
+
+                            <div class="prevnext full">
+        						<ul class="pager column<?php echo $nav_cols; ?>">
+        							<?php if ($prev_url) { ?>
+        							<li class="prev"><a href="<?php echo $prev_url; ?>" rel="tooltip" title="<?php echo $prev_title;?>"><i class="fa fa-chevron-circle-left"></i><span class="name hidden"><?php echo $prev_title;?></span><span class="dir"><?php echo $text_prev; ?></span></a></li>
+        							<?php } ?>
+        							<?php if ($back_url) { ?>
+        							<li class="back"><a href="<?php echo $back_url; ?>" rel="tooltip" title="<?php echo $button_back;?>"><i class="fa fa-undo"></i><span class="dir"><?php echo $button_back; ?></span></a></li>
+                                    <?php } else { ?>
+        							<li class="more"><a href="<?php echo $more_url; ?>" rel="tooltip" title="<?php echo $more_title;?>"><i class="fa fa-th"></i><span class="name hidden"><?php echo $more_title;?></span><span class="dir"><?php echo $text_more;?></span></a></li>
+                                    <?php } ?>
+        							<?php if ($next_url) { ?>
+        							<li class="next"><a href="<?php echo $next_url; ?>" rel="tooltip" title="<?php echo $next_title;?>"><i class="fa fa-chevron-circle-right"></i><span class="name hidden"><?php echo $next_title;?></span><span class="dir"><?php echo $text_next; ?></span></a></li>
+        							<?php } ?>
+        						</ul>
+        					</div>
+                        </div>
                     </div>
-                    <?php } ?>
 
                     <?php if ($related_articles) { ?>
                     <div id="article-related" class="box-blog">
@@ -119,21 +126,41 @@
                                 <?php foreach ($related_articles as $related) { ?>
                                 <article id="article-<?php echo $related['blog_article_id']; ?>" class="grid-item itemcat" data-filter-class="article">
                                     <?php if ($related['thumb']) { ?>
-                                    <div class="image" >
-                                        <a href="<?php echo $related['href']; ?>">
-                                            <img src="<?php echo $related['thumb']; ?>" />
+                                    <div class="image">
+                                        <a href="<?php echo $related['href']; ?>" title="<?php echo $related['name']; ?>">
+                                            <img src="<?php echo $related['thumb']; ?>" alt="<?php echo $related['name']; ?>" />
                                         </a>
+                            			<span class="description">
+                            				<a href="<?php echo $related['href']; ?>"><?php echo $related['short_description']; ?></a>
+                            			</span>
                                     </div>
                                     <?php } ?>
-                                    <div class="article-name">
-                                        <a href="<?php echo $related['href']; ?>"><?php echo $related['name']; ?></a>
-                                    </div>
-                                    <div class="article-description">
-                                        <?php echo $related['description']; ?>
-                                        <a class="button button_inverse button_dark smaller" href="<?php echo $related['href']; ?>"><?php echo $text_read_more; ?></a>
-                                    </div>
+                            		<div class="pannel">
+                            			<div class="info">
+                            				<header>
+                            					<h3><a href="<?php echo $related['href']; ?>" title="<?php echo $related['name']; ?>"><?php echo $related['name']; ?></a></h3>
+                            				</header>
+                            			</div>
+                            			<footer class="add-to add-to1">
+                                            <a href="<?php echo $related['href']; ?>" class="button button-read-more">
+                            					<?php echo $button_read_more; ?>
+                            				</a>
+                            			</footer>
+                            		</div>
                                 </article>
                                 <?php } ?>
+                            </div>
+                        </section>
+                    </div>
+                    <?php } ?>
+
+                    <?php if ($related_products) { ?>
+                    <div id="article-related">
+                        <h2><?php echo $text_related_product; ?></h2>
+
+                        <section id="related-listings" class="widget-module">
+                            <div id="filterscat">
+                                <?php echo $related_products; ?>
                             </div>
                         </section>
                     </div>

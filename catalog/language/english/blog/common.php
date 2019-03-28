@@ -1,18 +1,18 @@
 <?php
+// Heading
 $_['heading_filter_articles']   = 'Refine Articles';
 $_['heading_blog_category']     = 'Blog Category: ';
 $_['heading_blog_article']      = 'Blog Article: ';
-$_['heading_blog_search']       = 'Blog Search: ';
 $_['heading_blog_home']         = 'Blog Home';
 $_['heading_blog']              = 'Blog';
 
+// Text
 $_['text_blog']                 = 'Blog';
 $_['text_author']               = 'Author:';
 $_['text_category']             = 'Category:';
 $_['text_viewed']               = 'Views:';
 $_['text_published']            = 'Published:';
 $_['text_modified']             = 'Updated:';
-$_['button_read_more']          = 'Read More &raquo;';
 $_['text_search']               = 'Search';
 $_['text_link']                 = 'Link';
 $_['text_error']                = 'Category not found!';
@@ -27,6 +27,9 @@ $_['text_date_desc']            = 'Date (New)';
 $_['text_sort_order_asc']       = 'Order (Low)';
 $_['text_sort_order_desc']      = 'Order (High)';
 $_['text_loading']              = ' loading ...';
+
+// Button
+$_['button_read_more']          = 'Read More &raquo;';
 
 // Help
 $_['help_name']                 = 'Search by keyword';
