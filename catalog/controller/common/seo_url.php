@@ -228,8 +228,8 @@ class ControllerCommonSeoUrl extends Controller {
 				unset($data['path']);
 				unset($data['blog_article_id']);
 				unset($data['path_blog']);
-				// unset($data['forum_post_id']);
-				// unset($data['path_forum']);
+				unset($data['forum_post_id']);
+				unset($data['path_forum']);
 			}
 
 			// force product page url rewrite to include category(ies) and manufacturer
@@ -493,13 +493,7 @@ class ControllerCommonSeoUrl extends Controller {
 		    'product/manufacturer/info',
 		    'product/member/info',
 		    'information/information',
-		    'information/information/info',
-		    'blog/article',
-		    'blog/category',
-		    'forum/read',
-		    'forum/category'
+		    'information/information/info'
 		));
 	}
-
 }
-?>

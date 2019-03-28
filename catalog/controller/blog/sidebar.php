@@ -9,19 +9,11 @@ class ControllerBlogSidebar extends Controller {
 		$this->load->model('blog/article');
 
         $this->config_article_count = false; // $this->config->get('blog_article_count');
+		$hide_sort_limit = false;
 
-		// switch ($data['route']) {
-		// 	case 'blog/home':
-		// 	case 'blog/category':
-		// 	case 'blog/search':
-		// 		break;
-        //
-		// 	case 'blog/article':
-		// 		break;
-        //
-		// 	default:
-		// 		break;
-		// }
+		if ($data['route'] === 'blog/article') {
+			$hide_sort_limit = true;
+		}
 
         $this->setQueryParams($data['query_params']);
 
@@ -29,20 +21,36 @@ class ControllerBlogSidebar extends Controller {
         $this->data['categories'] = $this->getFilterCategories($data);
 
         // Sort, Limit
-        $this->data['sorts'] = $this->getSortOptions($data);
-        $this->data['limits'] = $this->getLimits($data['route'], $data['path'] . $this->getQueryString(array('limit')));
+        $this->data['sorts'] = !$hide_sort_limit ? $this->getSortOptions($data) : array();
+        $this->data['limits'] = !$hide_sort_limit ? $this->getLimits($data['route'], $data['path'] . $this->getQueryString(array('limit')), $this->config->get('blog_catalog_limit')) : array();
+		$this->data['hide_sort_limit'] = $hide_sort_limit;
 
 		// Selected Values
-		$this->data['filter_search'] = $data['filter']['filter_name'];
-		$this->data['filter_description'] = $data['filter']['filter_description'];
-		$this->data['sort'] = $data['filter']['sort'];
-		$this->data['order'] = $data['filter']['order'];
-		$this->data['limit'] = $data['filter']['limit'];
+		$filter_search = '';
+		$filter_description = '';
+		$sort = '';
+		$order = '';
+		$limit = '';
+
+		if (!empty($data['filter'])) {
+			$filter_search = $data['filter']['filter_name'];
+			$filter_description = $data['filter']['filter_description'];
+			$sort = $data['filter']['sort'];
+			$order = $data['filter']['order'];
+			$limit = $data['filter']['limit'];
+		}
+
+		$this->data['filter_search'] = $filter_search;
+		$this->data['filter_description'] = $filter_description;
+		$this->data['sort'] = $sort;
+		$this->data['order'] = $order;
+		$this->data['limit'] = $limit;
 
 		// Links
         $this->data['action'] = str_replace('&amp;', '&', $this->url->link($data['route'], $data['path'] . $this->getQueryString(array('description', 'search'))));
 		$this->data['reset'] = $this->getQueryString(array('page')) ? $this->url->link($data['route'], $data['path']) : '';
 		$this->data['continue'] = $this->url->link('blog/home');
+		$this->data['search'] = $this->url->link('blog/search');
 
         $this->template = 'template/blog/sidebar.tpl';
 
@@ -54,8 +62,8 @@ class ControllerBlogSidebar extends Controller {
 
 		$categories = $this->model_blog_category->getAllBlogCategories(array(
 			'filter_status'		 => 1,
-			'sort'               => $data['filter']['sort'],
-			'order'              => $data['filter']['order'],
+			'sort'               => 'sort_order_path',
+			'order'              => 'ASC',
 			'start'              => 0,
 			'limit'              => 999
 		));
@@ -63,11 +71,7 @@ class ControllerBlogSidebar extends Controller {
 		foreach ($categories as $category) {
 			if ($this->config_article_count) {
 				$article_total = $this->model_blog_article->getTotalBlogArticles(array(
-    				'filter_category_id' => $category['blog_category_id'],
-    				'sort'               => $data['filter']['sort'],
-    				'order'              => $data['filter']['order'],
-    				'start'              => 0,
-    				'limit'              => 999
+    				'filter_category_id' => $category['blog_category_id']
     			));
 			}
 
@@ -88,8 +92,8 @@ class ControllerBlogSidebar extends Controller {
 		$this->addSort($this->language->get('text_default'), 'a.sort_order-ASC', $this->url->link($data['route'], $data['path'] . '&sort=a.sort_order&order=ASC' . $url));
         $this->addSort($this->language->get('text_name_asc'), 'ad.name-ASC', $this->url->link($data['route'], $data['path'] . '&sort=ad.name&order=ASC' . $url));
         $this->addSort($this->language->get('text_name_desc'), 'ad.name-DESC', $this->url->link($data['route'], $data['path'] . '&sort=ad.name&order=DESC' . $url));
-        $this->addSort($this->language->get('text_date_asc'), 'a.date_added-ASC', $this->url->link($data['route'], $data['path'] . '&sort=a.date_available&order=ASC' . $url));
-        $this->addSort($this->language->get('text_date_desc'), 'a.date_added-DESC', $this->url->link($data['route'], $data['path'] . '&sort=a.date_available&order=DESC' . $url));
+        $this->addSort($this->language->get('text_date_asc'), 'a.date_available-ASC', $this->url->link($data['route'], $data['path'] . '&sort=a.date_available&order=ASC' . $url));
+        $this->addSort($this->language->get('text_date_desc'), 'a.date_available-DESC', $this->url->link($data['route'], $data['path'] . '&sort=a.date_available&order=DESC' . $url));
 
 		return $this->getSorts();
 	}

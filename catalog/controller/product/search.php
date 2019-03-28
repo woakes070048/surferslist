@@ -129,7 +129,13 @@ class ControllerProductSearch extends Controller {
 			}
 		}
 
-		$search = strip_non_alphanumeric_encode($search, false, ' -_"');
+		if ($search) {
+			$search = strip_non_alphanumeric_encode($search, false, ' -_"');
+		}
+
+		if ($tag) {
+			$tag = strip_non_alphanumeric($tag, true);
+		}
 
 		$heading_title = !empty($this->request->get['search']) ? $this->language->get('heading_title') .  ': ' . $this->request->get['search'] : $this->language->get('heading_title');
 		$meta_description = $this->language->get('meta_description');

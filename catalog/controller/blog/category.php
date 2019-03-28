@@ -17,7 +17,7 @@ class ControllerBlogCategory extends Controller {
 
         $filter_description = isset($this->request->get['description']) ? $this->request->get['description'] : true;
         $author = isset($this->request->get['author']) ? (int)$this->request->get['author'] : 0;
-        $sort = isset($this->request->get['sort']) ? $this->request->get['sort'] : 'a.date_available';
+        $sort = isset($this->request->get['sort']) ? $this->request->get['sort'] : 'a.sort_order';
         $order = isset($this->request->get['order']) ? $this->request->get['order'] : 'DESC';
         $page = isset($this->request->get['page']) ? (int)$this->request->get['page'] : 1;
         $limit = (isset($this->request->get['limit']) && $this->request->get['limit'] <= $this->config->get('blog_catalog_limit') * 4) ? (int)$this->request->get['limit'] : $this->config->get('blog_catalog_limit');
@@ -101,8 +101,8 @@ class ControllerBlogCategory extends Controller {
 
             $this->data['sidebar'] = $this->getChild('blog/sidebar', array(
                 'query_params'  => $query_params,
-                'route'         => 'blog/search',
-                'path'          => 'blog_category_id=' . $blog_category_id,
+                'route'         => 'blog/category',
+                'path'          => 'path_blog=' . $this->request->get['path_blog'],
                 'filter'        => $data
             ));
 
@@ -140,7 +140,6 @@ class ControllerBlogCategory extends Controller {
     		$this->data['url'] = $url;
 
             $this->document->addStyle('catalog/view/root/stylesheet/blog.css');
-            //$this->document->addScript('catalog/view/root/javascript/blog.js');
 
             $this->template = 'template/blog/category.tpl';
         } else {

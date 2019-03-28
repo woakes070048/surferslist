@@ -34,6 +34,7 @@
                     <?php } ?>
                 </div>
 
+                <?php if (!$hide_sort_limit) { ?>
                 <div class="sort" title="<?php echo $help_sort; ?>" rel="tooltip" data-container="body">
                     <label for="sort" class="hidden"><?php echo $text_sort; ?></label>
                     <select name="sort" onchange="location = this.value;">
@@ -59,10 +60,11 @@
                         <?php } ?>
                     </select>
                 </div>
+                <?php } ?>
             </div>
             <div class="buttons">
                 <div class="center">
-                    <a id="button-filter" href="<?php echo $action; ?>" class="button">
+                    <a id="button-filter" href="<?php echo $search; ?>" class="button">
                         <i class="fa fa-search"></i> <?php echo $button_search; ?>
                     </a>
                 </div>

@@ -83,7 +83,11 @@ class ModelBlogArticle extends Model {
 
 			$sql = "
 				SELECT a.blog_article_id
+				, a.member_id
+				, ad.name
 			";
+			// , cma.member_group_id
+			// , cmg.customer_group_id
 
 			$this->generateGetBlogArticlesJoins($sql, $data);
 			$this->generateGetBlogArticlesConditions($sql, $data, $search_log);
@@ -454,45 +458,48 @@ class ModelBlogArticle extends Model {
 			'a.date_available'
 		);
 
+		$sort_order = isset($data['order']) && ($data['order'] == 'DESC') ? 'DESC' : 'ASC';
+
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
 			switch ($data['sort']) {
 				case 'a.sort_order':
 					$sql .= "
 						ORDER BY YEAR(a.date_available) DESC
-						, IF(cmg.customer_group_id = 0, 0, 1) DESC
+						, IF(a.member_id = 0, 0, 1) ASC
 						, a.date_available DESC
+						, a.date_modified DESC
+					";  // , cma.member_group_id DESC
+					break;
+
+				case 'a.date_available':
+					$sql .= "
+						ORDER BY a.date_available {$sort_order}
+						, a.date_modified {$sort_order}
 					";
 					break;
 
 				case 'ad.name':
 					$sql .= "
-						ORDER BY LCASE(" . $data['sort'] . ")
+						ORDER BY LCASE(" . $data['sort'] . ") {$sort_order}
 					";
 					break;
 
 				default:
 					$sql .= "
-						ORDER BY " . $data['sort'] . "
+						ORDER BY " . $data['sort'] . " {$sort_order}
 					";
 					break;
-
 			}
 		} else {
 			$sql .= "
-				ORDER BY a.sort_order
+				ORDER BY a.sort_order {$sort_order}
 			";
 		}
 
 		if (!isset($data['sort']) || ($data['sort'] != 'a.sort_order')) {
-			if (isset($data['order']) && ($data['order'] == 'DESC')) {
-				$sql .= "
-					DESC, LCASE(ad.name) DESC
-				";
-			} else {
-				$sql .= "
-					ASC, LCASE(ad.name) ASC
-				";
-			}
+			$sql .= "
+				, LCASE(ad.name) {$sort_order}
+			";
 		}
 	}
 

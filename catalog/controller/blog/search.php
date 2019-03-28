@@ -20,14 +20,10 @@ class ControllerBlogSearch extends Controller {
 		$filter_description = isset($this->request->get['description']) ? $this->request->get['description'] : true;
         $blog_category_id = isset($this->request->get['blog_category_id']) ? (int)$this->request->get['blog_category_id'] : 0;
         $author = isset($this->request->get['author']) ? (int)$this->request->get['author'] : 0;
-		$sort = isset($this->request->get['sort']) ? $this->request->get['sort'] : 'a.date_available';
+		$sort = isset($this->request->get['sort']) ? $this->request->get['sort'] : 'a.sort_order';
 		$order = isset($this->request->get['order']) ? $this->request->get['order'] : 'DESC';
 		$page = isset($this->request->get['page']) ? (int)$this->request->get['page'] : 1;
 		$limit = (isset($this->request->get['limit']) && $this->request->get['limit'] <= $this->config->get('blog_catalog_limit') * 4) ? (int)$this->request->get['limit'] : $this->config->get('blog_catalog_limit');
-
-        if (!$search && !$tag && !$author && !$blog_category_id) {
-			$this->redirect($this->url->link('blog/home'));
-        }
 
         $heading_title = $this->language->get('heading_blog_search');
         $meta_description = $this->language->get('meta_description');
@@ -36,11 +32,13 @@ class ControllerBlogSearch extends Controller {
         $implode = array();
 
         if ($search) {
-            $implode[] = sprintf($this->language->get('text_search_keyword'), strip_tags_decode($search));
+            $search = strip_non_alphanumeric_encode($search, false, ' -_"');
+            $implode[] = sprintf($this->language->get('text_search_keyword'), $search);
         }
 
         if ($tag) {
-            $implode[] = sprintf($this->language->get('text_search_tag'), strip_tags_decode($tag));
+            $tag = strip_non_alphanumeric($tag, true);
+            $implode[] = sprintf($this->language->get('text_search_tag'), $tag);
         }
 
         if ($author) {
@@ -88,28 +86,36 @@ class ControllerBlogSearch extends Controller {
 
         $this->data['heading_title'] = $heading_title;
 
-        $data = array(
-            'filter_name'               => $search,
-            'filter_tag'                => $tag,
-            'filter_description'        => $filter_description,
-            'filter_category_id'        => $blog_category_id,
-            'filter_sub_category'       => true,
-            'filter_member_account_id'  => $author,
-            'sort'                      => $sort,
-            'order'                     => $order,
-            'start'                     => ($page - 1) * $limit,
-            'limit'                     => $limit,
-        );
+        $this->data['articles'] = array();
+        $article_total = 0;
+        $data = array();
 
-        $article_total = $this->model_blog_article->getTotalBlogArticles($data);
+        if (!$search && !$tag && !$author && !$blog_category_id && !isset($this->request->get['sort'])) {
+            // $this->redirect($this->url->link('blog/home'));
+        } else {
+            $data = array(
+                'filter_name'               => $search,
+                'filter_tag'                => $tag,
+                'filter_description'        => $filter_description,
+                'filter_category_id'        => $blog_category_id,
+                'filter_sub_category'       => true,
+                'filter_member_account_id'  => $author,
+                'sort'                      => $sort,
+                'order'                     => $order,
+                'start'                     => ($page - 1) * $limit,
+                'limit'                     => $limit,
+            );
 
-        $max_pages = $limit > 0 ? ceil($article_total / $limit) : 1;
+            $article_total = $this->model_blog_article->getTotalBlogArticles($data);
 
-        if ($page <= 0 || $limit <= 0 || ($max_pages > 0 && $page > $max_pages)) {
-            $this->redirect($this->url->link('error/not_found'));
+            $max_pages = $limit > 0 ? ceil($article_total / $limit) : 1;
+
+            if ($page <= 0 || $limit <= 0 || ($max_pages > 0 && $page > $max_pages)) {
+                $this->redirect($this->url->link('error/not_found'));
+            }
+
+    		$this->data['articles'] = $article_total ? $this->getChild('blog/data/list', $this->model_blog_article->getBlogArticles($data)) : array();
         }
-
-		$this->data['articles'] = $article_total ? $this->getChild('blog/data/list', $this->model_blog_article->getBlogArticles($data)) : array();
 
         $this->data['sidebar'] = $this->getChild('blog/sidebar', array(
             'query_params'  => $query_params,
@@ -146,7 +152,6 @@ class ControllerBlogSearch extends Controller {
         $this->data['url'] = $url;
 
         $this->document->addStyle('catalog/view/root/stylesheet/blog.css');
-        $this->document->addScript('catalog/view/root/javascript/blog.js');
 
         $this->template = 'template/blog/search.tpl';
 

@@ -26,7 +26,7 @@ class ControllerBlogHome extends Controller {
         }
 
         $filter_description = isset($this->request->get['description']) ? $this->request->get['description'] : true;
-        $sort = isset($this->request->get['sort']) ? $this->request->get['sort'] : 'a.date_available';
+        $sort = isset($this->request->get['sort']) ? $this->request->get['sort'] : 'a.sort_order';
         $order = isset($this->request->get['order']) ? $this->request->get['order'] : 'DESC';
         $page = isset($this->request->get['page']) ? (int)$this->request->get['page'] : 1;
         $limit = (isset($this->request->get['limit']) && $this->request->get['limit'] <= $this->config->get('blog_catalog_limit') * 4) ? (int)$this->request->get['limit'] : $this->config->get('blog_catalog_limit');
@@ -68,7 +68,7 @@ class ControllerBlogHome extends Controller {
 
         $this->data['sidebar'] = $this->getChild('blog/sidebar', array(
             'query_params'  => $query_params,
-            'route'         => 'blog/search',
+            'route'         => 'blog/home',
             'path'          => '',
             'filter'        => $data
         ));
@@ -99,8 +99,6 @@ class ControllerBlogHome extends Controller {
         $this->data['url'] = $url;
 
         $this->document->addStyle('catalog/view/root/stylesheet/blog.css');
-        //$this->document->addScript('catalog/view/root/javascript/blog.js');
-        //$this->document->addScript('catalog/view/root/wookmark/wookmark.min.js');
 
         $this->template = 'template/blog/home.tpl';
 

@@ -1,5 +1,5 @@
 <?php
-$_['heading_blog_search']       = 'Search Blog: ';
+$_['heading_blog_search']       = 'Search Blog';
 
 // Meta
 $_['meta_description']      = 'Search blog articles about extreme water sports equipment on SurfersList.';

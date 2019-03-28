@@ -92,19 +92,11 @@ class ControllerBlogArticle extends Controller {
 
             $this->data['related_products'] = $this->getChild('product/data/list', $this->model_blog_article->getRelatedProduct($blog_article_id));
 
-            $data = array(
-                'filter_name'   => '',
-                'filter_description' => true,
-                'sort'          => 'a.date_available',
-                'order'         => 'DESC',
-                'limit'         => $this->config->get('blog_catalog_limit'),
-            );
-
             $this->data['sidebar'] = $this->getChild('blog/sidebar', array(
                 'query_params'  => $query_params,
-                'route'         => 'blog/search',
+                'route'         => 'blog/article',
                 'path'          => '',
-                'filter'        => $data
+                'filter'        => array()
             ));
 
             // prev/next
@@ -140,7 +132,7 @@ class ControllerBlogArticle extends Controller {
 				$this->data['more_title'] = $this->language->get('heading_blog_home');
 			}
 
-			$sort = $this->getQueryParam('sort') ?: 'a.date_available';
+			$sort = $this->getQueryParam('sort') ?: 'a.sort_order';
 			$sort_order = $this->getQueryParam('order') ?: 'DESC';
 
 			$articles = !$preview_article ? $this->model_blog_article->getBlogArticlesIndexes(array(
@@ -236,7 +228,6 @@ class ControllerBlogArticle extends Controller {
             $this->data['blog_article_id'] = $blog_article_id;
 
             $this->document->addStyle('catalog/view/root/stylesheet/blog.css');
-            //$this->document->addScript('catalog/view/root/javascript/blog.js');
 
             $this->template = 'template/blog/article.tpl';
         } else {

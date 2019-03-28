@@ -105,7 +105,6 @@
     min-height: 38px;
     margin-bottom: 12px;
     margin-right: 55px;
-    text-align: justify;
 }
 
 .list-articles .read-more {
@@ -155,10 +154,6 @@
     margin-bottom: 10px;
 }
 
-.blog-page #related-articles {
-    margin-bottom: 30px;
-}
-
 .blog-page #related-articles .grid-item:hover .pannel .info,
 .blog-page #related-articles .grid-item:hover .pannel:before,
 .blog-page #related-articles .grid-item:hover .image {
@@ -190,7 +185,6 @@
 
     .list-articles .article-description {
         font-size: 16px;
-        line-height: 1.2;
     }
 
     .blog-page .article-heading .article-date {
@@ -234,7 +228,7 @@
         display: inline;
     }
 
-    .blog-article-page .article-body, .blog-page #related-articles, .blog-page #related-listings #filterscat {
+    .blog-article-page .article-body, .blog-page #related-articles .filterscat, .blog-page #related-listings #filterscat {
         margin-bottom: 20px;
     }
 }

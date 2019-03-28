@@ -36,6 +36,8 @@ class ControllerBlogData extends Controller {
 		$this->data['text_loading'] = $this->language->get('text_loading');
 		$this->data['button_read_more'] = $this->language->get('button_read_more');
 
+		$this->data['display_views'] = false;
+
 		$article_data = array();
 
 		foreach ($articles as $article) {

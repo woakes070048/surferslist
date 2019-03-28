@@ -2,9 +2,9 @@
 trait Limit {
 	protected $limits;
 
-	protected function getLimits($route = '', $url = '') {
+	protected function getLimits($route = '', $url = '', $default_limit = '') {
 		if ($route) {
-			$limit = $this->config->get('config_catalog_limit');
+			$limit = !$default_limit ? $this->config->get('config_catalog_limit') : $default_limit;
 
 			$limits = array_unique(array($limit / 2, $limit, $limit * 2, $limit * 4));
 
