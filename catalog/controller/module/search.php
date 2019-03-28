@@ -194,8 +194,8 @@ class ControllerModuleSearch extends Controller {
 
 		array_multisort(array(3, 1, 2), SORT_ASC, $this->data['listing_types']);
 
-		$this->data['search'] = $search;
-		$this->data['tag'] = $tag;
+		$this->data['search'] = strip_non_alphanumeric_encode($search, false, ' -_"');
+		$this->data['tag'] = strip_non_alphanumeric($tag, true);
 		$this->data['filter'] = $filter;
 		$this->data['description'] = $description;
 		$this->data['category_id'] = $category_id;

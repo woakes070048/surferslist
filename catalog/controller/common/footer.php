@@ -17,16 +17,16 @@ class ControllerCommonFooter extends Controller {
 		$this->data['scripts'] = $this->document->getScripts();
 
 		$this->data['social_buttons'] = isset($this->request->get['route'])
-			&& ($this->request->get['route'] == 'product/product' || $this->request->get['route'] == 'product/member/info')
+			&& ($this->request->get['route'] == 'product/product' || $this->request->get['route'] == 'product/member/info' || $this->request->get['route'] == 'blog/article')
 			? true : false;
 
-		$this->data['text_powered'] = sprintf($this->language->get('text_powered'), '2015 - ' . date('Y', time()), $this->config->get('config_name'));
+		$this->data['text_powered'] = sprintf($this->language->get('text_powered'), date('Y', time()), $this->config->get('config_name'));
 		$this->data['contact_email'] = $this->config->get('config_email');
 		$this->data['logo_img'] = $this->config->get('config_logo_img');
 		$this->data['text_logo_footer'] = sprintf($this->language->get('text_logo_footer'), $this->config->get('config_name'));
 
 		// Information
-		$this->data['about'] = $this->url->link('information/information', 'information_id=4'); // About Us
+		$this->data['about'] = $this->url->link('information/information', 'information_id=' . $this->config->get('config_about_information_id'));
 		$this->data['informations'] = $this->cache->get('information.primary.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'));
 		$this->data['informations_extra'] = $this->cache->get('information.other.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'));
 

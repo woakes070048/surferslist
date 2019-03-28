@@ -79,8 +79,8 @@ class ControllerCommonHeader extends Controller {
 		$this->data['special'] = $this->url->link('product/special');
 		$this->data['post'] = $this->customer->isLogged() ? $this->url->link('account/product/insert', '', 'SSL') : $this->url->link('account/anonpost', '', 'SSL');
 		$this->data['post_link'] = $this->url->link('account/anonpost', '', 'SSL');
-		$this->data['about'] = $this->url->link('information/information', 'information_id=4'); // About Us
-		$this->data['faq'] = $this->url->link('information/information', 'information_id=11'); // FAQ
+		$this->data['about'] = $this->url->link('information/information', 'information_id=' . $this->config->get('config_about_information_id'));
+		$this->data['faq'] = $this->url->link('information/information', 'information_id=' . $this->config->get('config_faq_information_id'));
 		// $this->data['blog'] = $this->url->link('blog/blog_home');
 		$this->data['register'] = $this->url->link('account/register');
 		$this->data['login'] = $this->url->link('account/login');

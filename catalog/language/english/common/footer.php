@@ -46,6 +46,5 @@ $_['text_blog']           = 'Blog';
 $_['text_forum']          = 'Forum';
 $_['text_voucher']        = 'Gift Certificates';
 $_['text_affiliate']      = 'Affiliates';
-$_['text_powered']        = '&copy; %s %s';
+$_['text_powered']        = '&copy; 2015 - %s %s';
 $_['text_logo_footer']    = '%s Logo';
-?>

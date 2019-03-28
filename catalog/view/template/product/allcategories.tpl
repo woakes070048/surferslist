@@ -84,7 +84,7 @@
 					<div class="product-grid category-grid">
 						<?php foreach ($categories as $category) { ?>
 						<div>
-							<?php if($this->config->get('apac_categories_display_images') && $category['thumb']) { ?>
+							<?php if ($this->config->get('apac_categories_display_images') && $category['thumb']) { ?>
 							<div class="image">
                                 <a href="<?php echo $category['href']; ?>">
                                     <span class="category-icon icon-<?php echo $category['icon']; ?>"></span>

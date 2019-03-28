@@ -167,9 +167,15 @@
     										<?php } ?>
                                             <?php if (($this->config->get('member_status')) && $member) { ?>
                                             <li><b><?php echo $text_member; ?></b>
-                                                <i><a href="<?php echo $member['href']; ?>">
-                                                    <?php if ($member['image']) { ?><img src="<?php echo $member['image']; ?>" title="<?php echo $member['name']; ?>" alt="<?php echo $member['name']; ?>" /><?php } ?>
-                                                    <?php echo $member['name']; ?>
+                                                <i>
+                                                    <?php if ($member['image']) { ?>
+                                                    <span class="avatar">
+                                                        <a href="<?php echo $member['href']; ?>">
+                                                            <img src="<?php echo $member['image']; ?>" title="<?php echo $member['name']; ?>" alt="<?php echo $member['name']; ?>" />
+                                                        </a>
+                                                    </span>
+                                                    <?php } ?>
+                                                    <a href="<?php echo $member['href']; ?>"><?php echo $member['name']; ?></a>
                         							<span class="rating-stars view-star<?php echo $member['rating']; ?>">
                         								<i class="fa fa-star icon_star star-color color1"></i>
                         								<i class="fa fa-star icon_star star-color color2"></i>

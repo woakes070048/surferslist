@@ -90,10 +90,11 @@ class ControllerCommonModule extends Controller {
     protected function hasSidebar() {
         $sidebar_exists = false;
 
-		if (strpos($this->route, 'product') === 0
+		if ((strpos($this->route, 'product') === 0
 			&& $this->route != 'product/product'
 			&& $this->route != 'product/search'
-			&& $this->route != 'product/compare') {
+			&& $this->route != 'product/compare')
+            || (strpos($this->route, 'blog') === 0)) {
 
 			$sidebar_exists = true;
 		}
