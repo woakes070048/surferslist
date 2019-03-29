@@ -24,4 +24,4 @@ $_['text_customer_group'] = 'Group:';
 $_['text_firstname']      = 'First Name:';
 $_['text_lastname']       = 'Last Name:';
 $_['text_email']          = 'E-Mail:';
-?>
+

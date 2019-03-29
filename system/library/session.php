@@ -26,4 +26,3 @@ class Session {
 		session_regenerate_id(true);
 	}
 }
-?>

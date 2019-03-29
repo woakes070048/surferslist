@@ -25,4 +25,4 @@ $_['text_manufacturer_categories']      = 'Categories';
 $_['text_select_manufacturer']          = '-- Select Brand --';
 $_['help_select_manufacturer']          = 'Select another brand';
 
-?>
+

@@ -430,13 +430,37 @@ class Customer {
 			return array();
 		}
 
-		$sql = "(SELECT image FROM " . DB_PREFIX . "product WHERE member_customer_id = '" . (int)$this->getId() . "' AND date_expiration >= NOW())
-				UNION DISTINCT
-				(SELECT pi.image FROM " . DB_PREFIX . "product_image pi INNER JOIN " . DB_PREFIX . "product p ON pi.product_id = p.product_id WHERE p.member_customer_id = '" . (int)$this->getId() . "' AND p.date_expiration >= NOW())
-				UNION DISTINCT
-				(SELECT member_account_image AS image FROM " . DB_PREFIX . "customer_member_account WHERE customer_id = '" . (int)$this->getId() . "')
-				UNION DISTINCT
-				(SELECT member_account_banner AS image FROM " . DB_PREFIX . "customer_member_account WHERE customer_id = '" . (int)$this->getId() . "')";
+		$sql = "
+			(
+				SELECT image
+				FROM " . DB_PREFIX . "product
+				WHERE member_customer_id = '" . (int)$this->getId() . "'
+				AND date_expiration >= NOW()
+			) UNION DISTINCT (
+				SELECT pi.image
+				FROM " . DB_PREFIX . "product_image pi
+				INNER JOIN " . DB_PREFIX . "product p ON pi.product_id = p.product_id
+				WHERE p.member_customer_id = '" . (int)$this->getId() . "'
+				AND p.date_expiration >= NOW()
+			) UNION DISTINCT (
+				SELECT member_account_image AS image
+				FROM " . DB_PREFIX . "customer_member_account
+				WHERE customer_id = '" . (int)$this->getId() . "'
+			) UNION DISTINCT (
+				SELECT member_account_banner AS image
+				FROM " . DB_PREFIX . "customer_member_account
+				WHERE customer_id = '" . (int)$this->getId() . "'
+			) UNION DISTINCT (
+				SELECT image
+				FROM " . DB_PREFIX . "blog_article
+				WHERE member_id = '" . (int)$this->getProfileId() . "'
+			) UNION DISTINCT (
+				SELECT i.image
+				FROM " . DB_PREFIX . "blog_article_image i
+				RIGHT JOIN " . DB_PREFIX . "blog_article a ON i.blog_article_id = a.blog_article_id
+				WHERE a.member_id = '" . (int)$this->getProfileId() . "'
+			)
+		";
 
 		$query = $this->db->query($sql);
 
@@ -699,4 +723,3 @@ class Customer {
   	}
 
 }
-?>

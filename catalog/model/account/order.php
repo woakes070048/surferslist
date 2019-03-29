@@ -396,4 +396,4 @@ class ModelAccountOrder extends Model {
 		return $query->row['total'];
 	}
 }
-?>
+

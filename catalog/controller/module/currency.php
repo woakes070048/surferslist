@@ -98,4 +98,4 @@ class ControllerModuleCurrency extends Controller {
 		return $currencies;
 	}
 }
-?>
+

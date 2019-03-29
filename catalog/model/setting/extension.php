@@ -21,4 +21,4 @@ class ModelSettingExtension extends Model {
 	}
 
 }
-?>
+

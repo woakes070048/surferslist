@@ -21,4 +21,4 @@ $_['text_sort_order_asc']       = 'Sort Order (Low &gt; High)';
 $_['text_sort_order_desc']      = 'Sort Order (High &gt; Low)';
 $_['text_sort_order_path_asc']  = 'Path Sort Order (Low &gt; High)';
 $_['text_sort_order_path_desc'] = 'Path Sort Order (High &gt; Low)';
-?>
+

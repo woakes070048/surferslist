@@ -63,4 +63,4 @@ $_['button_apply']     = 'Apply';
 $_['button_search']    = 'Search';
 $_['button_submit']		= 'Submit';
 $_['button_image_tab']  = 'Images';
-?>
+

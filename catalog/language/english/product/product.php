@@ -130,4 +130,4 @@ $_['error_filetype']    = 'Invalid file type!';
 $_['error_question_invalid']    = 'Discussion is not valid for this listing!';
 $_['error_question_logged']     = 'You must <a href="login">log in</a> to discuss this listing!';
 $_['error_question_membership'] = 'You must <a href="account-profile">activate a profile</a> to discuss this listing!';
-?>
+

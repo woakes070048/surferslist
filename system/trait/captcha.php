@@ -74,4 +74,4 @@ trait Captcha {
 		return $recaptcha->verify();
 	}
 }
-?>
+

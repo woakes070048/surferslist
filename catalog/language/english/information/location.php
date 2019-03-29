@@ -44,4 +44,4 @@ $_['button_continue'] = 'Save &amp; Continue';
 $_['help_location'] = 'Set a location to narrow results while browsing listings and profiles.';
 $_['help_location_logged'] = 'Location is <strong>set automatically</strong> upon <a href="%s" alt="log in">login</a>.';
 $_['help_location_add'] = '<a href="%s" alt="contact">Contact us</a> to request the addition of a location.';
-?>
+

@@ -94,7 +94,7 @@ class ControllerCommonHeader extends Controller {
 		$this->data['activated'] = $this->customer->hasProfile();
 		$this->data['activate'] = $this->url->link('account/member', '', 'SSL');
 		$this->data['profile'] = $this->customer->getId() ? $this->customer->getProfileUrl() : $this->url->link('account/member', '', 'SSL');
-		$this->data['shopping_cart'] = $this->url->link('checkout/cart');
+		$this->data['shopping_cart'] = $this->url->link('checkout/cart', '', 'SSL');
 		$this->data['checkout'] = $this->url->link('checkout/checkout', '', 'SSL');
 		$this->data['location'] = $this->url->link('information/location', 'redirect_path=' . urlencode(ltrim($request_path . '?' . $request_params, '/')));
 		$this->data['location_remove'] = $this->url->link('information/location', 'location=none&redirect_path=' . urlencode(ltrim($request_path . '?' . $request_params, '/')));
@@ -183,4 +183,4 @@ class ControllerCommonHeader extends Controller {
 		$this->render();
 	}
 }
-?>
+

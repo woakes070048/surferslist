@@ -162,4 +162,4 @@ class ControllerErrorProductRetired extends Controller {
 		$this->response->setOutput($this->render());
 	}
 }
-?>
+

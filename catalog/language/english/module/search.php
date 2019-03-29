@@ -87,4 +87,4 @@ $_['help_description']        = 'Search listing descriptions';
 // Entry
 $_['entry_search']      = 'Enter keyword(s)';
 $_['entry_description'] = 'Search descriptions?';
-?>
+

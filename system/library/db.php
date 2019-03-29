@@ -37,4 +37,3 @@ class DB {
 		return $this->driver->close();
 	}
 }
-?>

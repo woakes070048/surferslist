@@ -19,4 +19,4 @@ $_['help_password_confirm'] = 'Re-enter the new password';
 // Error
 $_['error_password'] = 'Password must be at least %s characters long and contain a lowercase letter, an uppercase letter, and a number.';
 $_['error_confirm']  = 'Password confirmation does not match password!';
-?>
+

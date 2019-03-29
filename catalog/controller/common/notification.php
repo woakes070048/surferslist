@@ -31,4 +31,4 @@ class ControllerCommonNotification extends Controller {
 		$this->render();
 	}
 }
-?>
+

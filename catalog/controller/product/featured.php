@@ -217,4 +217,4 @@ class ControllerProductFeatured extends Controller {
 		$this->response->setOutput($this->render());
 	}
 }
-?>
+

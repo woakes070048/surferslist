@@ -53,4 +53,3 @@ class Request {
 		return (strpos($this->server['HTTP_REFERER'], $referer) === 0);
 	}
 }
-?>

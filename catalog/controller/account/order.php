@@ -47,7 +47,7 @@ class ControllerAccountOrder extends Controller {
 					$this->cart->add($order_product['product_id'], $order_product['quantity'], $option_data);
 				}
 
-				$this->redirect($this->url->link('checkout/cart'));
+				$this->redirect($this->url->link('checkout/cart', '', 'SSL'));
 			}
 		}
 		* */
@@ -352,4 +352,3 @@ class ControllerAccountOrder extends Controller {
 	}
 
 }
-?>

@@ -38,4 +38,4 @@ $_['error_exists']     = 'File %s does not exist!';
 $_['error_mask']       = 'Mask must be between 3 and 128 characters!';
 $_['error_filetype']   = 'Invalid file type!';
 $_['error_product']    = 'This download cannot be deleted as it is currently assigned to %s listings!';
-?>
+

@@ -7,4 +7,4 @@ $_['meta_description']   = 'Featured extreme water sports equipment listings pos
 // Text
 $_['text_empty']        = 'No featured listings found.';
 
-?>
+

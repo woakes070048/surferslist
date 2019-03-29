@@ -105,4 +105,4 @@ class ControllerModuleMember extends Controller {
 		$this->render();
 	}
 }
-?>
+

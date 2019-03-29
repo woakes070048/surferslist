@@ -4,4 +4,4 @@ $_['heading_title'] = 'Popular Listings';
 
 // Text
 
-?>
+

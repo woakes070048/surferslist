@@ -83,4 +83,4 @@ class ControllerAccountNotify extends Controller {
 		$this->response->setOutput($this->render());
   	}
 }
-?>
+

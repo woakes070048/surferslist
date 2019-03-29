@@ -68,4 +68,4 @@ class ModelAccountDownload extends Model {
 		return $query->row['total'];
 	}
 }
-?>
+

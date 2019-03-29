@@ -30,4 +30,4 @@ class ControllerModuleAccount extends Controller {
 		$this->render();
 	}
 }
-?>
+

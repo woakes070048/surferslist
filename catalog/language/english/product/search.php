@@ -9,4 +9,4 @@ $_['text_search']       = 'Search';
 $_['text_results']      = 'Results';
 $_['text_empty']        = 'No listings found.';
 $_['text_complete']     = 'Complete and submit the search form above ^^^';
-?>
+

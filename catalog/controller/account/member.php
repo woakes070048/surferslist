@@ -735,4 +735,3 @@ class ControllerAccountMember extends Controller {
 	}
 
 }
-?>

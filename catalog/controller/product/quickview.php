@@ -101,4 +101,4 @@ class ControllerProductQuickview extends Controller {
 		}
 	}
 }
-?>
+

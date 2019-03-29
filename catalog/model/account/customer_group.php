@@ -178,4 +178,4 @@ class ModelAccountCustomerGroup extends Model {
 		return $customer_group_id;
 	}
 }
-?>
+

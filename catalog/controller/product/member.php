@@ -729,4 +729,4 @@ class ControllerProductMember extends Controller {
   	}
 
 }
-?>
+

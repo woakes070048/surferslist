@@ -7,4 +7,4 @@ $_['meta_keyword']      = 'unavailable, listing, equipment, extreme water sports
 // Text
 $_['text_error']        = 'Sorry, the requested listing is not available at this time.';
 $_['text_search']       = 'Please browse a related category or try a new search.';
-?>
+

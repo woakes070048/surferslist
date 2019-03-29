@@ -488,4 +488,4 @@ class ModelAccountSales extends Model {
 	}
 
 }
-?>
+

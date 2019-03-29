@@ -46,7 +46,7 @@ class ControllerCheckoutConfirm extends Controller {
 
 		// Validate cart has products and has stock.
 		if ((!$this->cart->hasProducts() && empty($this->session->data['vouchers'])) || (!$this->cart->hasStock() && !$this->config->get('config_stock_checkout'))) {
-			$redirect = $this->url->link('checkout/cart');
+			$redirect = $this->url->link('checkout/cart', '', 'SSL');
 		}
 
 		// Validate minimum quantity requirements.
@@ -62,7 +62,7 @@ class ControllerCheckoutConfirm extends Controller {
 			}
 
 			if ($product['minimum'] > $product_total) {
-				$redirect = $this->url->link('checkout/cart');
+				$redirect = $this->url->link('checkout/cart', '', 'SSL');
 
 				break;
 			}
@@ -426,4 +426,4 @@ class ControllerCheckoutConfirm extends Controller {
 		$this->response->setOutput($this->render());
 	}
 }
-?>
+

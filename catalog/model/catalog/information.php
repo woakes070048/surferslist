@@ -60,4 +60,4 @@ class ModelCatalogInformation extends Model {
 	}
 
 }
-?>
+

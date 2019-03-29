@@ -82,4 +82,3 @@ final class mMySQLi {
 		$this->link->close();
 	}
 }
-?>

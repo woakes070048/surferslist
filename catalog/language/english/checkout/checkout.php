@@ -111,4 +111,4 @@ $_['error_shipping']                 = 'Shipping method is required!';
 $_['error_no_shipping']              = 'No Shipping options are available. Please <a href="%s">contact us</a> for assistance!';
 $_['error_payment']                  = 'Payment method is required!';
 $_['error_no_payment']               = 'No Payment options are available. Please <a href="%s">contact us</a> for assistance!';
-?>
+

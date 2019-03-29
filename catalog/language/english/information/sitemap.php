@@ -27,4 +27,4 @@ $_['text_members']     = 'All Profiles';
 $_['text_location_set']    = 'Set your location';
 $_['text_service']     = 'Account Services';
 $_['text_footer_contact']  = 'Have a question?<br /><a href="%s">Contact SurfersList</a>';
-?>
+

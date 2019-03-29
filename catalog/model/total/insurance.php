@@ -88,4 +88,3 @@ class ModelTotalInsurance extends Model {
 		}
 	}
 }
-?>

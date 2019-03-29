@@ -8,4 +8,4 @@ $_['text_total']    = 'Shipping, Handling, Discounts & Taxes';
 
 // Help
 $_['help_paypal']   = 'You will be temporarily redirected to PayPal\'s website to access your account and submit your payment. You will then return to %s to review and complete your order.';
-?>
+

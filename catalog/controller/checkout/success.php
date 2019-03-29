@@ -29,8 +29,8 @@ class ControllerCheckoutSuccess extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		$this->addBreadcrumb($this->language->get('text_home'), $this->url->link('common/home'));
-		$this->addBreadcrumb($this->language->get('text_basket'), $this->url->link('checkout/cart'));
-		$this->addBreadcrumb($this->language->get('text_checkout'), $this->url->link('checkout/checkout'));
+		$this->addBreadcrumb($this->language->get('text_basket'), $this->url->link('checkout/cart', '', 'SSL'));
+		$this->addBreadcrumb($this->language->get('text_checkout'), $this->url->link('checkout/checkout', '', 'SSL'));
 		$this->addBreadcrumb($this->language->get('text_success'), $this->url->link('checkout/success'));
 
 		$this->data['breadcrumbs'] = $this->getBreadcrumbs();
@@ -108,4 +108,3 @@ class ControllerCheckoutSuccess extends Controller {
 		$this->response->setOutput($this->render());
 	}
 }
-?>

@@ -112,4 +112,4 @@ $_['help_member_custom_field_02']          = 'Enter a Twitter page';
 $_['help_member_custom_field_03']          = 'Enter a Facebook page';
 $_['help_member_custom_field_04']          = 'Enter a Pinterest page';
 $_['help_member_custom_field_05']          = 'Enter a Instagram page';
-?>
+

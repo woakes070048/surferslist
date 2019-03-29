@@ -111,7 +111,7 @@ class ControllerPaymentWorldPay extends Controller {
 
 			$this->response->setOutput($this->render());
 		} else {
-			$this->data['continue'] = $this->url->link('checkout/cart');
+			$this->data['continue'] = $this->url->link('checkout/cart', '', 'SSL');
 
 			$this->template = 'template/payment/worldpay_failure.tpl';
 
@@ -119,4 +119,4 @@ class ControllerPaymentWorldPay extends Controller {
 		}
 	}
 }
-?>
+

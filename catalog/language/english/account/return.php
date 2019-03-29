@@ -58,4 +58,4 @@ $_['error_product']      = 'Product Name must be greater than 3 and less than 25
 $_['error_model']        = 'Product Model must be greater than 3 and less than 128 characters!';
 $_['error_reason']       = 'You must select a return product reason!';
 $_['error_agree']        = 'You must agree to the %s!';
-?>
+

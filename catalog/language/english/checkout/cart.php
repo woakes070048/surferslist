@@ -49,7 +49,7 @@ $_['error_required']         = '%s required!';
 $_['error_classified']       = 'This is a Classified listing! Please <a href="%s">private message the owner</a> to inquire further.';
 $_['error_shared']           = 'This is listing is Not For Sale! Please <a href="%s">private message the owner</a> to inquire further.';
 $_['error_quantity']         = 'There is not enough inventory to order %s of these listings!';
-$_['error_member']           = 'Limit order to listings from <strong>ONE</strong> user. See <a href="ordering">ordering information</a> for more info.';
+$_['error_member']           = 'Limit order to listings from <strong>ONE</strong> user. See <a href="%s">ordering information</a> for more info.';
 $_['error_product']          = 'No listings in your cart!';
 $_['error_coupon']           = 'Coupon is either invalid, expired or reached its usage limit!';
 $_['error_voucher']          = 'Gift Certificate is either invalid or the balance is empty!';
@@ -61,5 +61,4 @@ $_['error_country']          = 'Please select a country!';
 $_['error_zone']             = 'Please select a state / region!';
 $_['error_shipping']         = 'Shipping method required!';
 $_['error_no_shipping']      = 'No Shipping options are available. Please <a href="%s">contact us</a> for assistance!';
-$_['error_member_unique']    = 'Cart contains items owned by more than one user - %s!<br />Please limit each order to listings from <strong>ONE</strong> User Profile at a time. See <a href="ordering-information">ordering information</a> for more info.';
-?>
+$_['error_member_unique']    = 'Cart contains items owned by more than one user - %s!<br />Please limit each order to listings from <strong>ONE</strong> User Profile at a time. See <a href="%s">ordering information</a> for more info.';

@@ -277,4 +277,4 @@ class ControllerPaymentPPStandard extends Controller {
 		}
 	}
 }
-?>
+

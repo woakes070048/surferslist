@@ -666,4 +666,4 @@ class ControllerAjaxFileManager extends Controller {
 		return $this->customer->validateLogin() && $this->customer->validateProfile() && $this->customer->getMemberImagesDirectory();
   	}
 }
-?>
+

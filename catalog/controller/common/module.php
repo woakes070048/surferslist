@@ -102,4 +102,4 @@ class ControllerCommonModule extends Controller {
         $this->setOutput($sidebar_exists);
     }
 }
-?>
+

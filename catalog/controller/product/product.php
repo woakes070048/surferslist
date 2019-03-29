@@ -403,4 +403,4 @@ class ControllerProductProduct extends Controller {
 		}
 	}
 }
-?>
+

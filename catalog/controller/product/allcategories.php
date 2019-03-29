@@ -164,4 +164,4 @@ class ControllerProductAllCategories extends Controller {
 		$this->response->setOutput($this->render());
   	}
 }
-?>
+

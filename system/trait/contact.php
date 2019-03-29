@@ -132,4 +132,4 @@ trait Contact {
 		$email_log->write($mail->toString() . ' | ' . $this->customer->getId() . ' | ' . $ip);
 	}
 }
-?>
+

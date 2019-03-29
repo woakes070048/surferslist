@@ -73,4 +73,4 @@ class ControllerAccountTransaction extends Controller {
 	}
 
 }
-?>
+

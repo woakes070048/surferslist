@@ -45,4 +45,4 @@ $_['error_permission']  = 'You do not have permission to modify profile ratings!
 $_['error_review']      = 'Review must be between %s and %s characters!';
 $_['error_rating']      = 'Rating of %s to %s stars is required!';
 $_['error_notchecked']  = 'No rating(s) selected!';
-?>
+

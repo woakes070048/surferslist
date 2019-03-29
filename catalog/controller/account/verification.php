@@ -84,4 +84,4 @@ class ControllerAccountVerification extends Controller {
 		}
 	}
 }
-?>
+

@@ -575,4 +575,3 @@ class Cart {
 		return $download;
 	}
 }
-?>

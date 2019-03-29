@@ -27,4 +27,4 @@ class ControllerModuleInformation extends Controller {
 		$this->render();
 	}
 }
-?>
+

@@ -29,4 +29,4 @@ trait Paginate {
 		return $pagination->render();
 	}
 }
-?>
+

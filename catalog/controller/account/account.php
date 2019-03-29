@@ -58,13 +58,14 @@ class ControllerAccountAccount extends Controller {
 			$this->data['fax'] = $customer_info['telephone'];
 		}
 
-		$privacy_policy_information_id = 3; // information_id 3 => Privacy Policy
-		$privacy_policy_info = $this->model_catalog_information->getInformation($privacy_policy_information_id);
+		$privacy_policy_id = $this->config->get('config_privacy_policy_id') ?: $this->config->get('config_account_id');
+
+		$privacy_policy_info = $this->model_catalog_information->getInformation($privacy_policy_id);
 
 		if ($privacy_policy_info) {
 			$this->data['help_personal_info'] .= ' ' . sprintf(
 				$this->language->get('help_personal_info_more'),
-				$this->url->link('information/information', 'information_id=' . $privacy_policy_information_id, 'SSL'),
+				$this->url->link('information/information', 'information_id=' . $privacy_policy_id, 'SSL'),
 				$privacy_policy_info['title']
 			);
 		}
@@ -259,4 +260,3 @@ class ControllerAccountAccount extends Controller {
 		$this->response->setOutput($this->render());
 	}
 }
-?>

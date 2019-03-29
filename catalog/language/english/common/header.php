@@ -47,4 +47,4 @@ $_['text_shopping_cart']  = 'Cart';
 $_['text_checkout']       = 'Checkout';
 $_['text_search']         = 'Search';
 $_['text_how']            = 'How it Works';
-?>
+

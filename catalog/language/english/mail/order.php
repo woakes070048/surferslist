@@ -39,4 +39,4 @@ $_['text_update_footer']        = '*** DO NOT REPLY directly to this email ***';
 $_['text_manufacturer']         = 'Brand';
 $_['text_member']               = 'Profile';
 $_['text_image']                = 'Image';
-?>
+

@@ -20,4 +20,4 @@ $_['text_review']      = 'My Ratings';
 $_['text_question']    = 'My Discussions';
 $_['text_wishlist']    = 'My Saved';
 $_['text_order']       = 'My Orders';
-?>
+

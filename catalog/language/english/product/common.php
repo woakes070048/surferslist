@@ -109,4 +109,4 @@ $_['help_sort']                 = 'Sort listings by';
 $_['help_limit']                = 'Results per page';
 $_['help_type']                 = 'Refine by sale type';
 
-?>
+

@@ -48,7 +48,7 @@ class ControllerAccountLogin extends Controller {
 							$this->redirect($this->url->link('account/account', '', 'SSL'));
 						}
 					} else {
-						$this->setError('warning', sprintf($this->language->get('error_login_fail'), $this->url->link('information/contact', '', 'SSL')));
+						$this->setError('warning', sprintf($this->language->get('error_login_fail'), $this->url->link('information/contact')));
 					}
 				}
 			}
@@ -221,7 +221,7 @@ class ControllerAccountLogin extends Controller {
 				}
 
 				if (!$customer_info['account_status']) {
-					$json['error'] = sprintf($this->language->get('error_status'), $this->url->link('information/contact', '', 'SSL'));
+					$json['error'] = sprintf($this->language->get('error_status'), $this->url->link('information/contact'));
 				}
 
 				if (!$json) {
@@ -233,7 +233,7 @@ class ControllerAccountLogin extends Controller {
 						$json['error'] = sprintf($this->language->get('error_social_status'), ucwords($data['provider']), $this->url->link('information/contact', '', 'SSL'));
 					} else if ($customer_info['user_id'] != $data['user_id']) {
 						$this->model_account_customer->addLoginAttempt($data['email']);
-						$json['error'] = sprintf($this->language->get('error_social_login_mismatch'), $this->url->link('information/contact', '', 'SSL'));
+						$json['error'] = sprintf($this->language->get('error_social_login_mismatch'), $this->url->link('information/contact'));
 					} else {
 						// valid account, update social token
 						$this->model_account_customer->updateSocialLoginToken($customer_info['customer_id'], $data);
@@ -287,7 +287,7 @@ class ControllerAccountLogin extends Controller {
 						'redirect' => (isset($data['redirect']) && (strpos($data['redirect'], $this->config->get('config_url')) === 0 || strpos($data['redirect'], $this->config->get('config_ssl')) === 0)) ? str_replace('&amp;', '&', $data['redirect']) : $this->url->link('account/account', '', 'SSL')
 					);
 				} else {
-					$json['error'] = sprintf($this->language->get('error_login_fail'), $this->url->link('information/contact', '', 'SSL'));
+					$json['error'] = sprintf($this->language->get('error_login_fail'), $this->url->link('information/contact'));
 				}
 			}
 		} else {
@@ -477,4 +477,3 @@ class ControllerAccountLogin extends Controller {
 	}
 
 }
-?>

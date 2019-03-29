@@ -36,4 +36,4 @@ class ModelAccountReturn extends Model {
 		return $query->rows;
 	}
 }
-?>
+
