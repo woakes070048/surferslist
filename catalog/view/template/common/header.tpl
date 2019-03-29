@@ -100,7 +100,7 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $server . 'catalog/view/' . $css_min; ?>" media="all" />
 <?php } ?>
 <?php foreach ($styles as $style) { ?>
-<link rel="<?php echo $style['rel']; ?>" type="text/css" href="<?php echo $server . $style['href']; ?>" media="<?php echo $style['media']; ?>" />
+<link rel="<?php echo $style['rel']; ?>" type="text/css" href="<?php echo $server . $style['href'] . $fingerprint; ?>" media="<?php echo $style['media']; ?>" />
 <?php } ?>
 <!-- Misc/Temp -->
 <?php if ($minify) { ?>

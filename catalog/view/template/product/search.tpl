@@ -113,7 +113,7 @@
                     </div>
 					<div class="buttons">
 						<div class="left">
-                            <a href="<?php echo $back; ?>" class="button button_back"><i class="fa fa-th-list"></i><?php echo $button_browse; ?></a>
+                            <a href="<?php echo $browse; ?>" class="button button_back"><i class="fa fa-th-list"></i><?php echo $button_browse; ?></a>
                         </div>
 						<div class="right">
                             <a href="<?php echo $continue; ?>" class="button button_alt button_home"><i class="fa fa-home"></i><?php echo $button_continue; ?></a>

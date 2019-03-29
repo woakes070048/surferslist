@@ -46,6 +46,7 @@ class ControllerCommonHeader extends Controller {
 		$this->data['minify'] = is_file(DIR_TEMPLATE . $css_min);
 		$this->data['server'] = CDN_SERVER ?: $server;
 		$this->data['css_min'] = $css_min;
+		$this->data['fingerprint'] = $css_min ? '?v=' . rtrim(substr($css_min, strpos($css_min, '-') + 1), '.min.css') : '';
 		$this->data['page'] = !isset($this->request->get['route']) || $this->request->get['route'] == 'common/home' || ($request_path == '/')	? 'home' : friendly_url($request_path);;
 		$this->data['alternate'] = $request_params ? $alternate . '?' . $request_params : $alternate;
 
