@@ -79,4 +79,4 @@ class ControllerAccountPassword extends Controller {
 		return !$this->hasError();
 	}
 }
-?>
+

@@ -7,4 +7,3 @@ $_['text_success']  = 'You have logged out!';
 $_['text_warning']  = 'You are not logged in!';
 $_['text_account']  = 'Account';
 $_['text_logout']   = 'Logout';
-?>

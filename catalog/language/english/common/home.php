@@ -14,4 +14,4 @@ $_['heading_post']      = 'Post';
 $_['text_post']         = 'Post Water Sports Equipment';
 $_['button_post']       = 'Add Listing';
 $_['help_post']         = 'Post equipment';
-?>
+

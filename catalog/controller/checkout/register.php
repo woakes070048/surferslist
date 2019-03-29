@@ -173,4 +173,4 @@ class ControllerCheckoutRegister extends Controller {
 	}
 
 }
-?>
+

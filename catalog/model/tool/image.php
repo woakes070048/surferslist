@@ -234,4 +234,4 @@ class ModelToolImage extends Model {
 	}
 
 }
-?>
+

@@ -8,4 +8,4 @@ $_['text_message']  = '<p>Your new user account has been created!</p><p>You will
 $_['text_approval'] = '<p>Thanks for joining %s!</p><p>A verification link has been sent to the email address that you used to create your account. <strong>Check your email</strong> and click on the link to activate your account and log in.</p>';
 $_['text_account']  = 'Account';
 $_['text_success']  = 'Success';
-?>
+

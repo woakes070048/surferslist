@@ -426,4 +426,4 @@ class ControllerCheckoutConfirm extends Controller {
 		$this->response->setOutput($this->render());
 	}
 }
-?>
+

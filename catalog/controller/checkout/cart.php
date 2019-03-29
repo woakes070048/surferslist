@@ -504,4 +504,4 @@ class ControllerCheckoutCart extends Controller {
 	}
 
 }
-?>
+

@@ -4,4 +4,4 @@ $_['heading_title'] = 'Special Offers';
 
 // Text
 
-?>
+

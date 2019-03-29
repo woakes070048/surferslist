@@ -106,4 +106,4 @@ class ControllerModuleLatest extends Controller {
 		$this->render();
 	}
 }
-?>
+

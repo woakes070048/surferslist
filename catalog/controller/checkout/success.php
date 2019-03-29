@@ -108,4 +108,4 @@ class ControllerCheckoutSuccess extends Controller {
 		$this->response->setOutput($this->render());
 	}
 }
-?>
+

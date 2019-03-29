@@ -20,4 +20,4 @@ class ModelSettingStore extends Model {
 		return $store_data;
 	}
 }
-?>
+

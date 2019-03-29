@@ -495,4 +495,4 @@ $_['error_image_url_restricted'] = 'Not allowed to read Image URL!';
 $_['error_import']            = 'You must upload a file!';
 $_['error_import_filetype']   = 'Invalid import file type!';
 $_['error_import_size']       = 'Import file must be less than %s kB!';
-?>
+

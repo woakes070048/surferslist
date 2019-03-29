@@ -156,4 +156,4 @@ class ModelAccountProductDownload extends Model {
 		return $query->row['total'];
 	}
 }
-?>
+

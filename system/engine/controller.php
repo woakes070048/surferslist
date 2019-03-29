@@ -96,4 +96,3 @@ abstract class Controller {
 		return $url;
 	}
 }
-?>

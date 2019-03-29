@@ -357,4 +357,4 @@ class ControllerAccountProductDownload extends Controller {
 		return !$this->hasError();
   	}
 }
-?>
+

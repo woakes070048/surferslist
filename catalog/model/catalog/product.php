@@ -2191,4 +2191,4 @@ class ModelCatalogProduct extends Model {
 	}
 
 }
-?>
+

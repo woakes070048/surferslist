@@ -24,4 +24,4 @@ class ModelDesignBanner extends Model {
 	}
 
 }
-?>
+

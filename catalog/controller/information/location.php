@@ -348,4 +348,4 @@ class ControllerInformationLocation extends Controller {
 		$this->response->setOutput($this->render());
 	}
 }
-?>
+

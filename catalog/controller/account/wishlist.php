@@ -77,4 +77,4 @@ class ControllerAccountWishList extends Controller {
 	}
 
 }
-?>
+

@@ -84,4 +84,4 @@ $_['error_review_self']         = 'You cannot submit a review for yourself!';
 $_['error_review_exists']       = 'You have already submitted a review for this profile!';
 $_['error_review_order']        = 'You must have an <a href="account-order">order history</a> with the user profile to submit a rating!';
 $_['error_review_text']         = 'Message must be between %s and %s characters!';
-?>
+

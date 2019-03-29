@@ -7,7 +7,6 @@
  */
 
 class SecurityBase {
-
     protected $config;
     protected $db;
     protected $request;
@@ -25,5 +24,4 @@ class SecurityBase {
         $this->session = $registry->get('session');
         $this->cache = $registry->get('cache');
     }
-
 }

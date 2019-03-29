@@ -583,4 +583,3 @@ class ModelShippingUsps extends Model {
 		return $method_data;
 	}
 }
-?>

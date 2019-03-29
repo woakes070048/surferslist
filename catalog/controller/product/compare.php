@@ -102,4 +102,4 @@ class ControllerProductCompare extends Controller {
 		$this->response->setOutput($this->render());
 	}
 }
-?>
+

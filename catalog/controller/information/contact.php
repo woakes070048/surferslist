@@ -331,4 +331,4 @@ class ControllerInformationContact extends Controller {
   	}
 
 }
-?>
+

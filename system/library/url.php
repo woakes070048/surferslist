@@ -33,4 +33,3 @@ class Url {
 		return $url;
 	}
 }
-?>

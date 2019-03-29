@@ -546,4 +546,4 @@ class ControllerPaymentKlarnaInvoice extends Controller {
 		return $defpos;
 	}
 }
-?>
+

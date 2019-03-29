@@ -9,4 +9,3 @@ $_['text_success']     = 'Your newsletter subscription has been successfully upd
 
 // Entry
 $_['entry_newsletter'] = 'Subscribe:';
-?>

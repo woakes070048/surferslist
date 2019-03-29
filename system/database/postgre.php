@@ -66,4 +66,3 @@ final class Postgre {
 		pg_close($this->link);
 	}
 }
-?>

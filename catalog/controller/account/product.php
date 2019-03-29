@@ -2218,4 +2218,4 @@ class ControllerAccountProduct extends Controller {
 	}
 
 }
-?>
+

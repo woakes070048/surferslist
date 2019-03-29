@@ -387,4 +387,4 @@ class ControllerCheckoutGuest extends Controller {
 		$this->response->setOutput($output);
 	}
 }
-?>
+

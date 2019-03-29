@@ -337,4 +337,4 @@ class ModelCatalogManufacturer extends Model {
 	}
 
 }
-?>
+

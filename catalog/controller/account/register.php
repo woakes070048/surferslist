@@ -222,4 +222,4 @@ class ControllerAccountRegister extends Controller {
 		return !$this->hasError();
 	}
 }
-?>
+

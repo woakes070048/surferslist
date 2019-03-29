@@ -20,4 +20,4 @@ This link above is valid for ***ONE TIME USE*** only.
 Please reply to this email if you have any questions.
 
 EOT;
-?>
+

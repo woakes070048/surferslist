@@ -128,4 +128,4 @@ class ControllerModuleCart extends Controller {
 		$this->response->setOutput($this->render());
 	}
 }
-?>
+

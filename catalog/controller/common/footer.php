@@ -118,4 +118,4 @@ class ControllerCommonFooter extends Controller {
 		$this->render();
 	}
 }
-?>
+

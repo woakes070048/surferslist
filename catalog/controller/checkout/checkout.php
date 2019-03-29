@@ -84,4 +84,4 @@ class ControllerCheckoutCheckout extends Controller {
 	}
 
 }
-?>
+

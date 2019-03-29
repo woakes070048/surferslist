@@ -67,4 +67,4 @@ class ModelCheckoutVoucherTheme extends Model {
 	}
 
 }
-?>
+

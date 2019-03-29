@@ -56,4 +56,4 @@ class ControllerAccountNewsletter extends Controller {
 		$this->response->setOutput($this->render());
 	}
 }
-?>
+

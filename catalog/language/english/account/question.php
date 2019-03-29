@@ -42,4 +42,4 @@ $_['entry_text']              = 'Message:';
 $_['error_permission']        = 'You do not have permission to modify discussion messages!';
 $_['error_text']              = 'Message must be between %s and %s characters!';
 $_['error_notchecked']        = 'No discussion message(s) selected!';
-?>
+

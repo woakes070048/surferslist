@@ -238,4 +238,4 @@ class ModelToolSeoUrl extends Model {
 		return $result->num_rows;
 	}
 }
-?>
+

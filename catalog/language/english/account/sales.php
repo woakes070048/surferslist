@@ -63,4 +63,4 @@ $_['help_comment']  		= 'min %s, max %s<br />characters long';
 
 // Error
 $_['error_comment']  		= 'Comment must be %s to %s characters! <a href="%s">Private message</a> for longer correspondence.';
-?>
+

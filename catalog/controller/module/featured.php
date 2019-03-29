@@ -132,4 +132,4 @@ class ControllerModuleFeatured extends Controller {
 		$this->render();
 	}
 }
-?>
+

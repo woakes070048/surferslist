@@ -173,4 +173,4 @@ class ControllerAccountVoucher extends Controller {
 		return !$this->hasError();
 	}
 }
-?>
+

@@ -108,4 +108,4 @@ class ControllerPaymentTwoCheckout extends Controller {
 		}
 	}
 }
-?>
+

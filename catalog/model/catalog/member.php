@@ -686,4 +686,4 @@ class ModelCatalogMember extends Model {
 	}
 
 }
-?>
+

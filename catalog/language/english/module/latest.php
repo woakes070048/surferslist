@@ -4,4 +4,4 @@ $_['heading_title'] = 'New Listings';
 
 // Text
 
-?>
+

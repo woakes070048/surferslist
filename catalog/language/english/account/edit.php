@@ -25,4 +25,4 @@ $_['error_firstname']  = 'First Name must be %s - %s characters and contain only
 $_['error_lastname']   = 'Last Name must be %s - %s characters and contain only letters!';
 $_['error_email']      = 'E-Mail does not appear to be valid!';
 $_['error_length']     = 'Phone Number must be less than %s characters!';
-?>
+

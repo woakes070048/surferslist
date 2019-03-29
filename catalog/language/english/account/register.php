@@ -39,4 +39,4 @@ $_['error_agree']          = 'You must agree to %s!';
 $_['text_message']  = 'Account created!<br />Next, <a href="%s">activate a profile</a> to <a href="%s">post</a> your listings.';
 $_['text_approval'] = 'Account registered! You will receive an email as soon as your account has been approved.';
 $_['text_success']  = 'Success';
-?>
+

@@ -234,4 +234,4 @@ class ControllerModuleSearch extends Controller {
 		$this->render();
 	}
 }
-?>
+

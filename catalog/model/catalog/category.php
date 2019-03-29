@@ -358,4 +358,4 @@ class ModelCatalogCategory extends Model {
 	}
 
 }
-?>
+

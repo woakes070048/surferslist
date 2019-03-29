@@ -483,4 +483,4 @@ class ModelAccountCustomer extends Model {
 		");
 	}
 }
-?>
+

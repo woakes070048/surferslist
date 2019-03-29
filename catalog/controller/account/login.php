@@ -477,4 +477,4 @@ class ControllerAccountLogin extends Controller {
 	}
 
 }
-?>
+

@@ -91,4 +91,4 @@ $_['help_member_reviews']        = 'Manage your profile ratings';
 $_['help_notify']                = 'Manage your email preferences';
 $_['help_phone']                 = 'Phone number allows someone to reach you if an order processing or account issue occurs.'
 
-?>
+

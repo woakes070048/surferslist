@@ -46,4 +46,4 @@ class ControllerPaymentLiqPay extends Controller {
 		}
 	}
 }
-?>
+

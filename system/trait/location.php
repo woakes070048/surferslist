@@ -115,4 +115,4 @@ trait Location {
 		return $name;
 	}
 }
-?>
+

@@ -353,4 +353,4 @@ class ControllerPaymentSagepayDirect extends Controller {
 		}
 	}
 }
-?>
+

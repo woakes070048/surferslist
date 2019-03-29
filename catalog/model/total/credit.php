@@ -49,4 +49,4 @@ class ModelTotalCredit extends Model {
 		}
 	}
 }
-?>
+

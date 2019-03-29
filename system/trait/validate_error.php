@@ -46,4 +46,4 @@ trait ValidateError {
 		return $this->errors;
 	}
 }
-?>
+

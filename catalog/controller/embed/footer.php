@@ -18,4 +18,4 @@ class ControllerEmbedFooter extends Controller {
 		$this->render();
 	}
 }
-?>
+

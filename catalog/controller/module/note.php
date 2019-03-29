@@ -33,4 +33,4 @@ class ControllerModuleNote extends Controller {
 		$this->render();
 	}
 }
-?>
+

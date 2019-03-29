@@ -12,4 +12,4 @@ $_['text_success'] = 'Your account has been verified successfully!';
 
 $_['error_invalid_code'] = 'Verification code invalid!';
 $_['error_attempts'] = 'Too many failed login attempts!<br />Please try again in 1 hour.';
-?>
+

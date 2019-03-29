@@ -27,4 +27,4 @@ $_['help_viewed_instructions']   = 'Please contact us for help.';
 
 // Error
 $_['error_permission']       = 'You do not have permission to edit Account Analytics Report!';
-?>
+

@@ -16,4 +16,4 @@ class ControllerModuleGoogleTalk extends Controller {
 		$this->render();
 	}
 }
-?>
+

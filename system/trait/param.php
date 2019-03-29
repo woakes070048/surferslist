@@ -40,4 +40,4 @@ trait Param {
 		return $url;
 	}
 }
-?>
+

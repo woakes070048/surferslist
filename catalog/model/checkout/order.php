@@ -928,4 +928,4 @@ class ModelCheckoutOrder extends Model {
 	}
 
 }
-?>
+

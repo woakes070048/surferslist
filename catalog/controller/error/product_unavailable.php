@@ -167,4 +167,4 @@ class ControllerErrorProductUnavailable extends Controller {
 		$this->response->setOutput($this->render());
 	}
 }
-?>
+

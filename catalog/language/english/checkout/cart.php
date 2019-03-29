@@ -62,4 +62,4 @@ $_['error_zone']             = 'Please select a state / region!';
 $_['error_shipping']         = 'Shipping method required!';
 $_['error_no_shipping']      = 'No Shipping options are available. Please <a href="%s">contact us</a> for assistance!';
 $_['error_member_unique']    = 'Cart contains items owned by more than one user - %s!<br />Please limit each order to listings from <strong>ONE</strong> User Profile at a time. See <a href="ordering-information">ordering information</a> for more info.';
-?>
+

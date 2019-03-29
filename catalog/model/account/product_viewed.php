@@ -130,4 +130,4 @@ class ModelAccountProductViewed extends Model {
 	}
 
 }
-?>
+

@@ -20,4 +20,4 @@ $_['help_email']           = 'Enter your e-mail address';
 $_['error_name']           = 'At least %s and no more than %s letters of the first or last name asssociated with your account is required!';
 $_['error_email']          = 'E-Mail address does not appear to be valid!';
 $_['error_reset']          = 'No account match was found!';
-?>
+

@@ -18,4 +18,4 @@ $_['column_model']  = 'Model';
 $_['column_stock']  = 'Stock';
 $_['column_price']  = 'Price/Value';
 $_['column_action'] = 'Action';
-?>
+

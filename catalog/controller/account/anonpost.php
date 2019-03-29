@@ -1145,4 +1145,4 @@ class ControllerAccountAnonPost extends Controller {
 	}
 
 }
-?>
+

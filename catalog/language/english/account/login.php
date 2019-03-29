@@ -43,4 +43,4 @@ $_['error_social_login_failed'] = 'Please try again later or login with password
 // Success
 $_['success_login']         = 'You have logged in!';
 $_['success_register']       = 'Account created!<br />Next, <a href="%s">activate a profile</a> to <a href="%s">post</a> your listings.';
-?>
+

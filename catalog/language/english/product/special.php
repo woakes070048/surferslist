@@ -6,4 +6,4 @@ $_['meta_description']   = 'Sales and discounts on extreme water sports equipmen
 
 // Text
 $_['text_empty']        = 'No special offers found.';
-?>
+

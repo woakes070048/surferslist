@@ -80,4 +80,4 @@ $_['error_message']    = 'Message must be between %s and %s characters!';
 $_['error_too_fast']   = 'Too fast! Please wait %s seconds and try again, or <a href="%s">login</a> to relax this restriction.';
 $_['error_timeout']    = 'Time expired! Please wait %s seconds and try again, or <a href="%s">login</a> to relax this restriction.';
 
-?>
+
