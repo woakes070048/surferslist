@@ -278,6 +278,7 @@ class ControllerProductSearch extends Controller {
 		$this->data['url'] = $url;
 
 		$this->data['compare'] = $this->url->link('product/compare');
+		$this->data['browse'] = $this->url->link('product/allproducts');
 		$this->data['back'] = ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->request->server['HTTP_REFERER'] : $this->url->link('product/allproducts');
 		$this->data['search'] = $this->url->link('product/search', $url);
 		$this->data['reset'] = $this->url->link('product/search');
