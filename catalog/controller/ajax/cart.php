@@ -54,7 +54,8 @@ class ControllerAjaxCart extends Controller {
                             }
 
                         } else if ($product['member_customer_id'] != $product_info['customer_id']) {
-                            $json['error'] = $this->language->get('error_member');
+                            $ordering_id = $this->config->get('config_ordering_id') ?: $this->config->get('config_account_id');
+                            $json['error'] = sprintf($this->language->get('error_member'), $this->url->link('information/information', 'information_id=' . $ordering_id, 'SSL'));
                         }
                     }
                 } else {
@@ -69,7 +70,7 @@ class ControllerAjaxCart extends Controller {
             if (!$json) {
                 $this->cart->add($this->request->post['product_id'], $quantity, $option);
 
-                $json['success'] = sprintf($this->language->get('text_success'), $this->url->link('product/product', 'product_id=' . $this->request->post['product_id']), $product_info['name'], $this->url->link('checkout/cart'));
+                $json['success'] = sprintf($this->language->get('text_success'), $this->url->link('product/product', 'product_id=' . $this->request->post['product_id']), $product_info['name'], $this->url->link('checkout/cart', '', 'SSL'));
 
                 unset($this->session->data['insurance']);
                 unset($this->session->data['shipping_method']);

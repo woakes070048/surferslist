@@ -2,7 +2,7 @@
 class ControllerAccountNewsletter extends Controller {
 	public function index() {
 		// disable
-		$this->redirect($this->url->link('error/not_found', '', 'SSL'));
+		$this->redirect($this->url->link('error/not_found'));
 
 		if (!$this->customer->validateLogin()) {
 			$this->session->data['redirect'] = $this->url->link('account/newsletter', '', 'SSL');
@@ -56,4 +56,3 @@ class ControllerAccountNewsletter extends Controller {
 		$this->response->setOutput($this->render());
 	}
 }
-

@@ -125,7 +125,7 @@ class ControllerAccountVoucher extends Controller {
 
 		$this->data['breadcrumbs'] = $this->getBreadcrumbs();
 
-		$this->data['continue'] = $this->url->link('checkout/cart');
+		$this->data['continue'] = $this->url->link('checkout/cart', '', 'SSL');
 
 		$this->template = 'template/common/success.tpl';
 

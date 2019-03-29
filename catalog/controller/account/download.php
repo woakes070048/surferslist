@@ -14,14 +14,13 @@ class ControllerAccountDownload extends Controller {
 	}
 
 	public function index() {
-
 		$this->data = $this->load->language('account/download');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->addBreadcrumb($this->language->get('text_home'), $this->url->link('common/home'));
-		$this->addBreadcrumb($this->language->get('text_account'), $this->url->link('account/account'));
-		$this->addBreadcrumb($this->language->get('text_downloads'), $this->url->link('account/download'));
+		$this->addBreadcrumb($this->language->get('text_home'), $this->url->link('common/home', '', 'SSL'));
+		$this->addBreadcrumb($this->language->get('text_account'), $this->url->link('account/account', '', 'SSL'));
+		$this->addBreadcrumb($this->language->get('text_downloads'), $this->url->link('account/download', '', 'SSL'));
 
 		$this->data['breadcrumbs'] = $this->getBreadcrumbs();
 
@@ -149,6 +148,4 @@ class ControllerAccountDownload extends Controller {
 			$this->redirect($this->url->link('account/download', '', 'SSL'));
 		}
 	}
-
 }
-

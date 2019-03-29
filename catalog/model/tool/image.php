@@ -232,6 +232,4 @@ class ModelToolImage extends Model {
 
 		return $destination;
 	}
-
 }
-

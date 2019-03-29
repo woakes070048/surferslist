@@ -606,7 +606,7 @@ class ControllerAccountAnonPost extends Controller {
 			$product_exists = $this->model_account_product->getAnonListingByData($data); // returns array with product_id and name
 
 			if ($product_exists) {
-				$product_exists_url = $this->url->link('product/product', 'product_id=' . $product_exists['product_id'], 'SSL');
+				$product_exists_url = $this->url->link('product/product', 'product_id=' . $product_exists['product_id']);
 				$this->appendError('input_data', sprintf($this->language->get('error_anonpost_exists'), $product_exists_url, $product_exists['name']));
 				$this->log->write('LISTING EXISTS (' . $product_exists_url . '): ' . json_encode($data));
 				return false;
@@ -1143,6 +1143,4 @@ class ControllerAccountAnonPost extends Controller {
 
 		return $return;
 	}
-
 }
-

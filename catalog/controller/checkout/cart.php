@@ -24,7 +24,7 @@ class ControllerCheckoutCart extends Controller {
 			unset($this->session->data['payment_methods']);
 			unset($this->session->data['reward']);
 
-			$this->redirect($this->url->link('checkout/cart'));
+			$this->redirect($this->url->link('checkout/cart', '', 'SSL'));
 		}
 
 		// Remove
@@ -42,7 +42,7 @@ class ControllerCheckoutCart extends Controller {
 			unset($this->session->data['payment_methods']);
 			unset($this->session->data['reward']);
 
-			$this->redirect($this->url->link('checkout/cart'));
+			$this->redirect($this->url->link('checkout/cart', '', 'SSL'));
 		}
 
 		// Coupon
@@ -51,7 +51,7 @@ class ControllerCheckoutCart extends Controller {
 
 			$this->session->data['success'] = $this->language->get('text_coupon');
 
-			$this->redirect($this->url->link('checkout/cart'));
+			$this->redirect($this->url->link('checkout/cart', '', 'SSL'));
 		}
 
 		// Voucher
@@ -60,7 +60,7 @@ class ControllerCheckoutCart extends Controller {
 
 			$this->session->data['success'] = $this->language->get('text_voucher');
 
-			$this->redirect($this->url->link('checkout/cart'));
+			$this->redirect($this->url->link('checkout/cart', '', 'SSL'));
 		}
 
 		// Reward
@@ -69,7 +69,7 @@ class ControllerCheckoutCart extends Controller {
 
 			$this->session->data['success'] = $this->language->get('text_reward');
 
-			$this->redirect($this->url->link('checkout/cart'));
+			$this->redirect($this->url->link('checkout/cart', '', 'SSL'));
 		}
 
 		// Shipping
@@ -80,7 +80,7 @@ class ControllerCheckoutCart extends Controller {
 
 			$this->session->data['success'] = $this->language->get('text_shipping');
 
-			$this->redirect($this->url->link('checkout/cart'));
+			$this->redirect($this->url->link('checkout/cart', '', 'SSL'));
 		}
 
 		if (!$this->cart->hasProducts() && empty($this->session->data['vouchers'])) {
@@ -404,7 +404,7 @@ class ControllerCheckoutCart extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		$this->addBreadcrumb($this->language->get('text_home'), $this->url->link('common/home'));
-		$this->addBreadcrumb($this->language->get('heading_title'), $this->url->link('checkout/cart'));
+		$this->addBreadcrumb($this->language->get('heading_title'), $this->url->link('checkout/cart', '', 'SSL'));
 
 		$this->data['breadcrumbs'] = $this->getBreadcrumbs();
 
@@ -477,24 +477,41 @@ class ControllerCheckoutCart extends Controller {
 	}
 
 	protected function validateMemberUnique() {
+		$order_member_id = 0;
 		$order_members = array();
 		$order_member_names = array();
 
 		foreach ($this->cart->getProducts() as $product) {
-			if (!empty($product['member_id']) && !array_key_exists($product['member_id'], $order_members)) {
-				$order_members[$product['member_id']] = array(
-					'name' => $product['member'],
-					'href' => $this->url->link('product/member/info', 'member_id=' . $product['member_id'])
+			$order_member_id = !empty($product['member_id']) ? $product['member_id'] : 0;
+
+			if ($order_member_id) {
+				$order_member_name = $product['member'];
+				$order_member_url = $this->url->link('product/member/info', 'member_id=' . $product['member_id']);
+			} else {
+				$order_member_name = $this->config->get('config_name');
+				$order_member_url = $this->request->isSecure() ? $this->config->get('config_ssl') : $this->config->get('config_url'); // $this->url->link('product/member/info', 'member_id=' . $this->config->get('config_member_id'))
+			}
+
+			if (!array_key_exists($order_member_id, $order_members)) {
+				$order_members[$order_member_id] = array(
+					'name' => $order_member_name,
+					'href' => $order_member_url
 				);
 			}
 		}
 
-		foreach ($order_members as $order_member) {
-			$order_member_names[] = '<a href="'. $order_member['href'] . '">' . $order_member['name'] . '</a>';
-		}
-
 		if (count($order_members) > 1) {
-			$this->setError('warning', sprintf($this->language->get('error_member_unique'), implode(', ', $order_member_names)));
+			foreach ($order_members as $order_member) {
+				$order_member_names[] = '<a href="'. $order_member['href'] . '">' . $order_member['name'] . '</a>';
+			}
+
+			$ordering_id = $this->config->get('config_ordering_id') ?: $this->config->get('config_account_id');
+
+			$this->setError('warning', sprintf(
+				$this->language->get('error_member_unique'),
+				implode(', ', $order_member_names),
+				$this->url->link('information/information', 'information_id=' . $ordering_id, 'SSL')
+			));
 		} else {
 			reset($order_members);
 			$this->order_member_id = key($order_members);
@@ -502,6 +519,4 @@ class ControllerCheckoutCart extends Controller {
 
 		return !$this->hasError();
 	}
-
 }
-

@@ -89,6 +89,4 @@ $_['help_member_order_history']  = 'Manage your past orders';
 $_['help_member_questions']      = 'Manage your discussion messages';
 $_['help_member_reviews']        = 'Manage your profile ratings';
 $_['help_notify']                = 'Manage your email preferences';
-$_['help_phone']                 = 'Phone number allows someone to reach you if an order processing or account issue occurs.'
-
-
+$_['help_phone']                 = 'Phone number allows someone to reach you if an order processing or account issue occurs.';

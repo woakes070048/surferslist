@@ -43,8 +43,9 @@ class ControllerCheckoutRegister extends Controller {
 
 			if ($this->data['text_agree'] === false) {
 				$this->load->model('catalog/information');
-				$privacy_policy_id = 3;
-				$terms_of_use_id = 5; // $this->config->get('config_account_id')
+				
+				$privacy_policy_id = $this->config->get('config_privacy_policy_id') ?: $this->config->get('config_account_id');
+				$terms_of_use_id = $this->config->get('config_terms_of_use_id') ?: $this->config->get('config_account_id');
 
 				$info_terms_of_use = $this->model_catalog_information->getInformation($terms_of_use_id);
 				$info_privacy_policy = $this->model_catalog_information->getInformation($privacy_policy_id);
@@ -82,7 +83,7 @@ class ControllerCheckoutRegister extends Controller {
 
 		// Validate cart has products and has stock.
 		if ((!$this->cart->hasProducts() && empty($this->session->data['vouchers'])) || (!$this->cart->hasStock() && !$this->config->get('config_stock_checkout'))) {
-			$json['redirect'] = $this->url->link('checkout/cart');
+			$json['redirect'] = $this->url->link('checkout/cart', '', 'SSL');
 		}
 
 		// Validate minimum quantity requirements.
@@ -98,7 +99,7 @@ class ControllerCheckoutRegister extends Controller {
 			}
 
 			if ($product['minimum'] > $product_total) {
-				$json['redirect'] = $this->url->link('checkout/cart');
+				$json['redirect'] = $this->url->link('checkout/cart', '', 'SSL');
 				break;
 			}
 		}
@@ -173,4 +174,3 @@ class ControllerCheckoutRegister extends Controller {
 	}
 
 }
-

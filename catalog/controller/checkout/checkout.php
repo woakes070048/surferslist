@@ -3,21 +3,31 @@ class ControllerCheckoutCheckout extends Controller {
 	public function index() {
 		// Validate cart has products and has stock.
 		if ((!$this->cart->hasProducts() && empty($this->session->data['vouchers'])) || (!$this->cart->hasStock() && !$this->config->get('config_stock_checkout'))) {
-			$this->redirect($this->url->link('checkout/cart'));
+			$this->redirect($this->url->link('checkout/cart', '', 'SSL'));
 		}
 
 		if ($this->config->get('config_secure') && !$this->request->isSecure()) {
 			$this->redirect($this->url->link('checkout/checkout', '', 'SSL'));
 		}
 
+		$order_member_id = 0;
 		$order_member_ids = array();
 
-		// Validate minimum quantity requirements.
+		// validation checks
 		$products = $this->cart->getProducts();
 
 		foreach ($products as $product) {
 			$product_total = 0;
-			$order_member_ids[] = (!empty($product['member_customer_id']) ? $product['member_customer_id'] : 0);
+			$order_member_id = !empty($product['member_id']) ? $product['member_id'] : 0;
+
+			if (!in_array($order_member_id, $order_member_ids)) {
+				$order_member_ids[] = $order_member_id;
+			}
+
+			// validate unique seller
+			if (count($order_member_ids) > 1) {
+				$this->redirect($this->url->link('checkout/cart', '', 'SSL'));
+			}
 
 			foreach ($products as $product_2) {
 				if ($product_2['product_id'] == $product['product_id']) {
@@ -25,14 +35,10 @@ class ControllerCheckoutCheckout extends Controller {
 				}
 			}
 
+			// validate quantity
 			if ($product['minimum'] > $product_total) {
-				$this->redirect($this->url->link('checkout/cart'));
+				$this->redirect($this->url->link('checkout/cart', '', 'SSL'));
 			}
-		}
-
-		// Validate Member unique
-		if (count(array_unique(array_filter($order_member_ids), SORT_REGULAR)) > 1) {
-			$this->redirect($this->url->link('checkout/cart'));
 		}
 
 		$this->load->language('checkout/checkout');
@@ -40,11 +46,11 @@ class ControllerCheckoutCheckout extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		$this->addBreadcrumb($this->language->get('text_home'), $this->url->link('common/home'));
-		$this->addBreadcrumb($this->language->get('text_cart'), $this->url->link('checkout/cart'));
-		$this->addBreadcrumb($this->language->get('heading_title'), $this->url->link('checkout/checkout'));
+		$this->addBreadcrumb($this->language->get('text_cart'), $this->url->link('checkout/cart', '', 'SSL'));
+		$this->addBreadcrumb($this->language->get('heading_title'), $this->url->link('checkout/checkout', '', 'SSL'));
 
 		$this->data['breadcrumbs'] = $this->getBreadcrumbs();
-		
+
 		$this->data['heading_title'] = $this->language->get('heading_title');
 
 		$this->data['text_checkout_option'] = $this->language->get('text_checkout_option');
@@ -84,4 +90,3 @@ class ControllerCheckoutCheckout extends Controller {
 	}
 
 }
-

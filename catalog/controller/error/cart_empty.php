@@ -6,7 +6,7 @@ class ControllerErrorCartEmpty extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		$this->addBreadcrumb($this->language->get('text_home'), $this->url->link('common/home'));
-		$this->addBreadcrumb($this->language->get('heading_title'), $this->url->link('checkout/cart'));
+		$this->addBreadcrumb($this->language->get('heading_title'), $this->url->link('checkout/cart', '', 'SSL'));
 
 		$this->data['breadcrumbs'] = $this->getBreadcrumbs();
 

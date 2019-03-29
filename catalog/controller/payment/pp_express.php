@@ -18,7 +18,7 @@ class ControllerPaymentPPExpress extends Controller {
 		if ((!$this->cart->hasProducts() && empty($this->session->data['vouchers'])) || (!$this->cart->hasStock() && !$this->config->get('config_stock_checkout'))) {
 			$this->log->write('No product redirect');
 
-			$this->response->redirect($this->url->link('checkout/cart'));
+			$this->response->redirect($this->url->link('checkout/cart', '', 'SSL'));
 		}
 
 		if ($this->customer->isLogged()) {
@@ -759,7 +759,7 @@ class ControllerPaymentPPExpress extends Controller {
 
 		// Validate cart has products and has stock.
 		if ((!$this->cart->hasProducts() && empty($this->session->data['vouchers'])) || (!$this->cart->hasStock() && !$this->config->get('config_stock_checkout'))) {
-			$redirect = $this->url->link('checkout/cart');
+			$redirect = $this->url->link('checkout/cart', '', 'SSL');
 		}
 
 		// Validate minimum quantity requirements.
@@ -775,7 +775,7 @@ class ControllerPaymentPPExpress extends Controller {
 			}
 
 			if ($product['minimum'] > $product_total) {
-				$redirect = $this->url->link('checkout/cart');
+				$redirect = $this->url->link('checkout/cart', '', 'SSL');
 
 				break;
 			}
@@ -1242,7 +1242,7 @@ class ControllerPaymentPPExpress extends Controller {
 
 	public function checkout() {
 		if ((!$this->cart->hasProducts() && empty($this->session->data['vouchers'])) || (!$this->cart->hasStock() && !$this->config->get('config_stock_checkout'))) {
-			$this->response->redirect($this->url->link('checkout/cart'));
+			$this->response->redirect($this->url->link('checkout/cart', '', 'SSL'));
 		}
 
 		$this->load->model('payment/pp_express');
@@ -1519,7 +1519,7 @@ class ControllerPaymentPPExpress extends Controller {
 			$this->load->language('payment/pp_express');
 
 			$this->addBreadcrumb($this->language->get('text_home'), $this->url->link('common/home'));
-			$this->addBreadcrumb($this->language->get('text_cart'), $this->url->link('checkout/cart'));
+			$this->addBreadcrumb($this->language->get('text_cart'), $this->url->link('checkout/cart', '', 'SSL'));
 
 			$this->data['breadcrumbs'] = $this->getBreadcrumbs();
 
@@ -1529,7 +1529,7 @@ class ControllerPaymentPPExpress extends Controller {
 
 			$this->data['button_continue'] = $this->language->get('button_continue');
 
-			$this->data['continue'] = $this->url->link('checkout/cart');
+			$this->data['continue'] = $this->url->link('checkout/cart', '', 'SSL');
 
 			unset($this->session->data['success']);
 
