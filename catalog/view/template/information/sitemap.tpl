@@ -1,6 +1,6 @@
 <?php echo $header; ?>
-<div class="container-page sitemap-page">
-    <div class="breadcrumb">
+<main class="container-page sitemap-page">
+    <header class="breadcrumb">
         <div class="layout">
             <h1><a href="<?php echo $sitemap; ?>"><i class="fa fa-sitemap"></i><?php echo $heading_title; ?></a></h1>
             <div class="links">
@@ -9,10 +9,10 @@
                 <?php } ?>
             </div>
         </div>
-    </div>
+    </header>
     <div class="layout">
         <?php echo $column_left; ?>
-        <div class="container-center">
+        <section class="container-center">
             <div class="content-page">
             	<?php echo $content_top; ?>
 				<?php echo $notification; ?>
@@ -126,8 +126,8 @@
                 </div>
                 <?php echo $content_bottom; ?>
             </div>
-        </div>
+        </section>
         <?php echo $column_right; ?>
     </div>
-</div>
+</main>
 <?php echo $footer; ?>

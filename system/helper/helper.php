@@ -32,20 +32,34 @@ function strip_tags_decode($data) {
 	return $data;
 }
 
-function strip_non_alphanumeric($string, $spaces = false) {
-	$string = trim(strip_tags(htmlspecialchars_decode($string, ENT_QUOTES)));
+function strip_non_alphanumeric($data, $spaces = false, $keep = ' ') {
+	if (is_array($data)) {
+		foreach ($data as $key => $value) {
+			unset($data[$key]);
 
-	$patterns = array(
-		0	=> '/[^A-Za-z0-9 ]/',
-		1	=> '/\s+/'
-	);
+			$data[strip_tags_decode($key)] = strip_non_alphanumeric($value, $spaces, $keep);
+		}
+	} else {
+		$data = trim(strip_tags(htmlspecialchars_decode($data, ENT_QUOTES)));
 
-	$replacements = array(
-		0	=> '',
-		1	=> $spaces ? '' : ' '
-	);
+		$patterns = array(
+			0	=> '/[^A-Za-z0-9' . preg_quote($keep, '/') . ']/',
+			1	=> '/\s+/'
+		);
 
-	return preg_replace($patterns, $replacements, $string);
+		$replacements = array(
+			0	=> '',
+			1	=> $spaces ? '' : ' '
+		);
+
+		$data = preg_replace($patterns, $replacements, $data);
+	}
+
+	return $data;
+}
+
+function strip_non_alphanumeric_encode($data, $spaces = false, $keep = ' ') {
+	return htmlspecialchars(strip_non_alphanumeric($data, $spaces, $keep), ENT_COMPAT, 'UTF-8');
 }
 
 function is_url($string) {

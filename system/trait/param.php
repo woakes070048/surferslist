@@ -24,7 +24,7 @@ trait Param {
 		$url = '';
 
 		foreach ($names as $name) {
-			if (($exclude && in_array($name, $exclude)) || empty($this->params[$name]) ) {
+			if (($exclude && in_array($name, $exclude)) || !isset($this->params[$name]) || $this->params[$name] === '') {
 				continue;
 			}
 

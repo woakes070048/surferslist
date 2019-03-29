@@ -89,7 +89,13 @@ class ControllerProductProduct extends Controller {
 				$profile_link = $product_data['member']['href'];
 			}
 
-			$this->data['heading_title'] = $preview_listing ? $this->language->get('button_preview') . ': ' . $product_data['name'] : $product_data['name'];
+			$heading_title = html_entity_decode($product_data['name'], ENT_QUOTES, 'UTF-8');
+
+			if ($preview_listing) {
+				$heading_title = $this->language->get('button_preview') . ': ' . $heading_title;
+			}
+
+			$this->data['heading_title'] = $heading_title;
 			$this->data['category_icon'] = !empty($product_data['categories'][0]['name']) ? friendly_url($product_data['categories'][0]['name']) : '';
 			$this->data['page_shortlink'] = $product_data['keyword'] ? $this->config->get('config_url') . $product_data['keyword'] : '';
 			$this->data['action'] = $product_data['href'];

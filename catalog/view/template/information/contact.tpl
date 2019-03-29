@@ -1,6 +1,6 @@
 <?php echo $header; ?>
-<div class="container-page contact-page">
-    <div class="breadcrumb">
+<main class="container-page contact-page">
+    <header class="breadcrumb">
         <div class="layout">
             <h1><a href="<?php echo $page; ?>"><i class="fa fa-envelope"></i><?php echo $heading_title; ?></a></h1>
             <div class="links">
@@ -9,11 +9,10 @@
                 <?php } ?>
             </div>
         </div>
-    </div>
+    </header>
     <div class="layout layout-left-minus-right">
         <!-- <?php // echo $column_left; ?> -->
-
-        <div class="container-left">
+        <section class="container-left">
             <div class="content-page">
             	<?php echo $content_top; ?>
 				<?php echo $notification; ?>
@@ -141,8 +140,8 @@
                 <?php echo $content_bottom; ?>
 
             </div>
-        </div>
+        </section>
         <!-- <?php // echo $column_right; ?> -->
     </div>
-</div>
+</main>
 <?php echo $footer; ?>

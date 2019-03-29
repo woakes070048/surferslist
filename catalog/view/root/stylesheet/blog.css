@@ -1,0 +1,289 @@
+.blog-page .article-heading .article-stats {
+    display: table;
+    font-style: italic;
+    color: #878787; /* #a8aaad; */
+    font-size: 14px;
+}
+
+.blog-page .article-heading .article-stats > span {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.blog-page .article-heading .article-stats > span + span {
+    padding-left: 12px;
+}
+
+.blog-page .article-heading .article-stats > .avatar {
+    float: left;
+    padding-right: 0;
+}
+
+.blog-page .article-heading .article-date {
+    float: right;
+    color: #fff;
+    font-weight: normal;
+    text-align: center;
+    padding: 0;
+    width: 60px;
+    margin-left: 10px;
+    background-color: #76cdd8;
+}
+
+.blog-page .article-date .year, .blog-page .article-date .month, .blog-page .article-date .day {
+    display: block;
+}
+
+.blog-page .article-date .year {
+    font-size: 12px;
+    padding: 6px 0;
+    background-color: #0d8f91;
+}
+
+.blog-page .article-date .month {
+    font-size: 16px;
+    padding: 6px 0 2px;
+}
+
+.blog-page .article-date .day {
+    font-size: 24px;
+    padding: 2px 0 6px;
+}
+
+.blog-page .article-image img {
+    width: initial;
+}
+
+/* Sidebar */
+.blog-page .sidebar #filtersbrands li {
+    padding: 0;
+}
+
+.blog-page .sidebar #filtersbrands li>a {
+    color: #24282c;
+    display: block;
+    padding: 12px 15px;
+}
+
+.blog-page .sidebar #filtersbrands li>a:hover {
+    color: #fff;
+    background-color: #24282c;
+}
+
+/* Article List */
+.list-articles .article-image {
+    float: left;
+    margin-bottom: 0;
+}
+
+.list-articles .blog-article > .content {
+    padding-bottom: 20px;
+}
+
+.list-articles .content .no-thumbnail {
+    width: 100%;
+}
+
+.list-articles .article-heading .article-name {
+    padding-bottom: 0;
+}
+
+.list-articles .article-heading .article-name a {
+    display: inline-block;
+    color: #424143;
+}
+
+.list-articles .article-heading .article-stats {
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.list-articles .article-description {
+    color: #424143;
+    font-size: 18px;
+    line-height: 1.3;
+    min-height: 38px;
+    margin-bottom: 12px;
+    margin-right: 55px;
+}
+
+.list-articles .read-more {
+    padding: 4px 6px;
+}
+
+/* Article Page */
+.blog-article-page .article-body {
+    position: relative;
+}
+
+.blog-article-page .article-heading .article-stats {
+    font-size: 16px;
+}
+
+.blog-article-page .article-heading {
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.blog-article-page .article-images .article-image {
+    display: inline-block;
+}
+
+.blog-article-page .article-images {
+    text-align: center;
+    overflow: auto;
+    width: 100%;
+}
+
+.blog-article-page .article-description {
+    font-size: 18px;
+}
+
+.blog-article-page .article-description p, .blog-article-page .article-description ul, .blog-article-page .article-description ol {
+    line-height: 1.4;
+}
+
+.blog-article-page .share {
+    border-bottom: none;
+}
+
+.blog-article-page .tags {
+    text-align: center;
+    overflow: hidden;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.blog-page #related-articles .grid-item:hover .pannel .info,
+.blog-page #related-articles .grid-item:hover .pannel:before,
+.blog-page #related-articles .grid-item:hover .image {
+    background-color: #0d8f91;
+}
+
+.blog-page #related-articles .grid-item:hover .add-to {
+    border-top-color: #0d8f91;
+}
+
+.blog-page #related-articles .grid-item .add-to, .blog-page #related-articles .grid-item .add-to a {
+    height: initial;
+}
+
+.blog-page #related-articles .button-read-more {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.blog-page #related-articles .grid-item .add-to a:hover {
+    background-color: #76cdd8;
+}
+
+/* L and smaller screen sizes */
+@media screen and (max-width:1192px) {
+    .list-articles .article-heading .article-name {
+        font-size: 20px;
+    }
+
+    .list-articles .article-description {
+        font-size: 16px;
+    }
+
+    .blog-page .article-heading .article-date {
+        width: 45px;
+    }
+
+    .blog-page .article-date .year {
+        font-size: 10px;
+        padding: 4px 0;
+    }
+
+    .blog-page .article-date .month {
+        font-size: 14px;
+        padding: 4px 0 2px;
+    }
+
+    .blog-page .article-date .day {
+        font-size: 18px;
+        padding: 2px 0 4px;
+    }
+
+    .blog-article-page .article-heading:after {
+        height: 0;
+        clear: both;
+        content: "";
+        display: block;
+        visibility: hidden;
+    }
+
+    .blog-article-page .article-image-wrapper > div[class^='grid-'] {
+        margin-left: 0;
+        margin-right: 0;
+        width: auto;
+        float: none;
+    }
+}
+
+/* M and smaller screen sizes */
+@media screen and (max-width:979px) {
+    .breadcrumb h1 i + span {
+        display: inline;
+    }
+
+    .blog-article-page .article-body, .blog-page #related-articles .filterscat, .blog-page #related-listings #filterscat {
+        margin-bottom: 20px;
+    }
+}
+
+/* S and smaller screen sizes */
+@media screen and (max-width:698px) {
+    .list-articles .article-image {
+        margin-bottom: 10px;
+    }
+
+    .list-articles .blog-article > .content {
+        padding-bottom: 10px;
+    }
+
+    .list-articles .article-description {
+        margin-right: 0;
+    }
+
+    .blog-page .article-heading .article-stats {
+        text-align: left;
+    }
+
+    .blog-page .article-heading .article-stats > .avatar {
+        margin-left: 0;
+    }
+
+    .blog-article-page .article-heading .article-stats {
+        display: block;
+        font-size: 14px;
+    }
+
+    .blog-article-page .article-heading .article-stats > span {
+        display: block;
+        line-height: 20px;
+    }
+
+    .blog-article-page .article-heading .article-stats > span + span {
+        padding: 0 0 0 50px;
+    }
+}
+
+/* XS screen sizes */
+@media screen and (max-width:446px) {
+    .blog-page .article-heading .article-stats > span {
+        display: block;
+        line-height: 20px;
+    }
+
+    .list-articles .article-heading .article-stats {
+        display: block;
+        padding-bottom: 6px;
+        padding-top: 6px;
+    }
+
+    .list-articles .article-heading .article-stats > span + span {
+        padding-left: 0;
+    }
+}
