@@ -127,19 +127,14 @@ $postListingForm.on('change', 'select[name=\'manufacturer_id\']', function() {
 
 	$('#manufacturer_thumb').hide();
 
-	if (selectedManufacturerId > 1) {
-		var selectedCategoryId = $('select[name=\'category_id\']').val() || $('input[name=\'category_id\']').val();
-		var selectedCategory = categories_json.length ? categories_json.filter(function(obj) {
-			return obj.category_id == selectedCategoryId;
-		}) : [];
-		var manufacturers = selectedCategory.length ? selectedCategory[0].manufacturers : [];
-		var selectedManufacturer = manufacturers.length ? manufacturers.filter(function(obj) {
-			return obj.manufacturer_id == selectedManufacturerId;
+	if (selectedManufacturerId > 1 && typeof manufacturers_json !== 'undefined') {
+		var selectedManufacturer = manufacturers_json.length ? manufacturers_json.filter(function(obj) {
+			return obj.id == selectedManufacturerId;
 		}) : [];
 
 		if (selectedManufacturer.length) {
-			if (typeof selectedManufacturer[0].image_resized !== 'undefined') {
-				$('#manufacturer_thumb').attr('src', selectedManufacturer[0].image_resized);
+			if (typeof selectedManufacturer[0].image !== 'undefined') {
+				$('#manufacturer_thumb').attr('src', selectedManufacturer[0].image);
 			}
 
 			$('#manufacturer_thumb').attr('alt', selectedManufacturer[0].name);

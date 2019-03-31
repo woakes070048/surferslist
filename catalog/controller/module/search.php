@@ -116,10 +116,10 @@ class ControllerModuleSearch extends Controller {
 		$limit = isset($this->request->get['limit']) ? (int)$this->request->get['limit'] : $this->config->get('config_catalog_limit');
 
 		// Categories & Manufacturers
-		$this->data['categories_complete'] = $this->model_catalog_category->getAllCategoriesComplete();
+		$this->data['categories_complete'] = htmlspecialchars(json_encode($this->model_catalog_category->getAllCategoriesComplete()), ENT_COMPAT);
 		$this->data['sub_categories'] = $category_id ? $this->model_catalog_category->getCategories($category_id) : array();
 		$this->data['third_categories'] = $sub_category_id ? $this->model_catalog_category->getCategories($sub_category_id) : array();
-		$this->data['manufacturers'] = $this->model_catalog_manufacturer->getManufacturers();
+		$this->data['manufacturers'] = $this->model_catalog_manufacturer->getAllManufacturersMin();
 
 		$this->data['categories'] = $this->cache->get('category.module.search.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'));
 
@@ -234,4 +234,3 @@ class ControllerModuleSearch extends Controller {
 		$this->render();
 	}
 }
-

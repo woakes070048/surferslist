@@ -214,11 +214,11 @@
 									  <option value="1"<?php if ($manufacturer_id == 1) { ?> selected="selected"<?php } ?>>-- Other Brand --</option>
 									  <?php if ($manufacturers) { ?>
 									  <?php foreach ($manufacturers as $manufacturer) { ?>
-									  <?php if ($manufacturer['manufacturer_id'] == 0) continue; ?>
-									  <?php if ($manufacturer['manufacturer_id'] == $manufacturer_id) { ?>
-									  <option value="<?php echo $manufacturer['manufacturer_id']; ?>" selected="selected"><?php echo $manufacturer['name']; ?></option>
+									  <?php if ($manufacturer['id'] == 0) continue; ?>
+									  <?php if ($manufacturer['id'] == $manufacturer_id) { ?>
+									  <option value="<?php echo $manufacturer['id']; ?>" selected="selected"><?php echo $manufacturer['name']; ?></option>
 									  <?php } else { ?>
-									  <option value="<?php echo $manufacturer['manufacturer_id']; ?>"><?php echo $manufacturer['name']; ?></option>
+									  <option value="<?php echo $manufacturer['id']; ?>"><?php echo $manufacturer['name']; ?></option>
 									  <?php } ?>
 									  <?php } ?>
 									  <?php } ?>
@@ -1121,7 +1121,7 @@
                     <input type="hidden" name="text_select_manufacturer_count" value="<?php echo $text_select_manufacturer_count; ?>" />
                     <input type="hidden" name="text_select_zone" value="<?php echo $text_select_zone; ?>" />
                     <input type="hidden" name="manufacturers_all" value="<?php echo htmlspecialchars(json_encode($manufacturers), ENT_COMPAT); ?>" />
-                    <input type="hidden" name="categories_complete" value="<?php echo htmlspecialchars(json_encode($categories_complete), ENT_COMPAT); ?>" />
+                    <input type="hidden" name="categories_complete" value="<?php echo $categories_complete; ?>" />
 
 				</div>
                 <?php echo $content_bottom; ?>

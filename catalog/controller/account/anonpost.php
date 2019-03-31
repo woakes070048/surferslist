@@ -225,14 +225,13 @@ class ControllerAccountAnonPost extends Controller {
 				$manufacturer_thumb = $this->model_tool_image->resize($manufacturer_info['image'], $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height'), 'fw');
 			}
 
-			$manufacturers = $this->model_catalog_manufacturer->getManufacturers();
+			$manufacturers = $this->model_catalog_manufacturer->getAllManufacturersMin();
 		}
 
 		$this->data['manufacturer_id'] = $manufacturer_id;
 		$this->data['manufacturer_name'] = $manufacturer_name;
 		$this->data['manufacturer_thumb'] = $manufacturer_thumb;
 		$this->data['manufacturers'] = $manufacturers;
-		$this->data['manufacturers_all'] = htmlspecialchars(json_encode($manufacturers), ENT_COMPAT);
 
 		$this->data['currency'] = $this->model_localisation_currency->getCurrencyByCode($this->currency->getCode());
 		$this->data['price'] = isset($this->request->post['price']) ? $this->request->post['price'] : '';

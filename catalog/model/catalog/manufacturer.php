@@ -161,23 +161,7 @@ class ModelCatalogManufacturer extends Model {
 
 			$query = $this->db->query($sql);
 
-			if (!empty($data['images_included'])) {
-				$this->load->model('tool/image');
-
-				foreach ($query->rows as $result) {
-					$image_resized = !empty($result['image']) ? $this->model_tool_image->resize($result['image'], 188, 188, 'fw') : ''; // $this->config->get('config_image_category_width'), $this->config->get('config_image_category_height')
-
-					$manufacturer_data[] = array(
-						'manufacturer_id'	=> $result['manufacturer_id'],
-						'image_resized'		=> $image_resized,
-						'name'				=> $result['name'],
-						'product_count'		=> $result['product_count'],
-						'sort_order'		=> $result['sort_order']
-					);
-				}
-			} else {
-				$manufacturer_data = $query->rows;
-			}
+			$manufacturer_data = $query->rows;
 
 			if ($cache_results && !$random) {
 				$this->cache->set('manufacturer.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $cache, $manufacturer_data, $this->cache_expires);
@@ -185,6 +169,40 @@ class ModelCatalogManufacturer extends Model {
 		}
 
 		return $manufacturer_data;
+	}
+
+	public function getAllManufacturersMin() {
+		$manufacturer_data = $this->cache->get('manufacturer.all.min.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'));
+
+		if ($manufacturer_data === false) {
+			$manufacturer_data = array();
+
+			$manufacturers = $this->getManufacturers();
+
+			$this->load->model('tool/image');
+
+			foreach ($manufacturers as $result) {
+				$image_resized = !empty($result['image']) ? $this->model_tool_image->resize($result['image'], 188, 188, 'fw') : ''; // $this->config->get('config_image_category_width'), $this->config->get('config_image_category_height')
+
+				$manufacturer_data[] = array(
+					'id'		=> (int)$result['manufacturer_id'],
+					'image'		=> $image_resized,
+					'name'		=> $result['name']
+				);
+			}
+
+			$this->cache->set('manufacturer.all.min.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'), $manufacturer_data, $this->cache_expires);
+		}
+
+		return $manufacturer_data;
+	}
+
+	public function getManufacturerIds($data) {
+		$manufacturers = $this->getManufacturers($data);
+
+		return array_map(function ($item) {
+			return (int)$item['manufacturer_id'];
+		}, $manufacturers);
 	}
 
 	private function getManufacturerProductCategories($manufacturer_id) {
@@ -335,6 +353,4 @@ class ModelCatalogManufacturer extends Model {
 			WHERE manufacturer_id = '" . (int)$manufacturer_id . "'
 		");
 	}
-
 }
-

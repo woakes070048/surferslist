@@ -77,7 +77,18 @@ class ModelCatalogCategory extends Model {
 		return $category_data;
 	}
 
-	public function getAllCategories($data) {
+	public function getCategoriesMin($parent_id = 0) {
+		$categories = $this->getCategories($parent_id);
+
+		return array_map(function ($item) {
+			return array(
+				'category_id' 	=> (int)$item['category_id'],
+				'name'			=> $item['name']
+			);
+		}, $categories);
+	}
+
+	public function getAllCategories($data = array()) {
 		$cache = md5(http_build_query($data));
 		$all_category_data = $this->cache->get('category.all.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $cache);
 
@@ -86,12 +97,16 @@ class ModelCatalogCategory extends Model {
 
 			$sql = "
 				SELECT cp.category_id AS category_id
-				, cd2.name AS name
-				, c1.status
-				, c1.image
 				, c1.parent_id
-				, c1.sort_order
 				, cp.level
+				, cd2.name AS name
+				, c1.image
+				, GROUP_CONCAT(cp.path_id ORDER BY cp.level SEPARATOR '_') AS path
+				, GROUP_CONCAT(cd1.name ORDER BY cp.level SEPARATOR '" . $this->language->get('text_separator') . "') AS path_name
+				, GROUP_CONCAT(LPAD(c2.sort_order,10,'0') ORDER BY cp.level) AS sort_order_path
+				, GROUP_CONCAT(c2.sort_order ORDER BY cp.level SEPARATOR '" . $this->language->get('text_separator') . "') AS sort_order_path_display
+				, c1.sort_order
+				, c1.status
 				, (SELECT COUNT(p.product_id) AS total
 					FROM " . DB_PREFIX . "product p
 					INNER JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id)
@@ -102,10 +117,6 @@ class ModelCatalogCategory extends Model {
 					AND p.member_approved = '1'
 					AND p.date_expiration >= NOW()
 					AND p.date_available <= NOW()) AS product_count
-				, GROUP_CONCAT(cd1.name ORDER BY cp.level SEPARATOR '" . $this->language->get('text_separator') . "') AS path_name
-				, GROUP_CONCAT(cp.path_id ORDER BY cp.level SEPARATOR '_') AS path
-				, GROUP_CONCAT(c2.sort_order ORDER BY cp.level SEPARATOR '" . $this->language->get('text_separator') . "') AS sort_order_path_display
-				, GROUP_CONCAT(LPAD(c2.sort_order,10,'0') ORDER BY cp.level) AS sort_order_path
 				FROM " . DB_PREFIX . "category_path cp
 				LEFT JOIN " . DB_PREFIX . "category c1 ON (cp.category_id = c1.category_id)
 				LEFT JOIN " . DB_PREFIX . "category c2 ON (cp.path_id = c2.category_id)
@@ -177,34 +188,15 @@ class ModelCatalogCategory extends Model {
 
 			$query = $this->db->query($sql);
 
-			if (!empty($data['filter_complete'])) {
-				$this->load->model('catalog/manufacturer');
-			}
-
 			foreach ($query->rows as $result) {
-				$category_children = !empty($data['filter_complete']) ? $this->getCategories($result['category_id']) : array();
-
-				if (!empty($data['filter_complete']) && $result['level'] == '0' && $result['category_id'] == $result['path']) {
-					$manufacturers_data = array(
-						'filter_category_id' 		=> $result['category_id'],
-						'include_parent_categories' => true,
-						'images_included' 			=> true
-					);
-
-					$category_manufacturers = $this->model_catalog_manufacturer->getManufacturers($manufacturers_data);
-				} else {
-					$category_manufacturers = array();
-				}
-
 				$all_category_data[] = array(
 					'category_id' 				=> $result['category_id'],
 					'parent_id'   				=> $result['parent_id'],
+					'level'        				=> $result['level'],
 					'name'        				=> $result['name'],
 					'path'        				=> $result['path'],
 					'path_name'	  				=> $result['path_name'],
 					'image'  	  				=> $result['image'],
-					'children'	  				=> $category_children,
-					'manufacturers'				=> $category_manufacturers,
 					'product_count' 			=> $result['product_count'],
 					'sort_order'  				=> $result['sort_order'],
 					'sort_order_path'			=> $result['sort_order_path'],
@@ -220,11 +212,44 @@ class ModelCatalogCategory extends Model {
 	}
 
 	public function getAllCategoriesComplete() {
-		$data = array(
-			'filter_complete' => true
-		);
+		$category_data = $this->cache->get('category.all.complete.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'));
 
-		return $this->getAllCategories($data);
+		if ($category_data === false) {
+			$category_data = array();
+			$category_info = array();
+
+			$categories = $this->getAllCategories();
+
+			$this->load->model('catalog/manufacturer');
+
+			foreach ($categories as $result) {
+				$category_manufacturers = array();
+
+				$category_info = array(
+					'id' 			=> (int)$result['category_id'],
+					'parent_id'   	=> (int)$result['parent_id'],
+					'name'        	=> $result['name'],
+					'path'        	=> $result['path'],
+					'path_name'	  	=> $result['path_name'],
+					'image'  	  	=> $result['image'],
+					'order'			=> $result['sort_order_path'],
+					'children'		=> $this->getCategoriesMin($result['category_id'])
+				);
+
+				if ($result['level'] == '0' && $result['category_id'] == $result['path']) {
+					$category_info['manufacturer_ids'] = $this->model_catalog_manufacturer->getManufacturerIds(array(
+						'filter_category_id' 		=> $result['category_id'],
+						'include_parent_categories' => true
+					));
+				}
+
+				$category_data[] = $category_info;
+			}
+
+			$this->cache->set('category.all.complete.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'), $category_data, $this->cache_expires);
+		}
+
+		return $category_data;
 	}
 
 	public function getCategoriesNames() {
@@ -358,4 +383,3 @@ class ModelCatalogCategory extends Model {
 	}
 
 }
-

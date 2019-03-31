@@ -815,7 +815,8 @@ class ControllerAccountProduct extends Controller {
 
 		// Categories
 		if ($this->config->get('member_data_field_category')) {
-			$this->data['categories_complete'] = $this->model_catalog_category->getAllCategoriesComplete();
+			$this->data['categories_complete'] = htmlspecialchars(json_encode($this->model_catalog_category->getAllCategoriesComplete()), ENT_COMPAT);
+
 			$this->data['categories'] = $this->model_catalog_category->getCategories(0);
 
 			if (isset($this->request->post['category_id'])) {
@@ -874,7 +875,7 @@ class ControllerAccountProduct extends Controller {
 				$this->data['manufacturer_name'] = '';
 			}
 
-			$this->data['manufacturers'] = $this->model_catalog_manufacturer->getManufacturers();
+			$this->data['manufacturers'] = $this->model_catalog_manufacturer->getAllManufacturersMin();
 		}
 
 		// Quantity, Minimum, Subtract
@@ -2218,4 +2219,3 @@ class ControllerAccountProduct extends Controller {
 	}
 
 }
-
