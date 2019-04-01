@@ -36,7 +36,7 @@
                 </div>
 
                 <?php if ($categories || $manufacturer || $member) { ?>
-                <div id="listings-container">
+                <div class="">
                     <ul id="listings" class="brands-list">
                         <?php foreach ($categories as $category) { ?>
                         <li class="listing-item grid-item" data-filter-class='["category"]'>

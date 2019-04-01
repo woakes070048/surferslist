@@ -838,7 +838,7 @@ $(document).ready(function() {
             } else {
                 $thisSlideshow.imagesLoaded(function() {
                     $thisSlideshow.find('.slideshow-carousel').slick(sliderOptions);
-                    $thisSlideshow.find('.loader').fadeOut(300);
+                    $thisSlideshow.find('.loader').fadeOut(200);
                     $thisSlideshow.addClass('widget-shadow');
 
                     if ($searchWidget.length) {

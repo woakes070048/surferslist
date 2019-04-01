@@ -193,7 +193,7 @@ if (listing_id) {
                 $('#image-small').attr('src', smallImage);
 
                 $('.left-item .thumb').imagesLoaded(function() {
-                    $('.left-item .thumb .loader').fadeOut(300, function() {
+                    $('.left-item .thumb .loader').fadeOut(200, function() {
                         $(this).remove();
                     });
             	});

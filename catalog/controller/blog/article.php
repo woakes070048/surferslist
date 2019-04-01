@@ -90,7 +90,10 @@ class ControllerBlogArticle extends Controller {
 
             $this->data['heading_title'] = $heading_title;
 
-            $this->data['related_products'] = $this->getChild('product/data/list', $this->model_blog_article->getRelatedProduct($blog_article_id));
+            $this->data['related_products'] = $this->getChild('product/data/list', array(
+    			'products' => $this->model_blog_article->getRelatedProduct($blog_article_id),
+    			'more' => ''
+            ));
 
             $this->data['sidebar'] = $this->getChild('blog/sidebar', array(
                 'query_params'  => $query_params,
@@ -107,11 +110,13 @@ class ControllerBlogArticle extends Controller {
 			$max_prevnext_length = 35;
 			$nav_cols = 1;
 			$more_url = '';
+			$more_title = '';
 			$prev_url = '';
 			$prev_title = '';
 			$next_url = '';
 			$next_title = '';
 			$back_url = '';
+			$back_title = $this->language->get('text_back');
 			$url = '';
 
 			$category_info = end($article_data['categories']);
@@ -121,15 +126,15 @@ class ControllerBlogArticle extends Controller {
 				$url .= '&path_blog=' . $category_info['path_blog'];
 
 				$more_url = $this->url->link('blog/category', $url);
-				$this->data['more_title'] = utf8_strlen($category_info['name']) > $max_prevnext_length ? utf8_substr($category_info['name'], 0, $max_prevnext_length) . $this->language->get('text_ellipses') : $category_info['name'];
+				$more_title = utf8_strlen($category_info['name']) > $max_prevnext_length ? utf8_substr($category_info['name'], 0, $max_prevnext_length) . $this->language->get('text_ellipses') : $category_info['name'];
 			} else if ($article_data['member_id']) {
 				$filter_member_account_id = $article_data['member_id'];
 
 				$more_url = $this->url->link('blog/search', 'author=' . $article_data['member_id'] . $url);
-				$this->data['more_title'] = utf8_strlen($article_data['author_name']) > $max_prevnext_length ? utf8_substr($article_data['author_name'], 0, $max_prevnext_length) . $this->language->get('text_ellipses') : $article_data['author_name'];
+				$more_title = utf8_strlen($article_data['author_name']) > $max_prevnext_length ? utf8_substr($article_data['author_name'], 0, $max_prevnext_length) . $this->language->get('text_ellipses') : $article_data['author_name'];
 			} else {
 				$more_url = $this->url->link('blog/home');
-				$this->data['more_title'] = $this->language->get('heading_blog_home');
+				$more_title = $this->language->get('heading_blog_home');
 			}
 
 			$sort = $this->getQueryParam('sort') ?: 'a.sort_order';
@@ -183,11 +188,11 @@ class ControllerBlogArticle extends Controller {
 				&& ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl')))
 				&& (!$article_prev || strpos($this->request->server['HTTP_REFERER'], $prev_url) === false)
 				&& (!$article_next || strpos($this->request->server['HTTP_REFERER'], $next_url) === false)) {
-				$this->session->data['back_url'] = $this->request->server['HTTP_REFERER'];
+				$back_url = $this->request->server['HTTP_REFERER'];
 			}
 
-			if (isset($this->session->data['back_url'])) {
-				$back_url = $this->session->data['back_url'];
+			if ($back_url) {
+				$this->session->data['back_url'] = $back_url;
 			}
 
 			if ($preview_article) {
@@ -197,11 +202,13 @@ class ControllerBlogArticle extends Controller {
 			}
 
 			$this->data['more_url'] = $more_url;
+			$this->data['more_title'] = $more_title;
 			$this->data['prev_url'] = $prev_url;
 			$this->data['prev_title'] = $prev_title;
 			$this->data['next_url'] = $next_url;
 			$this->data['next_title'] = $next_title;
 			$this->data['back_url'] = $back_url;
+			$this->data['back_title'] = $back_title;
 			$this->data['nav_cols'] = $nav_cols;
 
 			$this->data['preview_mode'] = $preview_article;

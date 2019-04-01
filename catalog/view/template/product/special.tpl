@@ -66,7 +66,7 @@
 
                 <?php if ($products) { ?>
 
-                <div id="grid-items-container">
+                <div class="grid-items-container">
 
             		<?php echo $products; ?>
 

@@ -61,12 +61,10 @@
 
                         <?php if ($image) { ?>
                         <div class="article-image-wrapper clearafter">
-                            <div class="grid-6 offset-1">
-                                <div class="article-image image image-border">
-                                    <a href="<?php echo $popup; ?>" class="lightbox" rel="article-images" data-small-image="<?php echo $thumb; ?>">
-                                        <img src="<?php echo $image; ?>" itemprop="image" />
-                                    </a>
-                                </div>
+                            <div class="article-image image image-border">
+                                <a href="<?php echo $popup; ?>" class="lightbox" rel="article-images" data-small-image="<?php echo $thumb; ?>">
+                                    <img src="<?php echo $image; ?>" itemprop="image" />
+                                </a>
                             </div>
                         </div>
                         <?php } ?>
@@ -106,15 +104,15 @@
                         <div class="prevnext full">
                             <ul class="pager column<?php echo $nav_cols; ?>">
                                 <?php if ($prev_url) { ?>
-                                <li class="prev"><a href="<?php echo $prev_url; ?>" rel="tooltip" title="<?php echo $prev_title;?>"><i class="fa fa-chevron-circle-left"></i><span class="name hidden"><?php echo $prev_title;?></span><span class="dir"><?php echo $text_prev; ?></span></a></li>
+                                <li class="prev"><a href="<?php echo $prev_url; ?>" rel="tooltip" title="<?php echo $prev_title;?>"><i class="fa fa-chevron-circle-left"></i><span class="name"><?php echo $prev_title;?></span><span class="dir"><?php echo $text_prev; ?></span></a></li>
                                 <?php } ?>
                                 <?php if ($back_url) { ?>
-                                <li class="back"><a href="<?php echo $back_url; ?>" rel="tooltip" title="<?php echo $button_back;?>"><i class="fa fa-undo"></i><span class="dir"><?php echo $button_back; ?></span></a></li>
+                                <li class="back"><a href="<?php echo $back_url; ?>" rel="tooltip" title="<?php echo $button_back;?>"><i class="fa fa-undo"></i><span class="name"><?php echo $back_title;?></span><span class="dir"><?php echo $button_back; ?></span></a></li>
                                 <?php } else { ?>
-                                <li class="more"><a href="<?php echo $more_url; ?>" rel="tooltip" title="<?php echo $more_title;?>"><i class="fa fa-th"></i><span class="name hidden"><?php echo $more_title;?></span><span class="dir"><?php echo $text_more;?></span></a></li>
+                                <li class="more"><a href="<?php echo $more_url; ?>" rel="tooltip" title="<?php echo $more_title;?>"><i class="fa fa-th"></i><span class="name"><?php echo $more_title;?></span><span class="dir"><?php echo $text_more;?></span></a></li>
                                 <?php } ?>
                                 <?php if ($next_url) { ?>
-                                <li class="next"><a href="<?php echo $next_url; ?>" rel="tooltip" title="<?php echo $next_title;?>"><i class="fa fa-chevron-circle-right"></i><span class="name hidden"><?php echo $next_title;?></span><span class="dir"><?php echo $text_next; ?></span></a></li>
+                                <li class="next"><a href="<?php echo $next_url; ?>" rel="tooltip" title="<?php echo $next_title;?>"><i class="fa fa-chevron-circle-right"></i><span class="name"><?php echo $next_title;?></span><span class="dir"><?php echo $text_next; ?></span></a></li>
                                 <?php } ?>
                             </ul>
                         </div>
@@ -166,7 +164,7 @@
                     <h2><?php echo $text_related_product; ?></h2>
 
                     <section id="related-listings" class="widget-module">
-                        <div id="grid-items-container">
+                        <div class="grid-items-container">
                             <?php echo $related_products; ?>
                         </div>
                     </section>

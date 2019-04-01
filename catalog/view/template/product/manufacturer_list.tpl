@@ -87,45 +87,50 @@
                 <?php echo $content_top; ?>
 
                 <?php if ($categories) { ?>
-                <div id="grid-items-container">
+                <div class="grid-items-container">
+                	<div class="progress-bar"></div>
+                	<div class="information loading">
+                		<p><?php echo $text_loading; ?></p>
+                		<span class="icon"><i class="fa fa-spin fa-circle-o-notch icon-spin"></i></span>
+                	</div>
                 	<div class="grid global-grid-item">
-                	<div class="grid-sizer"></div>
-					<?php foreach ($categories as $category) { ?>
-						<?php if ($category['manufacturer']) { ?>
-							<?php for ($i = 0; $i < count($category['manufacturer']);) { ?>
-								<?php $j = $i + ceil(count($category['manufacturer']) / 4); ?>
-								<?php for (; $i < $j; $i++) { ?>
-									<?php if (isset($category['manufacturer'][$i])) { ?>
-                                    <article class="grid-item runmember" data-filter-class='["<?php echo $category["name"]; ?>"]'>
-                                        <div class="image">
-                                            <?php if ($category['manufacturer'][$i]['image']) { ?>
-                                            <a href="<?php echo $category['manufacturer'][$i]['href']; ?>" title="<?php echo $category['manufacturer'][$i]['name']; ?>">
-                                                <img src="<?php echo $category['manufacturer'][$i]['image']; ?>" alt="<?php echo $category['manufacturer'][$i]['name']; ?>" />
-                                            </a>
-                                            <?php } ?>
-                            				<span class="description">
+                    	<div class="grid-sizer"></div>
+    					<?php foreach ($categories as $category) { ?>
+    						<?php if ($category['manufacturer']) { ?>
+    							<?php for ($i = 0; $i < count($category['manufacturer']);) { ?>
+    								<?php $j = $i + ceil(count($category['manufacturer']) / 4); ?>
+    								<?php for (; $i < $j; $i++) { ?>
+    									<?php if (isset($category['manufacturer'][$i])) { ?>
+                                        <article class="grid-item runmember" data-filter-class='["<?php echo $category["name"]; ?>"]'>
+                                            <div class="image">
+                                                <?php if ($category['manufacturer'][$i]['image']) { ?>
                                                 <a href="<?php echo $category['manufacturer'][$i]['href']; ?>" title="<?php echo $category['manufacturer'][$i]['name']; ?>">
-                                                    <?php if (!empty($category['manufacturer'][$i]['description'])) { ?>
-                                					<span class="listings">
-                                						<?php echo $category['manufacturer'][$i]['description']; ?>
-                                					</span>
-                                					<?php } ?>
+                                                    <img src="<?php echo $category['manufacturer'][$i]['image']; ?>" alt="<?php echo $category['manufacturer'][$i]['name']; ?>" />
                                                 </a>
-                            				</span>
-                                        </div>
-                                        <div class="pannel">
-                                            <div class="info">
-                                                <header>
-                            						<h3><a href="<?php echo $category['manufacturer'][$i]['href']; ?>" title="<?php echo $category['manufacturer'][$i]['name']; ?>"><?php echo $category['manufacturer'][$i]['name']; ?></a></h3>
-                            					</header>
+                                                <?php } ?>
+                                				<span class="description">
+                                                    <a href="<?php echo $category['manufacturer'][$i]['href']; ?>" title="<?php echo $category['manufacturer'][$i]['name']; ?>">
+                                                        <?php if (!empty($category['manufacturer'][$i]['description'])) { ?>
+                                    					<span class="listings">
+                                    						<?php echo $category['manufacturer'][$i]['description']; ?>
+                                    					</span>
+                                    					<?php } ?>
+                                                    </a>
+                                				</span>
                                             </div>
-                                        </div>
-                                    </article>
-									<?php } ?>
-								<?php } ?>
-							<?php } ?>
-						<?php } ?>
-					<?php } ?>
+                                            <div class="pannel">
+                                                <div class="info">
+                                                    <header>
+                                						<h3><a href="<?php echo $category['manufacturer'][$i]['href']; ?>" title="<?php echo $category['manufacturer'][$i]['name']; ?>"><?php echo $category['manufacturer'][$i]['name']; ?></a></h3>
+                                					</header>
+                                                </div>
+                                            </div>
+                                        </article>
+    									<?php } ?>
+    								<?php } ?>
+    							<?php } ?>
+    						<?php } ?>
+    					<?php } ?>
                     </div>
                 </div>
 
