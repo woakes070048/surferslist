@@ -3290,11 +3290,6 @@ table .success, table .warning, table .attention, table .information {
     margin: 9px;
 }
 
-.prevnext.full li i {
-    top: 50%;
-    margin-top: -8px;
-}
-
 .prevnext li i {
     position: absolute;
     left: 0;
@@ -7824,6 +7819,11 @@ a.highlight, b.highlight, i.highlight, span.highlight {
     .my-listings table .enable-disable-buttons .button > span[class^="hidden"] {
         display: inline !important;
     }
+
+    .prevnext.full li i {
+        top: 50%;
+        margin-top: -8px;
+    }
 }
 
 /* L and larger screen sizes */
@@ -9202,10 +9202,6 @@ a.highlight, b.highlight, i.highlight, span.highlight {
 
     .product-page .layout .right-item > .widget, .product-page .left-item {
         margin-bottom: 0;
-    }
-
-    .product-page .left-item .thumb {
-        padding: 0;
     }
 
     .grid-1, .grid-2, .grid-3, .grid-4, .grid-6, .grid-8 {
