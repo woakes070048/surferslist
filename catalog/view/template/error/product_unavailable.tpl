@@ -36,8 +36,8 @@
                 </div>
 
                 <?php if ($categories || $manufacturer || $member) { ?>
-                <div class="">
-                    <ul id="listings" class="brands-list">
+                <div class="listing-items-container">
+                    <ul class="listing-items brands-list">
                         <?php foreach ($categories as $category) { ?>
                         <li class="listing-item grid-item" data-filter-class='["category"]'>
                             <a href="<?php echo $category['href']; ?>">

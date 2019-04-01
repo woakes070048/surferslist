@@ -58,8 +58,13 @@
                 <?php echo $content_top; ?>
 
 				<?php if ($indexes) { ?>
-				<div class="">
-					<ul id="listings" class="brands-list">
+				<div class="listing-items-container">
+                	<div class="progress-bar"></div>
+                	<div class="information loading">
+                		<p><?php echo $text_loading; ?></p>
+                		<span class="icon"><i class="fa fa-spin fa-circle-o-notch icon-spin"></i></span>
+                	</div>
+					<ul class="listing-items brands-list">
 						<?php foreach ($indexes as $index) { ?>
 							<?php if ($index['name']) { ?>
 								<?php for ($i = 0; $i < count($index['category']);) { ?>
