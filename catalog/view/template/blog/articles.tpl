@@ -1,10 +1,10 @@
-<div class="progress-bar"></div>
-<div class="information loading">
-	<p><?php echo $text_loading; ?></p>
-	<span class="icon"><i class="fa fa-spin fa-circle-o-notch icon-spin"></i></span>
-</div>
-<div id="listings-container">
-	<div class="list-articles" id="listings">
+<div class="listing-items-container">
+	<div class="progress-bar"></div>
+	<div class="information loading">
+		<p><?php echo $text_loading; ?></p>
+		<span class="icon"><i class="fa fa-spin fa-circle-o-notch icon-spin"></i></span>
+	</div>
+	<div class="listing-items list-articles">
 		<?php foreach ($articles as $article) { ?>
 		<article class="widget listing-item blog-article">
 			<div class="content widget-no-heading clearafter">

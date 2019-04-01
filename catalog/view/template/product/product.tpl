@@ -440,7 +440,7 @@
                 <section class="container-center">
                     <div class="content-page">
                         <div id="related-listings" class="widget-module">
-                            <div id="grid-items-container">
+                            <div class="grid-items-container">
                         		<?php echo $products; ?>
                             </div>
                         </div>

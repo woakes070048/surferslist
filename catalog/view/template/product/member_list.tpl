@@ -118,77 +118,82 @@
                 <?php echo $content_top; ?>
 
                 <?php if ($members) { ?>
-                <div id="grid-items-container">
+                <div class="grid-items-container">
+                	<div class="progress-bar"></div>
+                	<div class="information loading">
+                		<p><?php echo $text_loading; ?></p>
+                		<span class="icon"><i class="fa fa-spin fa-circle-o-notch icon-spin"></i></span>
+                	</div>
                 	<div class="grid global-grid-item">
-                	<div class="grid-sizer"></div>
-                    <?php foreach ($members as $member) { ?>
-                    <article class="grid-item runmember" data-filter-class='["<?php echo $member['key']; ?>"]'>
-                        <div class="image">
-                            <?php if ($member['image']) { ?>
-                            <a href="<?php echo $member['href']; ?>" title="<?php echo $member['name']; ?>">
-                                <img src="<?php echo $member['image']; ?>" alt="<?php echo $member['name']; ?>" />
-                            </a>
-                            <?php } ?>
-            				<span class="description">
+                    	<div class="grid-sizer"></div>
+                        <?php foreach ($members as $member) { ?>
+                        <article class="grid-item runmember" data-filter-class='["<?php echo $member['key']; ?>"]'>
+                            <div class="image">
+                                <?php if ($member['image']) { ?>
                                 <a href="<?php echo $member['href']; ?>" title="<?php echo $member['name']; ?>">
-                					<?php if ($member['text_products']) { ?>
-                					<span class="listings">
-                						<?php echo $member['text_products']; ?>
-                					</span>
-                					<?php } ?><?php if (!$custom_fields && isset($member['rating'])) { ?>
-                                    <span class="rating">
-                                        <span class="rating-stars view-star<?php echo $member['rating']; ?>">
-                                            <i class="fa fa-star icon_star star-color color1"></i>
-                                            <i class="fa fa-star icon_star star-color color2"></i>
-                                            <i class="fa fa-star icon_star star-color color3"></i>
-                                            <i class="fa fa-star icon_star star-color color4"></i>
-                                            <i class="fa fa-star icon_star star-color color5"></i>
-                                            <i class="fa fa-star icon_star star-dark dark1"></i>
-                                            <i class="fa fa-star icon_star star-dark dark2"></i>
-                                            <i class="fa fa-star icon_star star-dark dark3"></i>
-                                            <i class="fa fa-star icon_star star-dark dark4"></i>
-                                            <i class="fa fa-star icon_star star-dark dark5"></i>
-                                        </span>
-                                    </span>
-                                    <?php } ?>
+                                    <img src="<?php echo $member['image']; ?>" alt="<?php echo $member['name']; ?>" />
                                 </a>
-            				</span>
-                        </div>
-                        <div class="pannel">
-                            <div class="info">
-                                <header>
-            						<h3><a href="<?php echo $member['href']; ?>" title="<?php echo $member['name']; ?>"><?php echo $member['name']; ?></a></h3>
-                    					<?php if ($custom_fields && isset($member['rating'])) { ?>
-                    					<span class="rating" title="<?php echo $member['help_member_rating']; ?>" rel="tooltip" data-container="body">
-                    						<span class="rating-stars view-star<?php echo $member['rating']; ?>">
-                    							<i class="fa fa-star icon_star star-color color1"></i>
-                    							<i class="fa fa-star icon_star star-color color2"></i>
-                    							<i class="fa fa-star icon_star star-color color3"></i>
-                    							<i class="fa fa-star icon_star star-color color4"></i>
-                    							<i class="fa fa-star icon_star star-color color5"></i>
-                    							<i class="fa fa-star icon_star star-dark dark1"></i>
-                    							<i class="fa fa-star icon_star star-dark dark2"></i>
-                    							<i class="fa fa-star icon_star star-dark dark3"></i>
-                    							<i class="fa fa-star icon_star star-dark dark4"></i>
-                    							<i class="fa fa-star icon_star star-dark dark5"></i>
-                    						</span>
+                                <?php } ?>
+                				<span class="description">
+                                    <a href="<?php echo $member['href']; ?>" title="<?php echo $member['name']; ?>">
+                    					<?php if ($member['text_products']) { ?>
+                    					<span class="listings">
+                    						<?php echo $member['text_products']; ?>
                     					</span>
-                    					<?php } ?>
-            					</header>
-            					<?php if ($custom_fields) { ?>
-            					<footer class="member-socials">
-            						<a href="<?php echo $member['member_custom_field_01']; ?>" target="_blank" <?php if (!$entry_member_custom_field_01 || empty($member['member_custom_field_01'])) echo 'style="display:none;"'; ?>><span class="website social" title="<?php echo $entry_member_custom_field_01; ?>" rel="tooltip" data-container="body"><i class="fa fa-globe"></i></span></a>
-            						<a href="<?php echo $member['member_custom_field_02']; ?>" target="_blank" <?php if (!$entry_member_custom_field_02 || empty($member['member_custom_field_02'])) echo 'style="display:none;"'; ?>><span class="twitter social" title="<?php echo $entry_member_custom_field_02; ?>" rel="tooltip" data-container="body"><i class="fa fa-twitter"></i></span></a>
-            						<a href="<?php echo $member['member_custom_field_03']; ?>" target="_blank" <?php if (!$entry_member_custom_field_03 || empty($member['member_custom_field_03'])) echo 'style="display:none;"'; ?>><span class="facebook social" title="<?php echo $entry_member_custom_field_03; ?>" rel="tooltip" data-container="body"><i class="fa fa-facebook"></i></span></a>
-                                    <a href="<?php echo $member['member_custom_field_05']; ?>" target="_blank" <?php if (!$entry_member_custom_field_05 || empty($member['member_custom_field_05'])) echo 'style="display:none;"'; ?>><span class="instagram social" title="<?php echo $entry_member_custom_field_05; ?>" rel="tooltip" data-container="body"><i class="fa fa-instagram"></i></span></a>
-            						<a href="<?php echo $member['member_custom_field_04']; ?>" target="_blank" <?php if (!$entry_member_custom_field_04 || empty($member['member_custom_field_04'])) echo 'style="display:none;"'; ?>><span class="pinterest social" title="<?php echo $entry_member_custom_field_04; ?>" rel="tooltip" data-container="body"><i class="fa fa-pinterest"></i></span></a>
-            						<a href="<?php echo $member['member_custom_field_06']; ?>" target="_blank" <?php if (!$entry_member_custom_field_06 || empty($member['member_custom_field_06'])) echo 'style="display:none;"'; ?>><span class="other social" title="<?php echo $entry_member_custom_field_06; ?>" rel="tooltip" data-container="body"><i class="fa fa-link"></i></span></a>
-            					</footer>
-            					<?php } ?>
+                    					<?php } ?><?php if (!$custom_fields && isset($member['rating'])) { ?>
+                                        <span class="rating">
+                                            <span class="rating-stars view-star<?php echo $member['rating']; ?>">
+                                                <i class="fa fa-star icon_star star-color color1"></i>
+                                                <i class="fa fa-star icon_star star-color color2"></i>
+                                                <i class="fa fa-star icon_star star-color color3"></i>
+                                                <i class="fa fa-star icon_star star-color color4"></i>
+                                                <i class="fa fa-star icon_star star-color color5"></i>
+                                                <i class="fa fa-star icon_star star-dark dark1"></i>
+                                                <i class="fa fa-star icon_star star-dark dark2"></i>
+                                                <i class="fa fa-star icon_star star-dark dark3"></i>
+                                                <i class="fa fa-star icon_star star-dark dark4"></i>
+                                                <i class="fa fa-star icon_star star-dark dark5"></i>
+                                            </span>
+                                        </span>
+                                        <?php } ?>
+                                    </a>
+                				</span>
                             </div>
-                        </div>
-                    </article>
-                    <?php } ?>
+                            <div class="pannel">
+                                <div class="info">
+                                    <header>
+                						<h3><a href="<?php echo $member['href']; ?>" title="<?php echo $member['name']; ?>"><?php echo $member['name']; ?></a></h3>
+                        					<?php if ($custom_fields && isset($member['rating'])) { ?>
+                        					<span class="rating" title="<?php echo $member['help_member_rating']; ?>" rel="tooltip" data-container="body">
+                        						<span class="rating-stars view-star<?php echo $member['rating']; ?>">
+                        							<i class="fa fa-star icon_star star-color color1"></i>
+                        							<i class="fa fa-star icon_star star-color color2"></i>
+                        							<i class="fa fa-star icon_star star-color color3"></i>
+                        							<i class="fa fa-star icon_star star-color color4"></i>
+                        							<i class="fa fa-star icon_star star-color color5"></i>
+                        							<i class="fa fa-star icon_star star-dark dark1"></i>
+                        							<i class="fa fa-star icon_star star-dark dark2"></i>
+                        							<i class="fa fa-star icon_star star-dark dark3"></i>
+                        							<i class="fa fa-star icon_star star-dark dark4"></i>
+                        							<i class="fa fa-star icon_star star-dark dark5"></i>
+                        						</span>
+                        					</span>
+                        					<?php } ?>
+                					</header>
+                					<?php if ($custom_fields) { ?>
+                					<footer class="member-socials">
+                						<a href="<?php echo $member['member_custom_field_01']; ?>" target="_blank" <?php if (!$entry_member_custom_field_01 || empty($member['member_custom_field_01'])) echo 'style="display:none;"'; ?>><span class="website social" title="<?php echo $entry_member_custom_field_01; ?>" rel="tooltip" data-container="body"><i class="fa fa-globe"></i></span></a>
+                						<a href="<?php echo $member['member_custom_field_02']; ?>" target="_blank" <?php if (!$entry_member_custom_field_02 || empty($member['member_custom_field_02'])) echo 'style="display:none;"'; ?>><span class="twitter social" title="<?php echo $entry_member_custom_field_02; ?>" rel="tooltip" data-container="body"><i class="fa fa-twitter"></i></span></a>
+                						<a href="<?php echo $member['member_custom_field_03']; ?>" target="_blank" <?php if (!$entry_member_custom_field_03 || empty($member['member_custom_field_03'])) echo 'style="display:none;"'; ?>><span class="facebook social" title="<?php echo $entry_member_custom_field_03; ?>" rel="tooltip" data-container="body"><i class="fa fa-facebook"></i></span></a>
+                                        <a href="<?php echo $member['member_custom_field_05']; ?>" target="_blank" <?php if (!$entry_member_custom_field_05 || empty($member['member_custom_field_05'])) echo 'style="display:none;"'; ?>><span class="instagram social" title="<?php echo $entry_member_custom_field_05; ?>" rel="tooltip" data-container="body"><i class="fa fa-instagram"></i></span></a>
+                						<a href="<?php echo $member['member_custom_field_04']; ?>" target="_blank" <?php if (!$entry_member_custom_field_04 || empty($member['member_custom_field_04'])) echo 'style="display:none;"'; ?>><span class="pinterest social" title="<?php echo $entry_member_custom_field_04; ?>" rel="tooltip" data-container="body"><i class="fa fa-pinterest"></i></span></a>
+                						<a href="<?php echo $member['member_custom_field_06']; ?>" target="_blank" <?php if (!$entry_member_custom_field_06 || empty($member['member_custom_field_06'])) echo 'style="display:none;"'; ?>><span class="other social" title="<?php echo $entry_member_custom_field_06; ?>" rel="tooltip" data-container="body"><i class="fa fa-link"></i></span></a>
+                					</footer>
+                					<?php } ?>
+                                </div>
+                            </div>
+                        </article>
+                        <?php } ?>
                     </div>
                 </div>
 

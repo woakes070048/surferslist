@@ -517,21 +517,16 @@ div[class^="grid-"]:last-child, .grid-2+.grid-2, .grid-3+.grid-6, .grid-6+.grid-
     word-break: break-word;
 }
 
-.no-js #loader {
+.no-js .loading {
     display: none;
 }
 
-.js #loader {
+.js .loading {
     display: block;
 }
 
 .js .grid .grid-item {
     visibility: hidden;
-}
-
-.js #loader+.grid, .js #loader+#listings-container {
-    min-height: 250px;
-    max-height: 500px;
 }
 
 #languages {
@@ -2040,7 +2035,7 @@ table .success, table .warning, table .attention, table .information {
 }
 
 .loading p {
-    font-size: 26px;
+    font-size: 24px;
     font-style: italic;
 }
 
@@ -2730,7 +2725,7 @@ table .success, table .warning, table .attention, table .information {
     width: 152px;
 }
 
-.widget-module .buttons, #grid-items-container .buttons {
+.widget-module .buttons, .grid-items-container .buttons {
     padding: 30px 0 0;
 }
 
@@ -3240,10 +3235,15 @@ table .success, table .warning, table .attention, table .information {
 
 .prevnext span {
     display: block;
+    margin-left: 30px;
+}
+
+.prevnext .dir, .prevnext .name {
+    margin-top: 9px;
+    margin-bottom: 9px;
 }
 
 .prevnext .dir {
-    margin: 9px 0;
     text-transform: uppercase;
     letter-spacing: 3px;
     font-size: 10px;
@@ -3254,6 +3254,7 @@ table .success, table .warning, table .attention, table .information {
     float: left;
     text-align: center;
     height: 100%;
+    position: relative;
 }
 
 .prevnext.full li:first-child {
@@ -3289,19 +3290,34 @@ table .success, table .warning, table .attention, table .information {
     margin: 9px;
 }
 
+.prevnext.full li i {
+    top: 50%;
+    margin-top: -8px;
+}
+
 .prevnext li i {
-    float: left;
+    position: absolute;
+    left: 0;
 }
 
 .prevnext li:last-child i {
-    float: right;
+    left: initial;
+    right: 0;
+}
+
+.prevnext li:last-child span {
+    margin-left: 0;
+    margin-right: 30px;
 }
 
 .prevnext li:only-child i {
-    float: none;
-    position: absolute;
+    right: initial;
     left: 50%;
     margin-left: -45px;
+}
+
+.prevnext li:only-child span {
+    margin-left: 30px;
 }
 
 .prevnext.compact {
@@ -5730,14 +5746,15 @@ input[name="member[member_name]"]:valid {
     transition: all 0.6s;
 }
 
-/* #grid-items-container .inactive {opacity:0; visibility:hidden;} */
-#grid-items-container, .grid-items-container, #listings-container {
+.grid-items-container, .listing-items-container {
     position: relative;
     overflow: hidden;
     margin-bottom: 30px;
 }
 
-#grid-items-container .inactive, .grid-items-container .inactive {
+/* .grid-items-container .inactive {opacity:0; visibility:hidden;} */
+
+.grid-items-container .inactive {
     visibility: visible;
     opacity: 0.3;
     filter: alpha(opacity=30);
@@ -5921,7 +5938,7 @@ input[name="member[member_name]"]:valid {
 }
 
 /* GRID ITEMS SYSTEM */
-#grid-items-container, .grid-items-container {
+.grid-items-container {
     display: inline-block;
     position: relative;
     width: 100%;
@@ -5960,11 +5977,11 @@ input[name="member[member_name]"]:valid {
     transition: all 0.3s ease-out;
 }
 
-#listings > .listing-item {
+.listing-items > .listing-item {
     opacity: 0;
 }
 
-#listings.wookmark-initialised > .listing-item {
+.listing-items.wookmark-initialised > .listing-item {
     opacity: 1;
 }
 
@@ -9156,7 +9173,7 @@ a.highlight, b.highlight, i.highlight, span.highlight {
 }
 
 @media screen and (max-width:487px) {
-    .grid-sizer, #grid-items-container .grid .grid-item, .grid-items-container .grid .grid-item {
+    .grid-sizer, .grid-items-container .grid .grid-item {
         width: 49.45%;
     }
 }

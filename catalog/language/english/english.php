@@ -21,6 +21,7 @@ $_['text_page_of']          = 'Page %s of %s';
 $_['text_separator']        = ' &raquo; ';
 $_['text_ellipses']         = '...';
 $_['text_wait']             = 'Please Wait';
+$_['text_back']             = 'Previous';
 
 // HTML
 $_['html_link']             = '<a href="%1$s">%1$s</a>';

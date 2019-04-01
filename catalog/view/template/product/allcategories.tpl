@@ -58,7 +58,7 @@
                 <?php echo $content_top; ?>
 
 				<?php if ($indexes) { ?>
-				<div id="listings-container">
+				<div class="">
 					<ul id="listings" class="brands-list">
 						<?php foreach ($indexes as $index) { ?>
 							<?php if ($index['name']) { ?>

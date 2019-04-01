@@ -125,6 +125,11 @@
     margin-bottom: 12px;
 }
 
+.blog-article-page .article-image-wrapper {
+    max-width: 750px;
+    margin: 0 auto;
+}
+
 .blog-article-page .article-images .article-image {
     display: inline-block;
 }
@@ -267,6 +272,10 @@
 
     .blog-article-page .article-heading .article-stats > span + span {
         padding: 0 0 0 50px;
+    }
+
+    .blog-article-page .prevnext .pager .name {
+        display: none;
     }
 }
 
