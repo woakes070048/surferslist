@@ -356,7 +356,14 @@ class ControllerProductManufacturer extends Controller {
 			$this->redirect($this->url->link('error/not_found'));
 		}
 
-		$this->data['products'] = $this->getChild('product/data/list', $this->model_catalog_product->getProducts($data));
+		$url = $this->getQueryString(array('page'));
+
+		$this->data['pagination'] = $this->getPagination($product_total, $page, $limit, 'product/manufacturer/info', 'manufacturer_id=' . $this->request->get['manufacturer_id'], $url);
+
+		$this->data['products'] = $this->getChild('product/data/list', array(
+			'products' => $this->model_catalog_product->getProducts($data),
+			'more' =>$page < $max_pages ? $this->url->link('ajax/product/more', 'manufacturer_id=' . $this->request->get['manufacturer_id'] . $url . '&page=' . ($page + 1)) : ''
+		));
 
 		$this->data['refine'] = $this->getChild('module/refine', array(
 			'query_params' => $query_params,
@@ -396,10 +403,6 @@ class ControllerProductManufacturer extends Controller {
 			$this->cache->set('manufacturer.active.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'), $this->data['manufacturers_active'], 60 * 60 * 24); // 1 day cache expiration
 		}
 
-		$url = $this->getQueryString(array('page'));
-
-		$this->data['pagination'] = $this->getPagination($product_total, $page, $limit, 'product/manufacturer/info', 'manufacturer_id=' . $this->request->get['manufacturer_id'], $url);
-
 		// meta
 		$image_info = $this->model_tool_image->getFileInfo($image);
 
@@ -426,7 +429,6 @@ class ControllerProductManufacturer extends Controller {
 		$this->data['search'] = $this->url->link('product/search');
 		$this->data['reset'] = $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $this->request->get['manufacturer_id']) . $jumpTo;
 		$this->data['continue'] = $this->url->link('common/home');
-		$this->data['more'] = $page < $max_pages ? $this->url->link('ajax/product/more', 'manufacturer_id=' . $this->request->get['manufacturer_id'] . $url . '&page=' . ($page + 1)) : '';
 
 		$this->model_catalog_manufacturer->updateViewed($this->request->get['manufacturer_id']);
 
@@ -445,4 +447,3 @@ class ControllerProductManufacturer extends Controller {
 		$this->response->setOutput($this->render());
 	}
 }
-

@@ -174,6 +174,34 @@ class ControllerProductSearch extends Controller {
 
 		$this->data['text_compare'] = sprintf($this->language->get('text_compare'), (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));
 
+		// Sorts
+		$url = $this->getQueryString(array('sort', 'order'));
+
+		if ($expand_search) $url .= '&expand_search=' . json_encode($expand_search);
+
+		$this->addSort($this->language->get('text_default'), 'p.sort_order-ASC', $this->url->link('product/search', 'sort=p.sort_order&order=ASC' . $url));
+		$this->addSort($this->language->get('text_name_asc'), 'pd.name-ASC', $this->url->link('product/search', 'sort=pd.name&order=ASC' . $url));
+		$this->addSort($this->language->get('text_name_desc'), 'pd.name-DESC', $this->url->link('product/search', 'sort=pd.name&order=DESC' . $url));
+		$this->addSort($this->language->get('text_date_asc'), 'p.date_added-ASC', $this->url->link('product/search','&sort=p.date_added&order=ASC' . $url));
+		$this->addSort($this->language->get('text_date_desc'), 'p.date_added-DESC', $this->url->link('product/search','&sort=p.date_added&order=DESC' . $url));
+		$this->addSort($this->language->get('text_price_asc'), 'p.price-ASC', $this->url->link('product/search', 'sort=p.price&order=ASC' . $url));
+		$this->addSort($this->language->get('text_price_desc'), 'p.price-DESC', $this->url->link('product/search', 'sort=p.price&order=DESC' . $url));
+		$this->addSort($this->language->get('text_model_asc'), 'p.model-ASC', $this->url->link('product/search', 'sort=p.model&order=ASC' . $url));
+		$this->addSort($this->language->get('text_model_desc'), 'p.model-DESC', $this->url->link('product/search', 'sort=p.model&order=DESC' . $url));
+		$this->addSort($this->language->get('text_random'), 'random-' . $order, $this->url->link('product/search', '&sort=random' . $url));
+
+		$this->data['sorts'] = $this->getSorts();
+		$this->data['random'] = $this->url->link('product/search', '&sort=random' . $url);
+
+		// Limits
+		$url = $this->getQueryString(array('limit'));
+
+		if ($expand_search) {
+			$url .= '&expand_search=' . json_encode($expand_search);
+		}
+
+		$this->data['limits'] = $this->getLimits('product/search', $url);
+
 		$this->data['products'] = array();
 		$results = array();
 		$product_total = 0;
@@ -220,46 +248,21 @@ class ControllerProductSearch extends Controller {
 			$results = $this->model_catalog_product->getProducts($data);
 		}
 
-		if ($results) {
-			$this->load->model('tool/image');
-
-			$this->data['products'] = $this->getChild('product/data/list', $results);
-		}
-
-		// Sorts
-		$url = $this->getQueryString(array('sort', 'order'));
-
-		if ($expand_search) $url .= '&expand_search=' . json_encode($expand_search);
-
-		$this->addSort($this->language->get('text_default'), 'p.sort_order-ASC', $this->url->link('product/search', 'sort=p.sort_order&order=ASC' . $url));
-		$this->addSort($this->language->get('text_name_asc'), 'pd.name-ASC', $this->url->link('product/search', 'sort=pd.name&order=ASC' . $url));
-		$this->addSort($this->language->get('text_name_desc'), 'pd.name-DESC', $this->url->link('product/search', 'sort=pd.name&order=DESC' . $url));
-		$this->addSort($this->language->get('text_date_asc'), 'p.date_added-ASC', $this->url->link('product/search','&sort=p.date_added&order=ASC' . $url));
-		$this->addSort($this->language->get('text_date_desc'), 'p.date_added-DESC', $this->url->link('product/search','&sort=p.date_added&order=DESC' . $url));
-		$this->addSort($this->language->get('text_price_asc'), 'p.price-ASC', $this->url->link('product/search', 'sort=p.price&order=ASC' . $url));
-		$this->addSort($this->language->get('text_price_desc'), 'p.price-DESC', $this->url->link('product/search', 'sort=p.price&order=DESC' . $url));
-		$this->addSort($this->language->get('text_model_asc'), 'p.model-ASC', $this->url->link('product/search', 'sort=p.model&order=ASC' . $url));
-		$this->addSort($this->language->get('text_model_desc'), 'p.model-DESC', $this->url->link('product/search', 'sort=p.model&order=DESC' . $url));
-		$this->addSort($this->language->get('text_random'), 'random-' . $order, $this->url->link('product/search', '&sort=random' . $url));
-
-		$this->data['sorts'] = $this->getSorts();
-		$this->data['random'] = $this->url->link('product/search', '&sort=random' . $url);
-
-		// Limits
-		$url = $this->getQueryString(array('limit'));
-
-		if ($expand_search) {
-			$url .= '&expand_search=' . json_encode($expand_search);
-		}
-
-		$this->data['limits'] = $this->getLimits('product/search', $url);
-
 		// Pagination
 		$url = $this->getQueryString(array('page'));
 
 		if ($expand_search) $url .= '&expand_search=' . json_encode($expand_search);
 
 		$this->data['pagination'] = $this->getPagination($product_total, $page, $limit, 'product/search', '', $url);
+
+		if ($results) {
+			$this->load->model('tool/image');
+
+			$this->data['products'] = $this->getChild('product/data/list', array(
+				'products' => $results,
+				'more' => $page < $max_pages ? $this->url->link('ajax/product/more', $url . '&page=' . ($page + 1)) : ''
+			));
+		}
 
 		if ($page > 1) {
 			$heading_title .= ' - ' . sprintf($this->language->get('text_page_of'), $page, $max_pages);
@@ -284,8 +287,6 @@ class ControllerProductSearch extends Controller {
 		$this->data['reset'] = $this->url->link('product/search');
 		$this->data['continue'] = $this->url->link('common/home');
 
-		$this->data['more'] = $page < $max_pages ? $this->url->link('ajax/product/more', $url . '&page=' . ($page + 1)) : '';
-
 		if (!$this->data['products'] && (isset($this->session->data['shipping_country_id']) || isset($this->session->data['shipping_zone_id']) || isset($this->session->data['shipping_location']))) {
 			// Remove Location
 			$url = $this->getQueryString(array('location', 'country', 'state'));
@@ -309,4 +310,3 @@ class ControllerProductSearch extends Controller {
 		$this->response->setOutput($this->render());
 	}
 }
-

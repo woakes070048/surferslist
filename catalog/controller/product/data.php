@@ -18,8 +18,8 @@ class ControllerProductData extends Controller {
 		$this->setOutput($data);
 	}
 
-	protected function list($products) {
-        if (empty($products)) {
+	protected function list($data) {
+        if (empty($data)) {
             return array();
         }
 
@@ -30,7 +30,7 @@ class ControllerProductData extends Controller {
 		$this->data['text_loading'] = $this->language->get('text_loading');
 		$this->data['text_save'] = $this->language->get('text_save');
 		$this->data['text_tax'] = $this->language->get('text_tax');
-		// $this->data['text_more'] = $this->language->get('text_more');
+		$this->data['text_more'] = $this->language->get('text_more');
 		// $this->data['text_empty'] = $this->language->get('text_empty');
 
 		$this->data['button_quickview'] = $this->language->get('button_quickview');
@@ -42,13 +42,15 @@ class ControllerProductData extends Controller {
 
 		$product_data = array();
 
-		foreach ($products as $product) {
+		foreach ($data['products'] as $product) {
 			$this->getMinData($product, $customer_group_id);
 			$this->getNonCachedData($product);
 			$product_data[$product['product_id']] = $product;
 		}
 
 		$this->data['products'] = $product_data;
+
+		$this->data['more'] = $data['more'];
 
 		$this->template = 'template/product/products.tpl';
 
@@ -93,8 +95,8 @@ class ControllerProductData extends Controller {
 		$this->render();
 	}
 
-	protected function embed($products) {
-        if (empty($products)) {
+	protected function embed($data) {
+        if (empty($data)) {
             return array();
         }
 
@@ -112,7 +114,7 @@ class ControllerProductData extends Controller {
 
 		$product_data = array();
 
-		foreach ($products as $product) {
+		foreach ($data['products'] as $product) {
 			$this->getMinData($product, $customer_group_id);
 			$this->getNonCachedData($product);
 			$product['quickview'] = $this->url->link('embed/quickview', 'listing_id=' . $product['product_id'], 'SSL');

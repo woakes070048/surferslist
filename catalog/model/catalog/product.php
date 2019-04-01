@@ -1808,25 +1808,19 @@ class ModelCatalogProduct extends Model {
 		return $product_data;
 	}
 
-	public function getProductRelatedRandom($products, $max = 10) {
-		if (!$products) {
+	public function getProductRelatedRandom($product_ids, $max = 10) {
+		if (!$product_ids) {
 			return array();
 		}
 
 		$product_related = array();
 
-		$product_related_ids = array_map(function ($item) {
-			return $item['product_id'];
-		}, $products);
+		$random_keys = array_rand($product_ids, min(count($product_ids), $max));
 
-		if ($product_related_ids) {
-			$random_keys = array_rand($product_related_ids, min(count($product_related_ids), $max));
-
-			if (is_array($random_keys)) {
-				foreach ($random_keys as $key) {
-					$product_related_id = $product_related_ids[$key];
-					$product_related[$product_related_id] = $this->getProductShort($product_related_id);
-				}
+		if (is_array($random_keys)) {
+			foreach ($random_keys as $key) {
+				$product_related_id = $product_ids[$key];
+				$product_related[$product_related_id] = $this->getProductShort($product_related_id);
 			}
 		}
 
@@ -2191,4 +2185,3 @@ class ModelCatalogProduct extends Model {
 	}
 
 }
-

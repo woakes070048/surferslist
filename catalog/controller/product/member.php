@@ -664,7 +664,14 @@ class ControllerProductMember extends Controller {
 			$this->redirect($this->url->link('error/not_found'));
 		}
 
-		$this->data['products'] = $this->getChild('product/data/list', $this->model_catalog_product->getProducts($data));
+		$url = $this->getQueryString(array('page'));
+
+		$this->data['pagination'] = $this->getPagination($product_total, $page, $limit, 'product/member/info', 'member_id=' . $this->request->get['member_id'], $url, $jumpTo);
+
+		$this->data['products'] = $this->getChild('product/data/list', array(
+			'products' => $this->model_catalog_product->getProducts($data),
+			'more' => $page < $max_pages ? $this->url->link('ajax/product/more', 'member_id=' . $this->request->get['member_id'] . $url . '&page=' . ($page + 1)) : ''
+		));
 
 		$this->data['refine'] = $this->getChild('module/refine', array(
 			'query_params' => $query_params,
@@ -677,10 +684,6 @@ class ControllerProductMember extends Controller {
 			'display_more_options' => $display_more_options,
 			'forsale' => $forsale
 		));
-
-		$url = $this->getQueryString(array('page'));
-
-		$this->data['pagination'] = $this->getPagination($product_total, $page, $limit, 'product/member/info', 'member_id=' . $this->request->get['member_id'], $url, $jumpTo);
 
 		if ($page > 1) {
 			$heading_title .= ' - ' . sprintf($this->language->get('text_page_of'), $page, $max_pages);
@@ -708,7 +711,6 @@ class ControllerProductMember extends Controller {
 		$this->data['search'] = $this->url->link('product/search');
 		$this->data['reset'] = $this->url->link('product/member/info', 'member_id=' . $this->request->get['member_id']) . $jumpTo;
 		$this->data['continue'] = $this->url->link('common/home');
-		$this->data['more'] = $page < $max_pages ? $this->url->link('ajax/product/more', 'member_id=' . $this->request->get['member_id'] . $url . '&page=' . ($page + 1)) : '';
 		$this->data['url'] = $url;
 
 		$this->model_catalog_member->updateViewed($this->request->get['member_id']);
@@ -729,4 +731,3 @@ class ControllerProductMember extends Controller {
   	}
 
 }
-

@@ -120,32 +120,6 @@ class ControllerProductSpecial extends Controller {
 
 		$this->data['text_compare'] = sprintf($this->language->get('text_compare'), (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));
 
-		// get all special listings
-		$url = $this->getQueryString();
-
-		$this->data['products'] = array();
-
-		$data = array(
-			'filter_name'        => $search,
-			'filter_location'    => $filter_location,
-			'filter_country_id'  => $filter_country_id,
-			'filter_zone_id'     => $filter_zone_id,
-			'sort'  			 => $sort,
-			'order' 			 => $order,
-			'start' 			 => ($page - 1) * $limit,
-			'limit' 			 => $limit
-		);
-
-		$product_total = $this->model_catalog_product->getTotalProductSpecials($data);
-
-		$max_pages = $limit > 0 ? ceil($product_total / $limit) : 1;
-
-		if ($page <= 0 || $limit <= 0 || ($max_pages > 0 && $page > $max_pages)) {
-			$this->redirect($this->url->link('error/not_found'));
-		}
-
-		$this->data['products'] = $this->getChild('product/data/list', $this->model_catalog_product->getProductSpecials($data));
-
 		// Sorts
 		$url = $this->getQueryString(array('sort', 'order'));
 
@@ -170,7 +144,33 @@ class ControllerProductSpecial extends Controller {
 		$this->data['sorts'] = $this->getSorts();
 		$this->data['limits'] = $this->getLimits('product/special', $this->getQueryString(array('limit')));
 
+		$this->data['products'] = array();
+
+		$data = array(
+			'filter_name'        => $search,
+			'filter_location'    => $filter_location,
+			'filter_country_id'  => $filter_country_id,
+			'filter_zone_id'     => $filter_zone_id,
+			'sort'  			 => $sort,
+			'order' 			 => $order,
+			'start' 			 => ($page - 1) * $limit,
+			'limit' 			 => $limit
+		);
+
+		$product_total = $this->model_catalog_product->getTotalProductSpecials($data);
+
+		$max_pages = $limit > 0 ? ceil($product_total / $limit) : 1;
+
+		if ($page <= 0 || $limit <= 0 || ($max_pages > 0 && $page > $max_pages)) {
+			$this->redirect($this->url->link('error/not_found'));
+		}
+
 		$url = $this->getQueryString(array('page'));
+
+		$this->data['products'] = $this->getChild('product/data/list', array(
+			'products' => $this->model_catalog_product->getProductSpecials($data),
+			'more' => $page < $max_pages ? $this->url->link('ajax/product/more', $url . '&special=true' . '&page=' . ($page + 1)) : ''
+		));
 
 		$this->data['pagination'] = $this->getPagination($product_total, $page, $limit, 'product/special', '', $url);
 
@@ -205,9 +205,6 @@ class ControllerProductSpecial extends Controller {
 		$this->data['reset'] = $this->url->link('product/special');
 		$this->data['continue'] = $this->url->link('common/home');
 
-		// $this->data['more'] = $page < $max_pages ? $this->url->link('product/special', $url . '&page=' . ($page + 1)) : '';
-		$this->data['more'] = $page < $max_pages ? $this->url->link('ajax/product/more', $url . '&special=true' . '&page=' . ($page + 1)) : '';
-
 		if (!$this->data['products'] && (isset($this->session->data['shipping_country_id']) || isset($this->session->data['shipping_zone_id']) || isset($this->session->data['shipping_location']))) {
 			// Remove Location
 			$url = $this->getQueryString(array('filter_location', 'filter_country_id', 'filter_zone_id'));
@@ -231,4 +228,3 @@ class ControllerProductSpecial extends Controller {
 		$this->response->setOutput($this->render());
 	}
 }
-

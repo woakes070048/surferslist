@@ -175,7 +175,9 @@ class ControllerEmbedProfile extends Controller {
 			return $this->profileNotFound();
 		}
 
-		$this->data['products'] = $this->getChild('product/data/embed', $this->model_catalog_product->getProducts($data, false));
+		$this->data['products'] = $this->getChild('product/data/embed', array(
+			'products' => $this->model_catalog_product->getProducts($data, false)
+		));
 
 		$this->data['refine'] = $this->getChild('module/refine', array(
 			'query_params' => $query_params,
@@ -249,4 +251,3 @@ class ControllerEmbedProfile extends Controller {
 	}
 
 }
-

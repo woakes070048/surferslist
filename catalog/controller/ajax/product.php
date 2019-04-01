@@ -457,6 +457,7 @@ class ControllerAjaxProduct extends Controller {
 			// add to filter_ids
 			if ($module && $filter_listings) {
 				$filter_listings .= ',' . $result['product_id'];
+                $this->setQueryParam('filter_listings', $filter_listings);
 			}
 		}
 

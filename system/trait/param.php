@@ -2,6 +2,10 @@
 trait Param {
 	protected $params = array();
 
+	protected function setQueryParam($name, $value) {
+		$this->params[$name] = $value;
+	}
+
 	protected function setQueryParams($names = array()) {
 		foreach ($names as $name) {
 			$this->params[$name] = isset($this->request->get[$name]) ? $this->request->get[$name] : '';
@@ -40,4 +44,3 @@ trait Param {
 		return $url;
 	}
 }
-

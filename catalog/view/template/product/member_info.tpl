@@ -11,10 +11,12 @@
         </div>
     </header>
     <div class="layout">
+
 		<?php if (!empty($member_name)) { ?>
         <section id="user-profile" class="container-top">
 			<div class="content-page member-profile clearafter">
                 <?php echo $notification; ?>
+
 				<?php if ($member_banner) { ?>
 				<div class="grid-1 profile-banner-section hidden-small">
 					<div class="widget">
@@ -26,6 +28,7 @@
 					</div>
 				</div>
 				<?php } ?>
+
 				<div class="grid-4 profile-image-section">
 					<div class="widget">
                         <div class="content widget-no-heading member-image">
@@ -51,6 +54,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="grid-8 profile-details-section">
                     <div class="widget">
                         <div id="tabs" class="widget-top-nav">
@@ -205,10 +209,13 @@
 						<?php } ?>
                     </div>
                 </div>
+
                 <input type="hidden" name="profile_id" value="<?php echo $profile_id; ?>" />
 			</div>
         </section>
+
         <?php } else { ?>
+
         <div class="global-page">
             <div class="information">
                 <p><?php echo $text_error; ?></p>
@@ -219,6 +226,7 @@
 				<div class="right"><a href="<?php echo $continue; ?>" class="button button_alt"><?php echo $button_continue; ?></a></div>
             </div>
         </div>
+
         <?php } ?>
 
         <?php if ($text_products) { ?>
@@ -238,13 +246,6 @@
 
                 		<?php echo $products; ?>
 
-                    	<?php if ($more) { ?>
-                    	<div class="buttons">
-                    		<div class="center">
-                    			<a class="button button_highlight button_more bigger load-more icon" href="<?php echo $more; ?>"><i class="fa fa-chevron-down"></i><?php echo $text_more; ?></a>
-                    		</div>
-                    	</div>
-                    	<?php } ?>
                     </div>
 
                     <?php if (isset($pagination)) { ?>
@@ -279,7 +280,7 @@
             </div>
         </section>
         <?php } ?>
-
+        
     </div>
 </main>
 <script type="text/javascript"><!--

@@ -205,7 +205,12 @@ class ControllerProductCategory extends Controller {
 			$this->redirect($this->url->link('error/not_found'));
 		}
 
-		$this->data['products'] = $this->getChild('product/data/list', $this->model_catalog_product->getProducts($data));
+		$url = $this->getQueryString(array('page'));
+
+		$this->data['products'] = $this->getChild('product/data/list', array(
+			'products' => $this->model_catalog_product->getProducts($data),
+			'more' => $page < $max_pages ? $this->url->link('ajax/product/more', 'path=' . $category_info['path'] . $url . '&page=' . ($page + 1)) : ''
+		));
 
 		$this->data['refine'] = $this->getChild('module/refine', array(
 			'query_params' => $query_params,
@@ -217,8 +222,6 @@ class ControllerProductCategory extends Controller {
 			'display_more_options' => $display_more_options,
 			'forsale' => $forsale
 		));
-
-		$url = $this->getQueryString(array('page'));
 
 		$this->data['pagination'] = $this->getPagination($product_total, $page, $limit, 'product/category', 'path=' . $category_info['path'] . ($filter_manufacturer_id ? '&manufacturer_id=' . $filter_manufacturer_id : ''), $url);
 
@@ -237,7 +240,6 @@ class ControllerProductCategory extends Controller {
 		$this->data['search'] = $this->url->link('product/search');
 		$this->data['reset'] = $this->url->link('product/category', 'path=' . $category_info['path']);
 		$this->data['continue'] = $this->url->link('common/home');
-		$this->data['more'] = $page < $max_pages ? $this->url->link('ajax/product/more', 'path=' . $category_info['path'] . $url . '&page=' . ($page + 1)) : '';
 		$this->data['url'] = $url;
 
 		if (!$this->data['products'] && (isset($this->session->data['shipping_country_id']) || isset($this->session->data['shipping_zone_id']) || isset($this->session->data['shipping_location']))) {
@@ -262,4 +264,3 @@ class ControllerProductCategory extends Controller {
 		$this->response->setOutput($this->render());
 	}
 }
-

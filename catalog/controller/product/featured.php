@@ -158,7 +158,14 @@ class ControllerProductFeatured extends Controller {
 			$this->redirect($this->url->link('error/not_found'));
 		}
 
-		$this->data['products'] = $this->getChild('product/data/list', $this->model_catalog_product->getProductFeatured($data, ($sort != 'random')));
+		$url = $this->getQueryString(array('page'));
+
+		$this->data['pagination'] = $this->getPagination($product_total, $page, $limit, 'product/featured', '', $url);
+
+		$this->data['products'] = $this->getChild('product/data/list', array(
+			'products' => $this->model_catalog_product->getProductFeatured($data, ($sort != 'random')),
+			'more' => $page < $max_pages ? $this->url->link('ajax/product/more', $url . '&featured=true' . '&page=' . ($page + 1)) : ''
+		));
 
 		$this->data['refine'] = $this->getChild('module/refine', array(
 			'query_params' => $query_params,
@@ -169,10 +176,6 @@ class ControllerProductFeatured extends Controller {
 			'display_more_options' => $display_more_options,
 			'forsale' => $forsale
 		));
-
-		$url = $this->getQueryString(array('page'));
-
-		$this->data['pagination'] = $this->getPagination($product_total, $page, $limit, 'product/featured', '', $url);
 
 		if ($page > 1) {
 			$heading_title .= ' - ' . sprintf($this->language->get('text_page_of'), $page, $max_pages);
@@ -190,9 +193,6 @@ class ControllerProductFeatured extends Controller {
 		$this->data['reset'] = $this->url->link('product/featured');
 		$this->data['continue'] = $this->url->link('common/home');
 		$this->data['url'] = $url;
-
-		// $this->data['more'] = $page < $max_pages ? $this->url->link('product/featured', $url . '&page=' . ($page + 1)) : '';
-		$this->data['more'] = $page < $max_pages ? $this->url->link('ajax/product/more', $url . '&featured=true' . '&page=' . ($page + 1)) : '';
 
 		if (!$this->data['products'] && (isset($this->session->data['shipping_country_id']) || isset($this->session->data['shipping_zone_id']) || isset($this->session->data['shipping_location']))) {
 			// Remove Location
@@ -217,4 +217,3 @@ class ControllerProductFeatured extends Controller {
 		$this->response->setOutput($this->render());
 	}
 }
-
