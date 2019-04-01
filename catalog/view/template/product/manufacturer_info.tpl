@@ -14,6 +14,7 @@
         <section id="brand-listings" class="container-bottom">
             <aside id="sidebar" class="sidebar container-left">
                 <?php echo $column_left; ?>
+
                 <?php if (!empty($brand)) { ?>
                 <div id="brand-profile" class="widget hidden-medium">
                     <h6><?php echo $heading_brand; ?></h6>
@@ -61,6 +62,7 @@
                     </div>
                 </div>
                 <?php } ?>
+
                 <?php echo $refine; ?>
                 <?php echo $column_right; ?>
             </aside>
@@ -74,14 +76,7 @@
                     <div id="grid-items-container">
 
                 		<?php echo $products; ?>
-
-                    	<?php if ($more) { ?>
-                    	<div class="buttons">
-                    		<div class="center">
-                    			<a class="button button_highlight button_more bigger load-more icon" href="<?php echo $more; ?>"><i class="fa fa-chevron-down"></i><?php echo $text_more; ?></a>
-                    		</div>
-                    	</div>
-                    	<?php } ?>
+                        
                     </div>
 
                     <?php if (isset($pagination)) { ?>

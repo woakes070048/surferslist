@@ -357,18 +357,12 @@ $(document).ready(function() {
     if ($('#listings').length) {
         var $progressBar = $('.progress-bar');
         var $listingItems = $('#listings > .listing-item');
-        var countImages = 0;
+        var totalImages = $('#listings .image').length;
         var loadedImages = 0;
 
-        $('#listings > .listing-item').each(function(item) {
-            if ($(item).find('img').length) {
-                countImages++;
-            }
-        });
+        console.log(totalImages)
 
         $listingItems.hide();
-
-        $('#listings').before('<div class="information loading"><p>' + textLoading + '</p><span class="icon"><i class="fa fa-spin fa-circle-o-notch icon-spin"></i></span></div>');
 
         $('#listings').imagesLoaded(function() {
             $('.loading').fadeOut(200);
@@ -402,15 +396,16 @@ $(document).ready(function() {
         }).always(function () {
             $progressBar.hide();
         }).progress(function (instance, image) {
-            $(image.img).closest('.listing-item').css({
+            console.log(loadedImages / totalImages);
+            $progressBar.css('width', (++loadedImages / totalImages * 100) + '%');
+        }).done(function () {
+            $listingItems.css({
                 'opacity': '0',
                 'visibility': 'visible'
             }).animate({
                 'opacity': '1'
             }, 300, 'swing');
-
-            $progressBar.css('width', (++loadedImages / countImages * 100) + '%');
-        });;
+        });
     }
 
     // Lightbox

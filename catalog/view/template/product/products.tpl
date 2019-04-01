@@ -75,3 +75,11 @@
 	</article>
 	<?php } ?>
 </div>
+
+<?php if ($more) { ?>
+<div class="buttons">
+	<div class="center">
+		<a class="button button_highlight button_more bigger load-more icon" href="<?php echo $more; ?>"><i class="fa fa-chevron-down"></i><?php echo $text_more; ?></a>
+	</div>
+</div>
+<?php } ?>

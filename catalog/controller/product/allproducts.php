@@ -200,7 +200,12 @@ class ControllerProductAllProducts extends Controller {
 			$this->redirect($this->url->link('error/not_found'));
 		}
 
-		$this->data['products'] = $this->getChild('product/data/list', $this->model_catalog_product->getProducts($data));
+		$url = $this->getQueryString(array('page'));
+
+		$this->data['products'] = $this->getChild('product/data/list', array(
+			'products' => $this->model_catalog_product->getProducts($data),
+			'more' => $page < $max_pages ? $this->url->link('ajax/product/more', $url . '&page=' . ($page + 1)) : ''
+		));
 
 		$this->data['refine'] = $this->getChild('module/refine', array(
 			'query_params' => $query_params,
@@ -211,9 +216,6 @@ class ControllerProductAllProducts extends Controller {
 			'display_more_options' => $display_more_options,
 			'forsale' => $forsale
 		));
-
-		// Pagination
-		$url = $this->getQueryString(array('page'));
 
 		$this->data['pagination'] = $this->getPagination($product_total, $page, $limit, 'product/allproducts', '', $url);
 
@@ -232,7 +234,6 @@ class ControllerProductAllProducts extends Controller {
 		$this->data['back'] = ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->request->server['HTTP_REFERER'] : $this->url->link('common/home');
 		$this->data['continue'] = $this->url->link('common/home');
 		$this->data['reset'] = $this->url->link('product/allproducts');
-		$this->data['more'] = $page < $max_pages ? $this->url->link('ajax/product/more', $url . '&page=' . ($page + 1)) : '';
 		$this->data['url'] = $url;
 
 		if (!$this->data['products'] && (isset($this->session->data['shipping_country_id']) || isset($this->session->data['shipping_zone_id']) || isset($this->session->data['shipping_location']))) {
@@ -259,4 +260,3 @@ class ControllerProductAllProducts extends Controller {
     }
 
 }
-

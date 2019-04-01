@@ -51,9 +51,6 @@ class ControllerProductProduct extends Controller {
 		if (!empty($product_info['categories'])) {
 			foreach ($product_info['categories'] as $product_category) {
 				$this->addBreadcrumb($product_category['name'], $this->url->link('product/category', 'path=' . $product_category['path'] . $this->getQueryStringOnlyThese(array('sort', 'order', 'limit'))));
-
-				// lowest/most-specific category
-				$this->request->get['path'] = $product_category['path'];  // useful for featured listing module
 			}
 		}
 
@@ -277,9 +274,17 @@ class ControllerProductProduct extends Controller {
 				'order' => $sort_order
 			), true) : array();
 
-			$product_related = $this->model_catalog_product->getProductRelatedRandom($products);
+			$product_total = count($products);
+			$limit = 10;
 
-			$this->data['products'] = $this->getChild('product/data/list', $product_related);
+			$product_related = $this->model_catalog_product->getProductRelatedRandom(array_map(function ($item) {
+				return $item['product_id'];
+			}, $products), $limit);
+
+			$this->data['products'] = $this->getChild('product/data/list', array(
+				'products' => $product_related,
+				'more' => ($product_total && ceil($product_total / $limit) > 1) ? $this->url->link('ajax/product/more', 'module=true&path=' . $category_info['path'] . '&limit=' . $limit . '&filter_listings=' . implode(',', array_keys($product_related))) : ''
+			));
 
 			// get the index of this listing
 			$product_index = key(array_filter($products, function ($item) use ($product_data) {
@@ -344,6 +349,11 @@ class ControllerProductProduct extends Controller {
 
 			$this->data['preview_mode'] = $preview_listing;
 
+			// lowest/most-specific category, used by featured listing module
+			if ($category_info) {
+				$this->request->get['path'] = $category_info['path'];
+			}
+
 			// update view count
 			if (!$preview_listing) {
 				$this->model_catalog_product->updateViewed($this->request->get['product_id']);
@@ -403,4 +413,3 @@ class ControllerProductProduct extends Controller {
 		}
 	}
 }
-

@@ -13,6 +13,7 @@
     <div class="layout">
         <aside id="sidebar" class="sidebar container-left">
             <?php echo $column_left; ?>
+
             <div class="widget brand-filter widget-ac-container collapse-medium">
     	        <div class="widget-filter widget-ac">
     	            <h6 class="widget-ac-active"><?php echo $heading_filter; ?><span><i class="fa fa-chevron-down icon-ac-down"></i><i class="fa fa-chevron-up icon-ac-up"></i></span></h6>
@@ -77,6 +78,7 @@
                     </div>
                 </div>
             </div>
+
             <?php echo $column_right; ?>
         </aside>
         <section class="container-center">
