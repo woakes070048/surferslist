@@ -51,7 +51,7 @@ class ControllerCommonSeoUrl extends Controller {
 		// Decode the SEO URL to find route to forward request
 		// (.htaccess directive "RewriteRule ^([^?]*) index.php?_route_=$1 [L,QSA]")
 		if (isset($this->request->get['_route_'])) {
-			$route = $this->request->get['_route_'];
+			$route = rtrim($this->request->get['_route_'], '/');
 
 			// routes set by config are memory-cached
 			// check category paths first

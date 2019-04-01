@@ -85,7 +85,7 @@
                 <?php echo $content_top; ?>
 
                 <?php if ($categories) { ?>
-                <div id="filterscat">
+                <div id="grid-items-container">
                 	<div class="grid global-grid-item">
                 	<div class="grid-sizer"></div>
 					<?php foreach ($categories as $category) { ?>

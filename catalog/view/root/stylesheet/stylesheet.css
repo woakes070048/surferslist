@@ -529,11 +529,7 @@ div[class^="grid-"]:last-child, .grid-2+.grid-2, .grid-3+.grid-6, .grid-6+.grid-
     visibility: hidden;
 }
 
-.js #runbrands li.member-item, .js #runbrands li.brand-item {
-    display: none;
-}
-
-.js #loader+.grid, .js #loader+#runfiltersbrands {
+.js #loader+.grid, .js #loader+#listings-container {
     min-height: 250px;
     max-height: 500px;
 }
@@ -2721,11 +2717,6 @@ table .success, table .warning, table .attention, table .information {
     margin-bottom: 20px;
 }
 
-.widget-filter .runfilterscroll {
-    max-height: 150px;
-    overflow: hidden;
-}
-
 .widget-filter .formbox p strong {
     font-size: 18px;
     font-weight: bold;
@@ -2739,7 +2730,7 @@ table .success, table .warning, table .attention, table .information {
     width: 152px;
 }
 
-.widget-module .buttons, #filterscat .buttons {
+.widget-module .buttons, #grid-items-container .buttons {
     padding: 30px 0 0;
 }
 
@@ -5739,12 +5730,14 @@ input[name="member[member_name]"]:valid {
     transition: all 0.6s;
 }
 
-/* #filterscat .inactive {opacity:0; visibility:hidden;} */
-#filterscat, .filterscat, #runmembermaps, #runfiltersbrands {
+/* #grid-items-container .inactive {opacity:0; visibility:hidden;} */
+#grid-items-container, .grid-items-container, #listings-container {
+    position: relative;
+    overflow: hidden;
     margin-bottom: 30px;
 }
 
-#filterscat .inactive, .filterscat .inactive {
+#grid-items-container .inactive, .grid-items-container .inactive {
     visibility: visible;
     opacity: 0.3;
     filter: alpha(opacity=30);
@@ -5928,7 +5921,7 @@ input[name="member[member_name]"]:valid {
 }
 
 /* GRID ITEMS SYSTEM */
-#runlatestmaps, #runbestmaps, #runfeaturedmaps, #runmembermaps, #runspecialmaps, #filterscat, .filterscat, #runrelatedmaps {
+#grid-items-container, .grid-items-container {
     display: inline-block;
     position: relative;
     width: 100%;
@@ -5967,11 +5960,11 @@ input[name="member[member_name]"]:valid {
     transition: all 0.3s ease-out;
 }
 
-#runbrands li {
+#listings > .listing-item {
     opacity: 0;
 }
 
-#runbrands.wookmark-initialised li {
+#listings.wookmark-initialised > .listing-item {
     opacity: 1;
 }
 
@@ -6225,16 +6218,6 @@ input[name="member[member_name]"]:valid {
     max-height: 440px;
 }
 
-.runrefinescroll {
-    overflow: hidden;
-}
-
-/* MANUFACTURERS */
-#runfiltersbrands {
-    position: relative;
-    overflow: hidden;
-}
-
 .brands-list {
     margin: 0;
     padding: 0;
@@ -6287,13 +6270,13 @@ input[name="member[member_name]"]:valid {
     margin-top: 5px;
 }
 
-#filtersbrands {
+.filter-listings {
     margin: 0;
     padding: 0;
     list-style-type: none;
 }
 
-#filtersbrands li {
+.filter-listings li {
     display: block;
     padding: 12px 15px;
     margin: 0 auto 5px;
@@ -6348,7 +6331,7 @@ input[name="member[member_name]"]:valid {
     background-color: #FFCC00;
 }
 
-#filtersbrands li.active {
+.filter-listings li.active {
     color: #fff;
 }
 
@@ -7332,7 +7315,7 @@ a, .top-header .hbox .content .list li p a, .top-header .hbox .content .list li 
     color: #0d8f91;
 }
 
-.button.button_primary, .button.button_secondary:hover, .button.button_browse, .menu-nav .topcat:hover .link, .grid-item .tools a, .pagination .links b, .widget-list>li:hover>a.active, .widget-list .active, .widget-list .active:hover, .widget-list li:hover>.a_icon .icon_list, .widget-list .active-arrow:before, .checkout-heading .steps, .pjSlide .nivo-controlNav a.active, .slideshow .owl-nav a.active, #filtersbrands li.active, .top-header .hbox .content:before, .social-footer a:hover, .sticky-icon, .pagination .links a:hover, .footer .top:hover, .sticky-content:before {
+.button.button_primary, .button.button_secondary:hover, .button.button_browse, .menu-nav .topcat:hover .link, .grid-item .tools a, .pagination .links b, .widget-list>li:hover>a.active, .widget-list .active, .widget-list .active:hover, .widget-list li:hover>.a_icon .icon_list, .widget-list .active-arrow:before, .checkout-heading .steps, .pjSlide .nivo-controlNav a.active, .slideshow .owl-nav a.active, .filter-listings li.active, .top-header .hbox .content:before, .social-footer a:hover, .sticky-icon, .pagination .links a:hover, .footer .top:hover, .sticky-content:before {
     background-color: #0d8f91;
 }
 
@@ -7356,7 +7339,7 @@ a, .top-header .hbox .content .list li p a, .top-header .hbox .content .list li 
 }
 
 /* ALL background color #76cdd8 */
-.button.button_secondary, .button.button_primary:hover, .top-header .hbox .search .button-search, .menu-nav .skinchildren li:hover>a, .grid-item .tools a, .pagination .links b, .widget-list>li:hover>a.active, .widget-list .active, .widget-list .active:hover, .widget-list li:hover>.a_icon .icon_list, .widget-list .active-arrow:before, .checkout-heading .steps, .pjSlide .nivo-controlNav a.active, .slideshow .owl-nav a.active, #filtersbrands li.active, .top-header .hbox .content:before, .social-footer a:hover, .sticky-icon, .checkout-heading a, .widget-top-nav a:hover {
+.button.button_secondary, .button.button_primary:hover, .top-header .hbox .search .button-search, .menu-nav .skinchildren li:hover>a, .grid-item .tools a, .pagination .links b, .widget-list>li:hover>a.active, .widget-list .active, .widget-list .active:hover, .widget-list li:hover>.a_icon .icon_list, .widget-list .active-arrow:before, .checkout-heading .steps, .pjSlide .nivo-controlNav a.active, .slideshow .owl-nav a.active, .filter-listings li.active, .top-header .hbox .content:before, .social-footer a:hover, .sticky-icon, .checkout-heading a, .widget-top-nav a:hover {
     background-color: #76cdd8;
 }
 
@@ -7370,7 +7353,7 @@ a, .top-header .hbox .content .list li p a, .top-header .hbox .content .list li 
 }
 
 /* Link Hover */
-.button, .menu-nav .skinchildren li:hover>a, .pagination .links b, .right-item .actions .links:hover i, #buttons-item .quantity-box a i, .widget-list li:hover>.a_icon .icon_list, .pagination .links a:hover, .menu-nav .topcat:hover .link, .menu-nav .topcat:hover .link i, .shopping-cart .itemcart .edit-quantity .image-edit:hover .fa-refresh, .shopping-cart .itemcart .total a:hover i, .widget-top-nav a:not(.selected):hover, .widget-top-nav a:not(.selected):hover strong, .widget-top-nav a:not(.selected):hover i, .grid-item:hover>.pannel h3, .grid-item:hover>.pannel h3 a, .grid-item:hover .pannel .price, .grid-item:hover .pannel .price .price-new, .grid-item:hover .pannel .price .price-old, #filtersbrands li:hover {
+.button, .menu-nav .skinchildren li:hover>a, .pagination .links b, .right-item .actions .links:hover i, #buttons-item .quantity-box a i, .widget-list li:hover>.a_icon .icon_list, .pagination .links a:hover, .menu-nav .topcat:hover .link, .menu-nav .topcat:hover .link i, .shopping-cart .itemcart .edit-quantity .image-edit:hover .fa-refresh, .shopping-cart .itemcart .total a:hover i, .widget-top-nav a:not(.selected):hover, .widget-top-nav a:not(.selected):hover strong, .widget-top-nav a:not(.selected):hover i, .grid-item:hover>.pannel h3, .grid-item:hover>.pannel h3 a, .grid-item:hover .pannel .price, .grid-item:hover .pannel .price .price-new, .grid-item:hover .pannel .price .price-old, .filter-listings li:hover {
     color: #fff;
 }
 
@@ -7386,7 +7369,7 @@ h1, h2, h3, h4, h5, h6, pre, .widget h6, .pagination .links a, .tags a, .grid-it
     color: #424143;
 }
 
-.button:hover, .button_alt:hover, .button.button_inverse:hover, #buttons-item .quantity-box a:hover i, .shopping-cart .itemcart .image .position .remove:hover, .shopping-cart .itemcart .edit-quantity .image-edit:hover .fa-refresh, .shopping-cart .itemcart .total a:hover i, #filtersbrands li:hover {
+.button:hover, .button_alt:hover, .button.button_inverse:hover, #buttons-item .quantity-box a:hover i, .shopping-cart .itemcart .image .position .remove:hover, .shopping-cart .itemcart .edit-quantity .image-edit:hover .fa-refresh, .shopping-cart .itemcart .total a:hover i, .filter-listings li:hover {
     background-color: #24282c;
 }
 
@@ -8196,9 +8179,6 @@ a.highlight, b.highlight, i.highlight, span.highlight {
         margin-left: 0;
     }
 
-    /*.widget-module .buttons, #filterscat .buttons {
-        opacity: 1;
-    }*/
     .compare-info tr:last-child .button {
         font-size: 0;
     }
@@ -9176,13 +9156,7 @@ a.highlight, b.highlight, i.highlight, span.highlight {
 }
 
 @media screen and (max-width:487px) {
-
-    /*#filterscat .grid, .filterscat .grid {
-        width: 213px;
-        left: 50%;
-        margin-left: -107px;
-    }*/
-    .grid-sizer, #filterscat .grid .grid-item, .filterscat .grid .grid-item {
+    .grid-sizer, #grid-items-container .grid .grid-item, .grid-items-container .grid .grid-item {
         width: 49.45%;
     }
 }

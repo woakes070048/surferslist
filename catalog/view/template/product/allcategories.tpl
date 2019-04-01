@@ -20,7 +20,7 @@
                         <div class="content">
         					<?php if ($indexes) { ?>
                             <div class="filter category-filter" title="<?php echo $help_category; ?>" rel="tooltip" data-container="body">
-            					<ul id="filtersbrands">
+            					<ul class="filter-listings">
             						<?php foreach ($indexes as $index) { ?>
                                         <li data-filter="<?php echo $index['name']; ?>"><?php echo $index['name']; ?></li>
                                     <?php } ?>
@@ -58,15 +58,15 @@
                 <?php echo $content_top; ?>
 
 				<?php if ($indexes) { ?>
-				<div id="runfiltersbrands">
-					<ul id="runbrands" class="brands-list">
+				<div id="listings-container">
+					<ul id="listings" class="brands-list">
 						<?php foreach ($indexes as $index) { ?>
 							<?php if ($index['name']) { ?>
 								<?php for ($i = 0; $i < count($index['category']);) { ?>
 									<?php $j = $i + ceil(count($index['category']) / 4); ?>
 									<?php for (; $i < $j; $i++) { ?>
 										<?php if (isset($index['category'][$i])) { ?>
-										<li class="grid-item" data-filter-class='["<?php echo $index['name']; ?>"]'>
+										<li class="listing-item grid-item" data-filter-class='["<?php echo $index['name']; ?>"]'>
 											<a href="<?php echo $index['category'][$i]['href']; ?>">
                                                 <span class="category-icon icon-<?php echo $index['category'][$i]['icon']; ?>"></span>
 												<h2><?php echo $index['category'][$i]['name']; ?></h2>
