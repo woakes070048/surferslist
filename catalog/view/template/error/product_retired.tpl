@@ -36,10 +36,10 @@
                 </div>
 
                 <?php if ($categories || $manufacturer || $member) { ?>
-                <div id="runfiltersbrands">
-                    <ul id="runbrands" class="brands-list">
+                <div id="listings-container">
+                    <ul id="listings" class="brands-list">
                         <?php foreach ($categories as $category) { ?>
-                        <li class="grid-item" data-filter-class='["category"]'>
+                        <li class="listing-item grid-item" data-filter-class='["category"]'>
                             <a href="<?php echo $category['href']; ?>">
                                 <img src="<?php echo $category['thumb']; ?>" alt="<?php echo $category['name']; ?>" />
                                 <h2><?php echo $category['name']; ?></h2>
@@ -47,7 +47,7 @@
                         </li>
                         <?php } ?>
                         <?php if ($manufacturer) { ?>
-                        <li class="grid-item" data-filter-class='["manufacturer"]'>
+                        <li class="listing-item grid-item" data-filter-class='["manufacturer"]'>
                             <a href="<?php echo $manufacturer['href']; ?>">
                                 <img src="<?php echo $manufacturer['thumb']; ?>" alt="<?php echo $manufacturer['name']; ?>" />
                                 <h2><?php echo $manufacturer['name']; ?></h2>
@@ -55,7 +55,7 @@
                         </li>
                         <?php } ?>
                         <?php if ($member) { ?>
-                        <li class="grid-item" data-filter-class='["member"]'>
+                        <li class="listing-item grid-item" data-filter-class='["member"]'>
                             <a href="<?php echo $member['href']; ?>">
                                 <img src="<?php echo $member['thumb']; ?>" alt="<?php echo $member['name']; ?>" />
                                 <h2><?php echo $member['name']; ?></h2>

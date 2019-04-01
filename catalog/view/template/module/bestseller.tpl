@@ -1,7 +1,7 @@
 <?php if ($products) { ?>
 <?php if ($position == 'content_top' || $position == 'content_bottom') { ?>
 <div class="widget-module widget-popular">
-    <div class="filterscat">
+    <div class="grid-items-container">
     	<div class="grid global-grid-item">
     		<div class="grid-sizer"></div>
             <?php echo $products; ?>

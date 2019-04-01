@@ -126,7 +126,7 @@
                     <h2><?php echo $text_related_article; ?></h2>
 
                     <section id="related-articles" class="widget-module">
-                        <div class="filterscat">
+                        <div class="grid-items-container">
                             <div class="grid global-grid-item">
                                 <div class="grid-sizer"></div>
                                 <?php foreach ($related_articles as $related) { ?>
@@ -166,7 +166,7 @@
                     <h2><?php echo $text_related_product; ?></h2>
 
                     <section id="related-listings" class="widget-module">
-                        <div id="filterscat">
+                        <div id="grid-items-container">
                             <?php echo $related_products; ?>
                         </div>
                     </section>

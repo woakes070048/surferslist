@@ -1,4 +1,4 @@
-<div id="filterscat">
+<div id="grid-items-container">
 	<div class="grid global-grid-item">
 		<div class="grid-sizer"></div>
 		<?php foreach ($products as $product) { ?>

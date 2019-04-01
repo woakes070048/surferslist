@@ -5,7 +5,7 @@
             <div class="content">
                 <?php if (count($categories) > 1) { ?>
                 <div class="filter category-filter">
-                    <ul id="filtersbrands">
+                    <ul class="filter-listings">
                         <?php foreach ($categories as $category) { ?>
                             <li data-filter="<?php echo $category['name']; ?>">
                                 <a href="<?php echo $category['href']; ?>"><?php echo $category['name']; ?></a>

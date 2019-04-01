@@ -152,6 +152,7 @@ class ControllerBlogSearch extends Controller {
         $this->data['url'] = $url;
 
         $this->document->addStyle('catalog/view/root/stylesheet/blog.css');
+        $this->document->addScript('catalog/view/root/wookmark/wookmark.min.js');
 
         $this->template = 'template/blog/search.tpl';
 

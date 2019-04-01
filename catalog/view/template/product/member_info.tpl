@@ -234,7 +234,7 @@
 
                     <?php if ($products) { ?>
 
-                    <div id="filterscat">
+                    <div id="grid-items-container">
 
                 		<?php echo $products; ?>
 
