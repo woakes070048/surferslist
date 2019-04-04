@@ -15,7 +15,9 @@
         </div>
     </header>
     <div class="layout">
+        <?php if (!empty($column_left)) { ?>
         <?php echo $column_left; ?>
+        <?php } ?>
         <section class="container-center">
             <div class="content-page">
             	<?php echo $content_top; ?>
@@ -40,7 +42,9 @@
                 <?php echo $content_bottom; ?>
             </div>
         </section>
+        <?php if (!empty($column_right)) { ?>
         <?php echo $column_right; ?>
+        <?php } ?>
     </div>
 </main>
 <?php echo $footer; ?>
