@@ -72,12 +72,15 @@
                         <?php if ($article_images) { ?>
                         <div class="article-images images">
                             <h2 class="hidden"><?php echo $text_image_gallery; ?></h2>
-                            <?php foreach ($article_images as $article_image) { ?>
-                            <div class="article-image image image-border">
-                                <a href="<?php echo $article_image['popup']; ?>" class="lightbox" rel="article-images" data-small-image="<?php echo $article_image['image']; ?>">
-                                    <img src="<?php echo $article_image['image']; ?>" alt="<?php echo $heading_title; ?>" />
+                            <?php for ($i = 0; $i < count($article_images); $i++) { ?>
+                            <div class="article-image image image-border<?php if ($i > $max_images) { ?> hidden<?php } ?>">
+                                <a href="<?php echo $article_images[$i]['popup']; ?>" class="lightbox" rel="article-images" data-small-image="<?php echo $article_images[$i]['image']; ?>">
+                                    <img src="<?php echo $article_images[$i]['image']; ?>" alt="<?php echo $heading_title; ?>" />
                                 </a>
                             </div>
+                            <?php } ?>
+                            <?php if (count($article_images) > $max_images) { ?>
+                            <p class="help"><?php echo $text_show_more_images; ?></p>
                             <?php } ?>
                         </div>
                         <?php } ?>

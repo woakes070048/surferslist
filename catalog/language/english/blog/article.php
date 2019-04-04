@@ -5,6 +5,7 @@ $_['text_image_gallery']    = 'Image Gallery';
 $_['text_tags']             = 'Tags';
 $_['text_related_product']  = 'Related Listings';
 $_['text_related_article']  = 'Related Articles';
+$_['text_show_more_images'] = 'Click an image above to open slideshow of more images.';
 $_['text_error']            = 'Article not found!';
 $_['text_prev']             = 'prev';
 $_['text_next']             = 'next';

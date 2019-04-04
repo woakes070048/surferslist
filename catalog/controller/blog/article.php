@@ -216,6 +216,7 @@ class ControllerBlogArticle extends Controller {
 			$this->data['nav_cols'] = $nav_cols;
 
 			$this->data['preview_mode'] = $preview_article;
+			$this->data['max_images'] = 6;			
 
 			// update view count
 			if (!$preview_article) {
