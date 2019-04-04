@@ -1,5 +1,7 @@
 <?php
 class ControllerBlogArticle extends Controller {
+	use Admin;
+
     private $error = array();
 
     public function index() {
@@ -10,10 +12,12 @@ class ControllerBlogArticle extends Controller {
 
         $blog_article_id = isset($this->request->get['blog_article_id']) ? (int)$this->request->get['blog_article_id'] : 0;
 
-        if (isset($this->request->get['preview_article']) && isset($this->session->data['customer_token']) && $this->request->get['preview_article'] == $this->session->data['customer_token']) {
-			$preview_article = true;
-		} else {
-			$preview_article = false;
+        $preview_article = false;
+
+        if (isset($this->request->get['preview_article'])) {
+            if ($this->isAdmin() || (isset($this->session->data['customer_token']) && $this->request->get['preview_article'] == $this->session->data['customer_token'])) {
+                $preview_article = true;
+            }
 		}
 
         $this->load->model('blog/category');
@@ -237,6 +241,16 @@ class ControllerBlogArticle extends Controller {
             $this->document->addStyle('catalog/view/root/stylesheet/blog.css');
 
             $this->template = 'template/blog/article.tpl';
+
+            $this->children = array(
+                'common/notification',
+                'common/column_left',
+                'common/column_right',
+                'common/content_top',
+                'common/content_bottom',
+                'common/footer',
+                'common/header'
+            );
         } else {
             $this->addBreadcrumb($this->language->get('text_error'), $this->url->link('blog/article', 'blog_article_id=' . $blog_article_id . $url));
 
@@ -251,19 +265,17 @@ class ControllerBlogArticle extends Controller {
             $this->response->addHeader($this->request->server['SERVER_PROTOCOL'] . '/1.1 404 Not Found');
 
             $this->template = 'template/error/not_found.tpl';
+
+            $this->children = array(
+                'common/notification',
+                'common/content_top',
+                'common/content_bottom',
+                'common/footer',
+                'common/header'
+            );
         }
 
         $this->data['breadcrumbs'] = $this->getBreadcrumbs();
-
-        $this->children = array(
-            'common/notification',
-            'common/column_left',
-            'common/column_right',
-            'common/content_top',
-            'common/content_bottom',
-            'common/footer',
-            'common/header'
-        );
 
         $this->response->setOutput($this->render());
     }
