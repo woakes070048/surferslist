@@ -153,13 +153,8 @@ class ControllerBlogData extends Controller {
             $article_images = $this->model_blog_article->getArticleImage($data['blog_article_id']);
 
             foreach ($article_images as $article_image) {
-                if ($article_image['image'] && is_file(DIR_IMAGE . $article_image['image'])) {
-                    $image = $this->model_tool_image->resize($article_image['image'], $this->config->get('blog_image_additional_width'), $this->config->get('blog_image_additional_height'), 'autocrop');
-                    $popup = $this->model_tool_image->resize($article_image['image'], $this->config->get('blog_image_popup_width'), $this->config->get('blog_image_popup_height'), 'fw');
-                } else {
-                    $image = false;
-                    $popup = false;
-                }
+				$image = $this->model_tool_image->resize($article_image['image'], $this->config->get('blog_image_additional_width'), $this->config->get('blog_image_additional_height'), 'autocrop');
+				$popup = $this->model_tool_image->resize($article_image['image'], $this->config->get('blog_image_popup_width'), $this->config->get('blog_image_popup_height'), 'fw');
 
                 $images[] = array(
                     'image' => $image,

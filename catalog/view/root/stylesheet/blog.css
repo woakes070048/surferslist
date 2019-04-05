@@ -1,3 +1,11 @@
+.blog-article-page .article-body, .list-articles .blog-article .article-preview {
+    position: relative;
+}
+
+.blog-page .article-heading, .list-articles .article-description {
+    margin-right: 70px;
+}
+
 .blog-page .article-heading .article-stats {
     display: table;
     font-style: italic;
@@ -20,7 +28,9 @@
 }
 
 .blog-page .article-heading .article-date {
-    float: right;
+    position: absolute;
+    top: 0;
+    right: 0;
     color: #fff;
     font-weight: normal;
     text-align: center;
@@ -104,7 +114,6 @@
     line-height: 1.3;
     min-height: 38px;
     margin-bottom: 12px;
-    margin-right: 55px;
 }
 
 .list-articles .read-more {
@@ -112,10 +121,6 @@
 }
 
 /* Article Page */
-.blog-article-page .article-body {
-    position: relative;
-}
-
 .blog-article-page .article-heading .article-stats {
     font-size: 16px;
 }
@@ -184,6 +189,10 @@
 
 /* L and smaller screen sizes */
 @media screen and (max-width:1192px) {
+    .blog-page .article-heading, .list-articles .article-description {
+        margin-right: 55px;
+    }
+
     .list-articles .article-heading .article-name {
         font-size: 20px;
     }
@@ -233,7 +242,7 @@
         display: inline;
     }
 
-    .blog-article-page .article-body, .blog-page #related-articles .grid-items-container, .blog-page #related-listings #grid-items-container {
+    .blog-article-page .content-page > .widget, .blog-page #related-articles .grid-items-container, .blog-page #related-listings #grid-items-container {
         margin-bottom: 20px;
     }
 }
@@ -252,30 +261,16 @@
         margin-right: 0;
     }
 
-    .blog-page .article-heading .article-stats {
-        text-align: left;
-    }
-
-    .blog-page .article-heading .article-stats > .avatar {
-        margin-left: 0;
-    }
-
     .blog-article-page .article-heading .article-stats {
-        display: block;
         font-size: 14px;
-    }
-
-    .blog-article-page .article-heading .article-stats > span {
-        display: block;
-        line-height: 20px;
-    }
-
-    .blog-article-page .article-heading .article-stats > span + span {
-        padding: 0 0 0 50px;
     }
 
     .blog-article-page .prevnext .pager .name {
         display: none;
+    }
+
+    .blog-article-page .article-body .article-image {
+        margin-bottom: 10px;
     }
 }
 
@@ -294,5 +289,22 @@
 
     .list-articles .article-heading .article-stats > span + span {
         padding-left: 0;
+    }
+
+    .blog-page .article-heading .article-stats {
+        text-align: left;
+    }
+
+    .blog-article-page .article-heading .article-stats {
+        display: block;
+    }
+
+    .blog-article-page .article-heading .article-stats > span {
+        display: block;
+        line-height: 20px;
+    }
+
+    .blog-article-page .article-heading .article-stats > span + span {
+        padding: 0 0 0 50px;
     }
 }

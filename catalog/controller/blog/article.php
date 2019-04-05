@@ -216,6 +216,7 @@ class ControllerBlogArticle extends Controller {
 			$this->data['nav_cols'] = $nav_cols;
 
 			$this->data['preview_mode'] = $preview_article;
+			$this->data['max_images'] = 6;
 
 			// update view count
 			if (!$preview_article) {
@@ -227,10 +228,10 @@ class ControllerBlogArticle extends Controller {
             $this->document->setKeywords($article_data['meta_keyword']);
 			$this->document->setUrl($this->url->link('blog/article', 'blog_article_id=' . $blog_article_id));
 
-			$image_info = $this->model_tool_image->getFileInfo($this->data['thumb']);
+			$image_info = $this->model_tool_image->getFileInfo($this->data['popup']);
 
 			if ($image_info) {
-				$this->document->setImage($this->data['thumb'], $image_info['mime'], $image_info[0], $image_info[1]);
+				$this->document->setImage($this->data['popup'], $image_info['mime'], $image_info[0], $image_info[1]);
 			}
 
 			$this->document->addLink($this->url->link('blog/article', 'blog_article_id=' . $blog_article_id), 'canonical');

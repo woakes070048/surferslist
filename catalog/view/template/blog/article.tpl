@@ -25,75 +25,80 @@
             <div class="content-page">
                 <?php echo $notification; ?>
 
-                <div class="widget article-body" itemprop="articleBody">
+                <div class="widget" itemprop="articleBody">
                     <div class="content">
-                        <div class="article-heading">
-                            <div class="article-date">
-                                <span class="month"><?php echo $month; ?></span>
-                                <span class="day"><?php echo $day; ?></span>
-                                <span class="year"><?php echo $year; ?></span>
-                                <span class="published hidden" itemprop="dateCreated"><?php echo $date_published; ?></span>
-                                <span class="modified hidden" itemprop="dateModified"><?php echo $date_modified; ?></span>
-                            </div>
-                            <div class="article-stats">
-                                <?php if ($author_image) { ?>
-                                <span class="avatar">
-                                    <a href="<?php echo $author_href; ?>">
-                                        <img src="<?php echo $author_image; ?>" alt="<?php echo $author_name; ?>" />
-                                    </a>
-                                </span>
-                                <?php } ?>
-                                <?php if ($member_id) { ?>
-                                <span class="author"><i class="fa fa-user"></i><?php echo $text_author; ?> <a href="<?php echo $author_search; ?>" ><span itemprop="author"><?php echo $author_name; ?></span></a></span>
-                                <?php } ?>
-                                <?php if ($categories) { ?>
-                                <span class="categories"><i class="fa fa-sitemap"></i><?php echo $text_category; ?>
-                                    <?php for ($i = 0; $i < count($categories); $i++) { ?>
-                                    <?php if ($i < (count($categories) - 1)) { ?>
-                                    <a href="<?php echo $categories[$i]['href']; ?>" itemprop="articleSection"><?php echo $categories[$i]['name']; ?></a>,
-                                    <?php } else { ?>
-                                    <a href="<?php echo $categories[$i]['href']; ?>" itemprop="articleSection"><?php echo $categories[$i]['name']; ?></a>
+                        <div class="article-body">
+                            <div class="article-heading">
+                                <div class="article-date">
+                                    <span class="month"><?php echo $month; ?></span>
+                                    <span class="day"><?php echo $day; ?></span>
+                                    <span class="year"><?php echo $year; ?></span>
+                                    <span class="published hidden" itemprop="dateCreated"><?php echo $date_published; ?></span>
+                                    <span class="modified hidden" itemprop="dateModified"><?php echo $date_modified; ?></span>
+                                </div>
+                                <div class="article-stats">
+                                    <?php if ($author_image) { ?>
+                                    <span class="avatar">
+                                        <a href="<?php echo $author_href; ?>">
+                                            <img src="<?php echo $author_image; ?>" alt="<?php echo $author_name; ?>" />
+                                        </a>
+                                    </span>
                                     <?php } ?>
-                                    <?php } ?></span>
+                                    <?php if ($member_id) { ?>
+                                    <span class="author"><i class="fa fa-user"></i><?php echo $text_author; ?> <a href="<?php echo $author_search; ?>" ><span itemprop="author"><?php echo $author_name; ?></span></a></span>
+                                    <?php } ?>
+                                    <?php if ($categories) { ?>
+                                    <span class="categories"><i class="fa fa-sitemap"></i><?php echo $text_category; ?>
+                                        <?php for ($i = 0; $i < count($categories); $i++) { ?>
+                                        <?php if ($i < (count($categories) - 1)) { ?>
+                                        <a href="<?php echo $categories[$i]['href']; ?>" itemprop="articleSection"><?php echo $categories[$i]['name']; ?></a>,
+                                        <?php } else { ?>
+                                        <a href="<?php echo $categories[$i]['href']; ?>" itemprop="articleSection"><?php echo $categories[$i]['name']; ?></a>
+                                        <?php } ?>
+                                        <?php } ?></span>
+                                    <?php } ?>
+                                </div>
+                            </div>
+
+                            <?php if ($image) { ?>
+                            <div class="article-image-wrapper clearafter">
+                                <div class="article-image image image-border">
+                                    <a href="<?php echo $popup; ?>" class="lightbox" rel="article-images" data-small-image="<?php echo $thumb; ?>">
+                                        <img src="<?php echo $image; ?>" itemprop="image" />
+                                    </a>
+                                </div>
+                            </div>
+                            <?php } ?>
+
+                            <?php if ($article_images) { ?>
+                            <div class="article-images images">
+                                <h2 class="hidden"><?php echo $text_image_gallery; ?></h2>
+                                <?php for ($i = 0; $i < count($article_images); $i++) { ?>
+                                <div class="article-image image image-border<?php if ($i >= $max_images) { ?> hidden<?php } ?>">
+                                    <a href="<?php echo $article_images[$i]['popup']; ?>" class="lightbox" rel="article-images" data-small-image="<?php echo $article_images[$i]['image']; ?>">
+                                        <img src="<?php echo $article_images[$i]['image']; ?>" alt="<?php echo $heading_title; ?>" />
+                                    </a>
+                                </div>
+                                <?php } ?>
+                                <?php if (count($article_images) > $max_images) { ?>
+                                <p class="help"><?php echo $text_show_more_images; ?></p>
                                 <?php } ?>
                             </div>
-                        </div>
-
-                        <?php if ($image) { ?>
-                        <div class="article-image-wrapper clearafter">
-                            <div class="article-image image image-border">
-                                <a href="<?php echo $popup; ?>" class="lightbox" rel="article-images" data-small-image="<?php echo $thumb; ?>">
-                                    <img src="<?php echo $image; ?>" itemprop="image" />
-                                </a>
-                            </div>
-                        </div>
-                        <?php } ?>
-
-                        <?php if ($article_images) { ?>
-                        <div class="article-images images">
-                            <h2 class="hidden"><?php echo $text_image_gallery; ?></h2>
-                            <?php foreach ($article_images as $article_image) { ?>
-                            <div class="article-image image image-border">
-                                <a href="<?php echo $article_image['popup']; ?>" class="lightbox" rel="article-images" data-small-image="<?php echo $article_image['image']; ?>">
-                                    <img src="<?php echo $article_image['image']; ?>" alt="<?php echo $heading_title; ?>" />
-                                </a>
-                            </div>
                             <?php } ?>
-                        </div>
-                        <?php } ?>
 
-                        <div class="article-description">
-                            <?php echo $description; ?>
-                        </div>
+                            <div class="article-description">
+                                <?php echo $description; ?>
+                            </div>
 
-                        <div class="tags" itemprop="keywords">
-                            <h4 class="hidden"><i class="fa fa-tags"></i><?php echo $text_tags; ?>: </h4>
-                            <?php foreach ($tags as $tag) { ?>
-                            <a class="label label-default" href="<?php echo $tag['href']; ?>"><?php echo $tag['tag']; ?></a>
-                            <?php } ?>
-                        </div>
+                            <div class="tags" itemprop="keywords">
+                                <h4 class="hidden"><i class="fa fa-tags"></i><?php echo $text_tags; ?>: </h4>
+                                <?php foreach ($tags as $tag) { ?>
+                                <a class="label label-default" href="<?php echo $tag['href']; ?>"><?php echo $tag['tag']; ?></a>
+                                <?php } ?>
+                            </div>
 
-                        <input type="hidden" name="blog_article_id" value="<?php echo $blog_article_id; ?>" />
+                            <input type="hidden" name="blog_article_id" value="<?php echo $blog_article_id; ?>" />
+                        </div>
                     </div>
 
                     <div class="buttons-footer">
@@ -104,15 +109,39 @@
                         <div class="prevnext full">
                             <ul class="pager column<?php echo $nav_cols; ?>">
                                 <?php if ($prev_url) { ?>
-                                <li class="prev"><a href="<?php echo $prev_url; ?>" rel="tooltip" title="<?php echo $prev_title;?>"><i class="fa fa-chevron-circle-left"></i><span class="name"><?php echo $prev_title;?></span><span class="dir"><?php echo $text_prev; ?></span></a></li>
+                                <li class="prev">
+                                    <a href="<?php echo $prev_url; ?>" rel="tooltip" title="<?php echo $prev_title;?>">
+                                        <i class="fa fa-chevron-circle-left"></i>
+                                        <span class="name"><?php echo $prev_title;?></span>
+                                        <span class="dir"><?php echo $text_prev; ?></span>
+                                    </a>
+                                </li>
                                 <?php } ?>
                                 <?php if ($back_url) { ?>
-                                <li class="back"><a href="<?php echo $back_url; ?>" rel="tooltip" title="<?php echo $button_back;?>"><i class="fa fa-undo"></i><span class="name"><?php echo $back_title;?></span><span class="dir"><?php echo $button_back; ?></span></a></li>
+                                <li class="back">
+                                    <a href="<?php echo $back_url; ?>" rel="tooltip" title="<?php echo $back_title;?>">
+                                        <i class="fa fa-undo"></i>
+                                        <span class="name hidden"><?php echo $back_title;?></span>
+                                        <span class="dir"><?php echo $button_back; ?></span>
+                                    </a>
+                                </li>
                                 <?php } else { ?>
-                                <li class="more"><a href="<?php echo $more_url; ?>" rel="tooltip" title="<?php echo $more_title;?>"><i class="fa fa-th"></i><span class="name"><?php echo $more_title;?></span><span class="dir"><?php echo $text_more;?></span></a></li>
+                                <li class="more">
+                                    <a href="<?php echo $more_url; ?>" rel="tooltip" title="<?php echo $more_title;?>">
+                                        <i class="fa fa-th"></i>
+                                        <span class="name hidden"><?php echo $more_title;?></span>
+                                        <span class="dir"><?php echo $text_more;?></span>
+                                    </a>
+                                </li>
                                 <?php } ?>
                                 <?php if ($next_url) { ?>
-                                <li class="next"><a href="<?php echo $next_url; ?>" rel="tooltip" title="<?php echo $next_title;?>"><i class="fa fa-chevron-circle-right"></i><span class="name"><?php echo $next_title;?></span><span class="dir"><?php echo $text_next; ?></span></a></li>
+                                <li class="next">
+                                    <a href="<?php echo $next_url; ?>" rel="tooltip" title="<?php echo $next_title;?>">
+                                        <i class="fa fa-chevron-circle-right"></i>
+                                        <span class="name"><?php echo $next_title;?></span>
+                                        <span class="dir"><?php echo $text_next; ?></span>
+                                    </a>
+                                </li>
                                 <?php } ?>
                             </ul>
                         </div>
