@@ -114,6 +114,8 @@ var fbAppID = '<?php echo $fb_app_id; ?>'; // for FB login only
 <script type="text/javascript" src="<?php echo $server; ?>catalog/view/root/javascript/listings.js"></script>
 <script type="text/javascript" src="<?php echo $server; ?>catalog/view/root/javascript/profile.js"></script>
 <script type="text/javascript" src="<?php echo $server; ?>catalog/view/root/javascript/listing.js"></script>
+<script type="text/javascript" src="<?php echo $server; ?>catalog/view/root/javascript/filter.js"></script>
+<script type="text/javascript" src="<?php echo $server; ?>catalog/view/root/javascript/search.js"></script>
 <script type="text/javascript" src="<?php echo $server; ?>catalog/view/root/javascript/module.js"></script>
 <?php } else { ?>
 <script type="text/javascript" src="<?php echo $server . 'catalog/view/' . $js_min; ?>"></script>
