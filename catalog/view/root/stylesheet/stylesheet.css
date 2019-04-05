@@ -3080,6 +3080,14 @@ table .success, table .warning, table .attention, table .information {
 .slick-slide img {
     width: 100%;
     margin: 0 auto;
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 1s;
+}
+
+.slick-slide img.slick-loading {
+    visibility: hidden;
+    opacity: 0;
 }
 
 .slick-slide:focus {
