@@ -9,6 +9,8 @@ class ControllerModuleFeatured extends Controller {
 		$this->load->model('catalog/product');
 		$this->load->model('tool/image');
 
+		$is_sidebar = ($setting['position'] == 'column_right' || $setting['position'] == 'column_left') ? true : false; // || ($setting['position'] != 'content_top' && $setting['position'] != 'content_bottom')
+
 		$filter_category_id = isset($this->request->get['filter_category_id']) ? $this->request->get['filter_category_id'] : '';
 
 		if (!empty($this->request->get['path']) && !is_array($this->request->get['path'])) {
@@ -40,14 +42,13 @@ class ControllerModuleFeatured extends Controller {
 		// 	$filter_zone_id = '';
 		// }
 
-		// to-do: add limit, scroll, and sort to Featured module settings
+		// to-do: add sort to (and remove image dimensions from?) Featured module settings
 		$sort = !empty($setting['sort'])? $setting['sort'] : 'random';  // 'random', 'date_added'
 		$order = ($sort == 'date_added') ? 'DESC' : 'ASC'; // if sorted by date, then show newest first, otherwise sort ascending
-		$limit = !empty($setting['limit']) ? $setting['limit'] : 6;
-
-		$image_width = ($setting['position'] == 'content_top' || $setting['position'] == 'content_bottom') ? $this->config->get('config_image_product_width') : 210;
-		$image_height = ($setting['position'] == 'content_top' || $setting['position'] == 'content_bottom') ? $this->config->get('config_image_product_height') : 210;
-		$image_crop = ($setting['position'] == 'content_top' || $setting['position'] == 'content_bottom') ? 'fw' : 'autocrop';
+		$limit = $setting['limit'] ?: 6;
+		$image_width = !$is_sidebar ? $this->config->get('config_image_product_width') : 210;
+		$image_height = !$is_sidebar ? $this->config->get('config_image_product_height') : 210;
+		$image_crop = !$is_sidebar ? 'fw' : 'autocrop';
 
 		$options_slick = $this->config->get('config_slick_options') ?: array(
 			'zIndex' => 198,
@@ -92,28 +93,27 @@ class ControllerModuleFeatured extends Controller {
 
 		$customer_group_id = $this->customer->isLogged() ? $this->customer->getCustomerGroupId() : $this->config->get('config_customer_group_id');
 
-		$listings = $this->cache->get('product.module.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . (int)$currency_id . '.' . $cache);
+		$products = $this->cache->get('product.module.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . (int)$currency_id . '.' . $cache);
 
-		if ($listings === false) {
-			$listings = array();
+		if ($products === false) {
+			$products = array();
 
-			$results = $this->model_catalog_product->getProductFeatured($data, false); // don't cache in model
+			$results = $this->model_catalog_product->getProductFeatured($data);
 
-			foreach ($results as $result) {
-				$featured_thumb = $this->model_tool_image->resize($result['image'], $image_width, $image_height, $image_crop);
-				$listings[$result['product_id']] = $this->getChild('product/data/info', $result);
-				$listings[$result['product_id']]['thumb'] = $featured_thumb;
+			foreach ($results as $product_id => $result) {
+				$products[$product_id] = $result;
+				$products[$product_id]['thumb_alt'] = $this->model_tool_image->resize($result['image'], $image_width, $image_height, $image_crop);
 			}
 
-			$this->cache->set('product.module.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . (int)$currency_id . '.' . $cache, $listings, 60 * 60 * 24 * 7); // 1 week cache expiration
+			$this->cache->set('product.module.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . (int)$currency_id . '.' . $cache, $products, 60 * 60 * 24 * 7); // 1 week cache expiration
 		}
 
-		if ($setting['position'] == 'content_top' || $setting['position'] == 'content_bottom') {
+		if (!$is_sidebar) {
 			// filter_ids
 			$url = '';
 
-			foreach ($listings as $listing) {
-				$url .= $listing['product_id'] . ',';
+			foreach ($products as $product) {
+				$url .= $product['product_id'] . ',';
 			}
 
 			$this->data['more'] = $this->url->link('ajax/product/more', 'module=true&featured=true&filter_listings=' . rtrim($url, ','));
@@ -121,15 +121,17 @@ class ControllerModuleFeatured extends Controller {
 			$this->data['more'] = $this->url->link('product/featured');
 		}
 
-		if ($setting['position'] == 'column_right' || $setting['position'] == 'column_left') {
+		if ($is_sidebar) {
 			$this->document->addScript('catalog/view/root/slick/slick.min.js');
 		}
 
-		$this->data['products'] = $this->getChild('product/data/list_module', array('products' => $listings, 'position' => $setting['position']));
+		$this->data['products'] = $this->getChild('product/data/list_module', array(
+			'products' 		=> $products,
+			'position' 		=> $setting['position']
+		));
 
 		$this->template = 'template/module/featured.tpl';
 
 		$this->render();
 	}
 }
-

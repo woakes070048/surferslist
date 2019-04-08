@@ -83,6 +83,11 @@ class ControllerProductData extends Controller {
 		foreach ($data['products'] as $product) {
 			$this->getMinData($product, $customer_group_id);
 			$this->getNonCachedData($product);
+
+			if (!isset($product['thumb_alt'])) {
+				$product['thumb_alt'] = $product['thumb'];
+			}
+
 			$product_data[$product['product_id']] = $product;
 		}
 
@@ -152,7 +157,8 @@ class ControllerProductData extends Controller {
         $product_data = !$cache ? false : $this->cache->get('product_' . (int)$data['product_id'] . '.data.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id);
 
         if ($product_data === false) {
-            $short_description = remove_links(preg_replace('/\s+/', ' ', strip_tags_decode($data['description'])));
+			$short_description_max_length = 80;
+            $short_description = remove_links(preg_replace('/\s+/', ' ', strip_tags_decode($data['description_short'])));
 
             if (!$short_description) {
                 if ($data['year'] != '0000') {
@@ -168,8 +174,8 @@ class ControllerProductData extends Controller {
                 if (utf8_strpos(trim($data['size']), ' ') === false && utf8_strlen($data['size']) < 10) {
                     $short_description .= ' ' . $data['size'];
                 }
-            } else if (utf8_strlen($short_description) > 80) {
-                $short_description = utf8_substr($short_description, 0, 80) . $this->language->get('text_ellipses');
+            } else if (utf8_strlen($short_description) > $short_description_max_length) {
+                $short_description = utf8_substr($short_description, 0, $short_description_max_length) . $this->language->get('text_ellipses');
             }
 
             $product_data = array(

@@ -4,9 +4,9 @@
 	<article class="featured-listing item slideshow-item">
 	    <div class="image image-no-border" title="<?php echo $product['name']; ?>" rel="tooltip" data-container="body">
 	        <?php if ($product['href']) { ?>
-	        <a href="<?php echo $product['href']; ?>"><img src="<?php echo $product['thumb']; ?>" alt="<?php echo $product['name']; ?>" /></a>
+	        <a href="<?php echo $product['href']; ?>"><img src="<?php echo $product['thumb_alt']; ?>" alt="<?php echo $product['name']; ?>" /></a>
 	        <?php } else { ?>
-	        <img src="<?php echo $product['thumb']; ?>" alt="<?php echo $product['name']; ?>" />
+	        <img src="<?php echo $product['thumb_alt']; ?>" alt="<?php echo $product['name']; ?>" />
 	        <?php } ?>
 	        <span class="description">
 	            <a href="<?php echo $product['href']; ?>" title="<?php echo $product['description_short']; ?>">

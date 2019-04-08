@@ -2,6 +2,10 @@
 class ModelCatalogProduct extends Model {
 	use Contact;
 
+	private $cache_expires_hour = 60 * 60; // 1 hour
+	private $cache_expires_day = 60 * 60 * 24; // 1 day
+	private $cache_expires_week = 60 * 60 * 24 * 7; // 1 week
+
 	public function getProduct($product_id, $preview = false) {
 		if (empty($product_id)) return array();
 
@@ -190,7 +194,7 @@ class ModelCatalogProduct extends Model {
 			}
 
 			if (!$preview) {
-				$this->cache->set('product_' . (int)$product_id . '.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id, $product_data);
+				$this->cache->set('product_' . (int)$product_id . '.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id, $product_data, $this->cache_expires_day);
 			}
 		}
 
@@ -224,7 +228,7 @@ class ModelCatalogProduct extends Model {
 			, p.sort_order
 			, p.date_added
 			, pd.name AS name
-			, pd.description
+			, LEFT(pd.description, 255) AS description_short
 			, m.manufacturer_id
 			, m.name AS manufacturer
 			, pm.member_account_id AS member_id
@@ -259,7 +263,7 @@ class ModelCatalogProduct extends Model {
 				'special'          => $query->row['special'],
 				'tax_class_id'     => $query->row['tax_class_id'],
 				'name'             => $query->row['name'],
-				'description'      => $query->row['description'],
+				'description_short' => $query->row['description_short'],
 				'image'            => $query->row['image'],
 				'model'            => $query->row['model'],
 				'size'             => $query->row['size'],
@@ -422,7 +426,7 @@ class ModelCatalogProduct extends Model {
 			}
 
 			if ($cache_results && !$random) {
-				$this->cache->set('product.products.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . $cache, $product_data);
+				$this->cache->set('product.products.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . $cache, $product_data, $this->cache_expires_hour);
 			}
 		}
 
@@ -549,7 +553,7 @@ class ModelCatalogProduct extends Model {
 			}
 
 			if ($cache_results) {
-				$this->cache->set('product.indexes.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $cache, $product_indexes);
+				$this->cache->set('product.indexes.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $cache, $product_indexes, $this->cache_expires_hour);
 			}
 		}
 
@@ -573,7 +577,7 @@ class ModelCatalogProduct extends Model {
 
 			$product_total = $query->row['total'];
 
-			$this->cache->set('product.total.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $cache, $product_total);
+			$this->cache->set('product.total.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $cache, $product_total, $this->cache_expires_hour);
 		}
 
 		return $product_total;
@@ -1131,6 +1135,36 @@ class ModelCatalogProduct extends Model {
 		}
 	}
 
+	private function getAllProductFeatured() {
+		$customer_group_id = $this->customer->isLogged() ? $this->customer->getCustomerGroupId() : $this->config->get('config_customer_group_id');
+
+		$product_data = $this->cache->get('product.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id);
+
+		if ($product_data === false) {
+			$product_data = $featured_dne = array();
+
+			$products = explode(',', $this->config->get('featured_product'));
+
+			foreach ($products as $product_id) {
+				$result = $this->getProductShort($product_id);
+
+				if ($result) {
+					$product_data[$product_id] = $result;
+				} else {
+					$featured_dne[] = $product_id; // does not exist (need to remove)
+				}
+			}
+
+			if ($featured_dne) {
+				$this->log->write('Featured DNE: ' . implode(', ', $featured_dne));
+			}
+		}
+
+		$this->cache->set('product.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id, $product_data, $this->cache_expires_week);
+
+		return $product_data;
+	}
+
 	public function getProductFeatured($data = array(), $cache_results = true) {
 		$customer_group_id = $this->customer->isLogged() ? $this->customer->getCustomerGroupId() : $this->config->get('config_customer_group_id');
 
@@ -1139,15 +1173,16 @@ class ModelCatalogProduct extends Model {
 		$product_data = !$cache_results ? false : $this->cache->get('product.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . $cache);
 
 		if ($product_data === false) {
-			$product_data = array();
-			$featured_dne = array();
-			$filter_ids = array();
-			$product_ids = array();
-			$filter_listing_ids = array();
-			$filter_category_id = 0;
-			$classified = $buy_now = $shared = false;
+			$product_data = $featured_dne = $filter_listing_ids = array();
+			$filter_category_id = $filter_country_id = $filter_zone_id = $filter_manufacturer_id = 0;
+			$filter_name = $filter_location = '';
+			$filter_listing_type = $classified = $buy_now = $shared = false;
 
-			$products = explode(',', $this->config->get('featured_product'));
+			$products_featured = $this->getAllProductFeatured();
+
+			if (!empty($data['filter_category_id']) && !is_array($data['filter_category_id'])) {
+				$filter_category_id = (int)$data['filter_category_id'];
+			}
 
 			if (!empty($data['filter_listings']) && !is_array($data['filter_listings'])) {
 				$filter_listings = explode(',', $data['filter_listings']);
@@ -1158,61 +1193,73 @@ class ModelCatalogProduct extends Model {
 			}
 
 			if (!empty($data['filter_listing_type']) && is_array($data['filter_listing_type'])) {
+				$filter_listing_type = true;
 				$classified = in_array('0', $data['filter_listing_type']);
 				$buy_now = in_array('1', $data['filter_listing_type']);
 				$shared = in_array('-1', $data['filter_listing_type']);
 			}
 
 			if (!empty($data['filter_filter']) && !is_array($data['filter_filter'])) {
+				$filter_ids = array();
 				$filters = explode(',', $data['filter_filter']);
 
 				foreach ($filters as $filter_id) {
 					$filter_ids[] = (int)$filter_id;
 				}
 
-				$product_ids = $this->getProductsByFilters($filter_ids);
+				$filter_listing_ids = array_merge($filter_listing_ids, $this->getProductsByFilters($filter_ids));
 			}
 
-			foreach ($products as $product_id) {
-				$result = $this->getProductShort($product_id);
+			if (!empty($data['filter_name'])) {
+				$filter_name = utf8_strtolower($data['filter_name']);
+			}
 
-				if ($result) {
-					if ((!empty($data['filter_location']) && utf8_strpos(utf8_strtolower($result['location']), utf8_strtolower($data['filter_location'])) === false)
-						|| (!empty($data['filter_country_id']) && $result['country_id'] != $data['filter_country_id'])
-						|| (!empty($data['filter_zone_id']) && $result['zone_id'] != $data['filter_zone_id'])
-						|| (!empty($data['filter_manufacturer_id']) && $result['manufacturer_id'] != $data['filter_manufacturer_id'])
-						|| (!empty($data['filter_name']) && utf8_strpos(utf8_strtolower($result['name']), utf8_strtolower($data['filter_name'])) === false)
-						|| (!empty($data['filter_filter']) && !in_array($product_id, $product_ids))
-						|| (!empty($data['filter_listings']) && in_array($product_id, $filter_listing_ids))) {
-						continue;
-					}
+			if (!empty($data['filter_location'])) {
+				$filter_location = utf8_strtolower($data['filter_location']);
+			}
 
-					if (!empty($data['filter_listing_type'])) {
-						if (($classified && $buy_now && $result['quantity'] < 0)
-							|| ($classified && $shared && $result['quantity'] > 0)
-							|| ($shared && $buy_now && $result['quantity'] == 0)
-							|| ($classified && $result['quantity'] != 0)
-							|| ($buy_now && $result['quantity'] <= 0)
-							|| ($shared && $result['quantity'] >= 0)) {
-							continue;
-						}
-					}
+			if (!empty($data['filter_country_id'])) {
+				$filter_country_id = (int)$data['filter_country_id'];
+			}
 
-					if (!empty($data['filter_category_id']) && !in_array((int)$data['filter_category_id'], explode('_', $result['path']))) {
-						continue;
-					}
+			if (!empty($data['filter_zone_id'])) {
+				$filter_zone_id = (int)$data['filter_zone_id'];
+			}
 
-					// $this->getProductFilters($product_id);
-					// $this->checkProductHasFilterInFilterGroup($product_id, $filter_group_id = 0, $filters = array())
+			if (!empty($data['filter_manufacturer_id'])) {
+				$filter_manufacturer_id = (int)$data['filter_manufacturer_id'];
+			}
 
-
-					$product_data[$product_id] = $result;
-				} else {
-					$featured_dne[] = $product_id; // does not exist (need to remove)
+			foreach ($products_featured as $product_id => $result) {
+				if ($filter_category_id && !in_array($filter_category_id, explode('_', $result['path']))) {
+					continue;
 				}
-			}
 
-			if ($featured_dne) $this->log->write('Featured DNE: ' . implode(', ', $featured_dne));
+				if (($filter_location && utf8_strpos(utf8_strtolower($result['location']), $filter_location) === false)
+					|| ($filter_country_id && $result['country_id'] != $filter_country_id)
+					|| ($filter_zone_id && $result['zone_id'] != $filter_zone_id)
+					|| ($filter_manufacturer_id && $result['manufacturer_id'] != $filter_manufacturer_id)
+					|| ($filter_name && utf8_strpos(utf8_strtolower($result['name']), $filter_name) === false)
+					|| ($filter_listing_ids && in_array($product_id, $filter_listing_ids))) {
+					continue;
+				}
+
+				if ($filter_listing_type) {
+					if (($classified && $buy_now && $result['quantity'] < 0)
+						|| ($classified && $shared && $result['quantity'] > 0)
+						|| ($shared && $buy_now && $result['quantity'] == 0)
+						|| ($classified && $result['quantity'] != 0)
+						|| ($buy_now && $result['quantity'] <= 0)
+						|| ($shared && $result['quantity'] >= 0)) {
+						continue;
+					}
+				}
+
+				// $this->getProductFilters($product_id);
+				// $this->checkProductHasFilterInFilterGroup($product_id, $filter_group_id = 0, $filters = array())
+
+				$product_data[$product_id] = $result;
+			}
 
 			// sort
 			$sort_order = array();
@@ -1271,7 +1318,7 @@ class ModelCatalogProduct extends Model {
 			}
 
 			if ($cache_results) {
-				$this->cache->set('product.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . $cache, $product_data);
+				$this->cache->set('product.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . $cache, $product_data, $this->cache_expires_week);
 			}
 		}
 
@@ -1398,7 +1445,7 @@ class ModelCatalogProduct extends Model {
 			}
 
 			if ($cache_results) {
-				$this->cache->set('product.special.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . $cache, $product_data);
+				$this->cache->set('product.special.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . $cache, $product_data, $this->cache_expires_hour);
 			}
 		}
 
@@ -1531,7 +1578,7 @@ class ModelCatalogProduct extends Model {
 				$product_ids[] = $result['product_id'];
 			}
 
-			$this->cache->set('product.filter.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $cache, $product_ids);
+			$this->cache->set('product.filter.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $cache, $product_ids, $this->cache_expires_hour);
 		}
 
 		return $product_ids;
@@ -1787,7 +1834,7 @@ class ModelCatalogProduct extends Model {
 		$product_data = array();
 
 		$query = $this->db->query("
-			SELECT *
+			SELECT related_id
 			FROM " . DB_PREFIX . "product_related pr
 			LEFT JOIN " . DB_PREFIX . "product p ON (pr.related_id = p.product_id)
 			LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id)
@@ -1885,7 +1932,7 @@ class ModelCatalogProduct extends Model {
 				$product_data[$result['product_id']] = $this->getProductShort($result['product_id']);
 			}
 
-			$this->cache->set('product.latest.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'). '.' . (int)$customer_group_id . '.' . (int)$limit, $product_data);
+			$this->cache->set('product.latest.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'). '.' . (int)$customer_group_id . '.' . (int)$limit, $product_data, $this->cache_expires_hour);
 		}
 
 		return $product_data;
@@ -1916,7 +1963,7 @@ class ModelCatalogProduct extends Model {
 				$product_data[$result['product_id']] = $this->getProductShort($result['product_id']);
 			}
 
-			$this->cache->set('product.popular.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'). '.' . (int)$customer_group_id . '.' . (int)$limit, $product_data);
+			$this->cache->set('product.popular.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'). '.' . (int)$customer_group_id . '.' . (int)$limit, $product_data, $this->cache_expires_day);
 		}
 
 		return $product_data;
@@ -1952,7 +1999,7 @@ class ModelCatalogProduct extends Model {
 				$product_data[$result['product_id']] = $this->getProductShort($result['product_id']);
 			}
 
-			$this->cache->set('product.bestseller.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'). '.' . (int)$customer_group_id . '.' . (int)$limit, $product_data);
+			$this->cache->set('product.bestseller.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'). '.' . (int)$customer_group_id . '.' . (int)$limit, $product_data, $this->cache_expires_day);
 		}
 
 		return $product_data;
