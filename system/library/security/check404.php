@@ -75,9 +75,9 @@ class SecurityCheck404 extends SecurityBase {
     protected function lockout() {
         $now = time();
         $expire_time = $now + (60 * $this->config->get('security_lockout_period'));
+        $ban = false;
 
         if ($this->check_list($this->config->get('security_white_list_404')) == false) {
-
             if (filter_var($this->request->server['REMOTE_ADDR'], FILTER_VALIDATE_IP) && $this->config->get('security_blacklist_repeat_offender')) {
                 $lock_limit = $this->config->get('security_blacklist_threshold');
 
@@ -93,13 +93,13 @@ class SecurityCheck404 extends SecurityBase {
                 $lock_count = 0;
             }
 
-            $ban = false;
-
             if ($lock_limit !== false && $lock_count >= $lock_limit) {
                 $this->db->query("
                     INSERT IGNORE INTO " . DB_PREFIX . "security_ban_list
                     SET `host` = '" . $this->db->escape($this->request->server['REMOTE_ADDR']) . "'
                 ");
+
+                $this->ban_list_cache[$this->request->server['REMOTE_ADDR']] = true;
 
                 $ban = true;
             }
@@ -113,8 +113,15 @@ class SecurityCheck404 extends SecurityBase {
                 , `user_id` = '0'
             ");
 
-            if ($this->config->get('security_email_404_notifications') && $this->config->get('security_email_404_address')) {
+            $this->lock_list_cache[$this->request->server['REMOTE_ADDR']] = true;
 
+            if ($ban) {
+                $this->cache->delete('security');
+            } else {
+                $this->cache->delete('security.locklist');
+            }
+
+            if ($this->config->get('security_email_404_notifications') && $this->config->get('security_email_404_address') && $this->config->get('config_alert_mail')) {
                 $mail = new Mail($this->config->get('config_smtp_api_key'));
                 $mail->protocol = $this->config->get('config_mail_protocol');
                 $mail->parameter = $this->config->get('config_mail_parameter');
@@ -141,14 +148,12 @@ class SecurityCheck404 extends SecurityBase {
                 $mail->setText(sprintf($this->language->get('text_security_404_notify_text'), $who, $duration));
                 $mail->send();
             }
-
-            $this->cache->delete('security');
         }
     }
 
     protected function check_lock() {
-        if (isset($this->lock_list_cache[$this->request->server['REMOTE_ADDR']])) {
-            return $this->lock_list_cache[$this->request->server['REMOTE_ADDR']];
+        if (!empty($this->lock_list_cache[$this->request->server['REMOTE_ADDR']])) {
+            return true;
         }
 
         $locklist = $this->cache->get('security.locklist');
@@ -171,7 +176,9 @@ class SecurityCheck404 extends SecurityBase {
 
         $request_server_is_locked = !in_array($this->db->escape($this->request->server['REMOTE_ADDR']), $locklist) ? false : true;
 
-        $this->lock_list_cache[$this->request->server['REMOTE_ADDR']] = $request_server_is_locked;
+        if ($request_server_is_locked) {
+            $this->lock_list_cache[$this->request->server['REMOTE_ADDR']] = true;
+        }
 
         return $request_server_is_locked;
     }
@@ -218,8 +225,8 @@ class SecurityCheck404 extends SecurityBase {
     }
 
     protected function is_banned() {
-        if (isset($this->ban_list_cache[$this->request->server['REMOTE_ADDR']])) {
-            return $this->ban_list_cache[$this->request->server['REMOTE_ADDR']];
+        if (!empty($this->ban_list_cache[$this->request->server['REMOTE_ADDR']])) {
+            return true;
         }
 
         $banlist = $this->cache->get('security.banlist');
@@ -241,7 +248,9 @@ class SecurityCheck404 extends SecurityBase {
 
         $request_server_is_banned = !in_array($this->db->escape($this->request->server['REMOTE_ADDR']), $banlist) ? false : true;
 
-        $this->ban_list_cache[$this->request->server['REMOTE_ADDR']] = $request_server_is_banned;
+        if ($request_server_is_banned) {
+            $this->ban_list_cache[$this->request->server['REMOTE_ADDR']] = true;
+        }
 
         return $request_server_is_banned;
     }
