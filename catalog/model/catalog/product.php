@@ -1131,6 +1131,34 @@ class ModelCatalogProduct extends Model {
 		}
 	}
 
+	private function getAllProductFeatured() {
+		$customer_group_id = $this->customer->isLogged() ? $this->customer->getCustomerGroupId() : $this->config->get('config_customer_group_id');
+
+		$product_data = $this->cache->get('product.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id);
+
+		if ($product_data === false) {
+			$product_data = $featured_dne = array();
+
+			$products = explode(',', $this->config->get('featured_product'));
+
+			foreach ($products as $product_id) {
+				$result = $this->getProductShort($product_id);
+
+				if ($result) {
+					$product_data[$product_id] = $result;
+				} else {
+					$featured_dne[] = $product_id; // does not exist (need to remove)
+				}
+			}
+
+			if ($featured_dne) $this->log->write('Featured DNE: ' . implode(', ', $featured_dne));
+		}
+
+		$this->cache->set('product.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id, $product_data);
+
+		return $product_data;
+	}
+
 	public function getProductFeatured($data = array(), $cache_results = true) {
 		$customer_group_id = $this->customer->isLogged() ? $this->customer->getCustomerGroupId() : $this->config->get('config_customer_group_id');
 
@@ -1139,15 +1167,16 @@ class ModelCatalogProduct extends Model {
 		$product_data = !$cache_results ? false : $this->cache->get('product.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . $cache);
 
 		if ($product_data === false) {
-			$product_data = array();
-			$featured_dne = array();
-			$filter_ids = array();
-			$product_ids = array();
-			$filter_listing_ids = array();
-			$filter_category_id = 0;
-			$classified = $buy_now = $shared = false;
+			$product_data = $featured_dne = $filter_listing_ids = array();
+			$filter_category_id = $filter_country_id = $filter_zone_id = $filter_manufacturer_id = 0;
+			$filter_name = $filter_location = '';
+			$filter_listing_type = $classified = $buy_now = $shared = false;
 
-			$products = explode(',', $this->config->get('featured_product'));
+			$products_featured = $this->getAllProductFeatured();
+
+			if (!empty($data['filter_category_id']) && !is_array($data['filter_category_id'])) {
+				$filter_category_id = (int)$data['filter_category_id'];
+			}
 
 			if (!empty($data['filter_listings']) && !is_array($data['filter_listings'])) {
 				$filter_listings = explode(',', $data['filter_listings']);
@@ -1158,61 +1187,73 @@ class ModelCatalogProduct extends Model {
 			}
 
 			if (!empty($data['filter_listing_type']) && is_array($data['filter_listing_type'])) {
+				$filter_listing_type = true;
 				$classified = in_array('0', $data['filter_listing_type']);
 				$buy_now = in_array('1', $data['filter_listing_type']);
 				$shared = in_array('-1', $data['filter_listing_type']);
 			}
 
 			if (!empty($data['filter_filter']) && !is_array($data['filter_filter'])) {
+				$filter_ids = array();
 				$filters = explode(',', $data['filter_filter']);
 
 				foreach ($filters as $filter_id) {
 					$filter_ids[] = (int)$filter_id;
 				}
 
-				$product_ids = $this->getProductsByFilters($filter_ids);
+				$filter_listing_ids = array_merge($filter_listing_ids, $this->getProductsByFilters($filter_ids));
 			}
 
-			foreach ($products as $product_id) {
-				$result = $this->getProductShort($product_id);
+			if (!empty($data['filter_name'])) {
+				$filter_name = utf8_strtolower($data['filter_name']);
+			}
 
-				if ($result) {
-					if ((!empty($data['filter_location']) && utf8_strpos(utf8_strtolower($result['location']), utf8_strtolower($data['filter_location'])) === false)
-						|| (!empty($data['filter_country_id']) && $result['country_id'] != $data['filter_country_id'])
-						|| (!empty($data['filter_zone_id']) && $result['zone_id'] != $data['filter_zone_id'])
-						|| (!empty($data['filter_manufacturer_id']) && $result['manufacturer_id'] != $data['filter_manufacturer_id'])
-						|| (!empty($data['filter_name']) && utf8_strpos(utf8_strtolower($result['name']), utf8_strtolower($data['filter_name'])) === false)
-						|| (!empty($data['filter_filter']) && !in_array($product_id, $product_ids))
-						|| (!empty($data['filter_listings']) && in_array($product_id, $filter_listing_ids))) {
-						continue;
-					}
+			if (!empty($data['filter_location'])) {
+				$filter_location = utf8_strtolower($data['filter_location']);
+			}
 
-					if (!empty($data['filter_listing_type'])) {
-						if (($classified && $buy_now && $result['quantity'] < 0)
-							|| ($classified && $shared && $result['quantity'] > 0)
-							|| ($shared && $buy_now && $result['quantity'] == 0)
-							|| ($classified && $result['quantity'] != 0)
-							|| ($buy_now && $result['quantity'] <= 0)
-							|| ($shared && $result['quantity'] >= 0)) {
-							continue;
-						}
-					}
+			if (!empty($data['filter_country_id'])) {
+				$filter_country_id = (int)$data['filter_country_id'];
+			}
 
-					if (!empty($data['filter_category_id']) && !in_array((int)$data['filter_category_id'], explode('_', $result['path']))) {
-						continue;
-					}
+			if (!empty($data['filter_zone_id'])) {
+				$filter_zone_id = (int)$data['filter_zone_id'];
+			}
 
-					// $this->getProductFilters($product_id);
-					// $this->checkProductHasFilterInFilterGroup($product_id, $filter_group_id = 0, $filters = array())
+			if (!empty($data['filter_manufacturer_id'])) {
+				$filter_manufacturer_id = (int)$data['filter_manufacturer_id'];
+			}
 
-
-					$product_data[$product_id] = $result;
-				} else {
-					$featured_dne[] = $product_id; // does not exist (need to remove)
+			foreach ($products_featured as $product_id => $result) {
+				if ($filter_category_id && !in_array($filter_category_id, explode('_', $result['path']))) {
+					continue;
 				}
-			}
 
-			if ($featured_dne) $this->log->write('Featured DNE: ' . implode(', ', $featured_dne));
+				if (($filter_location && utf8_strpos(utf8_strtolower($result['location']), $filter_location) === false)
+					|| ($filter_country_id && $result['country_id'] != $filter_country_id)
+					|| ($filter_zone_id && $result['zone_id'] != $filter_zone_id)
+					|| ($filter_manufacturer_id && $result['manufacturer_id'] != $filter_manufacturer_id)
+					|| ($filter_name && utf8_strpos(utf8_strtolower($result['name']), $filter_name) === false)
+					|| ($filter_listing_ids && in_array($product_id, $filter_listing_ids))) {
+					continue;
+				}
+
+				if ($filter_listing_type) {
+					if (($classified && $buy_now && $result['quantity'] < 0)
+						|| ($classified && $shared && $result['quantity'] > 0)
+						|| ($shared && $buy_now && $result['quantity'] == 0)
+						|| ($classified && $result['quantity'] != 0)
+						|| ($buy_now && $result['quantity'] <= 0)
+						|| ($shared && $result['quantity'] >= 0)) {
+						continue;
+					}
+				}
+
+				// $this->getProductFilters($product_id);
+				// $this->checkProductHasFilterInFilterGroup($product_id, $filter_group_id = 0, $filters = array())
+
+				$product_data[$product_id] = $result;
+			}
 
 			// sort
 			$sort_order = array();

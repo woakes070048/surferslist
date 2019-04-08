@@ -83,6 +83,11 @@ class ControllerProductData extends Controller {
 		foreach ($data['products'] as $product) {
 			$this->getMinData($product, $customer_group_id);
 			$this->getNonCachedData($product);
+
+			if (!isset($product['thumb_alt'])) {
+				$product['thumb_alt'] = $product['thumb'];
+			}
+
 			$product_data[$product['product_id']] = $product;
 		}
 
