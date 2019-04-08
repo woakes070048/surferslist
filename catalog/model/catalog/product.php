@@ -224,7 +224,7 @@ class ModelCatalogProduct extends Model {
 			, p.sort_order
 			, p.date_added
 			, pd.name AS name
-			, pd.description
+			, LEFT(pd.description, 255) AS description_short
 			, m.manufacturer_id
 			, m.name AS manufacturer
 			, pm.member_account_id AS member_id
@@ -259,7 +259,7 @@ class ModelCatalogProduct extends Model {
 				'special'          => $query->row['special'],
 				'tax_class_id'     => $query->row['tax_class_id'],
 				'name'             => $query->row['name'],
-				'description'      => $query->row['description'],
+				'description_short' => $query->row['description_short'],
 				'image'            => $query->row['image'],
 				'model'            => $query->row['model'],
 				'size'             => $query->row['size'],
@@ -1151,7 +1151,9 @@ class ModelCatalogProduct extends Model {
 				}
 			}
 
-			if ($featured_dne) $this->log->write('Featured DNE: ' . implode(', ', $featured_dne));
+			if ($featured_dne) {
+				$this->log->write('Featured DNE: ' . implode(', ', $featured_dne));
+			}
 		}
 
 		$this->cache->set('product.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id, $product_data);
@@ -1828,7 +1830,7 @@ class ModelCatalogProduct extends Model {
 		$product_data = array();
 
 		$query = $this->db->query("
-			SELECT *
+			SELECT related_id
 			FROM " . DB_PREFIX . "product_related pr
 			LEFT JOIN " . DB_PREFIX . "product p ON (pr.related_id = p.product_id)
 			LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id)
