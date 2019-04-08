@@ -2,6 +2,10 @@
 class ModelCatalogProduct extends Model {
 	use Contact;
 
+	private $cache_expires_hour = 60 * 60; // 1 hour
+	private $cache_expires_day = 60 * 60 * 24; // 1 day
+	private $cache_expires_week = 60 * 60 * 24 * 7; // 1 week
+
 	public function getProduct($product_id, $preview = false) {
 		if (empty($product_id)) return array();
 
@@ -190,7 +194,7 @@ class ModelCatalogProduct extends Model {
 			}
 
 			if (!$preview) {
-				$this->cache->set('product_' . (int)$product_id . '.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id, $product_data);
+				$this->cache->set('product_' . (int)$product_id . '.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id, $product_data, $this->cache_expires_day);
 			}
 		}
 
@@ -422,7 +426,7 @@ class ModelCatalogProduct extends Model {
 			}
 
 			if ($cache_results && !$random) {
-				$this->cache->set('product.products.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . $cache, $product_data);
+				$this->cache->set('product.products.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . $cache, $product_data, $this->cache_expires_hour);
 			}
 		}
 
@@ -549,7 +553,7 @@ class ModelCatalogProduct extends Model {
 			}
 
 			if ($cache_results) {
-				$this->cache->set('product.indexes.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $cache, $product_indexes);
+				$this->cache->set('product.indexes.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $cache, $product_indexes, $this->cache_expires_hour);
 			}
 		}
 
@@ -573,7 +577,7 @@ class ModelCatalogProduct extends Model {
 
 			$product_total = $query->row['total'];
 
-			$this->cache->set('product.total.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $cache, $product_total);
+			$this->cache->set('product.total.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $cache, $product_total, $this->cache_expires_hour);
 		}
 
 		return $product_total;
@@ -1156,7 +1160,7 @@ class ModelCatalogProduct extends Model {
 			}
 		}
 
-		$this->cache->set('product.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id, $product_data);
+		$this->cache->set('product.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id, $product_data, $this->cache_expires_week);
 
 		return $product_data;
 	}
@@ -1314,7 +1318,7 @@ class ModelCatalogProduct extends Model {
 			}
 
 			if ($cache_results) {
-				$this->cache->set('product.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . $cache, $product_data);
+				$this->cache->set('product.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . $cache, $product_data, $this->cache_expires_week);
 			}
 		}
 
@@ -1441,7 +1445,7 @@ class ModelCatalogProduct extends Model {
 			}
 
 			if ($cache_results) {
-				$this->cache->set('product.special.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . $cache, $product_data);
+				$this->cache->set('product.special.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . $cache, $product_data, $this->cache_expires_hour);
 			}
 		}
 
@@ -1574,7 +1578,7 @@ class ModelCatalogProduct extends Model {
 				$product_ids[] = $result['product_id'];
 			}
 
-			$this->cache->set('product.filter.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $cache, $product_ids);
+			$this->cache->set('product.filter.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $cache, $product_ids, $this->cache_expires_hour);
 		}
 
 		return $product_ids;
@@ -1928,7 +1932,7 @@ class ModelCatalogProduct extends Model {
 				$product_data[$result['product_id']] = $this->getProductShort($result['product_id']);
 			}
 
-			$this->cache->set('product.latest.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'). '.' . (int)$customer_group_id . '.' . (int)$limit, $product_data);
+			$this->cache->set('product.latest.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'). '.' . (int)$customer_group_id . '.' . (int)$limit, $product_data, $this->cache_expires_hour);
 		}
 
 		return $product_data;
@@ -1959,7 +1963,7 @@ class ModelCatalogProduct extends Model {
 				$product_data[$result['product_id']] = $this->getProductShort($result['product_id']);
 			}
 
-			$this->cache->set('product.popular.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'). '.' . (int)$customer_group_id . '.' . (int)$limit, $product_data);
+			$this->cache->set('product.popular.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'). '.' . (int)$customer_group_id . '.' . (int)$limit, $product_data, $this->cache_expires_day);
 		}
 
 		return $product_data;
@@ -1995,7 +1999,7 @@ class ModelCatalogProduct extends Model {
 				$product_data[$result['product_id']] = $this->getProductShort($result['product_id']);
 			}
 
-			$this->cache->set('product.bestseller.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'). '.' . (int)$customer_group_id . '.' . (int)$limit, $product_data);
+			$this->cache->set('product.bestseller.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'). '.' . (int)$customer_group_id . '.' . (int)$limit, $product_data, $this->cache_expires_day);
 		}
 
 		return $product_data;
