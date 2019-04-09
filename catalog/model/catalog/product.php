@@ -17,6 +17,7 @@ class ModelCatalogProduct extends Model {
 			$sql = "
 				SELECT DISTINCT p.*
 				, pd.*
+				, LEFT(pd.description, 255) AS description_short
 				, pm.customer_id
 				, m.name AS manufacturer
 				, m.image AS manufacturer_image
@@ -123,6 +124,7 @@ class ModelCatalogProduct extends Model {
 					'keyword'		   => $query->row['keyword'],
 					'name'             => $query->row['name'],
 					'description'      => $query->row['description'],
+					'description_short' => $query->row['description_short'],
 					'meta_description' => $query->row['meta_description'],
 					'meta_keyword'     => $query->row['meta_keyword'],
 					'tag'              => $query->row['tag'],
