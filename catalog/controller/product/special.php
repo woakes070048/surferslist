@@ -56,24 +56,24 @@ class ControllerProductSpecial extends Controller {
 
 		if (isset($this->request->get['filter_location'])) {
 			$filter_location = $this->request->get['filter_location'];
-		// } elseif (isset($this->session->data['shipping_location'])) {
-		// 	$filter_location = $this->session->data['shipping_location'];
+		} elseif (isset($this->session->data['shipping_location'])) {
+			$filter_location = $this->session->data['shipping_location'];
 		} else {
 			$filter_location = '';
 		}
 
 		if (isset($this->request->get['filter_country_id'])) {
 			$filter_country_id = $this->request->get['filter_country_id'];
-		// } elseif (isset($this->session->data['shipping_country_id'])) {
-		// 	$filter_country_id = $this->session->data['shipping_country_id'];
+		} elseif (isset($this->session->data['shipping_country_id'])) {
+			$filter_country_id = $this->session->data['shipping_country_id'];
 		} else {
 			$filter_country_id = '';
 		}
 
 		if (isset($this->request->get['filter_zone_id'])) {
 			$filter_zone_id = $this->request->get['filter_zone_id'];
-		// } elseif (isset($this->session->data['shipping_zone_id'])) {
-		// 	$filter_zone_id = $this->session->data['shipping_zone_id'];
+		} elseif (isset($this->session->data['shipping_zone_id'])) {
+			$filter_zone_id = $this->session->data['shipping_zone_id'];
 		} else {
 			$filter_zone_id = '';
 		}
@@ -115,6 +115,14 @@ class ControllerProductSpecial extends Controller {
 		}
 
 		$this->addBreadcrumb($this->language->get('heading_title'), $this->url->link('product/special'));
+
+		$location_name = $this->getLocationName('long');
+
+		if ($location_name) {
+			$heading_title .= ' - ' . $location_name;
+
+			$this->addBreadcrumb($location_name, $this->url->link('information/location'));
+		}
 
 		$this->data['breadcrumbs'] = $this->getBreadcrumbs();
 
@@ -167,16 +175,19 @@ class ControllerProductSpecial extends Controller {
 
 		$url = $this->getQueryString(array('page'));
 
+		$pagination = $this->getPagination($product_total, $page, $limit, 'product/special', '', $url);
+
 		$this->data['products'] = $this->getChild('product/data/list', array(
 			'products' => $this->model_catalog_product->getProductSpecials($data),
-			'more' => $page < $max_pages ? $this->url->link('ajax/product/more', $url . '&special=true' . '&page=' . ($page + 1)) : ''
+			'more' => $page < $max_pages ? $this->url->link('ajax/product/more', $url . '&special=true' . '&page=' . ($page + 1)) : '',
+			'pagination' => $pagination,
+			'reset' => !empty($url) ? $this->url->link('product/special') : false,
+			'query_params' => $query_params
 		));
-
-		$this->data['pagination'] = $this->getPagination($product_total, $page, $limit, 'product/special', '', $url);
 
 		if ($page > 1) {
 			$heading_title .= ' - ' . sprintf($this->language->get('text_page_of'), $page, $max_pages);
-			$meta_description = strip_tags_decode(substr($this->data['pagination'], strpos($this->data['pagination'], '<div class="results'))) . ' - ' . $meta_description;
+			$meta_description = strip_tags_decode(substr($pagination, strpos($pagination, '<div class="results'))) . ' - ' . $meta_description;
 			$meta_keyword .= ', ' . strtolower($this->language->get('text_page')) . ' ' . $page;
 		}
 
@@ -198,12 +209,10 @@ class ControllerProductSpecial extends Controller {
 		$this->data['limit'] = $limit;
 		$this->data['url'] = $url;
 
+		$this->data['action'] = str_replace('&amp;', '&', $this->url->link('product/special', $url));
+		$this->data['reset'] = $this->url->link('product/special');
 		$this->data['random'] = $this->url->link('product/special', '&sort=random' . $url);
 		$this->data['compare'] = $this->url->link('product/compare');
-		$this->data['back'] = ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->request->server['HTTP_REFERER'] : $this->url->link('product/allproducts');
-		$this->data['search'] = $this->url->link('product/search');
-		$this->data['reset'] = $this->url->link('product/special');
-		$this->data['continue'] = $this->url->link('common/home');
 
 		if (!$this->data['products'] && (isset($this->session->data['shipping_country_id']) || isset($this->session->data['shipping_zone_id']) || isset($this->session->data['shipping_location']))) {
 			// Remove Location

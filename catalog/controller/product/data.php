@@ -25,13 +25,17 @@ class ControllerProductData extends Controller {
 
 		$customer_group_id = $this->customer->isLogged() ? $this->customer->getCustomerGroupId() : $this->config->get('config_customer_group_id');
 
+		$referer = ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->request->server['HTTP_REFERER'] : false;
+
 		$this->load->language('product/common');
+
+		$this->data['heading_params'] = $this->language->get('heading_param_search');
 
 		$this->data['text_loading'] = $this->language->get('text_loading');
 		$this->data['text_save'] = $this->language->get('text_save');
 		$this->data['text_tax'] = $this->language->get('text_tax');
 		$this->data['text_more'] = $this->language->get('text_more');
-		// $this->data['text_empty'] = $this->language->get('text_empty');
+		$this->data['text_empty'] = $this->language->get('text_empty');
 
 		$this->data['button_quickview'] = $this->language->get('button_quickview');
 		$this->data['button_wishlist'] = $this->language->get('button_wishlist');
@@ -39,6 +43,10 @@ class ControllerProductData extends Controller {
 		$this->data['button_cart'] = $this->language->get('button_cart');
 		$this->data['button_contact'] = $this->language->get('button_contact');
 		$this->data['button_compare'] = $this->language->get('button_compare');
+		$this->data['button_back'] = $this->language->get('button_back');
+		$this->data['button_reset'] = $this->language->get('button_reset');
+		$this->data['button_search'] = $this->language->get('button_search');
+		$this->data['button_home'] = $this->language->get('button_continue');
 
 		$product_data = array();
 
@@ -50,7 +58,30 @@ class ControllerProductData extends Controller {
 
 		$this->data['products'] = $product_data;
 
-		$this->data['more'] = $data['more'];
+		$this->data['more'] = isset($data['more']) ? $data['more'] : false;
+		$this->data['pagination'] = isset($data['pagination']) ? $data['pagination'] : false;
+		$this->data['reset'] = isset($data['reset']) ? $data['reset'] : false;
+		$this->data['params'] = isset($data['params']) ? $data['params'] : array();
+		$this->data['back'] = $referer && $referer != $this->data['reset'] ? $referer : false;
+		$this->data['search'] = $this->url->link('product/search');
+		$this->data['home'] = $this->url->link('common/home');
+
+		// Remove Location
+		if (!$product_data && (isset($this->session->data['shipping_country_id']) || isset($this->session->data['shipping_zone_id']) || isset($this->session->data['shipping_location']))) {
+			if (isset($data['query_params'])) {
+				$this->setQueryParams($data['query_params']);
+			}
+			
+			$url = $this->getQueryString(array('filter_location', 'filter_country_id', 'filter_zone_id', 'location', 'country', 'state'));
+			$request_path = isset($this->request->server['REQUEST_URI']) ? parse_url(strtolower(urldecode($this->request->server['REQUEST_URI'])), PHP_URL_PATH) : '';
+			$location_remove_url = $this->url->link('information/location', 'location=none&redirect_path=' . urlencode(ltrim($request_path . '?' . ltrim($url, "&"), "/")));
+
+			$this->data['text_empty'] .= '&nbsp; &nbsp;' . sprintf($this->language->get('text_location_remove_url'), $location_remove_url);
+		}
+
+		if (!isset($data['pagination']) && !isset($data['reset'])) {
+			$this->data['text_empty'] = '';
+		}
 
 		$this->template = 'template/product/products.tpl';
 

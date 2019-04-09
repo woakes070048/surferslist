@@ -95,8 +95,7 @@ class ControllerBlogArticle extends Controller {
             $this->data['heading_title'] = $heading_title;
 
             $this->data['related_products'] = $this->getChild('product/data/list', array(
-    			'products' => $this->model_blog_article->getRelatedProduct($blog_article_id),
-    			'more' => ''
+    			'products' => $this->model_blog_article->getRelatedProduct($blog_article_id)
             ));
 
             $this->data['sidebar'] = $this->getChild('blog/sidebar', array(
