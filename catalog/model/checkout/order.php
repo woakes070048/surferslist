@@ -629,7 +629,7 @@ class ModelCheckoutOrder extends Model {
 		$template->data['title'] = sprintf($language->get('text_subject'), html_entity_decode($order_info['store_name'], ENT_QUOTES, 'UTF-8'), $order_info['order_no']);
 		$template->data['text_greeting'] = sprintf($language->get('text_greeting'), html_entity_decode($order_info['store_name'], ENT_QUOTES, 'UTF-8'));
 		$template->data['member_enabled'] = $this->config->get('member_status') ? true : false;
-		$template->data['logo'] = $this->config->get('config_url') . 'logo/logo-140x60.png'; // logo-315x90.png // 'image/' . $this->config->get('config_logo');
+		$template->data['logo'] = is_file(DIR_IMAGE . $this->config->get('config_logo')) ? $this->model_tool_image->resize($this->config->get('config_logo'), 140, 60, '') : CDN_SERVER . 'image/data/logo/logo-140x60.png';
 		$template->data['store_name'] = $order_info['store_name'];
 		$template->data['store_url'] = $order_info['store_url'];
 		$template->data['customer_id'] = $order_info['customer_id'];
@@ -928,4 +928,3 @@ class ModelCheckoutOrder extends Model {
 	}
 
 }
-
