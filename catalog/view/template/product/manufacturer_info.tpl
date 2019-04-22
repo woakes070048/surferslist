@@ -18,6 +18,7 @@
                 <?php if (!empty($brand)) { ?>
                 <div id="brand-profile" class="widget hidden-medium">
                     <h6><?php echo $heading_brand; ?></h6>
+
                     <div class="content brand-profile">
                         <div class="image image-border" title="<?php echo $brand['name']; ?>" rel="tooltip" data-container="body">
                             <?php if ($brand['href']) { ?>
@@ -28,7 +29,11 @@
                         </div>
 
                         <h2 class="brand-name hidden">
+                            <?php if ($brand['href']) { ?>
                             <a href="<?php echo $brand['href']; ?>" target="_blank"><?php echo $brand['name']; ?></a>
+                            <?php } else { ?>
+                            <?php echo $brand['name']; ?>
+                            <?php } ?>
                         </h2>
 
                         <ul class="global-attribute hidden">
@@ -55,11 +60,14 @@
                         </div>
                         <?php } ?>
                     </div>
+                    
+                    <?php if ($brand['href']) { ?>
                     <div class="buttons">
                         <div class="center">
                             <a href="<?php echo $brand['href']; ?>" target="_blank" class="button button_alt"><i class="fa fa-link"></i><?php echo $text_manufacturer_website; ?></a>
                         </div>
                     </div>
+                    <?php } ?>
                 </div>
                 <?php } ?>
 
