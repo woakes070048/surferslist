@@ -242,7 +242,6 @@ class ControllerAccountAnonPost extends Controller {
 		$this->data['display_more_options'] = $this->isAdmin() || $this->hasError() ? true : false;
 		$this->data['status'] = $this->isAdmin() && isset($this->request->post['status']) ? $this->request->post['status'] : 1;
 		$this->data['approved'] = $this->isAdmin() && isset($this->request->post['approved']) ? $this->request->post['approved'] : 1;
-		$this->data['price'] = isset($this->request->post['price']) ? $this->request->post['price'] : '';
 
 		$this->data['csrf_token'] = $this->getCSRFToken();
 		$this->data['captcha_enabled'] = $this->getCaptchaStatus();
@@ -862,6 +861,10 @@ class ControllerAccountAnonPost extends Controller {
 		$listing_condition_id = !empty($data['condition_id']) ? (int)($data['condition_id']) : 0;
 		$listing_location = !empty($data['location']) ? $data['location'] : '';
 		$listing_customer_id = !empty($data['member_customer_id']) ? $data['member_customer_id'] : ($this->customer->isLogged() ? $this->customer->getId() : 0);
+
+		if ($listing_price) {
+			$listing_price = $this->currency->convert((float)$listing_price, $this->currency->getCode(), $this->config->get('config_currency'));
+		}
 
 		// location
 		if (!empty($data['zone_id']) && !empty($data['country_id'])) {

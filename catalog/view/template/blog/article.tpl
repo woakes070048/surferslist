@@ -193,9 +193,7 @@
                     <h2><?php echo $text_related_product; ?></h2>
 
                     <section id="related-listings" class="widget-module">
-                        <div class="grid-items-container">
-                            <?php echo $related_products; ?>
-                        </div>
+                        <?php echo $related_products; ?>
                     </section>
                 </div>
                 <?php } ?>

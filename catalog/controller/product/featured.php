@@ -58,24 +58,24 @@ class ControllerProductFeatured extends Controller {
 
 		if (isset($this->request->get['filter_location'])) {
 			$filter_location = $this->request->get['filter_location'];
-		// } elseif (isset($this->session->data['shipping_location'])) {
-		// 	$filter_location = $this->session->data['shipping_location'];
+		} elseif (isset($this->session->data['shipping_location'])) {
+			$filter_location = $this->session->data['shipping_location'];
 		} else {
 			$filter_location = '';
 		}
 
 		if (isset($this->request->get['filter_country_id'])) {
 			$filter_country_id = $this->request->get['filter_country_id'];
-		// } elseif (isset($this->session->data['shipping_country_id'])) {
-		// 	$filter_country_id = $this->session->data['shipping_country_id'];
+		} elseif (isset($this->session->data['shipping_country_id'])) {
+			$filter_country_id = $this->session->data['shipping_country_id'];
 		} else {
 			$filter_country_id = '';  // $this->config->get('config_country_id');
 		}
 
 		if (isset($this->request->get['filter_zone_id'])) {
 			$filter_zone_id = $this->request->get['filter_zone_id'];
-		// } elseif (isset($this->session->data['shipping_zone_id'])) {
-		// 	$filter_zone_id = $this->session->data['shipping_zone_id'];
+		} elseif (isset($this->session->data['shipping_zone_id'])) {
+			$filter_zone_id = $this->session->data['shipping_zone_id'];
 		} else {
 			$filter_zone_id = '';
 		}
@@ -118,6 +118,14 @@ class ControllerProductFeatured extends Controller {
 
 		$this->addBreadcrumb($this->language->get('heading_title'), $this->url->link('product/featured'));
 
+		$location_name = $this->getLocationName('long');
+
+		if ($location_name) {
+			$heading_title .= ' - ' . $location_name;
+
+			$this->addBreadcrumb($location_name, $this->url->link('information/location'));
+		}
+
 		$this->data['breadcrumbs'] = $this->getBreadcrumbs();
 
 		// Products Featured
@@ -143,7 +151,6 @@ class ControllerProductFeatured extends Controller {
 
 		$products_featured = explode(',', $this->config->get('featured_product'));
 
-		// $product_total = $this->model_catalog_product->getTotalProductFeatured($data);
 		$products = $this->model_catalog_product->getProductsIndexes($data);
 
 		$products = array_filter($products, function ($item) use ($products_featured) {
@@ -160,11 +167,14 @@ class ControllerProductFeatured extends Controller {
 
 		$url = $this->getQueryString(array('page'));
 
-		$this->data['pagination'] = $this->getPagination($product_total, $page, $limit, 'product/featured', '', $url);
+		$pagination = $this->getPagination($product_total, $page, $limit, 'product/featured', '', $url);
 
 		$this->data['products'] = $this->getChild('product/data/list', array(
 			'products' => $this->model_catalog_product->getProductFeatured($data, ($sort != 'random')),
-			'more' => $page < $max_pages ? $this->url->link('ajax/product/more', $url . '&featured=true' . '&page=' . ($page + 1)) : ''
+			'more' => $page < $max_pages ? $this->url->link('ajax/product/more', $url . '&featured=true' . '&page=' . ($page + 1)) : '',
+			'pagination' => $pagination,
+			'reset' => !empty($url) ? $this->url->link('product/featured') : false,
+			'query_params' => $query_params
 		));
 
 		$this->data['refine'] = $this->getChild('module/refine', array(
@@ -179,7 +189,7 @@ class ControllerProductFeatured extends Controller {
 
 		if ($page > 1) {
 			$heading_title .= ' - ' . sprintf($this->language->get('text_page_of'), $page, $max_pages);
-			$meta_description = strip_tags_decode(substr($this->data['pagination'], strpos($this->data['pagination'], '<div class="results'))) . ' - ' . $meta_description;
+			$meta_description = strip_tags_decode(substr($pagination, strpos($pagination, '<div class="results'))) . ' - ' . $meta_description;
 			$meta_keyword .= ', ' . strtolower($this->language->get('text_page')) . ' ' . $page;
 		}
 
@@ -188,19 +198,6 @@ class ControllerProductFeatured extends Controller {
 		$this->document->setKeywords($meta_keyword);
 
 		$this->data['action'] = str_replace('&amp;', '&', $this->url->link('product/featured', $url));
-		$this->data['back'] = ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->request->server['HTTP_REFERER'] : $this->url->link('product/allproducts');
-		$this->data['search'] = $this->url->link('product/search');
-		$this->data['reset'] = $this->url->link('product/featured');
-		$this->data['continue'] = $this->url->link('common/home');
-		$this->data['url'] = $url;
-
-		if (!$this->data['products'] && (isset($this->session->data['shipping_country_id']) || isset($this->session->data['shipping_zone_id']) || isset($this->session->data['shipping_location']))) {
-			// Remove Location
-			$url = $this->getQueryString(array('filter_location', 'filter_country_id', 'filter_zone_id'));
-			$request_path = isset($this->request->server['REQUEST_URI']) ? parse_url(strtolower(urldecode($this->request->server['REQUEST_URI'])), PHP_URL_PATH) : '';
-			$location_remove_url = $this->url->link('information/location', 'location=none&redirect_path=' . urlencode(ltrim($request_path . '?' . ltrim($url, "&"), "/")));
-			$this->data['text_empty'] .= '&nbsp; &nbsp;' . sprintf($this->language->get('text_location_remove_url'), $location_remove_url);
-		}
 
 		$this->template = 'template/product/featured.tpl';
 

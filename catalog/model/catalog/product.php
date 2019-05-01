@@ -17,6 +17,7 @@ class ModelCatalogProduct extends Model {
 			$sql = "
 				SELECT DISTINCT p.*
 				, pd.*
+				, LEFT(pd.description, 255) AS description_short
 				, pm.customer_id
 				, m.name AS manufacturer
 				, m.image AS manufacturer_image
@@ -123,6 +124,7 @@ class ModelCatalogProduct extends Model {
 					'keyword'		   => $query->row['keyword'],
 					'name'             => $query->row['name'],
 					'description'      => $query->row['description'],
+					'description_short' => $query->row['description_short'],
 					'meta_description' => $query->row['meta_description'],
 					'meta_keyword'     => $query->row['meta_keyword'],
 					'tag'              => $query->row['tag'],
@@ -1173,7 +1175,7 @@ class ModelCatalogProduct extends Model {
 		$product_data = !$cache_results ? false : $this->cache->get('product.featured.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$customer_group_id . '.' . $cache);
 
 		if ($product_data === false) {
-			$product_data = $featured_dne = $filter_listing_ids = array();
+			$product_data = $featured_dne = $filter_in_listing_ids = $filter_out_listing_ids = array();
 			$filter_category_id = $filter_country_id = $filter_zone_id = $filter_manufacturer_id = 0;
 			$filter_name = $filter_location = '';
 			$filter_listing_type = $classified = $buy_now = $shared = false;
@@ -1188,7 +1190,7 @@ class ModelCatalogProduct extends Model {
 				$filter_listings = explode(',', $data['filter_listings']);
 
 				foreach ($filter_listings as $filter_listing_id) {
-					$filter_listing_ids[] = (int)$filter_listing_id;
+					$filter_out_listing_ids[] = (int)$filter_listing_id;
 				}
 			}
 
@@ -1207,7 +1209,7 @@ class ModelCatalogProduct extends Model {
 					$filter_ids[] = (int)$filter_id;
 				}
 
-				$filter_listing_ids = array_merge($filter_listing_ids, $this->getProductsByFilters($filter_ids));
+				$filter_in_listing_ids = $this->getProductsByFilters($filter_ids);
 			}
 
 			if (!empty($data['filter_name'])) {
@@ -1235,12 +1237,13 @@ class ModelCatalogProduct extends Model {
 					continue;
 				}
 
-				if (($filter_location && utf8_strpos(utf8_strtolower($result['location']), $filter_location) === false)
+				if (($filter_in_listing_ids && !in_array($product_id, $filter_in_listing_ids))
+					|| ($filter_location && utf8_strpos(utf8_strtolower($result['location']), $filter_location) === false)
 					|| ($filter_country_id && $result['country_id'] != $filter_country_id)
 					|| ($filter_zone_id && $result['zone_id'] != $filter_zone_id)
 					|| ($filter_manufacturer_id && $result['manufacturer_id'] != $filter_manufacturer_id)
 					|| ($filter_name && utf8_strpos(utf8_strtolower($result['name']), $filter_name) === false)
-					|| ($filter_listing_ids && in_array($product_id, $filter_listing_ids))) {
+					|| ($filter_out_listing_ids && in_array($product_id, $filter_out_listing_ids))) {
 					continue;
 				}
 

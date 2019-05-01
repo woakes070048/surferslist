@@ -35,6 +35,7 @@ class ModelAccountCustomer extends Model {
 		}
 
 		// email notification
+		$this->load->model('tool/image');
 		$this->load->language('mail/customer');
 
 		$verification_link = $data['approval_required'] ? $this->url->link('account/verification', 'v=' . $this->setVerificationCode($customer_id) . '&u=' . (int)$customer_id, 'SSL') : '';
@@ -58,7 +59,7 @@ class ModelAccountCustomer extends Model {
 		$template->data['title'] = sprintf($this->language->get('text_subject'), $this->config->get('config_name'));
 		$template->data['store_name'] = $this->config->get('config_name');
 		$template->data['store_url'] = $this->config->get('config_url');
-		$template->data['logo'] = $this->config->get('config_url') . 'logo/logo-140x60.png'; // $this->config->get('config_url') . 'image/' . $this->config->get('config_logo');
+		$template->data['logo'] = is_file(DIR_IMAGE . $this->config->get('config_logo')) ? $this->model_tool_image->resize($this->config->get('config_logo'), 140, 60, '') : CDN_SERVER . 'image/data/logo/logo-140x60.png';
 		$template->data['text_welcome'] = sprintf($this->language->get('text_welcome'), $data['firstname'] . ' ' . $data['lastname'], $this->config->get('config_name'));
 		$template->data['text_next_step'] = !$data['approval_required'] ? sprintf($this->language->get('text_login'), $this->url->link('account/login', '', 'SSL')) : $this->language->get('text_email_verification');
 		$template->data['text_link'] = $verification_link ?: '';
@@ -483,4 +484,3 @@ class ModelAccountCustomer extends Model {
 		");
 	}
 }
-

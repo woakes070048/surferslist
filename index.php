@@ -155,11 +155,6 @@ set_error_handler('error_handler');
 $request = new Request();
 $registry->set('request', $request);
 
-// Security Cron
-if (substr(php_sapi_name(), 0, 3) == 'cli' || empty($request->get['REMOTE_ADDR'])) {
-	$request->get['HTTP_HOST'] = '';
-}
-
 // Response
 $response = new Response();
 $response->addHeader('Content-Type: text/html; charset=utf-8');

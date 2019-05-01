@@ -207,9 +207,14 @@ class ControllerProductCategory extends Controller {
 
 		$url = $this->getQueryString(array('page'));
 
+		$pagination = $this->getPagination($product_total, $page, $limit, 'product/category', 'path=' . $category_info['path'] . ($filter_manufacturer_id ? '&manufacturer_id=' . $filter_manufacturer_id : ''), $url);
+
 		$this->data['products'] = $this->getChild('product/data/list', array(
 			'products' => $this->model_catalog_product->getProducts($data),
-			'more' => $page < $max_pages ? $this->url->link('ajax/product/more', 'path=' . $category_info['path'] . $url . '&page=' . ($page + 1)) : ''
+			'more' => $page < $max_pages ? $this->url->link('ajax/product/more', 'path=' . $category_info['path'] . $url . '&page=' . ($page + 1)) : '',
+			'pagination' => $pagination,
+			'reset' => !empty($url) ? $this->url->link('product/category', 'path=' . $category_info['path']) : false,
+			'query_params' => $query_params
 		));
 
 		$this->data['refine'] = $this->getChild('module/refine', array(
@@ -223,11 +228,9 @@ class ControllerProductCategory extends Controller {
 			'forsale' => $forsale
 		));
 
-		$this->data['pagination'] = $this->getPagination($product_total, $page, $limit, 'product/category', 'path=' . $category_info['path'] . ($filter_manufacturer_id ? '&manufacturer_id=' . $filter_manufacturer_id : ''), $url);
-
 		if ($page > 1) {
 			$heading_title .= ' - ' . sprintf($this->language->get('text_page_of'), $page, $max_pages);
-			$meta_description = strip_tags_decode(substr($this->data['pagination'], strpos($this->data['pagination'], '<div class="results'))) . ' - ' . $meta_description;
+			$meta_description = strip_tags_decode(substr($pagination, strpos($pagination, '<div class="results'))) . ' - ' . $meta_description;
 			$meta_keyword .= ', ' . strtolower($this->language->get('text_page')) . ' ' . $page;
 		}
 
@@ -236,18 +239,6 @@ class ControllerProductCategory extends Controller {
 		$this->document->setKeywords($meta_keyword);
 
 		$this->data['action'] = str_replace('&amp;', '&', $this->url->link('product/category', 'path=' . $category_info['path'] . $url));
-		$this->data['back'] = ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->request->server['HTTP_REFERER'] : $this->url->link('product/allproducts');
-		$this->data['search'] = $this->url->link('product/search');
-		$this->data['reset'] = $this->url->link('product/category', 'path=' . $category_info['path']);
-		$this->data['continue'] = $this->url->link('common/home');
-		$this->data['url'] = $url;
-
-		if (!$this->data['products'] && (isset($this->session->data['shipping_country_id']) || isset($this->session->data['shipping_zone_id']) || isset($this->session->data['shipping_location']))) {
-			$request_path = isset($this->request->server['REQUEST_URI']) ? parse_url(strtolower(urldecode($this->request->server['REQUEST_URI'])), PHP_URL_PATH) : '';
-			$url = $this->getQueryString(array('filter_location', 'filter_country_id', 'filter_zone_id'));
-			$location_remove_url = $this->url->link('information/location', 'location=none&redirect_path=' . urlencode(ltrim($request_path . '?' . ltrim($url, "&"), "/")));
-			$this->data['text_empty'] .= '&emsp;' . sprintf($this->language->get('text_location_remove_url'), $location_remove_url);
-		}
 
 		$this->template = 'template/product/category.tpl';
 

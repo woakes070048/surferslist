@@ -6,6 +6,8 @@ class ControllerProductSearch extends Controller {
 			$this->load->language('product/search')
 		);
 
+		$this->load->model('tool/image');
+
 		if (isset($this->request->get['search'])) {
 			$search = $this->request->get['search'];
 		} else if (isset($this->request->get['s'])) {
@@ -117,9 +119,11 @@ class ControllerProductSearch extends Controller {
 			'member'			=> $this->language->get('text_param_member')
 		);
 
+		$params = array();
+
 		foreach ($search_params as $key => $value) {
 			if (!empty(${$key})) {
-				$this->data['params'][] = array(
+				$params[] = array(
 					'name'	=> $value,
 					'field' => $key,
 					'value'	=> is_array(${$key}) ? implode(',', ${$key}) : ${$key}
@@ -170,8 +174,6 @@ class ControllerProductSearch extends Controller {
 
 		$this->data['heading_title'] = $heading_title;
 
-		$this->data['heading_params'] = $this->language->get('heading_param_search');
-
 		$this->data['text_compare'] = sprintf($this->language->get('text_compare'), (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));
 
 		// Sorts
@@ -202,7 +204,6 @@ class ControllerProductSearch extends Controller {
 
 		$this->data['limits'] = $this->getLimits('product/search', $url);
 
-		$this->data['products'] = array();
 		$results = array();
 		$product_total = 0;
 		$max_pages = 0;
@@ -253,20 +254,20 @@ class ControllerProductSearch extends Controller {
 
 		if ($expand_search) $url .= '&expand_search=' . json_encode($expand_search);
 
-		$this->data['pagination'] = $this->getPagination($product_total, $page, $limit, 'product/search', '', $url);
+		$pagination = $this->getPagination($product_total, $page, $limit, 'product/search', '', $url);
 
-		if ($results) {
-			$this->load->model('tool/image');
-
-			$this->data['products'] = $this->getChild('product/data/list', array(
-				'products' => $results,
-				'more' => $page < $max_pages ? $this->url->link('ajax/product/more', $url . '&page=' . ($page + 1)) : ''
-			));
-		}
+		$this->data['products'] = $this->getChild('product/data/list', array(
+			'products' => $results,
+			'more' => $page < $max_pages ? $this->url->link('ajax/product/more', $url . '&page=' . ($page + 1)) : '',
+			'pagination' => $pagination,
+			'reset' => !empty($url) ? $this->url->link('product/search') : false,
+			'query_params' => $query_params,
+			'params' => $params
+		));
 
 		if ($page > 1) {
 			$heading_title .= ' - ' . sprintf($this->language->get('text_page_of'), $page, $max_pages);
-			$meta_description = strip_tags_decode(substr($this->data['pagination'], strpos($this->data['pagination'], '<div class="results'))) . ' - ' . $meta_description;
+			$meta_description = strip_tags_decode(substr($pagination, strpos($pagination, '<div class="results'))) . ' - ' . $meta_description;
 			$meta_keyword .= ', ' . strtolower($this->language->get('text_page')) . ' ' . $page;
 		}
 
@@ -280,20 +281,10 @@ class ControllerProductSearch extends Controller {
 		$this->data['limit'] = $limit;
 		$this->data['url'] = $url;
 
+		$this->data['action'] = str_replace('&amp;', '&', $this->url->link('product/search', $url));
 		$this->data['compare'] = $this->url->link('product/compare');
 		$this->data['browse'] = $this->url->link('product/allproducts');
-		$this->data['back'] = ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->request->server['HTTP_REFERER'] : $this->url->link('product/allproducts');
-		$this->data['search'] = $this->url->link('product/search', $url);
-		$this->data['reset'] = $this->url->link('product/search');
-		$this->data['continue'] = $this->url->link('common/home');
-
-		if (!$this->data['products'] && (isset($this->session->data['shipping_country_id']) || isset($this->session->data['shipping_zone_id']) || isset($this->session->data['shipping_location']))) {
-			// Remove Location
-			$url = $this->getQueryString(array('location', 'country', 'state'));
-			$request_path = isset($this->request->server['REQUEST_URI']) ? parse_url(strtolower(urldecode($this->request->server['REQUEST_URI'])), PHP_URL_PATH) : '';
-			$location_remove_url = $this->url->link('information/location', 'location=none&redirect_path=' . urlencode(ltrim($request_path . '?' . ltrim($url, "&"), "/")));
-			$this->data['text_empty'] .= '&nbsp; &nbsp;' . sprintf($this->language->get('text_location_remove_url'), $location_remove_url);
-		}
+		$this->data['home'] = $this->url->link('common/home');
 
 		$this->template = 'template/product/search.tpl';
 

@@ -1,3 +1,4 @@
+<?php if ($products) { ?>
 <div class="grid-items-container">
 	<div class="progress-bar"></div>
 	<div class="information loading">
@@ -85,3 +86,44 @@
 	</div>
 	<?php } ?>
 </div>
+
+<?php if ($pagination) { ?>
+<div class="pagination"><?php echo $pagination; ?></div>
+<?php } ?>
+
+<?php } else if ($text_empty) { ?>
+
+<div class="global-page">
+	<div class="information">
+		<p><?php echo $text_empty; ?></p>
+		<span class="icon"><i class="fa fa-info-circle"></i></span>
+	</div>
+
+	<?php if ($params) { ?>
+	<div class="parameters">
+		<h3><?php echo $heading_params; ?></h3>
+		<ul class="global-attribute">
+			<?php foreach ($params as $param) { ?>
+			<li><b><?php echo $param['name']; ?>:</b><i class="param-value" data-field="<?php echo $param['field']; ?>" data-value="<?php echo $param['value']; ?>"></i></li>
+			<?php } ?>
+		</ul>
+	</div>
+	<?php } ?>
+
+	<div class="buttons">
+		<div class="left">
+			<?php if ($back) { ?>
+			<a href="<?php echo $back; ?>" class="button button_back"><i class="fa fa-undo"></i><?php echo $button_back; ?></a>
+			<?php } ?>
+			<?php if ($reset) { ?>
+			<a href="<?php echo $reset; ?>" class="button button_alt button_reset"><i class="fa fa-refresh"></i><?php echo $button_reset; ?></a>
+			<?php } ?>
+		</div>
+		<div class="right">
+			<a href="<?php echo $search; ?>" class="button button_search"><i class="fa fa-search"></i><?php echo $button_search; ?></a>
+			<a href="<?php echo $home; ?>" class="button button_alt button_home"><i class="fa fa-home"></i><?php echo $button_home; ?></a>
+		</div>
+	</div>
+</div>
+
+<?php } ?>

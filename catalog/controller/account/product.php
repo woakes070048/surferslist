@@ -1799,7 +1799,9 @@ class ControllerAccountProduct extends Controller {
 		}
 
 		foreach (array('price', 'value', 'price_discount', 'price_special') as $value) {
-			$data[$value] = strtr($data[$value], array(',' => ''));
+			if (isset($data[$value])) {
+				$data[$value] = strtr($data[$value], array(',' => ''));
+			}
 		}
 
 		if ($data['price']) {

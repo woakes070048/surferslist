@@ -666,11 +666,14 @@ class ControllerProductMember extends Controller {
 
 		$url = $this->getQueryString(array('page'));
 
-		$this->data['pagination'] = $this->getPagination($product_total, $page, $limit, 'product/member/info', 'member_id=' . $this->request->get['member_id'], $url, $jumpTo);
+		$pagination = $this->getPagination($product_total, $page, $limit, 'product/member/info', 'member_id=' . $this->request->get['member_id'], $url, $jumpTo);
 
 		$this->data['products'] = $this->getChild('product/data/list', array(
 			'products' => $this->model_catalog_product->getProducts($data),
-			'more' => $page < $max_pages ? $this->url->link('ajax/product/more', 'member_id=' . $this->request->get['member_id'] . $url . '&page=' . ($page + 1)) : ''
+			'more' => $page < $max_pages ? $this->url->link('ajax/product/more', 'member_id=' . $this->request->get['member_id'] . $url . '&page=' . ($page + 1)) : '',
+			'pagination' => $pagination,
+			'reset' => !empty($url) ? $this->url->link('product/member/info', 'member_id=' . $this->request->get['member_id']) . $jumpTo : false,
+			'query_params' => $query_params
 		));
 
 		$this->data['refine'] = $this->getChild('module/refine', array(
@@ -687,7 +690,7 @@ class ControllerProductMember extends Controller {
 
 		if ($page > 1) {
 			$heading_title .= ' - ' . sprintf($this->language->get('text_page_of'), $page, $max_pages);
-			$meta_description = strip_tags_decode(substr($this->data['pagination'], strpos($this->data['pagination'], '<div class="results'))) . ' - ' . $meta_description;
+			$meta_description = strip_tags_decode(substr($pagination, strpos($pagination, '<div class="results'))) . ' - ' . $meta_description;
 			$meta_keyword .= ', ' . strtolower($this->language->get('text_page')) . ' ' . $page;
 		}
 
@@ -705,13 +708,7 @@ class ControllerProductMember extends Controller {
 
 		$this->data['customer_id'] = $member_info['customer_id'];
 		$this->data['profile_id'] = $this->request->get['member_id'];
-
 		$this->data['action'] = str_replace('&amp;', '&', $this->url->link('product/member/info', 'member_id=' . $this->request->get['member_id'] . $url));
-		$this->data['back'] = ($this->request->checkReferer($this->config->get('config_url')) || $this->request->checkReferer($this->config->get('config_ssl'))) ? $this->request->server['HTTP_REFERER'] : $this->url->link('product/member');
-		$this->data['search'] = $this->url->link('product/search');
-		$this->data['reset'] = $this->url->link('product/member/info', 'member_id=' . $this->request->get['member_id']) . $jumpTo;
-		$this->data['continue'] = $this->url->link('common/home');
-		$this->data['url'] = $url;
 
 		$this->model_catalog_member->updateViewed($this->request->get['member_id']);
 
