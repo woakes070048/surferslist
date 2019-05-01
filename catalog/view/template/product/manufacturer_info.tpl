@@ -60,14 +60,14 @@
                         </div>
                         <?php } ?>
                     </div>
-                    
-                    <?php if ($brand['href']) { ?>
+
                     <div class="buttons">
                         <div class="center">
+                            <?php if ($brand['href']) { ?>
                             <a href="<?php echo $brand['href']; ?>" target="_blank" class="button button_alt"><i class="fa fa-link"></i><?php echo $text_manufacturer_website; ?></a>
+                            <?php } ?>
                         </div>
                     </div>
-                    <?php } ?>
                 </div>
                 <?php } ?>
 

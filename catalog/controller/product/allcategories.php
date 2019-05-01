@@ -64,6 +64,7 @@ class ControllerProductAllCategories extends Controller {
 		}
 
 		$this->data['indexes'] = array();
+		$this->data['categories'] = array();
 
 		$data = array(
 			'filter_status'		 => 1,
@@ -164,4 +165,3 @@ class ControllerProductAllCategories extends Controller {
 		$this->response->setOutput($this->render());
   	}
 }
-

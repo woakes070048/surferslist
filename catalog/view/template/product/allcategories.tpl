@@ -84,7 +84,7 @@
 						<?php } ?>
 					</ul>
 				</div>
-				<?php } else { ?>
+                <?php } else if ($categories) { ?>
                 <div class="global-page">
 					<div class="product-grid category-grid">
 						<?php foreach ($categories as $category) { ?>

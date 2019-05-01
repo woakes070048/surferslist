@@ -34,7 +34,7 @@ class ControllerCommonFooter extends Controller {
 			$this->load->model('catalog/information');
 		}
 
-		if (!$this->data['informations']) {
+		if ($this->data['informations'] === false) {
 			$this->data['informations'] = array();
 
 			foreach ($this->model_catalog_information->getInformations() as $result) {
@@ -49,7 +49,7 @@ class ControllerCommonFooter extends Controller {
 			$this->cache->set('information.primary.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id'), $this->data['informations'], 60 * 60 * 24 * 30); // 1 month cache expiration
 		}
 
-		if (!$this->data['informations_extra']) {
+		if ($this->data['informations_extra'] === false) {
 			$this->data['informations_extra'] = array();
 
 			foreach ($this->model_catalog_information->getInformations() as $result) {
@@ -118,4 +118,3 @@ class ControllerCommonFooter extends Controller {
 		$this->render();
 	}
 }
-
