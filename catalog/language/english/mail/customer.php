@@ -1,7 +1,7 @@
 <?php
 // Text
 $_['text_subject']        = '[%s] Thanks for joining!';
-$_['text_welcome']        = 'Welcome %s and thanks for joining %s, a user-generated catalog and marketplace of extreme water sports equipment!';
+$_['text_welcome']        = 'Welcome %s and thanks for joining %s, a user-generated directory and marketplace of extreme water sports equipment!';
 $_['text_login']          = 'Your new user account has been created and you can log in at: %s';
 $_['text_approval']       = 'Your account must be approved before you can login. Once approved, you can log in by using your email and password at:';
 $_['text_email_verification'] = 'Your new user account has been created, but you must verify your e-mail address by clicking on the link below to activate your account. If the link does not work when you click on it, then try copying and pasting it into your web browser.';
@@ -24,4 +24,3 @@ $_['text_customer_group'] = 'Group:';
 $_['text_firstname']      = 'First Name:';
 $_['text_lastname']       = 'Last Name:';
 $_['text_email']          = 'E-Mail:';
-

@@ -311,6 +311,9 @@
                                     </ul>
                                </li>
                                <li class="topcat">
+            						<a href="<?php echo $post_link; ?>" class="button button_post bolder"><?php echo $heading_post; ?></a>
+                               </li>
+                               <li class="topcat">
             						<a href="<?php echo $product_search. '&more=true'; ?>" class="button button_alt bolder menu-nav-search"><?php echo $text_search; ?></a>
                                     <?php if (false && $categories) { ?>
                                     <ul class="menuchildren skinchildren">
@@ -326,9 +329,6 @@
                                         <?php } ?>
                                     </ul>
                                     <?php } ?>
-                               </li>
-                               <li class="topcat">
-            						<a href="<?php echo $post_link; ?>" class="button button_post bolder"><?php echo $heading_post; ?></a>
                                </li>
                         	</ul>
                         </div>

@@ -32,65 +32,73 @@ class ControllerAccountAnonPost extends Controller {
 		$csrf_token_set = isset($this->session->data['csrf_token']) ? $this->session->data['csrf_token'] : '';
 
 		if ($this->request->server['REQUEST_METHOD'] == 'POST') {
-			$data = $this->request->post;
+			if (isset($this->request->post['newlink'])) {
+				if (empty($this->request->post['link']) || !$this->validateUrl($this->request->post['link'])) {
+					$this->setError('link', $this->language->get('error_link'));
+				}
+			} else {
+				$data = $this->request->post;
 
-			if ($this->isAdmin() && !empty($this->request->files['image_file'])) {
-				$data['image_file'] = $this->request->files['image_file'];
-			}
-
-			if (!$this->validateCaptcha()) {
-				$this->setError('captcha', $this->getCaptchaError());
-				$this->setError('warning', $this->getCaptchaError());
-			}
-
-			if (!$this->isAdmin()) {
-				if (!$this->validatePostTimeMin()) {
-					$this->setError('warning', sprintf($this->language->get('error_too_fast'), $min_time));
+				if ($this->isAdmin() && !empty($this->request->files['image_file'])) {
+					$data['image_file'] = $this->request->files['image_file'];
 				}
 
-				if (!$this->validatePostTimeMax()) {
-					$this->setError('warning', sprintf($this->language->get('error_timeout'), $min_time));
+				if (!$this->validateCaptcha()) {
+					$this->setError('captcha', $this->getCaptchaError());
+					$this->setError('warning', $this->getCaptchaError());
 				}
-			}
 
-			if (!$this->hasError()) {
-				if (!$this->validateCSRFToken()) {
-					$this->setError('warning', $this->language->get('error_invalid_token'));
-				};
-			}
+				if (!$this->isAdmin()) {
+					$min_time = 5;
 
-			if (!$this->hasError()) {
-				$this->validateForm($data);
-			}
+					if (!$this->validatePostTimeMin($min_time)) {
+						$this->setError('warning', sprintf($this->language->get('error_too_fast'), $min_time));
+					}
 
-			if (!$this->hasError() && $this->isAdmin()) {
-				if (!empty($data['image_file']['tmp_name'])) {
-					$this->validateImageFile($data['image_file']['tmp_name']);
-				} else if (!empty($data['image_url'])) {
-					$new_filename = $this->getImageFromUrl($data['image_url'], $csrf_token_set);
-
-					if ($new_filename) {
-						$this->validateImageFile($new_filename);
+					if (!$this->validatePostTimeMax()) {
+						$this->setError('warning', sprintf($this->language->get('error_timeout'), $min_time));
 					}
 				}
-			}
 
-			if (!$this->hasError()) {
-				$this->prepareData($data, $csrf_token_set);
-
-				// don't trigger email notification of new listing for admin users
-				if ($this->isAdmin()) {
-					$data['notify'] = false;
+				if (!$this->hasError()) {
+					if (!$this->validateCSRFToken()) {
+						$this->setError('warning', $this->language->get('error_invalid_token'));
+					};
 				}
 
-				if ($this->model_account_product->addAnonListing($data)) {
-					$this->session->data['success'] = $this->customer->isLogged() ? $this->language->get('text_success_new') : $this->language->get('text_anonpost_success');
-					unset($this->session->data['warning']);
+				if (!$this->hasError()) {
+					$this->validateForm($data);
 				}
 
-				$this->removeTempImages($csrf_token_set);
+				if (!$this->hasError() && $this->isAdmin()) {
+					if (!empty($data['image_file']['tmp_name'])) {
+						$this->validateImageFile($data['image_file']['tmp_name']);
+					} else if (!empty($data['image_url'])) {
+						$new_filename = $this->getImageFromUrl($data['image_url'], $csrf_token_set);
 
-				$this->redirect($this->url->link('account/anonpost', '', 'SSL'));
+						if ($new_filename) {
+							$this->validateImageFile($new_filename);
+						}
+					}
+				}
+
+				if (!$this->hasError()) {
+					$this->prepareData($data, $csrf_token_set);
+
+					// don't trigger email notification of new listing for admin users
+					if ($this->isAdmin()) {
+						$data['notify'] = false;
+					}
+
+					if ($this->model_account_product->addAnonListing($data)) {
+						$this->session->data['success'] = $this->customer->isLogged() ? $this->language->get('text_success_new') : $this->language->get('text_anonpost_success');
+						unset($this->session->data['warning']);
+					}
+
+					$this->removeTempImages($csrf_token_set);
+
+					$this->redirect($this->url->link('account/anonpost', '', 'SSL'));
+				}
 			}
 		}
 
@@ -239,7 +247,7 @@ class ControllerAccountAnonPost extends Controller {
 		$this->data['condition_id'] = isset($this->request->post['condition_id']) ? $this->request->post['condition_id'] : 0;
 
 		// Admin Fields
-		$this->data['display_more_options'] = $this->isAdmin() || $this->hasError() ? true : false;
+		$this->data['display_more_options'] = ($this->isAdmin() || ($this->hasError() && ($this->getError('year') || $this->getError('price') || $this->getError('tag')))) ? true : false;
 		$this->data['status'] = $this->isAdmin() && isset($this->request->post['status']) ? $this->request->post['status'] : 1;
 		$this->data['approved'] = $this->isAdmin() && isset($this->request->post['approved']) ? $this->request->post['approved'] : 1;
 

@@ -1,14 +1,14 @@
 <?php
 $_['text_post_intro']                   = 'Post your water sports equipment.';
 $_['text_edit_intro']                   = 'Edit your water sports equipment.';
-$_['text_intro_anonpost']               = '<br /><span class="text-smaller">[<a href="%s">post anonymously</a>]</span>';
 $_['text_import_intro']                 = 'Select a file to import listings.';
 $_['text_adminpost_intro']              = '<a href="%s">Import listings</a> from a file.';
-$_['text_anonpost_intro']               = 'Post equipment to the catalog.';
-$_['text_anonpost_intro_signin']        = '<br /><span class="text-smaller">[<a href="%s">sign in</a> to post your quiver]</span>';
-$_['text_anonpost_intro_post']          = '<br /><span class="text-smaller">[<a href="%s">manage your quiver</a>]</span>';
-$_['text_anonpost_meta_description']    = 'Post a listing of extreme water sports equipment to the catalog anonymously or sign in to create listings from your own quiver.';
-$_['text_anonpost_meta_keyword']        = 'post, create, equipment, water, sports, watersports';
+$_['text_anonpost_intro']               = 'Post a listing to the general directory.';
+$_['text_intro_anonpost']               = '<br /><span class="text-smaller">[or <a href="%s">post an anonymous listing</a>]</span>';
+$_['text_anonpost_intro_signin']        = '<br /><span class="text-smaller">[or <a href="%s">sign in</a> to post your listings]</span>';
+$_['text_anonpost_intro_post']          = '<br /><span class="text-smaller">[or <a href="%s">manage your listings</a>]</span>';
+$_['text_anonpost_meta_description']    = 'Post a listing of extreme water sports equipment to the directory anonymously or sign in to post listings of your own quiver.';
+$_['text_anonpost_meta_keyword']        = 'post, directory, equipment, water, sports, watersports';
 
 // Heading / Titles
 $_['heading_listings']       = 'My Listings';
@@ -495,4 +495,3 @@ $_['error_image_url_restricted'] = 'Not allowed to read Image URL!';
 $_['error_import']            = 'You must upload a file!';
 $_['error_import_filetype']   = 'Invalid import file type!';
 $_['error_import_size']       = 'Import file must be less than %s kB!';
-

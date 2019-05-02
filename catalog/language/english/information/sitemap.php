@@ -1,7 +1,7 @@
 <?php
 // Heading
 $_['heading_title']    = 'Site Map';
-$_['meta_keyword']       = 'sitemap, pages, index, catalog, listing';
+$_['meta_keyword']       = 'sitemap, pages, index, directory, listing';
 $_['meta_description']   = 'A sitemap of all the web pages listed on the %s website.';
 
 // Text
@@ -27,4 +27,3 @@ $_['text_members']     = 'All Profiles';
 $_['text_location_set']    = 'Set your location';
 $_['text_service']     = 'Account Services';
 $_['text_footer_contact']  = 'Have a question?<br /><a href="%s">Contact SurfersList</a>';
-
