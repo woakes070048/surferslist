@@ -10,11 +10,56 @@
     </div>
     <?php } ?>
     <div class="container-top">
-        <?php echo $content_top; ?>
+        <div class="content-page">
+            <?php echo $content_top; ?>
+            <div class="widget widget-home"><form action="<?php echo $post; ?>" method="post" enctype="multipart/form-data">
+        		<h2><a href="<?php echo $post; ?>"><?php echo $heading_post; ?></a></h2>
 
-        <div class="widget widget-search">
-        	<form action="<?php echo $search; ?>" method="post" enctype="multipart/form-data" id="searchwidget">
-        		<h1><a href="<?php echo $product_random; ?>"><?php echo $heading_search; ?></a></h1>
+        		<div class="content clearafter">
+
+        			<div class="grid-1 clearafter">
+        				<div class="grid-8">
+                            <div class="formbox">
+                                <p class="form-label show-small hidden"><strong><?php echo $entry_link; ?></strong></p>
+                                <input type="text"
+                                    name="link"
+                                    value=""
+                                    placeholder="<?php echo $text_link; ?>"
+                                    title="<?php echo $entry_link; ?>"
+                                    data-content="<?php echo $help_link; ?>"
+                                    data-placement="bottom"
+                                    data-container="body"
+                                    rel="popover"
+                                    data-trigger="focus" />
+                            </div>
+        				</div>
+
+        				<div class="grid-4">
+        					<div class="formbox">
+        						<input id="button-post" type="submit" value="<?php echo $button_post; ?>" class="button hidden" />
+        						<label for="button-post" class="button button-submit button_secondary"><i class="fa fa-pencil"></i><?php echo $button_post; ?></label>
+        					</div>
+        				</div>
+        			</div>
+
+                    <div class="grid-1 clearafter">
+                        <div class="grid-8">
+                            <span class="formbox label">
+                                <?php echo $text_post_alt; ?>
+                            </span>
+                        </div>
+
+                        <div class="grid-4"></div>
+                    </div>
+
+                </div>
+
+                <input type="hidden" name="category_name" value="" />
+                <input type="hidden" name="newlink" value="true" />
+        	</form>
+
+        	<form action="<?php echo $search; ?>" method="post" enctype="multipart/form-data">
+        		<h2><a href="<?php echo $product_random; ?>"><?php echo $heading_search; ?></a></h2>
 
         		<div class="content clearafter">
 
@@ -40,7 +85,7 @@
         					</div>
         				</div>
 
-        				<div class="grid-4 searchwidget-buttons hidden-medium">
+        				<div class="grid-4 hidden-medium">
         					<div class="formbox">
         						<input id="button-search" type="submit" value="<?php echo $button_search; ?>" class="button hidden" />
         						<label for="button-search" class="button button-submit button_highlight"><i class="fa fa-search"></i><?php echo $button_search; ?></label>
@@ -48,7 +93,7 @@
         				</div>
         			</div>
 
-                    <div class="grid-1 searchwidget-buttons show-medium">
+                    <div class="grid-1 show-medium">
                         <div class="formbox">
         					<label for="button-search" class="button button-submit button_highlight"><i class="fa fa-search"></i><?php echo $button_search; ?></label>
         				</div>
@@ -64,13 +109,7 @@
                             </span>
                         </div>
 
-                        <div class="grid-4 ">
-                            <span class="label float-right hidden-medium">
-                                <a href="<?php echo $about; ?>" title="<?php echo $help_about; ?>" rel="tooltip" data-placement="left">
-                                    <i class="fa fa-question-circle-o"></i>
-                                </a>
-                            </span>
-                        </div>
+                        <div class="grid-4"></div>
                     </div>
 
                 </div>
@@ -79,18 +118,8 @@
                 <input type="hidden" name="zone_id" value="<?php echo $zone_id; ?>" />
                 <input type="hidden" name="location" value="<?php echo $location; ?>" />
         	</form>
-        </div>
 
-        <div class="home-post">
-            <div class="content">
-                <div class="buttons">
-                    <div class="center">
-                        <a class="button button-post button_secondary bigger" href="<?php echo $post; ?>" title="<?php echo $help_post; ?>" rel="tooltip" data-container="body" data-placement="top">
-                            <i class="fa fa-pencil"></i><?php echo $button_post; ?>
-                        </a>
-                    </div>
-                </div>
-            </div>
+        	</div>
         </div>
     </div>
     <?php if ($content_bottom) { ?>

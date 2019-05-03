@@ -19,9 +19,7 @@ trait ValidateField {
 		}
 
 		$url = str_replace(' ', '%20', $url);
-
-		// return preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i", $url);
-		// return preg_match('@^https?:\/\/(?:[\w]+)(?:[-\w]*)\.([a-zA-Z\.]{2,6})([\/\w\.-]*)*\/?@', $url);
+		
 		return preg_match('#((https?)://(\S*?\.\S*?))([\s)\[\]{},;"\':<]|\.\s|$)#i', $url);
 	}
 
@@ -87,4 +85,3 @@ trait ValidateField {
 		return $valid;
 	}
 }
-

@@ -71,7 +71,7 @@ class ControllerProductData extends Controller {
 			if (isset($data['query_params'])) {
 				$this->setQueryParams($data['query_params']);
 			}
-			
+
 			$url = $this->getQueryString(array('filter_location', 'filter_country_id', 'filter_zone_id', 'location', 'country', 'state'));
 			$request_path = isset($this->request->server['REQUEST_URI']) ? parse_url(strtolower(urldecode($this->request->server['REQUEST_URI'])), PHP_URL_PATH) : '';
 			$location_remove_url = $this->url->link('information/location', 'location=none&redirect_path=' . urlencode(ltrim($request_path . '?' . ltrim($url, "&"), "/")));

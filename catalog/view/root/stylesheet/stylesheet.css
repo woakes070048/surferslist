@@ -271,7 +271,7 @@ h1, h2, h3, h4, h5, h6, input[type="button"], input[type="submit"], button[type=
 }
 
 .container-page.home-page {
-    min-height: 360px;
+    min-height: 500px;
 }
 
 #layout-floating .container-left {
@@ -2208,7 +2208,7 @@ table .success, table .warning, table .attention, table .information {
     padding: 20px;
 }
 
-.widget h6, .home-page .widget-slideshow+.widget-search h1 {
+.widget h6, .home-page .widget-home h2 {
     background-color: #fafafa;
     border-top: 1px solid #e9e9e9;
     border-bottom: 1px solid #e9e9e9;
@@ -2849,11 +2849,10 @@ table .success, table .warning, table .attention, table .information {
     display: inline-block;
     width: 100%;
     margin: 0;
-    padding: 16px 0 24px;
+    padding: 20px 0;
     text-align: center;
     vertical-align: middle;
-    text-shadow: 1px 1px 13px rgba(0, 0, 0, .85);
-    background: rgba(0, 0, 0, .3);
+    text-shadow: 2px 2px 13px rgba(0, 0, 0, .5);
     z-index: 99;
 }
 
@@ -3940,7 +3939,7 @@ table .success, table .warning, table .attention, table .information {
 }
 
 /* Search Widget */
-#searchwidget .content, .sidebar .content, .home-page .home-post .buttons .center {
+#searchwidget .content, .home-page .widget-home .content, .sidebar .content {
     padding-left: 15px;
     padding-right: 15px;
     padding-top: 15px;
@@ -3980,7 +3979,7 @@ input[name="member[member_name]"]:valid {
     background-color: #fff;
 }
 
-#searchwidget .formbox {
+#searchwidget .formbox, .home-page .widget-home .formbox {
     margin-bottom: 15px;
 }
 
@@ -4054,7 +4053,7 @@ input[name="member[member_name]"]:valid {
     background-color: #76cdd8;
 }
 
-#searchwidget .searchwidget-buttons .button {
+#searchwidget .searchwidget-buttons .button, .home-page .widget-home .button {
     font-size: 20px;
     font-weight: bolder;
     width: 100%;
@@ -4063,7 +4062,7 @@ input[name="member[member_name]"]:valid {
     position: relative;
 }
 
-#searchwidget .searchwidget-buttons .button i {
+#searchwidget .searchwidget-buttons .button i, .home-page .widget-home .button i {
     width: 22px;
     height: 22px;
     font-size: 22px;
@@ -4085,22 +4084,19 @@ input[name="member[member_name]"]:valid {
     text-decoration: none;
 }
 
-/* Home Page Search Widget  */
-.home-page .widget-search {
+/* Home Page Widget  */
+.home-page .widget-home {
     max-width: 848px;
+    padding: 0;
     margin-right: auto;
     margin-left: auto;
-}
-
-.home-page .widget-slideshow+.widget-search {
-    background: transparent;
-    padding: 40px;
-    margin-top: -100px;
+    margin-top: 130px;
     position: absolute;
-    top: 50%;
+    top: 0;
     left: 0;
     right: 0;
     z-index: 9;
+    background: transparent;
     -moz-box-shadow: none;
     /* 0 2px 3px rgba(0,0,0,0.2); */
     -webkit-box-shadow: none;
@@ -4109,45 +4105,54 @@ input[name="member[member_name]"]:valid {
     /* 0 2px 3px rgba(0,0,0,0.2); */
 }
 
-.home-page .widget-slideshow+.widget-search h1 {
+.home-page .widget-home > form {
+    background: rgba(0,0,0,.3);
+}
+
+.home-page .widget-home > form + form {
+    margin-top: 30px;
+}
+
+.home-page .widget-home hr {
+    margin: 30px 0 0 0;
+    border-top: none;
+}
+
+.home-page .widget-home h2 {
     background: transparent;
     border: none;
-    font-size: 32px;
+    font-size: 28px;
     font-weight: 700;
     letter-spacing: 2px;
     padding-left: 15px;
     padding-right: 15px;
+    padding-bottom: 0;
 }
 
-.home-page .home-post {
-    position: absolute;
-    bottom: 0;
-}
-
-.home-page .widget-slideshow+.widget-search select,
-.home-page .widget-slideshow+.widget-search input[type="text"],
-.home-page .widget-slideshow+.widget-search input[type="text"]::placeholder,
-.home-page .widget-slideshow+.widget-search .button-more-options,
-.home-page .widget-slideshow+.widget-search #searchwidget .label,
-.home-page .widget-slideshow+.widget-search #searchwidget .label a,
-.home-page .widget-slideshow+.widget-search #searchwidget .label a i {
+.home-page .widget-home select,
+.home-page .widget-home input[type="text"],
+.home-page .widget-home input[type="text"]::placeholder,
+.home-page .widget-home .button-more-options,
+.home-page .widget-home .label,
+.home-page .widget-home .label a,
+.home-page .widget-home .label a i {
     font-size: 16px;
 }
 
-.home-page .widget-slideshow+.widget-search h1 a,
-.home-page .widget-slideshow+.widget-search #searchwidget .label,
-.home-page .widget-slideshow+.widget-search #searchwidget .label a,
-.home-page .widget-slideshow+.widget-search #searchwidget #button-location {
+.home-page .widget-home h2 a,
+.home-page .widget-home .label,
+.home-page .widget-home .label a,
+.home-page .widget-home #button-location {
     color: #fff;
     text-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
 }
 
-.home-page .widget-slideshow+.widget-search #searchwidget .label,
-.home-page .widget-slideshow+.widget-search #searchwidget .label a {
+.home-page .widget-home .label,
+.home-page .widget-home .label a {
     font-weight: 700;
 }
 
-.home-page .widget-slideshow+.widget-search .icheckbox_minimal-custom, .home-page .widget-slideshow+.widget-search .icheckbox_minimal-custom.hover {
+.home-page .widget-home .icheckbox_minimal-custom, .home-page .widget-home .icheckbox_minimal-custom.hover {
     background-position: -60px 0;
     margin-bottom: 4px;
     margin-right: 4px;
@@ -4156,12 +4161,12 @@ input[name="member[member_name]"]:valid {
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
 }
 
-.home-page .widget-slideshow+.widget-search .icheckbox_minimal-custom.checked {
+.home-page .widget-home .icheckbox_minimal-custom.checked {
     background-position: -80px 0;
 }
 
-.home-page .widget-slideshow+.widget-search #searchwidget input[type="text"],
-.home-page .widget-slideshow+.widget-search #searchwidget select {
+.home-page .widget-home input[type="text"],
+.home-page .widget-home select {
     border-color: transparent;
 }
 
@@ -7331,7 +7336,7 @@ input[name="member[member_name]"]:valid {
     color: #0d8f91 !important;
 }
 
-a, .top-header .hbox .content .list li p a, .top-header .hbox .content .list li a:hover i, .top-header .hbox .content .list .selected, .top-header .hbox .content .toptitle h6, .top-header .mini-info a:hover, .shopping-cart .cart-info .line2, .shopping-cart .mini-cart-total tr:last-child .totaltext, .shopping-cart .itemcart .name p a:hover, .menu-nav .home a:hover, .menu-nav .topcat .link i, .menu-nav .skinchildren .tablechildren b a:hover, .menu-nav .skinchildren .tablechildren li a:hover, .item-mini .info h3 a:hover, .review-mini .info .item h3 a:hover, .review-mini .description .author a, .global-page .list-icon i, .global-page .list-icon a:hover, .modules-html .list-icon i, .modules-html .list-icon a:hover, .widget-list-child .active-child, .formbox .label .labelprice, .shopping-cart .recurring .recurring_icon, .shopping-cart .itemcart .edit-quantity .fa-refresh, .category-list ul li a:hover, .brands-list a:hover, .global-attribute .name, .right-item .actions .links i, .bottom-footer p a:hover, .middle-footer .column ul li a:hover, .middle-footer .column p a:hover, #category-list-static li a:hover, .widget-list a u, .category-list ul li a u, .top-header .hbox .content .list li a u, #category-list-static li a h4 u, .sticky-content .list-icon i, .sticky-content .list-icon li a:hover, .top-header .hbox .content .list li a:hover, .top-header .hbox .content .list li a:hover i, #searchwidget #button-more-options, .global-page .widget.widget-ac-container .widget-ac>h6, .home-page .widget-slideshow+.widget-search #searchwidget input[type="text"], .shopping-cart .itemcart .image .quantity, .button.button_inverse {
+a, .top-header .hbox .content .list li p a, .top-header .hbox .content .list li a:hover i, .top-header .hbox .content .list .selected, .top-header .hbox .content .toptitle h6, .top-header .mini-info a:hover, .shopping-cart .cart-info .line2, .shopping-cart .mini-cart-total tr:last-child .totaltext, .shopping-cart .itemcart .name p a:hover, .menu-nav .home a:hover, .menu-nav .topcat .link i, .menu-nav .skinchildren .tablechildren b a:hover, .menu-nav .skinchildren .tablechildren li a:hover, .item-mini .info h3 a:hover, .review-mini .info .item h3 a:hover, .review-mini .description .author a, .global-page .list-icon i, .global-page .list-icon a:hover, .modules-html .list-icon i, .modules-html .list-icon a:hover, .widget-list-child .active-child, .formbox .label .labelprice, .shopping-cart .recurring .recurring_icon, .shopping-cart .itemcart .edit-quantity .fa-refresh, .category-list ul li a:hover, .brands-list a:hover, .global-attribute .name, .right-item .actions .links i, .bottom-footer p a:hover, .middle-footer .column ul li a:hover, .middle-footer .column p a:hover, #category-list-static li a:hover, .widget-list a u, .category-list ul li a u, .top-header .hbox .content .list li a u, #category-list-static li a h4 u, .sticky-content .list-icon i, .sticky-content .list-icon li a:hover, .top-header .hbox .content .list li a:hover, .top-header .hbox .content .list li a:hover i, #searchwidget #button-more-options, .global-page .widget.widget-ac-container .widget-ac>h6, .home-page .widget-home input[type="text"]:focus, .shopping-cart .itemcart .image .quantity, .button.button_inverse {
     color: #0d8f91;
 }
 
@@ -7782,22 +7787,21 @@ a.highlight, b.highlight, i.highlight, span.highlight {
         padding-left: 0;
     }
 
-    .home-page .widget-slideshow+.widget-search #searchwidget .searchwidget-buttons .button {
+    .home-page .widget-home .button {
         font-size: 24px;
     }
 
-    .home-page .widget-slideshow+.widget-search select,
-    .home-page .widget-slideshow+.widget-search input[type="text"],
-    .home-page .widget-slideshow+.widget-search input[type="text"]::placeholder {
+    .home-page .widget-home select,
+    .home-page .widget-home input[type="text"],
+    .home-page .widget-home input[type="text"]::placeholder {
         font-size: 18px;
     }
 
-    .home-page .widget-slideshow+.widget-search #searchwidget input[type="text"],
-    .home-page .widget-slideshow+.widget-search #searchwidget select,
-    .home-page .widget-slideshow+.widget-search #searchwidget .button,
-    .home-page .home-post .button {
-        height: 50px;
-        padding: 12px 14px;
+    .home-page .widget-home select,
+    .home-page .widget-home input[type="text"],
+    .home-page .widget-home .button {
+        height: 46px;
+        padding: 9px 14px;
         -moz-box-shadow: 0 2px 13px rgba(0, 0, 0, 0.2);
         -webkit-box-shadow: 0 2px 13px rgba(0, 0, 0, 0.2);
         box-shadow: 0 2px 13px rgba(0, 0, 0, 0.2);
@@ -7805,12 +7809,6 @@ a.highlight, b.highlight, i.highlight, span.highlight {
 
     .home-page .widget-categories {
         display: none;
-    }
-
-    .home-page .home-post {
-        width: 250px;
-        left: 50%;
-        margin-left: -125px;
     }
 
     .search-page .product-filter .product-compare, .search-page .product-filter #random {
@@ -7840,7 +7838,7 @@ a.highlight, b.highlight, i.highlight, span.highlight {
         width: 250px;
     }
 
-    .home-page .widget-slideshow+.widget-search #searchwidget .label a.button-more-options {
+    .home-page .widget-home .label a.button-more-options {
         margin-right: 175px;
     }
 
@@ -7893,10 +7891,6 @@ a.highlight, b.highlight, i.highlight, span.highlight {
         /* 44.50% */
     }
 
-    .slideshow .slideshow-title {
-        text-shadow: 2px 2px 13px rgba(0, 0, 0, .5);
-    }
-
     #embed-profile .content-page {
         max-width: 852px;
     }
@@ -7911,7 +7905,10 @@ a.highlight, b.highlight, i.highlight, span.highlight {
 /* L and smaller screen sizes */
 @media screen and (max-width:1192px) {
 
-    /* BREADCRUMB */
+    /* .home-page .widget-home {
+        margin-top: 110px;
+    } */
+
     .product-page .breadcrumb h1 {
         width: 100%;
         text-align: center;
@@ -7971,6 +7968,10 @@ a.highlight, b.highlight, i.highlight, span.highlight {
 
 /* L screen sizes */
 @media screen and (min-width:980px) and (max-width:1192px) {
+    .home-page .widget-home {
+        margin-top: 100px;
+    }
+
     .hidden-large, .hidden-xlarge, .show-very-small, .show-small, .show-medium {
         display: none !important;
     }
@@ -8066,7 +8067,6 @@ a.highlight, b.highlight, i.highlight, span.highlight {
 
     .slideshow .slideshow-title {
         font-size: 45px;
-        padding-bottom: 20px;
     }
 
     .slideshow .slideshow-title-position-middle {
@@ -8163,7 +8163,7 @@ a.highlight, b.highlight, i.highlight, span.highlight {
         color: #a8aaad;
     }
 
-    .widget-search .grid-4, .widget-search .grid-8 {
+    .widget-search .grid-4, .widget-search .grid-8, .widget-home .grid-4, .widget-home .grid-8  {
         margin-left: 0 !important;
         margin-right: 0 !important;
         width: auto !important;
@@ -8297,8 +8297,6 @@ a.highlight, b.highlight, i.highlight, span.highlight {
 
     .slideshow .slideshow-title {
         font-size: 40px;
-        padding-top: 12px;
-        padding-bottom: 18px;
     }
 
     .slideshow .slideshow-title-position-middle {
@@ -8380,9 +8378,9 @@ a.highlight, b.highlight, i.highlight, span.highlight {
         font-size: 16px;
     }
 
-    .home-page .widget-slideshow+.widget-search {
+    .home-page .widget-home {
         max-width: 590px;
-        margin-top: -160px;
+        margin-top: 30px;
     }
 
     /* ALL WIDGETS - list style */
@@ -8508,22 +8506,16 @@ a.highlight, b.highlight, i.highlight, span.highlight {
         background-size: 84px 56px;
     }
 
-    .home-page .widget-slideshow+.widget-search, .home-page .home-post {
+    .home-page .widget-home {
         min-width: 320px;
         max-width: 360px;
-    }
-
-    .home-page .widget-slideshow+.widget-search {
         padding: 0;
-        margin-top: -180px;
+        margin-top: 10px;
         margin-bottom: 0;
     }
 
-    .home-page .home-post {
-        width: 100%;
-        left: 0;
-        right: 0;
-        margin: 0 auto;
+    .home-page .widget-home > form + form {
+        margin-top: 10px;
     }
 
     .home-page .container-top .slideshow .slideshow-prev, .home-page .slideshow .slideshow-next {
@@ -8531,17 +8523,15 @@ a.highlight, b.highlight, i.highlight, span.highlight {
     }
 
     .home-page .container-top .slideshow, .home-page .container-top .slideshow img {
-        height: 360px;
-        min-height: 360px;
+        height: 500px;
+        min-height: 500px;
     }
 
     .slideshow .slideshow-title {
         font-size: 30px;
-        padding-top: 10px;
-        padding-bottom: 15px;
     }
 
-    .home-page .widget-slideshow+.widget-search h1 {
+    .home-page .widget-home h2 {
         text-align: center;
         font-size: 20px;
         line-height: 1.3;
@@ -8826,7 +8816,7 @@ a.highlight, b.highlight, i.highlight, span.highlight {
         display: none !important;
     }
 
-    #searchwidget .searchwidget-buttons .button i {
+    #searchwidget .searchwidget-buttons .button i, .home-page .widget-home .button i {
         position: absolute;
         left: 10px;
     }
@@ -9161,10 +9151,9 @@ a.highlight, b.highlight, i.highlight, span.highlight {
         margin-right: 1.67%;
     }
 
-    .home-page .widget-slideshow+.widget-search #searchwidget input[type="text"],
-    .home-page .widget-slideshow+.widget-search #searchwidget select,
-    .home-page .widget-slideshow+.widget-search #searchwidget .button,
-    .home-page .home-post .button {
+    .home-page .widget-home input[type="text"],
+    .home-page .widget-home select,
+    .home-page .widget-home .button {
         -moz-box-shadow: 0 2px 13px rgba(0, 0, 0, 0.2);
         -webkit-box-shadow: 0 2px 13px rgba(0, 0, 0, 0.2);
         box-shadow: 0 2px 13px rgba(0, 0, 0, 0.2);
@@ -9233,8 +9222,16 @@ a.highlight, b.highlight, i.highlight, span.highlight {
         padding-right: 10px;
     }
 
-    .home-page .widget-slideshow+.widget-search .icheckbox_minimal-custom.checked {
+    .home-page .widget-home .icheckbox_minimal-custom.checked {
         background-position: -40px 0;
+    }
+
+    .home-page .widget-home > form {
+        background: transparent;
+    }
+
+    .home-page .widget-home > form + form {
+        margin-top: 0;
     }
 
     #searchwidget .searchwidget-checkboxes .title {
@@ -9332,7 +9329,7 @@ a.highlight, b.highlight, i.highlight, span.highlight {
         padding: 15px 0;
     }
 
-    .home-page .widget-slideshow+.widget-search h1 {
+    .home-page .widget-home h2 {
         font-size: 20px;
         line-height: 1.2;
         letter-spacing: 0.5px;

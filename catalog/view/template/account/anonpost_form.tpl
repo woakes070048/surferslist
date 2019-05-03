@@ -52,37 +52,6 @@
                                 <?php if ($error_link) { ?><span class="error"><i class="fa fa-exclamation-triangle"></i><?php echo $error_link; ?></span><?php } ?>
                             </div>
 
-                            <?php if ($admin) { ?>
-                            <div class="formbox hidden">
-                                <div class="image image-border">
-                                    <input type="file" name="image_file" id="image-file" accept="image/png,image/jpeg" />
-                                    <?php if ($error_image_file) { ?><span class="error"><i class="fa fa-exclamation-triangle"></i><?php echo $error_image_file; ?></span><?php } ?>
-                                </div>
-                            </div>
-
-                            <div class="formbox">
-                                <p class="form-label">
-                                    <strong><?php echo $entry_image; ?></strong>
-                                    <i class="fa fa-question-circle float-right grey-text" title="<?php echo $entry_image . $help_required; ?>" data-content="<?php echo $help_image; ?>" data-placement="left" rel="popover" data-container="body" data-trigger="hover"></i>
-                                </p>
-                                <div class="image image-border">
-                                    <img src="<?php echo $thumb; ?>" alt="" id="thumb" class="thumb" style="max-width:205px;" /><br />
-                                    <input type="hidden" name="image" value="<?php echo $image; ?>" id="image" />
-                                    <a class="button button-upload" id="button-upload" title="<?php echo $button_upload; ?>" rel="tooltip" data-container="body"><i class="fa fa-upload"></i><?php echo $button_upload; ?></a>
-                                    <a class="button button_clear button_alt" data-target="" title="<?php echo $button_clear; ?>" rel="tooltip" data-container="body"><i class="fa fa-times"></i><?php echo $button_clear; ?></a>
-                                    <div class="progress-bar"></div>
-                                </div>
-                                <?php if ($error_image) { ?><span class="error"><i class="fa fa-exclamation-triangle"></i><?php echo $error_image; ?></span><?php } ?>
-                                <p class="or">--- OR ---</p>
-                                <p class="form-label">
-                                    <strong><?php echo $entry_image_url; ?></strong>
-                                    <i class="fa fa-question-circle float-right grey-text" title="<?php echo $entry_image_url . $help_optional; ?>" data-placement="left" data-container="body" rel="tooltip"></i>
-                                </p>
-                                <input type="text" name="image_url" value="<?php echo isset($image_url) ? $image_url : ''; ?>" placeholder="http://" />
-                                <?php if ($error_image_url) { ?><span class="error"><i class="fa fa-exclamation-triangle"></i><?php echo $error_image_url; ?></span><?php } ?>
-                            </div>
-                            <?php } ?>
-
 							<?php if ($this->config->get('member_tab_links')) { ?>
 							<?php if ($this->config->get('member_data_field_category')) { ?>
 
@@ -194,11 +163,10 @@
 								<?php if ($error_size) { ?><span class="error"><i class="fa fa-exclamation-triangle"></i><?php echo $error_size; ?></span><?php } ?>
 							</div>
 
-                            <?php if (!$admin) { ?>
-                            <div class="formbox">
+                            <div class="formbox<?php if (!$error_image && !$error_image_link && !$error_image_url && !$error_image_file) { ?> hidden<?php } ?>">
                                 <p class="form-label">
                                     <strong><?php echo $entry_image; ?></strong>
-                                    <i class="fa fa-question-circle float-right grey-text" title="<?php echo $entry_image . $help_required; ?>" data-content="<?php echo $help_image; ?>" data-placement="left" data-container="body" rel="popover" data-trigger="hover"></i>
+                                    <i class="fa fa-question-circle float-right grey-text" title="<?php echo $entry_image . $help_required; ?>" data-content="<?php echo $help_image; ?>" data-placement="left" rel="popover" data-container="body" data-trigger="hover"></i>
                                 </p>
                                 <div class="image image-border">
                                     <img src="<?php echo $thumb; ?>" alt="" id="thumb" class="thumb" style="max-width:205px;" /><br />
@@ -207,7 +175,33 @@
                                     <a class="button button_clear button_alt" data-target="" title="<?php echo $button_clear; ?>" rel="tooltip" data-container="body"><i class="fa fa-times"></i><?php echo $button_clear; ?></a>
                                     <div class="progress-bar"></div>
                                 </div>
-                                <?php if ($error_image) { ?><span class="error"><i class="fa fa-exclamation-triangle"></i><?php echo $error_image; ?></span><?php } ?>
+                                <?php if ($error_image) { ?>
+                                <span class="error"><i class="fa fa-exclamation-triangle"></i><?php echo $error_image; ?></span>
+                                <?php } ?>
+
+                                <?php if ($admin) { ?>
+                                <p class="or"><?php echo $text_or; ?></p>
+                                <p class="form-label">
+                                    <strong><?php echo $entry_image_url; ?></strong>
+                                    <i class="fa fa-question-circle float-right grey-text" title="<?php echo $entry_image_url . $help_optional; ?>" data-placement="left" data-container="body" rel="tooltip"></i>
+                                </p>
+                                <input type="text" name="image_url" value="<?php echo isset($image_url) ? $image_url : ''; ?>" placeholder="http://" />
+                                <?php if ($error_image_url) { ?>
+                                <span class="error"><i class="fa fa-exclamation-triangle"></i><?php echo $error_image_url; ?></span>
+                                <?php } ?>
+                                <p class="or"><?php echo $text_or; ?></p>
+                                <input type="file" name="image_file" id="image-file" accept="image/png,image/jpeg" />
+                                <?php if ($error_image_file) { ?>
+                                <span class="error"><i class="fa fa-exclamation-triangle"></i><?php echo $error_image_file; ?></span>
+                                <?php } ?>
+                                <?php } ?>
+                            </div>
+
+                            <?php if ($error_image_link) { ?>
+                            <div class="warning">
+                                <p><?php echo $error_image_link; ?></p>
+                                <span class="close"><i class="fa fa-times"></i></span>
+                                <span class="icon"><i class="fa fa-exclamation-triangle"></i></span>
                             </div>
                             <?php } ?>
 
