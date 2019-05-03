@@ -157,6 +157,7 @@ $_['heading_shipping_zones']    = 'Shipping Zones Available';
 $_['text_more_options']         = 'Show More Fields';
 $_['text_hide_options']         = 'Hide More Fields';
 $_['text_upload']               = 'Image uploaded!';
+$_['text_or']                   = '--- OR ---';
 
 // Column
 $_['column_name']            = 'Title';
@@ -484,6 +485,7 @@ $_['error_exists_dir']        = 'Directory %s does not exist or is invalid!';
 $_['error_filename']          = 'Image filename must be between %s and %s characters!';
 $_['error_filetype']          = 'Invalid image file type! Must be JPG or PNG.';
 $_['error_filesize']          = 'Image file size must be less than %sMB!';
+$_['error_image_link']        = 'A valid image could not be found at the Link. Please upload an image or copy &amp; paste it here.';
 $_['error_image_dimensions']  = 'Image must be at least %spx by %spx!';
 $_['error_image_scale']       = 'Image height cannot be more than twice the width!';
 $_['error_banner_scale']      = 'Width of banner image must be at least twice its height!';

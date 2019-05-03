@@ -74,21 +74,16 @@ class ControllerAccountAnonPost extends Controller {
 
 				if (!$this->hasError() && !$this->image) {
 					if ($this->isAdmin()) {
-						$image_is_valid = false;
-
+						// saves image location to $this->image if successful, else sets error
 						if (!empty($data['image_file']['tmp_name'])) {
-							$image_is_valid = $this->validateImageFile($data['image_file']['tmp_name']);
+							$this->validateImageFile($data['image_file']['tmp_name'], 'image_file');
 						} else if (!empty($data['image_url'])) {
-							$new_filename = $this->getImageFromUrl($data['image_url'], $csrf_token_set);
-
-							if ($new_filename) {
-								$image_is_valid = $this->validateImageFile($new_filename);
-							}
+							$this->validateImageFile($this->getImageFromUrl($data['image_url'], $csrf_token_set), 'image_url');
 						}
 					}
 
 					if (!$this->image) {
-						// try to get image from link (sets error 'image_url' upon failure)
+						// try to get image from link, sets error 'image_link' on failure
 						$this->tryGetImage($data['link'], $csrf_token_set);
 					}
 				}
@@ -172,6 +167,7 @@ class ControllerAccountAnonPost extends Controller {
 			'image'				=>	'error_image',
 			'image_url'			=>	'error_image_url',
 			'image_file'		=>	'error_image_file',
+			'image_link'		=>	'error_image_link',
 			'size'				=>	'error_size',
 			'category'			=>	'error_category',
 			'category_sub'		=>	'error_category_sub',
@@ -188,12 +184,12 @@ class ControllerAccountAnonPost extends Controller {
 		}
 
         // Help
-		$image_upload_filesize_max = $this->config->get('member_image_upload_filesize_max') ? $this->config->get('member_image_upload_filesize_max') / 1024 : 5; // kB to MB
-		$image_dimensions_min_width = $this->config->get('member_image_dimensions_min_width') ? $this->config->get('member_image_dimensions_min_width') : 245;
-		$image_dimensions_min_height = $this->config->get('member_image_dimensions_min_height') ? $this->config->get('member_image_dimensions_min_height') : 245;
+		$image_upload_filesize_max = (int)$this->config->get('member_image_upload_filesize_max') ?: 5120; // kB
+		$image_dimensions_min_width = (int)$this->config->get('member_image_dimensions_min_width') ?: 245;
+		$image_dimensions_min_height = (int)$this->config->get('member_image_dimensions_min_height') ?: 245;
 
 		$this->data['help_description'] = sprintf($this->language->get('help_description'), $this->config->get('member_data_field_description_min'), $this->config->get('member_data_field_description_max'));
-        $this->data['help_image'] = sprintf($this->language->get('help_image'), $image_dimensions_min_width, $image_dimensions_min_height, $image_upload_filesize_max);
+        $this->data['help_image'] = sprintf($this->language->get('help_image'), $image_dimensions_min_width, $image_dimensions_min_height, ($image_upload_filesize_max / 1024));
 
 		// Name, Description, Tags
 		$this->data['languages'] = $this->model_localisation_language->getLanguages();
@@ -358,15 +354,15 @@ class ControllerAccountAnonPost extends Controller {
 			// read posted file
 			if (is_uploaded_file($this->request->files['import']['tmp_name']) && file_exists($this->request->files['import']['tmp_name'])) {
 				$filename = basename(preg_replace('/[^a-zA-Z0-9\.\-\s+]/', '', html_entity_decode($this->request->files['import']['name'], ENT_QUOTES, 'UTF-8')));
-				$filename_ext = strtolower(strrchr($filename, '.'));
+				$filename_ext = substr(strrchr(strtolower($filename), '.'), 1);
 
 				if (!defined('DIR_IMPORT')) define('DIR_IMPORT', str_replace('/image/', '/import/', DIR_IMAGE));
 
 				move_uploaded_file($this->request->files['import']['tmp_name'], DIR_IMPORT . $filename);
 
-				if ($filename_ext == '.json') {
+				if ($filename_ext == 'json') {
 					$listings = json_decode(file_get_contents(DIR_IMPORT . $filename), true);
-				} else if ($filename_ext == '.csv') {
+				} else if ($filename_ext == 'csv') {
 					// parse CSV file into an array of arrays of values from each line in the CSV
 					$listings = array_map('str_getcsv', file(DIR_IMPORT . $filename));
 
@@ -395,6 +391,7 @@ class ControllerAccountAnonPost extends Controller {
 				// reset/clear image
 				$this->image = '';
 				$this->clearError('image_url');
+				$this->clearError('image_link');
 
 				// increment row counter
 				$row_number++;
@@ -433,12 +430,8 @@ class ControllerAccountAnonPost extends Controller {
 
 				// process image url to file
 				if (!empty($data['image_url'])) {
-					$new_filename = $this->getImageFromUrl($data['image_url'], $csrf_token_set);
-
-					if ($new_filename) {
-						// saves image location to $this->image if successful, else sets error for 'image_url'
-						$image_url_is_valid = $this->validateImageFile($new_filename, $row_number);
-					}
+					// saves image location to $this->image if successful, else sets error for 'image_url'
+					$this->validateImageFile($this->getImageFromUrl($data['image_url'], $csrf_token_set), 'image_url', $row_number);
 				}
 
 				// process image file
@@ -448,20 +441,22 @@ class ControllerAccountAnonPost extends Controller {
 						continue;
 					}
 
+					// should be placed in `temp` dir
 					if (utf8_strpos($data['image'], 'temp') !== false) {
 						// triggers move when prepareData() is called below
 						$this->image = $data['image'];
 					}
 				}
 
+				// finally, try get image from link url
 				if (!$this->image) {
 					$this->tryGetImage($data['link'], $csrf_token_set);
 				}
 
-				// image error => skip
-				if (!$this->image && ($this->getError('image_url') || !$image_url_is_valid)) {
-					 $this->appendError('input_data', $this->getError('image_url'));
-					 continue;
+				// no image => skip
+				if (!$this->image) {
+					$this->appendError('input_data', ($this->getError('image_url') ?: $this->getError('image_link')));
+					continue;
 				}
 
 				$data = array_merge($data, $member_data);
@@ -559,17 +554,10 @@ class ControllerAccountAnonPost extends Controller {
 		if (!empty($this->request->files['import']['name'])) {
 			$filename = basename(preg_replace('/[^a-zA-Z0-9\.\-\s+]/', '', html_entity_decode($this->request->files['import']['name'], ENT_QUOTES, 'UTF-8')));
 
-			$allowed_mimetypes = array(
-				'application/json',
-				'text/csv'
-			);
+			$allowed_ext = array('json', 'csv');
+			$allowed_mimetypes = array('application/json', 'text/csv');
 
-			$allowed_ext = array(
-				'.json',
-				'.csv'
-			);
-
-			if (!in_array($this->request->files['import']['type'], $allowed_mimetypes) || !in_array(strtolower(strrchr($filename, '.')), $allowed_ext)) {
+			if (!in_array($this->request->files['import']['type'], $allowed_mimetypes) || !in_array(substr(strrchr(strtolower($filename), '.'), 1), $allowed_ext)) {
 				$this->setError('import', $this->language->get('error_import_filetype'));
 			}
 
@@ -591,32 +579,45 @@ class ControllerAccountAnonPost extends Controller {
 		return !$this->hasError();
 	}
 
-	private function validateImageFile($filepath, $row = 0) {
-		if (empty($filepath)) return false;
-
-		$image_mimetypes_valid = array('image/jpeg', 'image/pjpeg', 'image/x-png', 'image/png');
-		$image_dimensions_min_width = $this->config->get('member_image_dimensions_min_width') ? (int)$this->config->get('member_image_dimensions_min_width') : 450;
-		$image_dimensions_min_height = $this->config->get('member_image_dimensions_min_height') ? (int)$this->config->get('member_image_dimensions_min_height') : 450;
-		$image_dimensions_resize_width = (int)$this->config->get('member_image_dimensions_resize_width');
-		$image_dimensions_margin = 150;
-		$image_dimensions_ratio_min = 0.5;
-		$image_dimensions_ratio_max = 2;
-		$resize_image = false;
-		$resize_ratio = 0.618;
+	private function validateImageFile($filepath, $field_type, $row = 0) {
 		$validate_file_error = false;
 
-		// first, validate mime type
-		$source_mime_type = mime_content_type(DIR_IMAGE . $filepath);
-
-		if (!in_array($source_mime_type, $image_mimetypes_valid)) {
-			$validate_file_error = $this->language->get('error_filetype');
+		if (empty($filepath)) {
+			$validate_file_error = sprintf($this->language->get('error_exists'), "");
 		}
 
+		// filename length
+		if (!$validate_file_error) {
+			$image_mimetypes_valid = array('image/jpeg', 'image/pjpeg', 'image/x-png', 'image/png');
+			$image_dimensions_min_width = (int)$this->config->get('member_image_dimensions_min_width') ?: 450;
+			$image_dimensions_min_height = (int)$this->config->get('member_image_dimensions_min_height') ?: 450;
+			$image_dimensions_resize_width = (int)$this->config->get('member_image_dimensions_resize_width');
+			$image_dimensions_margin = 150;
+			$image_dimensions_ratio_min = 0.5;
+			$image_dimensions_ratio_max = 2;
+			$resize_image = false;
+			$resize_ratio = 0.618;
+
+			if (!$this->validateStringLength($filepath, 5, 128)) {
+				$validate_file_error = sprintf($this->language->get('error_filename'), 5, 128);
+			}
+		}
+
+		// mime type
+		if (!$validate_file_error) {
+			$source_mime_type = mime_content_type(DIR_IMAGE . $filepath);
+
+			if (!in_array($source_mime_type, $image_mimetypes_valid)) {
+				$validate_file_error = $this->language->get('error_filetype');
+			}
+		}
+
+		// dimensions
 		if (!$validate_file_error) {
 			list($image_width, $image_height) = getimagesize(DIR_IMAGE . $filepath);
 			$image_dimensions_ratio = (float)($image_width / $image_height);
 
-			// image dimensions ratio
+			// dimensions ratio
 			if ($image_dimensions_ratio < $image_dimensions_ratio_min || $image_dimensions_ratio > $image_dimensions_ratio_max) {
 				if ($image_dimensions_ratio < $image_dimensions_ratio_min) {
 					$resized_width = (int)($image_height * $resize_ratio);
@@ -631,6 +632,7 @@ class ControllerAccountAnonPost extends Controller {
 				$image_height = $resized_height;
 			}
 
+			// dimensions size
 			if ($image_width < $image_dimensions_min_width || $image_height < $image_dimensions_min_height) {
 				// image dimensions too small => add padding
 				if (($image_dimensions_min_width - $image_width <= $image_dimensions_margin)
@@ -641,7 +643,7 @@ class ControllerAccountAnonPost extends Controller {
 
 					$resize_image = true;
 				} else {
-					$validate_file_error = 'Image must be at least ' . ($image_dimensions_min_width - $image_dimensions_margin) . 'px by ' . ($image_dimensions_min_height - $image_dimensions_margin) . 'px!';
+					$validate_file_error = sprintf($this->language->get('error_image_dimensions'), ($image_dimensions_min_width - $image_dimensions_margin), ($image_dimensions_min_height - $image_dimensions_margin));
 				}
 			} else if ($image_dimensions_resize_width > 0 && $image_width > $image_dimensions_resize_width) {
 				// image dimensions too big => resize smaller
@@ -658,20 +660,17 @@ class ControllerAccountAnonPost extends Controller {
 			}
 
 			$this->image = $filepath;
-
-			return true;
 		} else {
-			if (strpos($filepath, 'anonpost-image-url') !== false) {
-				if ($row > 0) {
-					$validate_file_error .= ' | Row ' . ($row + 1);
-				}
-
-				$this->setError('image_url', $validate_file_error);
-			} else {
-				$this->setError('image_file', $validate_file_error);
+			if ($field_type === 'image_url' && $row > 0) {
+				$validate_file_error .= ' | Row ' . ($row + 1);
 			}
 
-			return false;
+			if ($field_type === 'image_link') {
+				$validate_file_error = $this->language->get('error_image_link');
+				$this->setError('warning', $validate_file_error);
+			}
+
+			$this->setError($field_type, $validate_file_error);
 		}
 	}
 
@@ -784,9 +783,6 @@ class ControllerAccountAnonPost extends Controller {
 		}
 
 		if ($this->config->get('member_data_field_image')) {
-			// if (empty($data['image']) && empty($data['image_url']) && empty($data['image_file']['tmp_name'])) {
-			// 	$this->setError('image', $this->language->get('error_image'));
-			// } else
 			if (!empty($data['image'])) {
 				if (!is_file(DIR_IMAGE . $data['image'])) {
 					$this->setError('image', $this->language->get('error_exists'));
@@ -1038,19 +1034,15 @@ class ControllerAccountAnonPost extends Controller {
 	}
 
 	private function tryGetImage($url, $save_to_dir) {
-		$image_is_valid = false;
 		$image_url = $this->findImageUrl($url);
 
 		if ($image_url && $this->validateUrl($image_url)) {
-			$new_filename = $this->getImageFromUrl($image_url, $save_to_dir);
-
-			if ($new_filename) {
-				// saves image location to $this->image if successful, else sets error for 'image_url'
-				$image_is_valid = $this->validateImageFile($new_filename);
-			}
+			// saves image location to $this->image if successful, else sets error for 'image_link'
+			$this->validateImageFile($this->getImageFromUrl($image_url, $save_to_dir), 'image_link');
+		} else {
+			$this->setError('image_link', $this->language->get('error_image_link'));
+			$this->setError('warning', $this->language->get('error_image_link'));
 		}
-
-		return $image_is_valid;
 	}
 
 	private function findImageUrl($url) {
@@ -1060,7 +1052,10 @@ class ControllerAccountAnonPost extends Controller {
 		}
 
 		$image_url = '';
-		$min_width = $this->config->get('member_image_dimensions_min_width') ? (int)$this->config->get('member_image_dimensions_min_width') : 450;
+		$ext = '';
+		$min_width = (int)$this->config->get('member_image_dimensions_min_width') ?: 450;
+		$min_height = (int)$this->config->get('member_image_dimensions_min_height') ?: 450;
+		$allowed_ext = array('jpg', 'jpeg', 'png');
 
 		$html = file_get_html(sanitize_url($url), false, $this->getStreamContext());
 
@@ -1087,27 +1082,52 @@ class ControllerAccountAnonPost extends Controller {
 		}
 
 		if (!$image_url) {
-			foreach ($html->find('img') as $el_img) {
-				// $this->log->write($el_img->__toString());  // debug
+			$el_imgs = $html->find('img');
 
-				if ((isset($el_img->width) && $el_img->width > $min_width)) {
-					$parent_element = $el_img->parent();
+			if ($el_imgs) {
+				foreach ($el_imgs as $el_img) {
+					$el_img_size = $el_img->get_display_size();
 
-					if ($parent_element->tag == 'a' && !empty($parent_element->href)) {
-						$image_url = $parent_element->href;
-					} else {
+					// debug
+					// $this->log->write('image "' . $el_img->__toString() . '" (' . json_encode($el_img_size) . ') @ url "' . $url . '"');
+
+					// if ((isset($el_img->width) && $el_img->width > $min_width)) {
+					if (($el_img_size['width'] != -1 && $el_img_size['width'] > $min_width)
+						|| ($el_img_size['height'] != -1 && $el_img_size['height'] > $min_height)) {
+
 						$image_url = $el_img->src;
-					}
 
-					break;
+						break;
+					} else {
+						$parent_element = $el_img->parent();
+
+						if ($parent_element->tag == 'a' && !empty($parent_element->href)) {
+							$ext = substr(strrchr(strtolower($parent_element->href), '.'), 1);  // strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+							if ($ext && in_array($ext, $allowed_ext)) {
+								$image_url = $parent_element->href;
+
+								break;
+							}
+						}
+					}
 				}
+
+				$image_url = $el_imgs[0]->src;
 			}
 		}
 
 		$html->clear();
 		unset($html);
 
-		// $this->log->write('image_url: ' . $image_url);  // debug
+		// handle relative urls
+		if ($image_url && substr($image_url, 0, 4) !== 'http') {
+			$url_parts = parse_url($url);
+			$image_url = $url_parts['scheme'] . "://" . $url_parts['host'] . "/" . $image_url;
+		}
+
+		// debug
+		// $this->log->write('image_url: ' . $image_url);
 		return $image_url;
 	}
 
@@ -1120,9 +1140,9 @@ class ControllerAccountAnonPost extends Controller {
 		$image_url_filename = substr(strrchr(strtolower($image_url), '/'), 1);
 
 		// first, check file extension and filename length before downloading
-		$allowed_filetypes = array('jpg', 'jpeg', 'png');
+		$allowed_ext = array('jpg', 'jpeg', 'png');
 
-		if (!in_array($image_url_ext, $allowed_filetypes)) {
+		if (!in_array($image_url_ext, $allowed_ext)) {
 			$this->setError('image_url', $this->language->get('error_filetype'));
 		} else if ((utf8_strlen($image_url_filename) < 5) || (utf8_strlen($image_url_filename) > 128)) {
 			$this->setError('image_url', sprintf($this->language->get('error_filename'), 5, 128));

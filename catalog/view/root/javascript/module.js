@@ -11,9 +11,9 @@ if (typeof handleError === 'undefined') {
 function filterCategoriesJSON(searchTerm, categoriesJson, minPath, exactMatch = false) {
     if (searchTerm.length) {
         return exactMatch ? categoriesJson.filter(function(obj) {
-            return obj.name.toLowerCase() == searchTerm.toLowerCase() && obj.path.length >= minPath;
+            return obj.name.toLowerCase() == searchTerm.toLowerCase() && obj.path.split("_").length >= minPath;
         }) : categoriesJson.filter(function(obj) {
-            return obj.path_name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 && obj.path.length >= minPath;
+            return obj.path_name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1 && obj.path.split("_").length >= minPath;
         });
     } else {
         return categoriesJson;
