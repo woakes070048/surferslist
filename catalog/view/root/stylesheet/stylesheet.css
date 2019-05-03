@@ -2849,11 +2849,10 @@ table .success, table .warning, table .attention, table .information {
     display: inline-block;
     width: 100%;
     margin: 0;
-    padding: 16px 0 20px;
+    padding: 20px 0;
     text-align: center;
     vertical-align: middle;
-    text-shadow: 1px 1px 13px rgba(0, 0, 0, .85);
-    background: rgba(0, 0, 0, .3);
+    text-shadow: 2px 2px 13px rgba(0, 0, 0, .5);
     z-index: 99;
 }
 
@@ -4091,7 +4090,7 @@ input[name="member[member_name]"]:valid {
     padding: 0;
     margin-right: auto;
     margin-left: auto;
-    margin-top: 140px;
+    margin-top: 130px;
     position: absolute;
     top: 0;
     left: 0;
@@ -4106,8 +4105,16 @@ input[name="member[member_name]"]:valid {
     /* 0 2px 3px rgba(0,0,0,0.2); */
 }
 
+.home-page .widget-home > form {
+    background: rgba(0,0,0,.3);
+}
+
+.home-page .widget-home > form + form {
+    margin-top: 30px;
+}
+
 .home-page .widget-home hr {
-    margin: 30px 0;
+    margin: 30px 0 0 0;
     border-top: none;
 }
 
@@ -7884,10 +7891,6 @@ a.highlight, b.highlight, i.highlight, span.highlight {
         /* 44.50% */
     }
 
-    .slideshow .slideshow-title {
-        text-shadow: 2px 2px 13px rgba(0, 0, 0, .5);
-    }
-
     #embed-profile .content-page {
         max-width: 852px;
     }
@@ -7902,9 +7905,9 @@ a.highlight, b.highlight, i.highlight, span.highlight {
 /* L and smaller screen sizes */
 @media screen and (max-width:1192px) {
 
-    .home-page .widget-home {
+    /* .home-page .widget-home {
         margin-top: 110px;
-    }
+    } */
 
     .product-page .breadcrumb h1 {
         width: 100%;
@@ -7965,6 +7968,10 @@ a.highlight, b.highlight, i.highlight, span.highlight {
 
 /* L screen sizes */
 @media screen and (min-width:980px) and (max-width:1192px) {
+    .home-page .widget-home {
+        margin-top: 100px;
+    }
+
     .hidden-large, .hidden-xlarge, .show-very-small, .show-small, .show-medium {
         display: none !important;
     }
@@ -8060,7 +8067,6 @@ a.highlight, b.highlight, i.highlight, span.highlight {
 
     .slideshow .slideshow-title {
         font-size: 45px;
-        padding-bottom: 15px;
     }
 
     .slideshow .slideshow-title-position-middle {
@@ -8291,8 +8297,6 @@ a.highlight, b.highlight, i.highlight, span.highlight {
 
     .slideshow .slideshow-title {
         font-size: 40px;
-        padding-top: 12px;
-        padding-bottom: 12px;
     }
 
     .slideshow .slideshow-title-position-middle {
@@ -8376,7 +8380,7 @@ a.highlight, b.highlight, i.highlight, span.highlight {
 
     .home-page .widget-home {
         max-width: 590px;
-        margin-top: 40px;
+        margin-top: 30px;
     }
 
     /* ALL WIDGETS - list style */
@@ -8506,8 +8510,12 @@ a.highlight, b.highlight, i.highlight, span.highlight {
         min-width: 320px;
         max-width: 360px;
         padding: 0;
-        margin-top: 0;
+        margin-top: 10px;
         margin-bottom: 0;
+    }
+
+    .home-page .widget-home > form + form {
+        margin-top: 10px;
     }
 
     .home-page .container-top .slideshow .slideshow-prev, .home-page .slideshow .slideshow-next {
@@ -8521,8 +8529,6 @@ a.highlight, b.highlight, i.highlight, span.highlight {
 
     .slideshow .slideshow-title {
         font-size: 30px;
-        padding-top: 10px;
-        padding-bottom: 10px;
     }
 
     .home-page .widget-home h2 {
@@ -9218,6 +9224,14 @@ a.highlight, b.highlight, i.highlight, span.highlight {
 
     .home-page .widget-home .icheckbox_minimal-custom.checked {
         background-position: -40px 0;
+    }
+
+    .home-page .widget-home > form {
+        background: transparent;
+    }
+
+    .home-page .widget-home > form + form {
+        margin-top: 0;
     }
 
     #searchwidget .searchwidget-checkboxes .title {

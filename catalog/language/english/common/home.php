@@ -1,6 +1,6 @@
 <?php
-$_['heading_search']    = 'Discover <br class="show-small" />Water Sports Equipment';
-$_['heading_post']      = 'Add a Listing';
+$_['heading_search']    = 'Discover Equipment';
+$_['heading_post']      = 'Add Listing';
 
 $_['entry_link']        = 'Enter a link';
 

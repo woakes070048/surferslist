@@ -58,8 +58,6 @@
                 <input type="hidden" name="newlink" value="true" />
         	</form>
 
-            <hr class="hidden-medium" />
-
         	<form action="<?php echo $search; ?>" method="post" enctype="multipart/form-data">
         		<h2><a href="<?php echo $product_random; ?>"><?php echo $heading_search; ?></a></h2>
 

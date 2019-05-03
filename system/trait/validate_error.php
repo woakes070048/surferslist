@@ -18,6 +18,10 @@ trait ValidateError {
 		$this->errors[$name] = $value;
 	}
 
+	protected function clearError($name = '') {
+		$this->setError($name, '');
+	}
+
 	protected function appendError($name, $value, $key = null) {
 		if (!$name) {
 			return;
@@ -46,4 +50,3 @@ trait ValidateError {
 		return $this->errors;
 	}
 }
-

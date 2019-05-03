@@ -67,10 +67,19 @@ function is_url($string) {
 		return false;
 	}
 
-	// $pattern = '@^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)@';
-	$pattern = '@^https?:\/\/(?:[\w]+)(?:[-\w]*)\.([a-zA-Z\.]{2,6})([\/\w\.-]*)*\/?@';
+	$pattern = '@^https?:\/\/(www\.)?[-a-zA-Z0-9%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9%_\+.~#?&//=]*)@';
 
 	return preg_match($pattern, $string);
+}
+
+function sanitize_url($string) {
+	if (!$string) {
+		return '';
+	}
+
+	$pattern = '[^-A-Za-z0-9+&@#/%?=~_|!:,.;\(\)]';
+
+	return preg_replace($pattern, "", $string);
 }
 
 function replace_urls($string, $replacement) {

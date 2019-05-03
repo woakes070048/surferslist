@@ -428,7 +428,7 @@ $(document).ready(function() {
         // sliderOptions.centerPadding = '0';
 
         // Disable Homepage slider on mobile
-        if ($thisSlideshow.parents('.home-page') && ($(window).width() <= 698 || typeof isMobile !== 'undefined' && isMobile.any())) {
+        if ($thisSlideshow.parents('.home-page') && ($(window).width() <= 979 || typeof isMobile !== 'undefined' && isMobile.any())) {
             var homeBgImgSrc = $('.slideshow-item:first-child img').attr('src') || $('.slideshow-item:first-child img').attr('data-lazy');
 
             $thisSlideshow.html('');
