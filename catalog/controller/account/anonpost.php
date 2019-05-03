@@ -72,10 +72,7 @@ class ControllerAccountAnonPost extends Controller {
 					$this->validateForm($data);
 				}
 
-				if (!$this->hasError()) {
-					// first try to get image from link (sets error 'image_url' upon failure)
-					$this->tryGetImage($data['link'], $csrf_token_set);
-
+				if (!$this->hasError() && !$this->image) {
 					if ($this->isAdmin()) {
 						$image_is_valid = false;
 
@@ -88,11 +85,11 @@ class ControllerAccountAnonPost extends Controller {
 								$image_is_valid = $this->validateImageFile($new_filename);
 							}
 						}
+					}
 
-						// clear any potential error from tryGetImage()
-						if ($image_is_valid) {
-							$this->clearError('image_url');
-						}
+					if (!$this->image) {
+						// try to get image from link (sets error 'image_url' upon failure)
+						$this->tryGetImage($data['link'], $csrf_token_set);
 					}
 				}
 
