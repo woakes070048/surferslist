@@ -163,7 +163,7 @@
 								<?php if ($error_size) { ?><span class="error"><i class="fa fa-exclamation-triangle"></i><?php echo $error_size; ?></span><?php } ?>
 							</div>
 
-                            <div class="formbox<?php if (!$error_image && !$error_image_link && !$error_image_url && !$error_image_file) { ?> hidden<?php } ?>">
+                            <div class="formbox<?php if (!$error_image && !$error_image_link && !$error_image_url && !$error_image_file && !$image && !$admin) { ?> hidden<?php } ?>">
                                 <p class="form-label">
                                     <strong><?php echo $entry_image; ?></strong>
                                     <i class="fa fa-question-circle float-right grey-text" title="<?php echo $entry_image . $help_required; ?>" data-content="<?php echo $help_image; ?>" data-placement="left" rel="popover" data-container="body" data-trigger="hover"></i>
