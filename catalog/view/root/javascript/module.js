@@ -444,7 +444,7 @@ $(document).ready(function() {
                 $thisSlideshow.find('.loader').fadeOut(200);
                 $thisSlideshow.addClass('widget-shadow');
 
-                $('.home-page .widget-home').on('change', 'select[name=\'category_id\'].no-cascade', function() {
+                $('.home-page .widget-home').on('change', 'select[name=\'category\']', function() {
                     var categorySelectIndex = $(this).prop('selectedIndex');
                     var categorySelectName = $('option:selected', this).text().toLowerCase();
 
