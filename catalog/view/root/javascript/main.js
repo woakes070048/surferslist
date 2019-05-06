@@ -515,12 +515,6 @@ function popupLoginFormLoaded() {
         })
     });
 
-    $form.on('keydown', 'input', function(e) {
-        if (e.keyCode == 13) {
-            $form.trigger('submit');
-        }
-    });
-
     $.colorbox({
         inline: true,
         href: '#login-popup',
@@ -659,12 +653,6 @@ function popupRegisterFormLoaded() {
             },
             error: handleError
         })
-    });
-
-    $form.on('keydown', 'input', function(e) {
-        if (e.keyCode == 13) {
-            $form.trigger('submit');
-        }
     });
 
     $.colorbox({
@@ -815,12 +803,6 @@ function popupContactFormLoaded() {
             },
             error: handleError
         })
-    });
-
-    $form.on('keydown', 'input', function(e) {
-        if (e.keyCode == 13) {
-            $form.trigger('submit');
-        }
     });
 
     // open loaded form in colorbox
@@ -1021,7 +1003,7 @@ $(document).clickOrTouch('.close', function(e) {
 // All Form Submissions
 $(document).clickOrTouch('#form-submit', function(e) {
     e.preventDefault();
-    $('#form').trigger('submit');
+    $('#form').submit();
 })
 
 $('form .button-submit').clickOrTouch(null, function(e) {
@@ -1029,15 +1011,16 @@ $('form .button-submit').clickOrTouch(null, function(e) {
     $(this).closest('form').trigger('submit');
 })
 
-$('#form').on('keydown', 'input', function(e) {
+$('form').on('keydown', 'input', function(e) {
     if (e.keyCode == 13) {
-        $('#form').trigger('submit');
+        $(this).closest('form').submit();
     }
 });
 
-$('#form').on('submit', function() {
-    $('input[type="submit"]').prop('disabled', true);
-    $('.button-submit').removeClass('button-submit button_save button_highlight').addClass('button-wait button_alt icon').html('<i class="fa fa-spin fa-circle-o-notch icon-spin"></i> ' + textWait);
+$('form').on('submit', function() {
+    $(this).find('input[type="submit"]').prop('disabled', true);
+    $(this).find('.button-submit > i').attr('class', 'fa fa-spin fa-circle-o-notch icon-spin');
+    $(this).find('.button-submit').removeClass('button-submit').addClass('button-wait icon');
 });
 
 // Select All
