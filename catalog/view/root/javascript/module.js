@@ -136,6 +136,9 @@ function getManufacturerOptionsByCategory(categoryObj, categoriesJson, manufactu
 
 // Sub-Category and Manufacturer select (Search, Post)
 (function() {
+    var categories_json = $('input[name=\'categories_complete\']').length ? JSON.parse($('input[name=\'categories_complete\']').val()) : [];
+    var manufacturers_json = $('input[name=\'manufacturers_all\']').length ? JSON.parse($('input[name=\'manufacturers_all\']').val()) : [];
+    
     $values = [];
 
     if ($('#searchwidget').length) {
@@ -147,8 +150,6 @@ function getManufacturerOptionsByCategory(categoryObj, categoriesJson, manufactu
     }
 
     $.each($values, function(index, $value) {
-        var categories_json = $('input[name=\'categories_complete\']').length ? JSON.parse($('input[name=\'categories_complete\']').val()) : [];
-        var manufacturers_json = $('input[name=\'manufacturers_all\']').length ? JSON.parse($('input[name=\'manufacturers_all\']').val()) : [];
         var textSelectCategory = $('input[name=\'text_select_category\']').val();
         var textSelectCategorySub = $('input[name=\'text_select_category_sub\']').val();
         var textSelectCategoryCount =  $('input[name=\'text_select_category_count\']').val();
